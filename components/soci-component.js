@@ -16,6 +16,19 @@ export class SociComponent extends HTMLElement {
     functions.forEach(key => (this[key] = this[key].bind(this)));
   }
 
+  fire(event, detail, attr){
+    if(!attr) attr = 'on' + event
+    let tempAttr = this.getAttribute(attr)
+    if(tempAttr) eval(tempAttr)
+    this.removeAttribute(attr)
+    let e = new CustomEvent(event, {detail: detail, bubbles: true})
+    if(!attr) attr = 'on' + event
+    this.dispatchEvent(e)
+    setTimeout(()=>{
+      this.setAttribute(attr, tempAttr)
+    },1)
+  }
+
   getCss() {
     if(this.css) return html`<style>${this.css()}</style>`
   }

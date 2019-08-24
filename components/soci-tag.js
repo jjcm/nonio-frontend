@@ -52,6 +52,7 @@ export default class SociTag extends SociComponent {
     this.setAttribute('score', 
       score + (this.toggleAttribute('upvoted') ? 1 : -1)
     )
+    this.fire('vote')
   }
 
   connectedCallback(){
