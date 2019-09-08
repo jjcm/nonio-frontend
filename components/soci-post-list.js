@@ -11,9 +11,10 @@ export default class SociPostLi extends SociComponent {
         background: var(--n1);
         display: block;
         width: 100%;
+        overflow: auto;
       }
       ::slotted(soci-post-li){
-        margin-bottom: 8px;
+        margin-top: 8px;
       }
     `
   }
