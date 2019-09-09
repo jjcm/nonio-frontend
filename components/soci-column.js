@@ -12,22 +12,26 @@ export default class SociColumn extends SociComponent {
         position: relative;
         display: block;
         height: 100%;
-
+        width: 100%;
+        max-width: 1200px;
       }
       :host header {
         height: 88px;
         width: 100%;
-        background: linear-gradient(180deg, #5766CF -158.66%, #2C36A1 40%);
         color: #fff;
-        padding: 0 12px;
         position: absolute;
         top: 0;
         z-index: 1;
         box-sizing: border-box;
       }
+      :host([color="red"]) header {
+        background: linear-gradient(180deg, #5766CF 0%, #2C36A1 40%);
+      }
       :host filters {
         display: flex;
         flex-direction: flex-end;
+        padding: 0 12px;
+        border-top: 1px solid rgba(255,255,255,0.1);
       }
       :host filter {
         opacity: 0.5;
@@ -36,7 +40,8 @@ export default class SociColumn extends SociComponent {
         padding: 6px 12px;
         cursor: pointer;
         font-weight: 500;
-        font-size: 14px;
+        font-size: 12px;
+        line-height: 18px;
       }
       :host filter:first-child {
         margin-right: auto;
@@ -51,7 +56,7 @@ export default class SociColumn extends SociComponent {
         content:'';
         display: block;
         position: absolute;
-        top: 2px;
+        top: -2px;
         left: calc(50% - 8px);
         width: 16px;
         height: 4px;
