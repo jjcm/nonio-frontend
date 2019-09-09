@@ -1,3 +1,6 @@
+import SociColumn from "./soci-column.js"
+window.customElements.define('soci-column', SociColumn)
+
 import SociPostLi from "./soci-post-li.js"
 window.customElements.define('soci-post-li', SociPostLi)
 

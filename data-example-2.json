@@ -1,0 +1,12 @@
+[
+    {
+        "title": "asdf",
+        "user": "bobo",
+        "tags": [
+            {
+                "name": "wtf",
+                "score": 10
+            }
+        ]
+    }
+]
