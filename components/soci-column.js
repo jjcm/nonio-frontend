@@ -24,9 +24,6 @@ export default class SociColumn extends SociComponent {
         z-index: 1;
         box-sizing: border-box;
       }
-      :host([color="red"]) header {
-        background: linear-gradient(180deg, #5766CF 0%, #2C36A1 40%);
-      }
       :host filters {
         display: flex;
         flex-direction: flex-end;
@@ -108,11 +105,32 @@ export default class SociColumn extends SociComponent {
     this.setAttribute('filter', e.currentTarget.innerHTML)
   }
 
+  getColorSchemes(){
+    let schemes = ''
+    let colors = {
+      "red": ['r2', 'r3', 'light'],
+      "light-red": ['r1', 'r2', 'light'],
+      "orange": ['o2', 'o3', 'light'],
+      "light-orange": ['o0', 'o1', 'dark'],
+    }
+
+    for(let color in colors){
+      schemes += `:host([color="${color}"]) header {
+        background: linear-gradient(180deg, var(--${colors[color][0]}) 0%, var(--${colors[color][1]}) 40%);
+        color: ${colors[color][2] == 'light' ? 'rgba(255,255,255, 0.95)' : 'rgba(0,0,0,0.95)'};
+      }`
+    }
+    return schemes
+  }
+
   render(){
     let data = 'data-example.json'
     this.filterClick = this.filterClick.bind(this)
     return html`
       ${this.getCss()}
+      <style>
+        ${this.getColorSchemes()}
+      </style>
       <header>
         <div id="tag-title"></div>
         <filters>
