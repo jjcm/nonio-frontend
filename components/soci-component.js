@@ -1,5 +1,5 @@
 import {html, render} from "../lib/lit-html/lit-html.js"
-export {html} from "../lib/lit-html/lit-html.js"
+export {html, render} from "../lib/lit-html/lit-html.js"
 
 export class SociComponent extends HTMLElement {
   constructor() {
