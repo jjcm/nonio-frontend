@@ -8,21 +8,95 @@ export default class SociColumn extends SociComponent {
   css(){
     return `
       :host {
-        padding-top: 88px;
         position: relative;
         display: block;
-        height: 100%;
+        height: calc(100vh - 16px);
+        box-sizing: border-box;
         width: 100%;
         max-width: 1200px;
+        margin: 16px 16px 0 0;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
       }
-      :host header {
+      :host(:first-child){
+        margin-left: 16px;
+      }
+      :host scroll-container {
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      :host content {
+        display: block;
+      }
+      :host sub-header {
         height: 88px;
         width: 100%;
         color: #fff;
-        position: absolute;
-        top: 0;
-        z-index: 1;
+        z-index: 2;
         box-sizing: border-box;
+        background-color: inherit;
+      }
+      :host sticky-header {
+        color: #fff;
+        background-color: inherit;
+        position: sticky;
+        top: 0;
+        height: 68px;
+        width: 100%;
+        z-index: 2;
+        display: block;
+        padding: 0 24px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px 8px 0 0;
+      }
+      :host sticky-header soci-icon {
+        width: 32px;
+        height: 32px;
+        border: 1px solid #fff;
+        display: block;
+      }
+      :host cover-photo {
+        height: 160px;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        top: 0;
+        background-image: url('example-data/cover-example.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      :host info {
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      :host info button {
+        height: 24px;
+        border-radius: 12px;
+        background: transparent;
+        outline: none;
+        border: 1px solid #fff;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        margin-right: -2px;
+        cursor: pointer;
+      }
+      :host info button:hover {
+        background: rgba(255,255,255,0.2);
+      }
+      :host info button:active {
+        background: rgba(255,255,255,1);
+      }
+      :host subscribers {
+        font-size: 16px;
       }
       :host filters {
         display: flex;
@@ -63,13 +137,9 @@ export default class SociColumn extends SociComponent {
 
       :host #tag-title {
         font-weight: 600;
-        font-size: 20px;
-        line-height: 56px;
-        margin-left: 10px;
-      }
-
-      :host soci-post-list {
-        height: 100%;
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: 0.7px;
       }
     `
   }
@@ -85,6 +155,10 @@ export default class SociColumn extends SociComponent {
         break
       case "tag":
         this.select('#tag-title').innerHTML = '#' + newValue
+        break
+      case "subscribers":
+        let subs = newValue || 0
+        this.select('subscribers').innerHTML = subs + ' subscribers'
         break
     }
   }
@@ -105,19 +179,27 @@ export default class SociColumn extends SociComponent {
     this.setAttribute('filter', e.currentTarget.innerHTML)
   }
 
+  connectedCallback(){
+    this.select('scroll-container').addEventListener('scroll', this._onScroll.bind(this))
+  }
+
+  _onScroll(){
+    let scroll = Math.min(this.select('scroll-container').scrollTop, 160)
+    this.select('cover-photo').style.backgroundPositionY = `${scroll >> 1}px`
+  }
+
   getColorSchemes(){
     let schemes = ''
     let colors = {
-      "red": ['r2', 'r3', 'light'],
-      "light-red": ['r1', 'r2', 'light'],
-      "orange": ['o2', 'o3', 'light'],
-      "light-orange": ['o0', 'o1', 'dark'],
+      "red": 'r1',
+      "teal": 't2',
+      "orange": 'o1',
+      "purple": 'p2'
     }
 
     for(let color in colors){
-      schemes += `:host([color="${color}"]) header {
-        background: linear-gradient(180deg, var(--${colors[color][0]}) 0%, var(--${colors[color][1]}) 40%);
-        color: ${colors[color][2] == 'light' ? 'rgba(255,255,255, 0.95)' : 'rgba(0,0,0,0.95)'};
+      schemes += `:host([color="${color}"]) content{
+        background: var(--${colors[color]})
       }`
     }
     return schemes
@@ -131,17 +213,29 @@ export default class SociColumn extends SociComponent {
       <style>
         ${this.getColorSchemes()}
       </style>
-      <header>
-        <div id="tag-title"></div>
-        <filters>
-          <filter selected @click=${this.filterClick}>all</filter>
-          <filter @click=${this.filterClick}>images</filter>
-          <filter @click=${this.filterClick}>videos</filter>
-          <filter @click=${this.filterClick}>audio</filter>
-          <filter @click=${this.filterClick}>blogs</filter>
-        </filters>
-      </header>
-      <soci-post-list data=${data}></soci-post-list>
+      <scroll-container>
+        <cover-photo></cover-photo>
+        <content>
+          <sticky-header>
+            <div id="tag-title"></div>
+            <soci-icon glyph="filter"></soci-icon>
+          </sticky-header>
+          <sub-header>
+            <info>
+              <subscribers>69 subscribers</subscribers>
+              <button>Subscribe</button>
+            </info>
+            <filters>
+              <filter selected @click=${this.filterClick}>all</filter>
+              <filter @click=${this.filterClick}>images</filter>
+              <filter @click=${this.filterClick}>videos</filter>
+              <filter @click=${this.filterClick}>audio</filter>
+              <filter @click=${this.filterClick}>blogs</filter>
+            </filters>
+          </sub-header>
+          <soci-post-list data=${data}></soci-post-list>
+        </content>
+      </scroll-container>
     `
   }
 }

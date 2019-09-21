@@ -8,10 +8,11 @@ export default class SociPostLi extends SociComponent {
   css(){
     return `
       :host {
-        background: var(--n1);
+        background: rgba(255,255,255,0.8);
         display: block;
         width: 100%;
-        overflow: auto;
+        padding: 2px 8px 28px;
+        box-sizing: border-box;
       }
       ::slotted(soci-post-li){
         margin-top: 8px;
