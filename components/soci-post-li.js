@@ -136,7 +136,6 @@ export default class SociPostLi extends SociComponent {
 
   _openPost() {
     let url = this.getAttribute('url')
-    console.log(`Post opened. Url: ${url}`)
   }
 
   _updateTime() {
@@ -168,13 +167,20 @@ export default class SociPostLi extends SociComponent {
 
   set score(val){
     this.setAttribute('score', val)
-    console.log('set')
-    console.log(val)
   }
 
   _tagVoted(e){
-    console.log('vote')
-    this.score = this.score + 1
+    let tag = e.target.closest('soci-tag')
+    if(tag.hasAttribute('upvoted')){
+      if(this.querySelectorAll('soci-tag[upvoted]').length == 1){
+        this.score++
+      }
+    }
+    else {
+      if(this.querySelectorAll('soci-tag[upvoted]').length == 0){
+        this.score--
+      }
+    }
   }
 
   render(){
