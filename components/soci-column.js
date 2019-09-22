@@ -61,8 +61,11 @@ export default class SociColumn extends SociComponent {
       :host sticky-header soci-icon {
         width: 32px;
         height: 32px;
-        border: 1px solid #fff;
-        display: block;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      :host sticky-header soci-icon:hover {
+        background: rgba(255,255,255,0.2);
       }
       :host cover-photo {
         height: 160px;
