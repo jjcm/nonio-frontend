@@ -89,9 +89,11 @@ export default class SociColumn extends SociComponent {
         border-radius: 12px;
         background: transparent;
         outline: none;
-        border: 1px solid #fff;
+        border: none;
+        margin: 1px;
+        box-shadow: 0 0 0 1px #fff;
         color: #fff;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 500;
         margin-right: -2px;
         cursor: pointer;
@@ -213,7 +215,7 @@ export default class SociColumn extends SociComponent {
   }
 
   render(){
-    let data = 'data-example.json'
+    let data = 'fake-routes/posts.json'
     this.filterClick = this.filterClick.bind(this)
     return html`
       ${this.getCss()}

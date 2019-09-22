@@ -8,7 +8,7 @@ export default class SociSidebar extends SociComponent {
   css(){
     return `
       :host {
-        border-right: 2px solid var(--n2);
+        border-right: 2px solid var(--n1);
         margin-right: 16px;
         width: 280px;
         min-width: 280px;
@@ -17,7 +17,7 @@ export default class SociSidebar extends SociComponent {
       :host input {
         border: none;
         height: 38px;
-        padding-left: 52px;
+        padding-left: 54px;
         font-size: 14px;
         width: 100%;
       }
@@ -37,13 +37,13 @@ export default class SociSidebar extends SociComponent {
       }
 
       :host h2 {
-        padding-left: 52px;
+        padding-left: 54px;
         line-height: 40px;
         margin: 12px 0 4px 0;
       }
 
       :host section {
-        border-bottom: 2px solid var(--n2);
+        border-bottom: 2px solid var(--n1);
         position: relative;
       }
 
@@ -61,6 +61,17 @@ export default class SociSidebar extends SociComponent {
         top: 6px;
       }
 
+      :host #user {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        padding-left: 20px;
+      }
+
+      :host #tags {
+        padding-bottom: 20px;
+      }
+
       :host a {
         display: block;
         text-decoration: none;
@@ -70,11 +81,34 @@ export default class SociSidebar extends SociComponent {
         cursor: pointer;
       }
 
+      :host a:hover {
+        background: var(--n1);
+      }
+
       :host a:last-child {
         margin-bottom: 20px;
       }
+
+      ::slotted(a) {
+        display: block;
+        padding-left: 54px;
+        text-decoration: none;
+        line-height: 32px;
+        position: relative;
+        color: var(--n4);
+      }
+
+      ::slotted(a:hover) {
+        background: var(--n1);
+      }
+
+      ::slotted(svg) {
+        position: absolute;
+        left: 20px;
+      }
     `
   }
+
 
   static get observedAttributes() {
     return ['user']
@@ -85,6 +119,38 @@ export default class SociSidebar extends SociComponent {
       case "user":
         break
     }
+  }
+
+  createSubscribedTags(data){
+    let tags = html`
+      ${data.map((tag) => html`
+        <a href="#${tag.name}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: var(--${tag.color}); position: absolute; left: 24px; top: 8px; width: 16px; height: 16px; border-radius: 3px;">
+            <g transform="translate(1,1.5)">
+            <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="white"/>
+            </g>
+          </svg>
+          ${tag.name}
+        </a>
+      `)}
+    `
+    render(tags, this)
+  }
+
+  connectedCallback(){
+    let tagsUrl = 'fake-routes/subscribed-tags.json'
+    fetch(tagsUrl).then(
+      response=>{
+        if(response.ok) return response.json()
+        else this.log('JSON not found')
+      }
+    ).then(
+      json=>{
+        if(json) this.createSubscribedTags(json)
+      }
+    ).catch(e=>{
+      this.log(e)
+    })
   }
 
   render(){
