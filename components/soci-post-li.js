@@ -67,6 +67,10 @@ export default class SociPostLi extends SociComponent {
         height: 20px;
         line-height: 16px;
         border-radius: 10px;
+        scrollbar-width: none;
+      }
+      :host #tags::-webkit-scrollbar {
+        display: none;
       }
       :host #score {
         white-space: nowrap;

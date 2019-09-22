@@ -10,6 +10,9 @@ window.customElements.define('soci-post-li', SociPostLi)
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
 
+import SociSidebar from "./soci-sidebar.js"
+window.customElements.define('soci-sidebar', SociSidebar)
+
 import SociTag from "./soci-tag.js"
 window.customElements.define('soci-tag', SociTag)
 
