@@ -150,6 +150,10 @@ export default class SociColumn extends SociComponent {
         line-height: 24px;
         letter-spacing: 0.7px;
       }
+
+      :host soci-post-list {
+        min-height: calc(100% - 297px);
+      }
     `
   }
 
@@ -182,6 +186,8 @@ export default class SociColumn extends SociComponent {
       if(child.innerHTML == filter) child.setAttribute('selected', '')
       else child.removeAttribute('selected')
     })
+
+    this.select('soci-post-list').setAttribute('filter', filter)
   }
 
   filterClick(e){

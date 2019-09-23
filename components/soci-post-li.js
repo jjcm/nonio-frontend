@@ -14,6 +14,10 @@ export default class SociPostLi extends SociComponent {
         padding: 12px;
         border-radius: 8px;
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-height: 160px;
+        transition: all 0.3s;
+        opacity: 1;
       }
       :host #top {
         display: flex;

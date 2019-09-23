@@ -17,27 +17,58 @@ export default class SociPostLi extends SociComponent {
       ::slotted(soci-post-li){
         margin-top: 8px;
       }
+
+      :host([filter="images"]) ::slotted(soci-post-li:not([type="image"])){
+        max-height: 0;
+        opacity: 0;
+        margin-bottom: -32px;
+      }
+
+      :host([filter="videos"]) ::slotted(soci-post-li:not([type="video"])){
+        max-height: 0;
+        opacity: 0;
+        margin-bottom: -32px;
+      }
+
+      :host([filter="audio"]) ::slotted(soci-post-li:not([type="audio"])){
+        max-height: 0;
+        opacity: 0;
+        margin-bottom: -32px;
+      }
+
+      :host([filter="blogs"]) ::slotted(soci-post-li:not([type="blog"])){
+        max-height: 0;
+        opacity: 0;
+        margin-bottom: -32px;
+      }
     `
   }
 
   static get observedAttributes() {
-    return ['data', 'order', 'timespan']
+    return ['data', 'order', 'timespan', 'filter']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == "data"){
-      fetch(newValue).then(
-        response=>{
-          if(response.ok) return response.json()
-          else this.log('JSON not found')
-        }
-      ).then(
-        json=>{
-          if(json) this.createPosts(json)
-        }
-      ).catch(e=>{
-        this.log(e)
-      })
+    switch(name){
+      case "data":
+        fetch(newValue).then(
+          response=>{
+            if(response.ok) return response.json()
+            else this.log('JSON not found')
+          }
+        ).then(
+          json=>{
+            if(json) this.createPosts(json)
+          }
+        ).catch(e=>{
+          this.log(e)
+        })
+        break
+      case "filter":
+        // should put an infinite scroll here
+        console.log('filterUpdate')
+        
+        break
     }
   }
 
