@@ -17,6 +17,7 @@ export default class SociColumn extends SociComponent {
         margin: 16px 16px 0 0;
         border-radius: 8px 8px 0 0;
         overflow: hidden;
+        min-width: 400px;
       }
       :host(:first-child){
         margin-left: 16px;
@@ -176,11 +177,28 @@ export default class SociColumn extends SociComponent {
     }
   }
 
-  filterPosts(filter){
-    //
-    // Visuals
-    //
+  get tag(){
+    return this.getAttribute('tag')
+  }
+  set tag(val){
+    return this.setAttribute('tag', val)
+  }
 
+  get color(){
+    return this.getAttribute('color')
+  }
+  set color(val){
+    return this.setAttribute('color', val)
+  }
+
+  get filter(){
+    return this.getAttribute('filter')
+  }
+  set filter(val){
+    return this.setAttribute('filter', val)
+  }
+
+  filterPosts(filter){
     filter = filter || "all"
     Array.from(this.select("filters").children).forEach(child => {
       if(child.innerHTML == filter) child.setAttribute('selected', '')
