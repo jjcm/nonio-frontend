@@ -4,6 +4,9 @@ window.customElements.define('soci-column', SociColumn)
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 
+import SociPost from "./soci-post.js"
+window.customElements.define('soci-post', SociPost)
+
 import SociPostLi from "./soci-post-li.js"
 window.customElements.define('soci-post-li', SociPostLi)
 

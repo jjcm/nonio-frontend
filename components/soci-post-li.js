@@ -146,6 +146,10 @@ export default class SociPostLi extends SociComponent {
 
   _openPost() {
     let url = this.getAttribute('url')
+
+    let post = document.createElement('soci-post')
+    post.setAttribute('title', this.getAttribute('title'))
+    post.open(this)
   }
 
   _updateTime() {
@@ -194,6 +198,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   render(){
+    this._openPost = this._openPost.bind(this)
     return html`
       ${this.getCss()}
       <div id="top">
