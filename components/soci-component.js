@@ -45,3 +45,4 @@ export class SociComponent extends HTMLElement {
     if(this.css) return html`<style>${this.css()}</style>`
   }
 }
+

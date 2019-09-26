@@ -1,4 +1,5 @@
 import {SociComponent, html} from './soci-component.js'
+import SociRouter from './soci-router.js'
 
 export default class SociPost extends SociComponent {
   constructor() {
@@ -29,6 +30,7 @@ export default class SociPost extends SociComponent {
 
       :host([open]) {
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 8px 8px 0 16px rgba(255,255,255,1);
+        transition: none;
       }
 
       :host content {
@@ -108,27 +110,35 @@ export default class SociPost extends SociComponent {
   }
 
   open(fromElement){
-    console.log(fromElement)
-    let pos = fromElement.getBoundingClientRect()
+    if(fromElement){
+      let pos = fromElement.getBoundingClientRect()
 
-    this.style.width = pos.width
-    this.style.height = pos.height
-    this.style.left = pos.left
-    this.style.top = pos.top
+      this.style.width = pos.width
+      this.style.height = pos.height
+      this.style.left = pos.left
+      this.style.top = pos.top
 
-    document.body.appendChild(this)
-    setTimeout(()=>{
-      this.style.width = ""
-      this.style.height = ""
-      this.style.top = ""
-      this.style.left = ""
+      document.body.appendChild(this)
       setTimeout(()=>{
-        this.setAttribute('open', '')
-      }, 200)
-    }, 1)
+        this.style.width = ""
+        this.style.height = ""
+        this.style.top = ""
+        this.style.left = ""
+        setTimeout(()=>{
+          this.setAttribute('open', '')
+        }, 200)
+      }, 1)
+    }
+
+    let currentLocation = document.location.pathname + document.location.hash
+    this._prevUrl = currentLocation
+
+    let details = document.querySelector('soci-router').getDetailsFromUrl()
+    history.pushState(details, this.getAttribute('title'), this.getAttribute('url'))
   }
 
   close(){
+    if(this._prevUrl) history.pushState(null, 'soci', this._prevUrl)
     document.body.removeChild(this)
   }
 

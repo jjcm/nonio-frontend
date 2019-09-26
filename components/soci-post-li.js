@@ -34,6 +34,7 @@ export default class SociPostLi extends SociComponent {
       :host #mid {
         display: flex;
         font-size: 14px;
+        text-decoration: none;
         color: var(--n4);
         letter-spacing: -0.08px;
         line-height: 18px;
@@ -119,7 +120,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments']
+    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments', 'url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -140,15 +141,18 @@ export default class SociPostLi extends SociComponent {
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break;
+      case 'url':
+        this.select('#mid').href = newValue
+        break;
 
     }
   }
 
-  _openPost() {
-    let url = this.getAttribute('url')
-
+  _openPost(e) {
+    e.preventDefault()
     let post = document.createElement('soci-post')
     post.setAttribute('title', this.getAttribute('title'))
+    post.setAttribute('url', this.getAttribute('url'))
     post.open(this)
   }
 
@@ -205,10 +209,10 @@ export default class SociPostLi extends SociComponent {
         <slot name="user"></slot>
         <div id="time"></div>
       </div>
-      <div id="mid" @click=${this._openPost}>
+      <a id="mid" @click=${this._openPost}>
         <img id="thumbnail"></img>
         <div id="title"></div>
-      </div>
+      </a>
       <div id="bot">
         <div id="score"></div>
         <div id="tags"><slot name="tags"></slot></div>
