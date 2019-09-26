@@ -18,7 +18,9 @@ export default class SociRouter extends SociComponent {
   connectedCallback(){
     let details = this.getDetailsFromUrl()
     history.replaceState(details, '', document.location.pathname + document.location.hash)
-    window.addEventListener('popstate', this.onPopState)
+    window.addEventListener('popstate', this.onPopState.bind(this))
+    window.addEventListener('hashchange', this.onHashChange.bind(this))
+    this.onHashChange()
   }
 
   getDetailsFromUrl(){
@@ -31,17 +33,56 @@ export default class SociRouter extends SociComponent {
   }
 
   onPopState(e){
-    console.log(e.state)
+    console.log('pop state')
+    /*
     if(e.state.post == '/') {
       let post = document.querySelector('soci-post')
       if(post) post.close()
     }
+    */
+
+    this.onHashChange()
+  }
+
+  onHashChange(e){
+    let path = window.location.pathname.replace(config.BASE_URL, '') + window.location.hash
+    path = path.slice(1)
+    console.log(path)
+    this.route(path)
+  }
+
+  route(path){
+    switch(true){
+      case path.length == 0: 
+        console.log('home')
+        break
+      case /^#/.test(path): 
+        console.log('postslists')
+        break
+      case /^settings/.test(path):
+        console.log('settings')
+        break
+      default: 
+        console.log('page')
+        break
+    }
+
   }
 
   render(){
     return html`
       ${this.getCss()}
       <slot></slot>
+
+      <sidebar>
+        <slot name="sidebar">
+      </sidebar>
+      <main>
+        <slot name="postlists"></slot>
+        <slot name="post"></slot>
+        <slot name="settings"></slot>
+        <slot name="404"></slot>
+      </main>
     `
   }
 }
