@@ -131,14 +131,21 @@ export default class SociPost extends SociComponent {
     }
 
     let currentLocation = document.location.pathname + document.location.hash
-    this._prevUrl = currentLocation
+    this._prevLocation = {
+      url: currentLocation,
+      title: document.title
+    }
 
-    let details = document.querySelector('soci-router').getDetailsFromUrl()
-    history.pushState(details, this.getAttribute('title'), this.getAttribute('url'))
+    let router = document.querySelector('soci-router')
+    if(router) router.updateUrl(this.getAttribute('title'), this.getAttribute('url'))
   }
 
   close(){
-    if(this._prevUrl) history.pushState(null, 'soci', this._prevUrl)
+    if(this._prevLocation) {
+      let router = document.querySelector('soci-router')
+      if(router) router.updateUrl(this._prevLocation.title, this._prevLocation.url)
+    }
+
     document.body.removeChild(this)
   }
 

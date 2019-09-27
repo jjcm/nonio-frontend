@@ -33,21 +33,22 @@ export default class SociRouter extends SociComponent {
   }
 
   onPopState(e){
-    console.log('pop state')
-    /*
-    if(e.state.post == '/') {
-      let post = document.querySelector('soci-post')
-      if(post) post.close()
-    }
-    */
-
     this.onHashChange()
+  }
+
+  updateUrl(title, path){
+    if(path == this._currentPath) return 0
+    this._currentUrl = path
+    window.history.pushState(null, title, path)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+    document.title = title
   }
 
   onHashChange(e){
     let path = window.location.pathname.replace(config.BASE_URL, '') + window.location.hash
     path = path.slice(1)
-    console.log(path)
+    if(path == this._currentPath) return 0
+    this._currentPath = path
     this.route(path)
   }
 
