@@ -12,6 +12,9 @@ export default class SociSidebar extends SociComponent {
         margin-right: 16px;
         width: 280px;
         min-width: 280px;
+        display: block;
+        height: 100vh;
+        overflow: auto;
       }
 
       :host input {
@@ -66,6 +69,10 @@ export default class SociSidebar extends SociComponent {
         align-items: center;
         height: 64px;
         padding-left: 20px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 10;
       }
 
       :host #tags {

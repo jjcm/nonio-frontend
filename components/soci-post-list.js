@@ -66,7 +66,6 @@ export default class SociPostLi extends SociComponent {
         break
       case "filter":
         // should put an infinite scroll here
-        console.log('filterUpdate')
         
         break
     }

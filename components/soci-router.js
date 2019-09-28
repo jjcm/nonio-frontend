@@ -12,6 +12,11 @@ export default class SociRouter extends SociComponent {
       :host {
         display: contents;
       }
+
+      :host main slot:not([active]) {
+        display: none;
+      }
+
     `
   }
 
@@ -53,34 +58,40 @@ export default class SociRouter extends SociComponent {
   }
 
   route(path){
+    let location = ''
     switch(true){
       case path.length == 0: 
-        console.log('home')
+        location = 'home'
         break
       case /^#/.test(path): 
-        console.log('postslists')
+        location = 'postlists'
         break
       case /^settings/.test(path):
-        console.log('settings')
+        location = 'settings'
         break
       default: 
-        console.log('page')
+        location = 'post'
         break
     }
 
+    console.log(`You are viewing: ${location}`)
+    let currentPage = this.select('slot[active]')
+    if(currentPage) currentPage.removeAttribute('active')
+
+    let newPage = this.select(`slot[name=${location}]`)
+    if(newPage) newPage.setAttribute('active', '')
   }
 
   render(){
     return html`
       ${this.getCss()}
-      <slot></slot>
-
       <sidebar>
         <slot name="sidebar">
       </sidebar>
       <main>
         <slot name="postlists"></slot>
         <slot name="post"></slot>
+        <slot name="home"></slot>
         <slot name="settings"></slot>
         <slot name="404"></slot>
       </main>
