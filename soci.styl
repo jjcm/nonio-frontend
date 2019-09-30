@@ -25,3 +25,79 @@ body
   .color
     width: 40px
     height: 40px
+
+#user
+  width: 150vw
+  position: fixed
+  transform-origin: top left
+  padding: 30px 50px
+  .header
+    display: flex
+    justify-content: space-between
+  .hero
+    position: relative
+    width: 100%
+    max-width: 400px
+    padding-right: 40px
+  .subtitle
+    font-size: 20px
+    font-weight: 500
+    line-height: 24px
+    color: var(--n3)
+    position: absolute
+    left: 140px
+    top: 76px
+
+  .money
+  .subscribers
+    padding-top: 16px
+    padding-right: 120px
+    position: relative
+    .title
+      font-size: 54px
+      font-weight: 600
+      color: var(--n4)
+      margin-bottom: 10px
+    .label
+      font-size: 14px
+      text-transform: uppercase
+      color: var(--n3)
+    .up
+      color: var(--g2)
+      font-weight: bold
+      font-size: 16px
+      padding-left: 18px
+      position: absolute
+      right: 40px
+      top: 28px
+      &:before
+        position: absolute
+        left: 0
+        top: 3px
+        border-bottom: 12px solid var(--g2)
+        border-right: 6px solid transparent
+        border-left: 6px solid transparent
+        content: ''
+        display: block
+        width: 0
+        height: 0
+
+  .content
+    display: flex
+    margin-top: 40px
+    .col
+      border-top: 1px solid var(--n2)
+      width: 100%
+      margin-right: 40px
+      &:last-child
+        margin-right: 0px
+      .col-header
+        color: var(--n3)
+        text-transform: uppercase
+        display: flex
+        align-items: center
+        height: 60px
+        soci-icon
+          margin-right: 8px
+      soci-post-list
+        padding: 0

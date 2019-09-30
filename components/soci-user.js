@@ -49,6 +49,16 @@ export default class SociUser extends SociComponent {
         font-weight: bold;
         line-height: 24px;
       }
+      :host([size="x-large"]) #avatar {
+        width: 120px;
+        height: 120px;
+        margin-right: 18px;
+      }
+      :host([size="x-large"]) #username {
+        font-size: 48px;
+        font-weight: bold;
+        line-height: 84px;
+      }
     `
   }
 
