@@ -8,12 +8,18 @@ export default class SociRouter extends SociComponent {
   css(){
     return `
       :host {
-        display: contents;
+        display: none;
       }
     `
   }
 
+  activate(){
+    console.log('ACTIVATE')
+    console.log(this)
+  }
+
   connectedCallback(){
+    console.log(this.activatez)
   }
 
   static get observedAttributes() {

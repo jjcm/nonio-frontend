@@ -1,10 +1,12 @@
+soci-sidebar(slot="sidebar")
 soci-router
-  soci-sidebar(slot="sidebar")
-  div(slot="postlists" style="display: flex;")
-    soci-column(filter="images", tag="funny", color="purple")
-    soci-column(filter="images", tag="funny", color="red")
-    soci-column(filter="images", tag="funny", color="teal")
-    soci-column(filter="images", tag="funny", color="orange")
-  div(slot="home")
-    h1 Home / Landing page
-  soci-post(slot="post" title="a generic page" type="image" url="some-random-post" open)
+  soci-route(pattern="^#" title="tags")
+    div(style="display: flex;")
+      soci-column(filter="images", tag="funny", color="purple")
+      soci-column(filter="images", tag="funny", color="red")
+      soci-column(filter="images", tag="funny", color="orange")
+  soci-route(pattern="^$" title="tags")
+    div(style="display: flex;")
+      h1 Home / Landing page
+  soci-route(pattern="^#user$" title="tags")
+    include user.pug

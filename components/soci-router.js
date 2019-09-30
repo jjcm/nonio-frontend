@@ -4,6 +4,7 @@ import config from '../config.js'
 export default class SociRouter extends SociComponent {
   constructor() {
     super()
+    this.routes = []
   }
 
 
@@ -21,11 +22,14 @@ export default class SociRouter extends SociComponent {
   }
 
   connectedCallback(){
+    this.registerRoutes()
+
     let details = this.getDetailsFromUrl()
     history.replaceState(details, '', document.location.pathname + document.location.hash)
     window.addEventListener('popstate', this.onPopState.bind(this))
     window.addEventListener('hashchange', this.onHashChange.bind(this))
     this.onHashChange()
+
   }
 
   getDetailsFromUrl(){
@@ -57,6 +61,19 @@ export default class SociRouter extends SociComponent {
     this.route(path)
   }
 
+  registerRoutes(){
+    this.querySelectorAll('soci-route').forEach(route => this.registerRoute(route))
+  }
+
+  registerRoute(route){
+    this.routes.push({
+      pattern: new RegExp(route.getAttribute('pattern')),
+      data: route.innerHTML
+    })
+
+    route.remove()
+  }
+
   route(path){
     let location = ''
     switch(true){
@@ -74,6 +91,12 @@ export default class SociRouter extends SociComponent {
         break
     }
 
+    this.routes.forEach(route=>{
+      if(route.pattern.test(path)){
+        this.innerHTML = route.data
+      }
+    })
+
     console.log(`You are viewing: ${location}`)
     let currentPage = this.select('slot[active]')
     if(currentPage) currentPage.removeAttribute('active')
@@ -85,16 +108,7 @@ export default class SociRouter extends SociComponent {
   render(){
     return html`
       ${this.getCss()}
-      <sidebar>
-        <slot name="sidebar">
-      </sidebar>
-      <main>
-        <slot name="postlists"></slot>
-        <slot name="post"></slot>
-        <slot name="home"></slot>
-        <slot name="settings"></slot>
-        <slot name="404"></slot>
-      </main>
+      <slot></slot>
     `
   }
 }
