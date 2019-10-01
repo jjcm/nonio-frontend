@@ -1,12 +1,16 @@
-soci-sidebar(slot="sidebar")
 soci-router
+  soci-sidebar
   soci-route(pattern="^#" title="tags")
     div(style="display: flex;")
       soci-column(filter="images", tag="funny", color="purple")
       soci-column(filter="images", tag="funny", color="red")
       soci-column(filter="images", tag="funny", color="orange")
-  soci-route(pattern="^$" title="tags")
+  soci-route#home(pattern="^$" title="home")
+    script.
+      document.getElementById('home').addEventListener('routeactivate', ()=>{
+        console.log('hio')
+      })
     div(style="display: flex;")
       h1 Home / Landing page
-  soci-route(pattern="^#user$" title="tags")
+  soci-route(pattern="^#user$" title="user")
     include user.pug

@@ -10,23 +10,57 @@ export default class SociRouter extends SociComponent {
       :host {
         display: none;
       }
+      :host([activating]),
+      :host([active]) {
+        display: flex;
+      }
     `
   }
 
   activate(){
-    console.log('ACTIVATE')
-    console.log(this)
+    this.innerHTML = this.data
+    this.setAttribute('activating', '')
+    setTimeout(()=>{
+      this.removeAttribute('activating')
+      this.setAttribute('active', '')
+
+      let e = new CustomEvent('routeactivate', {bubbles: false})
+      this.dispatchEvent(e)
+    },1)
+  }
+
+  deactivate(){
+    if(this.hasAttribute('active')){
+      this.removeAttribute('active')
+      this.data = this.innerHTML
+      this.innerHTML = ''
+    }
   }
 
   connectedCallback(){
-    console.log(this.activatez)
+    this.data = this.innerHTML 
+    this.innerHTML = ''
   }
 
   static get observedAttributes() {
-    return ['pattern']
+    return ['pattern', 'active']
+  }
+
+  get pattern() {
+    let pattern = this.getAttribute('pattern') || ''
+    return new RegExp(pattern)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    switch(name){
+      case "pattern":
+        break
+      case "active":
+        if(newValue == ''){
+          this.innerHTML = this.data
+        }
+        break
+    }
   }
 
 

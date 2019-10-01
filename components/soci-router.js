@@ -1,10 +1,9 @@
-import {SociComponent, html, render} from './soci-component.js'
+import {SociComponent, html} from './soci-component.js'
 import config from '../config.js'
 
 export default class SociRouter extends SociComponent {
   constructor() {
     super()
-    this.routes = []
   }
 
 
@@ -13,23 +12,15 @@ export default class SociRouter extends SociComponent {
       :host {
         display: contents;
       }
-
-      :host main slot:not([active]) {
-        display: none;
-      }
-
     `
   }
 
   connectedCallback(){
-    this.registerRoutes()
-
     let details = this.getDetailsFromUrl()
     history.replaceState(details, '', document.location.pathname + document.location.hash)
     window.addEventListener('popstate', this.onPopState.bind(this))
     window.addEventListener('hashchange', this.onHashChange.bind(this))
     this.onHashChange()
-
   }
 
   getDetailsFromUrl(){
@@ -61,48 +52,12 @@ export default class SociRouter extends SociComponent {
     this.route(path)
   }
 
-  registerRoutes(){
-    this.querySelectorAll('soci-route').forEach(route => this.registerRoute(route))
-  }
-
-  registerRoute(route){
-    this.routes.push({
-      pattern: new RegExp(route.getAttribute('pattern')),
-      data: route.innerHTML
-    })
-
-    route.remove()
-  }
-
   route(path){
-    let location = ''
-    switch(true){
-      case path.length == 0: 
-        location = 'home'
-        break
-      case /^#/.test(path): 
-        location = 'postlists'
-        break
-      case /^settings/.test(path):
-        location = 'settings'
-        break
-      default: 
-        location = 'post'
-        break
-    }
-
-    this.routes.forEach(route=>{
+    this.querySelectorAll('soci-route').forEach(route=>{
       if(route.pattern.test(path)){
-        this.innerHTML = route.data
-      }
+        route.activate()
+      } else route.deactivate()
     })
-
-    console.log(`You are viewing: ${location}`)
-    let currentPage = this.select('slot[active]')
-    if(currentPage) currentPage.removeAttribute('active')
-
-    let newPage = this.select(`slot[name=${location}]`)
-    if(newPage) newPage.setAttribute('active', '')
   }
 
   render(){
