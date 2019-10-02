@@ -5,30 +5,20 @@ body
   color: var(--n6)
   scrollbar-width: none
 
-.page
-  width: 50%
-.inner-page
-  padding: 0 12px;
-
 ::-webkit-scrollbar {
   display: none
 }
 
-::-webkit-scrollbar {
-    background-color: blue;
-}
+#pages
+  height: 100vh
+  overflow: auto
+  width: 100%
+  position: relative
 
-#color-grid
-  display: grid
-  grid-template-columns: repeat(8, 40px)
-  grid-template-rows: repeat(4, 40px)
-  .color
-    width: 40px
-    height: 40px
 
 #user
   padding: 30px 50px
-  .header
+  header
     display: flex
     justify-content: space-between
   .hero
@@ -123,3 +113,17 @@ body
         transition-delay: 0.2s
       &:nth-child(4)
         transition-delay: 0.3s
+
+#user
+  header
+  .content
+    transform: translateY(10px)
+    opacity: 0
+    transition: all 0.3s ease-in-out
+  &[active]
+    header
+    .content
+      transform: translateY(0)
+      opacity: 1
+    .content
+      transition-delay: 0.1s

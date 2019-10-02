@@ -41,8 +41,15 @@ export class SociComponent extends HTMLElement {
     console.groupEnd(groupLabel)
   }
 
-  getCss() {
+  getCss(){
     if(this.css) return html`<style>${this.css()}</style>`
   }
+
+  localLink(e){
+    e.preventDefault()
+    window.history.pushState(null, null, this.href)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  }
 }
+
 
