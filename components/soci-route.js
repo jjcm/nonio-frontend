@@ -55,11 +55,6 @@ export default class SociRouter extends SociComponent {
     switch(name){
       case "pattern":
         break
-      case "active":
-        if(newValue == ''){
-          this.innerHTML = this.data
-        }
-        break
     }
   }
 

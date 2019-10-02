@@ -98,3 +98,28 @@ body
           margin-right: 8px
       soci-post-list
         padding: 0
+
+#home
+  h1
+    transform: translateY(10px)
+    opacity: 0
+    transition: all 0.3s ease-in-out
+  &[active]
+    h1
+      transform: translateY(0)
+      opacity: 1
+#tags
+  soci-column
+    transform: translateY(10px)
+    opacity: 0
+    transition: all 0.3s ease-in-out
+  &[active]
+    soci-column
+      transform: translateY(0)
+      opacity: 1
+      &:nth-child(2)
+        transition-delay: 0.1s
+      &:nth-child(3)
+        transition-delay: 0.2s
+      &:nth-child(4)
+        transition-delay: 0.3s
