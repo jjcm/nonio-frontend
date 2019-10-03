@@ -1,29 +1,28 @@
-#user
-  header
-    .hero
-      soci-user(size="x-large" name="pwnies")
-      .subtitle Conjurer for Deep Design and Theoretical Ideas
-    .money
-      .title $4,269
-      .label current earnings
-      .up  +2.5%
+header
+  .hero
+    soci-user(size="x-large" name="pwnies")
+    .subtitle Conjurer for Deep Design and Theoretical Ideas
+  .money
+    .title $4,269
+    .label current earnings
+    .up  +2.5%
 
-    .subscribers
-      .title 1.8k
-      .label subscribers
-      .up  +0.4%
+  .subscribers
+    .title 1.8k
+    .label subscribers
+    .up  +0.4%
 
-  .content
-    .col
-      .col-header
-        soci-icon(glyph="tags")
-        | My Posts
-      soci-post-list(data="fake-routes/posts.json")
-    .col
-      .col-header
-        soci-icon(glyph="comments")
-        | Comments
-      soci-post-list(data="fake-routes/posts.json")
+.content
+  .col
+    .col-header
+      soci-icon(glyph="tags")
+      | My Posts
+    soci-post-list(data="fake-routes/posts.json")
+  .col
+    .col-header
+      soci-icon(glyph="comments")
+      | Comments
+    soci-post-list(data="fake-routes/posts.json")
 
-  script(src="pages/user.js")
-  link(rel="stylesheet" href="pages/user.styl")
+script(src="pages/user.js")
+link(rel="stylesheet" href="pages/user.styl")
