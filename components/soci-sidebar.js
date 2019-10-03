@@ -148,10 +148,6 @@ export default class SociSidebar extends SociComponent {
     document.getElementById('tags').appendChild(column)
   }
 
-  userClick(e){
-    e.preventDefault()
-  }
-
   createSubscribedTags(data){
     let tags = html`
       ${data.map((tag) => html`
