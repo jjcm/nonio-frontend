@@ -13,6 +13,9 @@ window.customElements.define('soci-post-li', SociPostLi)
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
 
+import SociRoute from "./soci-route.js"
+window.customElements.define('soci-route', SociRoute)
+
 import SociRouter from "./soci-router.js"
 window.customElements.define('soci-router', SociRouter)
 

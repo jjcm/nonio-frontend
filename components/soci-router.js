@@ -1,4 +1,4 @@
-import {SociComponent, html, render} from './soci-component.js'
+import {SociComponent, html} from './soci-component.js'
 import config from '../config.js'
 
 export default class SociRouter extends SociComponent {
@@ -12,11 +12,6 @@ export default class SociRouter extends SociComponent {
       :host {
         display: contents;
       }
-
-      :host main slot:not([active]) {
-        display: none;
-      }
-
     `
   }
 
@@ -58,43 +53,17 @@ export default class SociRouter extends SociComponent {
   }
 
   route(path){
-    let location = ''
-    switch(true){
-      case path.length == 0: 
-        location = 'home'
-        break
-      case /^#/.test(path): 
-        location = 'postlists'
-        break
-      case /^settings/.test(path):
-        location = 'settings'
-        break
-      default: 
-        location = 'post'
-        break
-    }
-
-    console.log(`You are viewing: ${location}`)
-    let currentPage = this.select('slot[active]')
-    if(currentPage) currentPage.removeAttribute('active')
-
-    let newPage = this.select(`slot[name=${location}]`)
-    if(newPage) newPage.setAttribute('active', '')
+    this.querySelectorAll('soci-route').forEach(route=>{
+      if(route.pattern.test(path)){
+        route.activate()
+      } else route.deactivate()
+    })
   }
 
   render(){
     return html`
       ${this.getCss()}
-      <sidebar>
-        <slot name="sidebar">
-      </sidebar>
-      <main>
-        <slot name="postlists"></slot>
-        <slot name="post"></slot>
-        <slot name="home"></slot>
-        <slot name="settings"></slot>
-        <slot name="404"></slot>
-      </main>
+      <slot></slot>
     `
   }
 }

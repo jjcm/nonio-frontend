@@ -65,14 +65,24 @@ export default class SociSidebar extends SociComponent {
       }
 
       :host #user {
-        display: flex;
-        align-items: center;
-        height: 64px;
-        padding-left: 20px;
         position: sticky;
         top: 0;
         background: #fff;
         z-index: 10;
+        height: 64px;
+      }
+
+      :host #user a {
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      :host #user a:hover {
+        background: transparent;
       }
 
       :host #tags {
@@ -135,7 +145,7 @@ export default class SociSidebar extends SociComponent {
     column.tag = e.currentTarget.textContent.trim()
     //column.color = e.currentTarget.getAttribute('color')
     column.color = 'purple'
-    document.body.appendChild(column)
+    document.getElementById('tags').appendChild(column)
   }
 
   createSubscribedTags(data){
@@ -175,7 +185,9 @@ export default class SociSidebar extends SociComponent {
     return html`
       ${this.getCss()}
       <section id="user">
-        <soci-user size="large" name="pwnies"></soci-user>
+        <a href="user" @click=${this.localLink}>
+          <soci-user size="large" name="pwnies"></soci-user>
+        </a>
       </section>
       <section id="search">
         <input placeholder="search"></input>
