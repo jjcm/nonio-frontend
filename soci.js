@@ -3,13 +3,12 @@ let soci = {
 
   },
   registerPage: (page, dom) => {
-    page.dom = document.querySelector(dom)
-    if(page.activate) page.dom.addEventListener('routeactivate', page.activate)
-    if(page.deactivate) page.dom.addEventListener('routedeactivate', page.deactivate)
+    page.dom = dom
+    if(page.onActivate) page.dom.addEventListener('routeactivate', page.onActivate)
+    if(page.onDeactivate) page.dom.addEventListener('routedeactivate', page.onDeactivate)
     page.init()
   },
   postData: async function(url = '', data = {}) {
-    // Default options are marked with *
     const response = await fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -17,13 +16,12 @@ let soci = {
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
         'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      body: JSON.stringify(data) 
     });
-    return await response.json(); // parses JSON response into native JavaScript objects
+    return await response.json();
   },
   log(message, details, type){
     let color = ['deebff', '0747ac']

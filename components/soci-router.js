@@ -21,6 +21,7 @@ export default class SociRouter extends SociComponent {
     window.addEventListener('popstate', this.onPopState.bind(this))
     window.addEventListener('hashchange', this.onHashChange.bind(this))
     this.onHashChange()
+    console.log('router connected')
   }
 
   getDetailsFromUrl(){

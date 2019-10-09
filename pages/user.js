@@ -1,11 +1,11 @@
 let user = {
   init: () => {
   },
-  activate: () => {
+  onActivate: () => {
     console.log('ayy')
   },
-  deactivate: () => {
+  onDeactivate: () => {
   }
 }
 
-soci.registerPage(user, '#user')
+soci.registerPage(user, document.currentScript.closest('soci-route'))

@@ -1,33 +1,5 @@
 #home-container
-  script.
-    document.getElementById('home').addEventListener('routeactivate', ()=>{
-      fetch('//api.non.io/').then(response=>response.json()).then(data=>{
-        console.log(data)
-      })
-
-      document.querySelector('#home-container #register').addEventListener('click', async ()=>{
-        let creds = {
-          email: document.querySelector('#home-container #email').value,
-          password: document.querySelector('#home-container #password').value
-        }
-
-        let response = await soci.postData('https://api.non.io/register', creds)
-        soci.log('Registration Successful! Token:', response.token)
-        return 0
-        fetch('//api.non.io/register', {
-          method: 'POST',
-          mode: 'no-cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          redirect: 'follow',
-          referrer: 'no-referrer',
-          body: JSON.stringify(creds)
-        }).then(response => response.json()).then(data=>{
-          console.log(data)
-        })
-      })
-    })
+  script(src="pages/home.js")
   h1 Home / Landing page
 
   h2 registration test
@@ -36,3 +8,6 @@
   label(for="password") Password
   input(id="password" type="password")
   button#register Register
+
+
+  soci-link(href="qwer1234") test
