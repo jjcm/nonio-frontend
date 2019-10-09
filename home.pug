@@ -7,11 +7,6 @@ soci-router
         soci-column(filter="images", tag="funny", color="red")
         soci-column(filter="images", tag="funny", color="orange")
     soci-route#home(pattern="^$" title="home")
-      script.
-        document.getElementById('home').addEventListener('routeactivate', ()=>{
-          console.log('hio')
-        })
-      div(style="display: flex;")
-        h1 Home / Landing page
+      include pages/home.pug
     soci-route#user(pattern="^user$" title="user")
       include pages/user.pug

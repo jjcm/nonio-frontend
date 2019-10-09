@@ -1,0 +1,24 @@
+{
+  "name": "soci-frontend-server",
+  "version": "1.0.0",
+  "description": "Dynamically compiles soci's frontend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjcm/soci-components.git"
+  },
+  "author": "Jake Miller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jjcm/soci-components/issues"
+  },
+  "homepage": "https://github.com/jjcm/soci-components#readme",
+  "dependencies": {
+    "mime-types": "^2.1.24",
+    "pug": "^2.0.4",
+    "stylus": "^0.54.7"
+  }
+}

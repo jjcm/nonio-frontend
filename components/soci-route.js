@@ -40,20 +40,19 @@ export default class SociRouter extends SociComponent {
   connectedCallback(){
     this.data = this.innerHTML 
     this.innerHTML = ''
+
+    let pattern = this.getAttribute('pattern') || ''
+    this.pattern = new RegExp(pattern)
   }
 
   static get observedAttributes() {
     return ['pattern', 'active']
   }
 
-  get pattern() {
-    let pattern = this.getAttribute('pattern') || ''
-    return new RegExp(pattern)
-  }
-
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case "pattern":
+        this.pattern = new RegExp(newValue)
         break
     }
   }
