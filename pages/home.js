@@ -1,8 +1,3 @@
-/*
-document.getElementById('home').addEventListener('routeactivate', ()=>{
-})
-*/
-
 let home = {
   init: () => {
   },
@@ -13,7 +8,7 @@ let home = {
         password: document.querySelector('#home-container #password').value
       }
 
-      let response = await soci.postData('https://api.non.io/register', creds)
+      let response = await soci.postData('register', creds)
       soci.log('Registration Successful! Token:', response.token)
     })
   },

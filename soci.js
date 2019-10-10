@@ -1,3 +1,5 @@
+const API_URL = 'https://api.non.io/'
+
 let soci = {
   init: () => {
 
@@ -8,8 +10,8 @@ let soci = {
     if(page.onDeactivate) page.dom.addEventListener('routedeactivate', page.onDeactivate)
     page.init()
   },
-  postData: async function(url = '', data = {}) {
-    const response = await fetch(url, {
+  postData: async function(url, data = {}) {
+    const response = await fetch(API_URL + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -22,6 +24,9 @@ let soci = {
       body: JSON.stringify(data) 
     });
     return await response.json();
+  },
+  getData: async function(url){
+
   },
   log(message, details, type){
     let color = ['deebff', '0747ac']
