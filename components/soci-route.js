@@ -18,6 +18,7 @@ export default class SociRouter extends SociComponent {
   }
 
   activate(){
+    if(this.hasAttribute('active')) return 0
     this.innerHTML = this.data
     this.setAttribute('activating', '')
     setTimeout(()=>{
