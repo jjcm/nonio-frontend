@@ -2,10 +2,7 @@ soci-router
   soci-sidebar
   #pages
     soci-route#tags(pattern="^#" title="tags")
-      div(style="display: flex;")
-        soci-column(filter="images", tag="funny", color="purple")
-        soci-column(filter="images", tag="funny", color="red")
-        soci-column(filter="images", tag="funny", color="orange")
+      include pages/tags.pug
     soci-route#home(pattern="^$" title="home")
       include pages/home.pug
     soci-route#user(pattern="^user$" title="user")

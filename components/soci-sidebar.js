@@ -139,25 +139,38 @@ export default class SociSidebar extends SociComponent {
   }
 
   tagClick(e){
+    e.preventDefault()
+    let href = e.currentTarget.href.match(/#.*$/)[0]
+    if(document.getElementById('tags').active){
+      console.log('location: ' + window.location.hash)
+      href = `${window.location.hash}+${href}`
+    }
+    else {
+      href = '/' + href
+    }
     let column = document.createElement('soci-column')
     column.filter = 'all'
     column.tag = e.currentTarget.textContent.trim()
     //column.color = e.currentTarget.getAttribute('color')
     column.color = 'purple'
-    document.getElementById('tags').appendChild(column)
+    let tags = document.getElementById('tags')
+    tags.insertBefore(column, tags.children[0])
+
+    window.history.pushState(null, null, href)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
   }
 
   createSubscribedTags(data){
     let tags = html`
       ${data.map((tag) => html`
-        <soci-link href="#${tag.name}" @click=${this.tagClick} color=${tag.color}>
+        <a href="/#${tag.name}" @click=${this.tagClick} color=${tag.color}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: var(--${tag.color}); position: absolute; left: 24px; top: 8px; width: 16px; height: 16px; border-radius: 3px;">
             <g transform="translate(1,1.5)">
             <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="white"/>
             </g>
           </svg>
           ${tag.name}
-        </soci-link>
+        </a>
       `)}
     `
     render(tags, this)

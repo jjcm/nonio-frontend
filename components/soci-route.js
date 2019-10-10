@@ -7,7 +7,7 @@ export default class SociRouter extends SociComponent {
 
   css(){
     return `
-      :host {
+      :host(:not([active])){
         display: none;
       }
       :host([activating]),
@@ -36,6 +36,10 @@ export default class SociRouter extends SociComponent {
       this.data = this.innerHTML
       this.innerHTML = ''
     }
+  }
+
+  get active() {
+    return this.hasAttribute('active')
   }
 
   connectedCallback(){
