@@ -11,7 +11,10 @@ let home = {
       let response = await soci.postData('register', creds)
       soci.log('Registration Successful! Token:', response.token)
       soci.token = response.token
+
+      /* Use this if we ever switch to a secure server for non.io only
       document.cookie = `Authorization=Bearer ${response.token}`
+      */
     })
   },
   onDeactivate: () => {

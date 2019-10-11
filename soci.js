@@ -2,7 +2,6 @@ const API_URL = 'https://api.non.io/'
 
 let soci = {
   init: () => {
-    soci.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZGZhZ2dnaHlAc2QuY29tIiwiZXhwaXJlc0F0IjoxNTcwNjk1ODYyfQ.UIENuAcuvkrTFTwOTHumnVDj1HuEzhGSYOmncI3vWwA"
 
   },
   registerPage: (page, dom) => {
@@ -27,15 +26,17 @@ let soci = {
     return await response.json();
   },
   getData: async function(url){
+    /* Use this if we ever switch to a secure server for non.io only
     let options = {
       mode: 'cors',
       credentials: 'include'
     }
-    /*
+    */
+
+    let options = {}
     if(soci.token) options.headers = { 
       Authorization: "Bearer " + soci.token
     }
-    */
 
     const response = await fetch(API_URL + url, options)
     return await response.json()
