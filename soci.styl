@@ -11,11 +11,12 @@ body
 
 #pages
   height: 100vh
-  overflow: auto
-  width: 100%
+  overflow: hidden
+  width: calc(100vw - 280px)
   position: relative
 
-
+#home
+  padding: 0 16px
 #user
   padding: 30px 50px
   header
@@ -99,12 +100,13 @@ body
       transform: translateY(0)
       opacity: 1
 #tags
+  scroll-snap-type: x proximity;
+  scroll-padding: 16px;
   soci-column
     transform: translateY(10px)
     opacity: 0
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, margin 0.3s ease-out
   &[active]
-    justify-content: center
     soci-column
       transform: translateY(0)
       opacity: 1
@@ -114,6 +116,10 @@ body
         transition-delay: 0.2s
       &:nth-child(4)
         transition-delay: 0.3s
+      &.inserting
+        opacity: 0
+        transform: translateX(-200px)
+        margin-left: -416px
 
 #user
   header

@@ -7,8 +7,11 @@ export default class SociRouter extends SociComponent {
 
   css(){
     return `
-      :host(:not([active])){
+      :host {
         display: none;
+        width: 100%;
+        height: 100vw;
+        overflow: auto;
       }
       :host([activating]),
       :host([active]) {

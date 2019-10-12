@@ -8,6 +8,7 @@ export default class SociColumn extends SociComponent {
   css(){
     return `
       :host {
+        scroll-snap-align: start;
         position: relative;
         display: block;
         height: calc(100vh - 16px);
