@@ -10,7 +10,7 @@ export default class SociRouter extends SociComponent {
       :host {
         display: none;
         width: 100%;
-        height: 100vw;
+        height: 100vh;
         overflow: auto;
         box-sizing: border-box;
         transition: opacity 0.1s ease-in-out;
