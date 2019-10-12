@@ -12,10 +12,19 @@ export default class SociRouter extends SociComponent {
         width: 100%;
         height: 100vw;
         overflow: auto;
+        box-sizing: border-box;
+        transition: opacity 0.1s ease-in-out;
       }
       :host([activating]),
       :host([active]) {
         display: flex;
+      }
+
+      :host([active]) {
+        opacity: 1;
+      }
+      :host([activating]) {
+        opacity: 0;
       }
     `
   }

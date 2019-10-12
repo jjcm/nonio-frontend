@@ -12,74 +12,48 @@ export default class SociPost extends SociComponent {
         background: var(--n0);
         box-sizing: border-box;
         display: block;
-        border-radius: 8px;
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 8px 8px 0 16px rgba(255,255,255,0);
         overflow: hidden;
         transition: all 0.3s, box-shadow 0.2s;
-        position: fixed;
         z-index: 10;
+        width: 100%;
+        height: 100%;
       }
 
-      :host,
       :host content {
-        width: calc(100vw - 314px);
-        height: calc(100vh - 32px);
-        top: 16px;
-        left: 298px;
+        height: calc(100vh - 200px);
       }
 
-      :host([open]) {
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 8px 8px 0 16px rgba(255,255,255,1);
-        transition: none;
+      :host content img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       :host content {
         display: block;
-        padding: 12px;
       }
 
-      :host #title {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s ease;
-        font-size: 20px;
-        margin-top: 0;
+      :host footer {
+        box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
+        display: flex;
       }
 
-      :host([open]) #title {
-        opacity: 1;
-        transform: none;
-      }
-
-      :host img {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s ease 0.2s;
-        margin: 0 -12px;
-      }
-
-      :host([open]) img {
-        opacity: 1;
+      :host #details-container {
         width: 100%;
-        transform: none;
       }
 
-      :host #close {
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        font-size: 24px;
-        cursor: pointer;
-        width: 24px;
-        height: 24px;
-        line-height: 18px;
-        text-align: center;
-      }
-      :host #close:hover {
-        background: var(--n1);
+      :host #details {
+        max-width: 800px;
+        margin: 0 auto;
+        padding-top: 24px;
       }
 
-
+      :host h1 {
+        font-size: 40px;
+        line-height: 48px;
+        margin-top: 18px;
+        font-weight: 500;
+      }
     `
   }
 
@@ -140,6 +114,7 @@ export default class SociPost extends SociComponent {
 
   }
 
+  /*
   close(){
     if(this._prevLocation) {
       let router = document.querySelector('soci-router')
@@ -148,20 +123,28 @@ export default class SociPost extends SociComponent {
 
     document.body.removeChild(this)
   }
+  */
 
   connectedCallback(){
   }
 
 
   render(){
-    this.close = this.close.bind(this)
+    //this.close = this.close.bind(this)
     return html`
       ${this.getCss()}
       <content>
-        <div id="close" @click=${this.close}>x</div>
-        <h1 id="title"></h1>
         <img src="example-data/cat.jpg"/>
       </content>
+      <footer>
+        <div id="details-container">
+          <div id="details">
+            <soci-user size="large" name="pwnies"></soci-user>
+            <h1>title</h1>
+          </div>
+        </div>
+        <soci-comment-list></soci-comment-list>
+      </footer>
     `
   }
 }

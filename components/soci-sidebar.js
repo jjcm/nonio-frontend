@@ -16,6 +16,8 @@ export default class SociSidebar extends SociComponent {
         overflow: auto;
         position: relative;
         z-index: 1000;
+        padding-bottom: 90px;
+        box-sizing: border-box;
       }
 
       :host input {
@@ -126,25 +128,25 @@ export default class SociSidebar extends SociComponent {
       }
       
       #comments {
-        border-bottom: 0:
+        border-bottom: 0;
       }
 
       #footer {
         font-size: 12px;
-        padding: 0 22px;
+        padding: 18px 22px;
         line-height: 24px;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         box-sizing: border-box;
-        width: 100%;
+        width: 280px;
         color: var(--n3);
+        background: #fff;
       }
 
       #footer links {
         justify-content: flex-start;
         display: flex;
         font-size: 14px;
-        padding-bottom: 18px;
       }
 
       #footer soci-link {
