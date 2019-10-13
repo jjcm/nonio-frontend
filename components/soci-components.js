@@ -28,5 +28,8 @@ window.customElements.define('soci-sidebar', SociSidebar)
 import SociTag from "./soci-tag.js"
 window.customElements.define('soci-tag', SociTag)
 
+import SociTagGroup from "./soci-tag-group.js"
+window.customElements.define('soci-tag-group', SociTagGroup)
+
 import SociUser from "./soci-user.js"
 window.customElements.define('soci-user', SociUser)

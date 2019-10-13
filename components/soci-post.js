@@ -7,11 +7,13 @@ export default class SociPost extends SociComponent {
   }
 
   css(){
+    let FOOTER_HEIGHT = 200
     return `
       :host {
         background: var(--n0);
         box-sizing: border-box;
-        display: block;
+        display: flex;
+        flex-direction: column;
         overflow: hidden;
         transition: all 0.3s, box-shadow 0.2s;
         z-index: 10;
@@ -19,13 +21,9 @@ export default class SociPost extends SociComponent {
         height: 100%;
       }
 
-      :host content {
-        height: calc(100vh - 200px);
-      }
-
       :host content img {
         width: 100%;
-        height: 100%;
+        max-height: calc(100vh - ${FOOTER_HEIGHT}px);
         object-fit: contain;
       }
 
@@ -34,18 +32,20 @@ export default class SociPost extends SociComponent {
       }
 
       :host footer {
+        height: 100%;
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: flex;
+        position: relative;
       }
 
       :host #details-container {
-        width: 100%;
+        min-width: 400px;
       }
 
       :host #details {
         max-width: 800px;
         margin: 0 auto;
-        padding-top: 24px;
+        padding: 24px;
       }
 
       :host h1 {
@@ -53,6 +53,12 @@ export default class SociPost extends SociComponent {
         line-height: 48px;
         margin-top: 18px;
         font-weight: 500;
+      }
+
+      :host soci-comment-list {
+        display: block;
+        border-left: 2px solid rgba(0,0,0,0.08);
+        width: 100%;
       }
     `
   }
@@ -141,6 +147,9 @@ export default class SociPost extends SociComponent {
           <div id="details">
             <soci-user size="large" name="pwnies"></soci-user>
             <h1>title</h1>
+            <soci-tag-group score="234">
+              <soci-tag>wtf</soci-tag>
+            </soci-tag-group>
           </div>
         </div>
         <soci-comment-list></soci-comment-list>
