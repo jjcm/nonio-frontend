@@ -32,6 +32,7 @@ export default class SociUser extends SociComponent {
         letter-spacing: -0.16px;
         margin-left: 4px;
         user-select: none;
+        color: inherit;
       }
 
       :host([op]) {
@@ -74,10 +75,6 @@ export default class SociUser extends SociComponent {
       this.select('#username').innerHTML = newValue
       this.select('#avatar').src = 'example-data/profile.jpg'
     }
-  }
-
-  connectedCallback(){
-    //this.addEventListener('click', this.vote)
   }
 
   render(){

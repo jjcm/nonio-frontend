@@ -1,6 +1,9 @@
 import SociColumn from "./soci-column.js"
 window.customElements.define('soci-column', SociColumn)
 
+import SociComment from "./soci-comment.js"
+window.customElements.define('soci-comment', SociComment)
+
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 

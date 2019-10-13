@@ -7,17 +7,19 @@ export default class SociTagGroup extends SociComponent {
   css(){
     return `
       :host {
+        --height: 20px;
+        --tag-font-size: 10px;
         display: flex;
-        line-height: 20px;
+        line-height: var(--height);
         align-items: center;
         position: relative;
       }
       :host #tags {
         overflow: hidden;
         overflow-x: auto;
-        height: 20px;
+        height: var(--height);
         line-height: 16px;
-        border-radius: 10px;
+        border-radius: calc(var(--height) / 2);
         scrollbar-width: none;
       }
       :host::-webkit-scrollbar {
@@ -32,10 +34,10 @@ export default class SociTagGroup extends SociComponent {
       }
       :host #add-tag {
         background: var(--n1);
-        height: 20px;
+        height: var(--height);
         width: 32px;
         min-width: 32px;
-        border-radius: 10px;
+        border-radius: calc(var(--height) / 2);
         text-align: center;
         display: inline-flex;
         align-items: center;
@@ -51,9 +53,26 @@ export default class SociTagGroup extends SociComponent {
         color: var(--n2);
         padding: 0 8px;
       }
+
+      :host([size="large"]) {
+        --height: 24px;
+        --tag-font-size: 14px;
+      }
+
       :host([size="large"]) #score {
         font-size: 24px;
       }
+
+      :host soci-user {
+        --font-weight: 500;
+      }
+
+      ::slotted(soci-tag) {
+        height: var(--height);
+        line-height: var(--height);
+        font-size: var(--tag-font-size);
+      }
+
     `
   }
 

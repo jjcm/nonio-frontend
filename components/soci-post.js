@@ -14,7 +14,6 @@ export default class SociPost extends SociComponent {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
         transition: all 0.3s, box-shadow 0.2s;
         z-index: 10;
         width: 100%;
@@ -51,7 +50,7 @@ export default class SociPost extends SociComponent {
       :host h1 {
         font-size: 32px;
         line-height: 36px;
-        margin: 10px 0 14px;
+        margin: 12px 0 18px;
         font-weight: 400;
       }
 
@@ -64,8 +63,14 @@ export default class SociPost extends SociComponent {
       :host soci-user {
         margin-top: -2px;
         --avatar-size: 24px;
-        --font-weight: 500;
-        --font-size: 18px;
+        --font-weight: 400;
+        --font-size: 16px;
+      }
+
+      :host description {
+        margin-top: 18px;
+        line-height: 24px;
+        display: block;
       }
     `
   }
@@ -157,9 +162,14 @@ export default class SociPost extends SociComponent {
             <soci-tag-group score="234" size="large">
               <soci-tag>wtf</soci-tag>
             </soci-tag-group>
+            <description>
+              Just a test of some filler details and making some line wraps happen who knows what should actually be in here but hey we're loading it in all fancy like ya know? Dont event sweat it brah.
+            </description>
           </div>
         </div>
-        <soci-comment-list></soci-comment-list>
+        <soci-comment-list>
+          <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
+        </soci-comment-list>
       </footer>
     `
   }

@@ -11,11 +11,11 @@ link(rel="stylesheet" href="soci.styl")
 soci-router
   soci-sidebar
   #pages
-    soci-route#tags(pattern="^#" title="tags")
+    soci-route#tags(pattern="^#")
       include pages/tags.pug
-    soci-route#home(pattern="^$" title="home")
+    soci-route#home(pattern="^$")
       include pages/home.pug
-    soci-route#user(pattern="^user$" title="user")
+    soci-route#user(pattern="^user$")
       include pages/user.pug
-    soci-route#post(pattern=".*" title="post")
+    soci-route#post(pattern=".*")
       include pages/post.pug
