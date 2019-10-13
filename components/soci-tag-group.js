@@ -51,6 +51,9 @@ export default class SociTagGroup extends SociComponent {
         color: var(--n2);
         padding: 0 8px;
       }
+      :host([size="large"]) #score {
+        font-size: 24px;
+      }
     `
   }
 

@@ -11,19 +11,24 @@ export default class SociUser extends SociComponent {
         display: inline-flex;
         color: var(--n4);
         cursor: pointer;
+        --font-size: 12px;
+        --font-weight: 300;
+        --avatar-size: 16px;
+        --line-height: 16px;
       }
 
       :host #avatar {
-        width: 16px;
-        height: 16px;
+        width: var(--avatar-size);
+        height: var(--avatar-size);
         border-radius: 50%;
         background: var(--n2);
         object-fit: cover;
       }
 
       :host #username {
-        line-height: 16px;
-        font-size: 12px;
+        font-size: var(--font-size);
+        font-weight: var(--font-weight);
+        line-height: var(--line-height);
         letter-spacing: -0.16px;
         margin-left: 4px;
         user-select: none;
@@ -39,25 +44,23 @@ export default class SociUser extends SociComponent {
         font-weight: 900;
       }
 
+      :host([size="large"]) {
+        --avatar-size: 24px;
+        --font-size: 16px;
+        --font-weight: bold;
+        --line-height: 24px;
+      }
       :host([size="large"]) #avatar {
-        width: 24px;
-        height: 24px;
         margin-right: 8px;
       }
-      :host([size="large"]) #username {
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 24px;
-      }
       :host([size="x-large"]) #avatar {
-        width: 120px;
-        height: 120px;
+        --avatar-size: 120px;
         margin-right: 18px;
       }
-      :host([size="x-large"]) #username {
-        font-size: 48px;
-        font-weight: bold;
-        line-height: 84px;
+      :host([size="x-large"]) {
+        --font-size: 48px;
+        --font-weight: 600;
+        --line-height: 84px;
       }
     `
   }

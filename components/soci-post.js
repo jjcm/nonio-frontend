@@ -49,16 +49,23 @@ export default class SociPost extends SociComponent {
       }
 
       :host h1 {
-        font-size: 40px;
-        line-height: 48px;
-        margin-top: 18px;
-        font-weight: 500;
+        font-size: 32px;
+        line-height: 36px;
+        margin: 10px 0 14px;
+        font-weight: 400;
       }
 
       :host soci-comment-list {
         display: block;
         border-left: 2px solid rgba(0,0,0,0.08);
         width: 100%;
+      }
+
+      :host soci-user {
+        margin-top: -2px;
+        --avatar-size: 24px;
+        --font-weight: 500;
+        --font-size: 18px;
       }
     `
   }
@@ -146,8 +153,8 @@ export default class SociPost extends SociComponent {
         <div id="details-container">
           <div id="details">
             <soci-user size="large" name="pwnies"></soci-user>
-            <h1>title</h1>
-            <soci-tag-group score="234">
+            <h1>lowfi hip hop radio - beats to relax/study to</h1>
+            <soci-tag-group score="234" size="large">
               <soci-tag>wtf</soci-tag>
             </soci-tag-group>
           </div>
