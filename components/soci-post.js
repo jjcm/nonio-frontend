@@ -31,7 +31,6 @@ export default class SociPost extends SociComponent {
       }
 
       :host footer {
-        height: 100%;
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: flex;
         position: relative;
@@ -42,9 +41,10 @@ export default class SociPost extends SociComponent {
       }
 
       :host #details {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
-        padding: 24px;
+        box-sizing: border-box;
+        padding: 24px 36px;
       }
 
       :host h1 {
@@ -58,6 +58,9 @@ export default class SociPost extends SociComponent {
         display: block;
         border-left: 2px solid rgba(0,0,0,0.08);
         width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        padding: 24px 36px 24px 34px;
       }
 
       :host soci-user {
@@ -71,6 +74,13 @@ export default class SociPost extends SociComponent {
         margin-top: 18px;
         line-height: 24px;
         display: block;
+      }
+
+      @media (max-width: 1180px) { 
+        :host footer {
+          display: block;
+        }
+
       }
     `
   }
@@ -110,7 +120,7 @@ export default class SociPost extends SociComponent {
       this.style.left = pos.left
       this.style.top = pos.top
 
-      document.body.appendChild(this)
+      //document.body.appendChild(this)
       setTimeout(()=>{
         this.style.width = ""
         this.style.height = ""
@@ -126,7 +136,7 @@ export default class SociPost extends SociComponent {
 
           let router = document.querySelector('soci-router')
           if(router) router.updateUrl(this.getAttribute('title'), this.getAttribute('url'))
-        }, 200)
+        }, 2)
       }, 1)
     }
 
@@ -168,7 +178,17 @@ export default class SociPost extends SociComponent {
           </div>
         </div>
         <soci-comment-list>
-          <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
+          <soci-comment user="pwnies" score="1738">
+            heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
+            <div slot="replies">
+              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
+              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
+                <div slot="replies">
+                  <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
+                </div>
+              </soci-comment>
+            </div>
+          </soci-comment>
         </soci-comment-list>
       </footer>
     `
