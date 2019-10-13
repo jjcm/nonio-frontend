@@ -88,7 +88,7 @@ export default class SociComment extends SociComponent {
         display: flex;
         align-items: center;
         height: 24px;
-        padding: 0 8px 0 2px;
+        padding: 0 9px 0 2px;
         border-radius: 12px;
         background: var(--n1);
         cursor: pointer;
