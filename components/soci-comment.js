@@ -92,6 +92,8 @@ export default class SociComment extends SociComponent {
         border-radius: 12px;
         background: var(--n1);
         cursor: pointer;
+        user-select: none;
+        --fill-color: transparent;
       }
 
       :host #upvote soci-icon {
@@ -102,17 +104,37 @@ export default class SociComment extends SociComponent {
         background: var(--n2);
       }
 
+      :host #upvote[upvoted],
+      :host #upvote:active {
+        background: var(--g1);
+        color: #fff;
+        --fill-color: #fff;
+      }
+
       :host #upvote:hover soci-icon {
         color: var(--n4);
+      }
+
+      :host #upvote[upvoted] soci-icon,
+      :host #upvote:active soci-icon {
+        color: transparent;
+
       }
 
       :host soci-icon[glyph=downvote] {
         cursor: pointer;
         color: var(--n3);
+        --fill-color: transparent;
       }
 
       :host soci-icon[glyph=downvote]:hover {
         color: var(--n4);
+      }
+
+      :host soci-icon[glyph=downvote][downvoted],
+      :host soci-icon[glyph=downvote]:active {
+        color: var(--r2);
+        --fill-color: var(--r2);
       }
 
       :host #replies {
@@ -184,8 +206,44 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
   }
 
+  get score(){
+    return parseInt(this.getAttribute('score'))
+  }
+
+  set score(val){
+    this.setAttribute('score', val)
+  }
+
+  _upvote(){
+    let upvote = this.select('#upvote')
+    let downvote = this.select('soci-icon[glyph="downvote"]')
+    upvote.toggleAttribute('upvoted')
+    if(upvote.hasAttribute('upvoted')){
+      this.score += downvote.hasAttribute('downvoted') ? 2 : 1
+      downvote.removeAttribute('downvoted')
+    }
+    else {
+      this.score--
+    }
+  }
+
+  _downvote(){
+    let upvote = this.select('#upvote')
+    let downvote = this.select('soci-icon[glyph="downvote"]')
+    downvote.toggleAttribute('downvoted')
+    if(downvote.hasAttribute('downvoted')){
+      this.score -= upvote.hasAttribute('upvoted') ? 2 : 1
+      upvote.removeAttribute('upvoted')
+    }
+    else {
+      this.score++
+    }
+  }
+
   render(){
     this._toggleReplies = this._toggleReplies.bind(this)
+    this._upvote = this._upvote.bind(this)
+    this._downvote = this._downvote.bind(this)
     return html`
       ${this.getCss()}
       <top>
@@ -199,11 +257,11 @@ export default class SociComment extends SociComponent {
         <div id="reply">Reply</div>
         <div id="view-replies" @click=${this._toggleReplies}></div>
         <div id="vote-container">
-          <div id="upvote">
+          <div id="upvote" @click=${this._upvote}>
             <soci-icon glyph="upvote"></soci-icon>
             <div id="score"></div>
           </div>
-          <soci-icon glyph="downvote"></soci-icon>
+          <soci-icon glyph="downvote" @click=${this._downvote}></soci-icon>
         </div>
       </div>
       <div id="replies">

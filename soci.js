@@ -2,7 +2,7 @@ const API_URL = 'https://api.non.io/'
 
 let soci = {
   init: () => {
-    soci.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF3ZXIyMzFmNDIzNEBhc2RmYy5jb20iLCJleHBpcmVzQXQiOjE1NzA5NjMwMDh9.cSeN613MXSw9UbFi0eKz8T_6nMnLZQDIOTP7fu0Gbng'
+    soci.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InF3ZXIyM2YxNDIzNEBhc2RmYy5jb20iLCJleHBpcmVzQXQiOjE1NzEwNDIyMTd9.ifhVwQYEGJ7cWO1vwPJSQPa8QJprtUC3-sK9ykIOQfg'
 
   },
   registerPage: (page, dom) => {
