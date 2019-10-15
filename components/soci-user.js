@@ -63,6 +63,10 @@ export default class SociUser extends SociComponent {
         --font-weight: 600;
         --line-height: 84px;
       }
+
+      :host([avatar-only]) #username {
+        display: none;
+      }
     `
   }
 
