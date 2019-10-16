@@ -10,6 +10,9 @@ window.customElements.define('soci-comment-list', SociCommentList)
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 
+import SociInput from "./soci-input.js"
+window.customElements.define('soci-input', SociInput)
+
 import SociLink from "./soci-link.js"
 window.customElements.define('soci-link', SociLink)
 
