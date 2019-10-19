@@ -26,7 +26,7 @@ export default class SociComment extends SociComponent {
         color: var(--b3);
       }
 
-      :host #time {
+      :host time {
         color: var(--n3);
         display: inline;
         font-size: 12px;
@@ -184,6 +184,9 @@ export default class SociComment extends SociComponent {
       case 'user':
         this.select('soci-user').setAttribute('name', newValue)
         break
+      case 'date':
+        this.select('time').innerHTML = newValue
+        break
     }
   }
 
@@ -248,7 +251,7 @@ export default class SociComment extends SociComponent {
       ${this.getCss()}
       <top>
         <soci-user size="large"></soci-user>
-        <div id="time">2m ago</div>
+        <time>0m ago</time>
       </top>
       <div id="comment">
         <slot></slot>
