@@ -27,14 +27,12 @@ export default class SociCommentList extends SociComponent {
     let filter = e.currentTarget.innerHTML
     let comments = Array.from(this.children)
     
-    console.log(comments[0].getAttribute('date'))
     comments = comments.sort((a,b)=>{
-      console.log(parseInt(a.getAttribute('date')))
-      console.log(parseInt(b.getAttribute('date')))
-      return parseInt(a.getAttribute('date')) < parseInt(b.getAttribute('date'))
+      return parseInt(b.getAttribute('date')) - parseInt(a.getAttribute('date'))
     })
-    console.log(comments[0].getAttribute('date'))
 
+    this.innerHTML = ''
+    comments.forEach(comment => this.appendChild(comment))
   }
 
   render(){

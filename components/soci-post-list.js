@@ -72,8 +72,6 @@ export default class SociPostLi extends SociComponent {
   }
 
   async createPosts(data){
-    console.log('creating posts')
-    console.log(this)
     data = await soci.getData('posts')
 
     let posts = html`

@@ -50,6 +50,50 @@ export class SociComponent extends HTMLElement {
     window.history.pushState(null, null, this.href)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
   }
+
+  updateTime(time, dom){
+    clearTimeout(this._updateTimer)
+    console.log('this is firing twice, and I have no idea why. TODO')
+    console.log('testo')
+    const secondsPerUnit = [
+      ['s', 1],
+      ['m', 60],
+      ['h', 3600],
+      ['d', 86400],
+      ['w', 604800],
+      ['m', 2629746],
+      ['y', 31556952]
+    ]
+
+    const secondsAgo = Math.floor((Date.now() - parseInt(time)) / 1000) + 1
+
+    for(let i = 1; i < secondsPerUnit.length; i++){
+      if(secondsAgo < secondsPerUnit[i][1]){
+        let unit = secondsPerUnit[i - 1][0]
+        let interval = secondsPerUnit[i - 1][1]
+        this._updateTimer = setTimeout(()=>{this.updateTime(time, dom)}, interval * 1000)
+        dom.innerHTML = Math.floor(secondsAgo / interval) + unit + ' ago'
+        break
+      }
+    }
+    return 0
+
+    console.log(`time = ${time}`)
+    console.log(dom)
+    function setTimeAgo(time, interval, unit, dom){
+      setTimeout(()=>{this.updateTime(time, dom)}, interval * 1000)
+      dom.innerHTML = Math.floor(time / interval) + unit + ' ago'
+    }
+    setTimeAgo = setTimeAgo.bind(this)
+    time = Math.floor((Date.now() - parseInt(time)) / 1000)
+    if(time < 60) setTimeAgo(time, 1, 's', dom)
+    else if(time < 3600) setTimeAgo(time, 60, 'm', dom)
+    else if(time < 86400) setTimeAgo(time, 3600, 'h', dom)
+    else if(time < 604800) setTimeAgo(time, 86400, 'd', dom)
+    else if(time < 2629746) setTimeAgo(time, 604800, 'w', dom)
+    else if(time < 31556952) setTimeAgo(time, 2629746, 'm', dom)
+    else setTimeAgo(time, 31556952, 'y', dom)
+  }
 }
 
 

@@ -173,7 +173,7 @@ export default class SociComment extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['score', 'user', 'replies']
+    return ['score', 'user', 'replies', 'date']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -185,7 +185,7 @@ export default class SociComment extends SociComponent {
         this.select('soci-user').setAttribute('name', newValue)
         break
       case 'date':
-        this.select('time').innerHTML = newValue
+        this.updateTime(newValue, this.select('time'))
         break
     }
   }
@@ -251,7 +251,7 @@ export default class SociComment extends SociComponent {
       ${this.getCss()}
       <top>
         <soci-user size="large"></soci-user>
-        <time>0m ago</time>
+        <time>0s ago</time>
       </top>
       <div id="comment">
         <slot></slot>
