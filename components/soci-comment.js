@@ -209,6 +209,12 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
   }
 
+  disconnectedCallback(){
+    if(this._updateTimer){
+      clearTimeout(this._updateTimer)
+    } 
+  }
+
   get score(){
     return parseInt(this.getAttribute('score'))
   }

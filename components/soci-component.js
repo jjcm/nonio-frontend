@@ -52,9 +52,8 @@ export class SociComponent extends HTMLElement {
   }
 
   updateTime(time, dom){
-    clearTimeout(this._updateTimer)
-    console.log('this is firing twice, and I have no idea why. TODO')
-    console.log('testo')
+    if(this._updateTimer) clearTimeout(this._updateTimer)
+
     const secondsPerUnit = [
       ['s', 1],
       ['m', 60],
@@ -76,23 +75,6 @@ export class SociComponent extends HTMLElement {
         break
       }
     }
-    return 0
-
-    console.log(`time = ${time}`)
-    console.log(dom)
-    function setTimeAgo(time, interval, unit, dom){
-      setTimeout(()=>{this.updateTime(time, dom)}, interval * 1000)
-      dom.innerHTML = Math.floor(time / interval) + unit + ' ago'
-    }
-    setTimeAgo = setTimeAgo.bind(this)
-    time = Math.floor((Date.now() - parseInt(time)) / 1000)
-    if(time < 60) setTimeAgo(time, 1, 's', dom)
-    else if(time < 3600) setTimeAgo(time, 60, 'm', dom)
-    else if(time < 86400) setTimeAgo(time, 3600, 'h', dom)
-    else if(time < 604800) setTimeAgo(time, 86400, 'd', dom)
-    else if(time < 2629746) setTimeAgo(time, 604800, 'w', dom)
-    else if(time < 31556952) setTimeAgo(time, 2629746, 'm', dom)
-    else setTimeAgo(time, 31556952, 'y', dom)
   }
 }
 
