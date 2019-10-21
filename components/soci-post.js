@@ -1,5 +1,4 @@
 import {SociComponent, html} from './soci-component.js'
-import SociRouter from './soci-router.js'
 
 export default class SociPost extends SociComponent {
   constructor() {
@@ -86,7 +85,7 @@ export default class SociPost extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments']
+    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments', 'href']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -103,11 +102,13 @@ export default class SociPost extends SociComponent {
         break
       case 'score':
         this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
-        break;
+        break
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
-        break;
-
+        break
+      case 'href':
+        this.select('soci-comment-list').setAttribute('href', newValue)
+        break
     }
   }
 
@@ -142,23 +143,7 @@ export default class SociPost extends SociComponent {
 
   }
 
-  /*
-  close(){
-    if(this._prevLocation) {
-      let router = document.querySelector('soci-router')
-      if(router) router.updateUrl(this._prevLocation.title, this._prevLocation.url)
-    }
-
-    document.body.removeChild(this)
-  }
-  */
-
-  connectedCallback(){
-  }
-
-
   render(){
-    //this.close = this.close.bind(this)
     return html`
       ${this.getCss()}
       <content>
