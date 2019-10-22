@@ -7,7 +7,36 @@ export default class SociCommentList extends SociComponent {
 
   css(){
     return `
-      :host {
+      :host controls {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        margin: 28px 0 20px;
+        color: var(--n3);
+        font-weight: 500;
+        font-size: 16px;
+      }
+      :host filtering {
+        display: flex;
+        padding-left: 6px;
+      }
+      :host filter {
+        margin-right: 32px;
+        position: relative;
+      }
+      :host filter[active] {
+        color: var(--n4);
+      }
+      :host filter[active]:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -6px;
+        left: calc(50% - 8px);
+        width: 16px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--n4);
       }
     `
   }
@@ -24,6 +53,10 @@ export default class SociCommentList extends SociComponent {
   }
 
   _filter(e){
+    let current = this.select('filter[active]')
+    if(current) current.removeAttribute('active')
+    e.currentTarget.toggleAttribute('active')
+
     let filter = e.currentTarget.innerHTML
     let comments = Array.from(this.children)
     
@@ -42,7 +75,7 @@ export default class SociCommentList extends SociComponent {
       <soci-input></soci-input>
       <controls>
         <filtering>
-          <filter @click=${this._filter}>top</filter>
+          <filter @click=${this._filter} active>top</filter>
           <filter @click=${this._filter}>new</filter>
         </filtering>
         <comment-count>0 comments</comment-count>

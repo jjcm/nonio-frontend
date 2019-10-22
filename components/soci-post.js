@@ -6,7 +6,7 @@ export default class SociPost extends SociComponent {
   }
 
   css(){
-    let FOOTER_HEIGHT = 200
+    let FOOTER_HEIGHT = 300
     return `
       :host {
         background: var(--n0);
