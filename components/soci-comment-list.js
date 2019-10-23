@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import {SociComponent, html, render} from './soci-component.js'
 
 export default class SociCommentList extends SociComponent {
   constructor() {
@@ -50,8 +50,13 @@ export default class SociCommentList extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'data':
+        this.renderComments(newValue)
         break
     }
+  }
+
+  connectedCallback(){
+    this.renderComments()
   }
 
   _filter(e){
@@ -66,6 +71,77 @@ export default class SociCommentList extends SociComponent {
     })
     this.innerHTML = ''
     comments.forEach(comment => this.appendChild(comment))
+  }
+
+  async renderComments(){
+    //data = await soci.getData('comments')
+    let data = [
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 10000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "123",
+        date: Date.now() - 10000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 100000,
+            content: 'heyo im a comment',
+          },
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now(),
+            content: 'heyo im a comment',
+          },
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now(),
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+    ]
+
+    render(this.createComments(data), this)
+  }
+
+  createComments(comments){
+    console.log(comments)
+    console.log(comments[0].children)
+    return html`
+      ${comments.map((comment) => html`
+        <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
+          ${comment.content}
+          <div slot="replies">
+            ${this.recurseComments(comment.children)}
+          </div>
+        </soci-comment>
+      `)}
+    `
+  }
+
+  recurseComments(comment){
+    console.log('recursion time')
+    if(comment.children){
+      console.log(comment.children)
+      return this.createComments(comment.children)
+    }
   }
 
   render(){
