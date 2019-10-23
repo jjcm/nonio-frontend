@@ -23,7 +23,9 @@ export default class SociCommentList extends SociComponent {
       :host filter {
         margin-right: 32px;
         position: relative;
+        cursor: pointer;
       }
+      :host filter:hover,
       :host filter[active] {
         color: var(--n4);
       }
@@ -31,7 +33,7 @@ export default class SociCommentList extends SociComponent {
         content: '';
         display: block;
         position: absolute;
-        top: -6px;
+        top: -4px;
         left: calc(50% - 8px);
         width: 16px;
         height: 4px;
@@ -57,13 +59,11 @@ export default class SociCommentList extends SociComponent {
     if(current) current.removeAttribute('active')
     e.currentTarget.toggleAttribute('active')
 
-    let filter = e.currentTarget.innerHTML
+    let filteredAttr = e.currentTarget.innerHTML == 'Top' ? 'score' : 'date'
     let comments = Array.from(this.children)
-    
     comments = comments.sort((a,b)=>{
-      return parseInt(b.getAttribute('date')) - parseInt(a.getAttribute('date'))
+      return parseInt(b.getAttribute(filteredAttr)) - parseInt(a.getAttribute(filteredAttr))
     })
-
     this.innerHTML = ''
     comments.forEach(comment => this.appendChild(comment))
   }
@@ -75,8 +75,8 @@ export default class SociCommentList extends SociComponent {
       <soci-input></soci-input>
       <controls>
         <filtering>
-          <filter @click=${this._filter} active>top</filter>
-          <filter @click=${this._filter}>new</filter>
+          <filter @click=${this._filter} active>Top</filter>
+          <filter @click=${this._filter}>New</filter>
         </filtering>
         <comment-count>0 comments</comment-count>
       </controls>
