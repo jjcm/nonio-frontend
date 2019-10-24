@@ -11,10 +11,15 @@ export default class SociCommentList extends SociComponent {
         display: flex;
         width: 100%;
         justify-content: space-between;
-        margin: 28px 0 20px;
+        margin: 18px -34px 0;
         color: var(--n3);
         font-weight: 500;
-        font-size: 16px;
+        font-size: 12px;
+        border-top: 1px solid var(--n2);
+        height: 30px;
+        line-height: 30px;
+        padding: 0 34px;
+        background: linear-gradient(var(--n1), #fff);
       }
       :host filtering {
         display: flex;
@@ -33,7 +38,7 @@ export default class SociCommentList extends SociComponent {
         content: '';
         display: block;
         position: absolute;
-        top: -4px;
+        top: -2px;
         left: calc(50% - 8px);
         width: 16px;
         height: 4px;
@@ -79,7 +84,105 @@ export default class SociCommentList extends SociComponent {
       {
         user: "pwnies",
         score: "1234",
-        date: Date.now() - 10000,
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
+        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+        children: [
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+          }
+        ]
+      },
+      {
+        user: "pwnies",
+        score: "1234",
+        date: Date.now() - 100000,
         content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
         children: [
           {
@@ -101,6 +204,20 @@ export default class SociCommentList extends SociComponent {
             score: "1234",
             date: Date.now() - 100000,
             content: 'heyo im a comment',
+            children: [
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 100000,
+                content: 'heyo im a comment',
+              },
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 100000,
+                content: 'heyo im a comment',
+              },
+            ]
           },
           {
             user: "pwnies",
@@ -129,7 +246,7 @@ export default class SociCommentList extends SociComponent {
         <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
           ${comment.content}
           <div slot="replies">
-            ${this.recurseComments(comment.children)}
+            ${this.recurseComments(comment)}
           </div>
         </soci-comment>
       `)}
@@ -138,8 +255,8 @@ export default class SociCommentList extends SociComponent {
 
   recurseComments(comment){
     console.log('recursion time')
+    console.log(comment)
     if(comment.children){
-      console.log(comment.children)
       return this.createComments(comment.children)
     }
   }

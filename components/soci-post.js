@@ -44,6 +44,8 @@ export default class SociPost extends SociComponent {
         margin: 0 auto;
         box-sizing: border-box;
         padding: 24px 36px;
+        position: sticky;
+        top: 0;
       }
 
       :host h1 {
@@ -59,7 +61,7 @@ export default class SociPost extends SociComponent {
         width: 100%;
         box-sizing: border-box;
         position: relative;
-        padding: 24px 36px 24px 34px;
+        padding: 18px 36px 24px 34px;
       }
 
       :host soci-user {
