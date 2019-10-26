@@ -108,7 +108,7 @@ export default class SociPost extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'title':
-        this.select('#title').innerHTML = newValue
+        this.select('h1').innerHTML = newValue
         break
       case 'type':
         if(newValue.match(/video|image/)) this.select('#thumbnail').src = 'example-data/cat.jpg'

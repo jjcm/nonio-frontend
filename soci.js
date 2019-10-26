@@ -2,8 +2,24 @@ const API_URL = 'https://api.non.io/'
 
 let soci = {
   init: () => {
-    soci.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZGZhODkwMzQ4OWFAYXNkLmNvbSIsImV4cGlyZXNBdCI6MTU3MTM4NjcxNH0.Xw5pNPBoHBVWn0FFHdSfYDp4L0IHgz5TZX3VBKG5po8'
+    soci.token = localStorage.getItem('jwt')
+  },
+  storeToken: (token) => {
+    soci.token = token
+    localStorage.setItem('jwt', token)
+  },
+  refreshToken: () => {
 
+  },
+  checkTokenExpired: () => {
+    try {
+      let expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)
+      if(expiry < Date.now()) return true
+      return false
+    }
+    catch {
+      return false
+    }
   },
   registerPage: (page, dom) => {
     page.dom = dom
