@@ -195,7 +195,6 @@ export default class SociComment extends SociComponent {
     let button = e.currentTarget
     if(this.hasAttribute('expanded')){
       button.innerHTML = "Hide replies"
-      let replies = this.querySelector('div[slot="replies"]')
     }
     else {
       button.innerHTML = `View ${this.querySelectorAll('soci-comment').length} replies`
@@ -207,6 +206,8 @@ export default class SociComment extends SociComponent {
     if(numberOfReplies)
       this.select('#view-replies').innerHTML = `View ${this.querySelectorAll('soci-comment').length} replies`
     else this.select('#view-replies').style.display = "none"
+
+    if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
   }
 
   disconnectedCallback(){

@@ -239,8 +239,6 @@ export default class SociCommentList extends SociComponent {
   }
 
   createComments(comments){
-    console.log(comments)
-    console.log(comments[0].children)
     return html`
       ${comments.map((comment) => html`
         <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
@@ -254,8 +252,6 @@ export default class SociCommentList extends SociComponent {
   }
 
   recurseComments(comment){
-    console.log('recursion time')
-    console.log(comment)
     if(comment.children){
       return this.createComments(comment.children)
     }

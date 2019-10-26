@@ -99,6 +99,7 @@ export default class SociSidebar extends SociComponent {
         line-height: 32px;
         padding-left: 22px;
         cursor: pointer;
+        box-sizing: border-box;
       }
 
       :host a:hover {

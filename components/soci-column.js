@@ -11,11 +11,11 @@ export default class SociColumn extends SociComponent {
         scroll-snap-align: start;
         position: relative;
         display: block;
-        height: calc(100vh - 16px);
+        height: 100%;
         box-sizing: border-box;
         width: 100%;
         max-width: 1200px;
-        margin: 16px 16px 0 0;
+        margin-right: 16px;
         border-radius: 8px 8px 0 0;
         overflow: hidden;
         min-width: 400px;

@@ -17,6 +17,7 @@ export default class SociPost extends SociComponent {
         z-index: 10;
         width: 100%;
         height: 100%;
+        overflow-x: hidden;
       }
 
       :host content img {
