@@ -23,6 +23,19 @@ export default class SociPost extends SociComponent {
         width: 100%;
         max-height: calc(100vh - ${FOOTER_HEIGHT}px);
         object-fit: contain;
+        position: relative;
+        z-index: 10;
+        margin-bottom: -100%;
+      }
+
+      :host content img#bg {
+        position: inherit;
+        z-index: 9;
+        left: 0;
+        object-fit: cover;
+        transform: scale(1.1);
+        filter: blur(20px) brightness(0.8) saturate(0.8);
+        margin-bottom: 0;
       }
 
       :host content {
@@ -33,6 +46,7 @@ export default class SociPost extends SociComponent {
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: flex;
         position: relative;
+        background: #fff;
       }
 
       :host #details-container {
@@ -150,6 +164,7 @@ export default class SociPost extends SociComponent {
       ${this.getCss()}
       <content>
         <img src="example-data/cat.jpg"/>
+        <img id="bg" src="example-data/cat.jpg"/>
       </content>
       <footer>
         <div id="details-container">
