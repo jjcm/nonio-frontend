@@ -27,7 +27,7 @@ let home = {
       console.log(creds)
 
       let response = await soci.postData('login', creds)
-      if(repsonse){
+      if(response){
         soci.log('Login Successful! Token:', response.token)
         soci.storeToken(response.token)
       }

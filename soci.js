@@ -3,6 +3,11 @@ const API_URL = 'https://api.non.io/'
 let soci = {
   init: () => {
     soci.token = localStorage.getItem('jwt')
+
+    this.editor = new Quill('#editor-test', {
+      modules: { toolbar: true },
+      theme: 'snow'
+    })
   },
   storeToken: (token) => {
     soci.token = token
