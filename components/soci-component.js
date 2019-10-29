@@ -51,6 +51,19 @@ export class SociComponent extends HTMLElement {
     window.dispatchEvent(new HashChangeEvent('hashchange'))
   }
 
+  get authenticated(){
+    let token = localStorage.getItem('jwt')
+    if(!token) return false
+    try {
+      let expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)
+      if(expiry > Date.now() / 1000) return true
+      return false
+    }
+    catch {
+      return false
+    }
+  }
+
   updateTime(time, dom){
     if(this._updateTimer) clearTimeout(this._updateTimer)
 
