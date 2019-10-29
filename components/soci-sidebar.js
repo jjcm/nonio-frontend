@@ -260,7 +260,18 @@ export default class SociSidebar extends SociComponent {
         cursor: pointer;
         text-align: center;
       }
-      
+
+      :host button[type="submit"] svg {
+        height: 22px;
+        width: 22px;
+        top: 4px;
+        left: 4px;
+        display: none;
+      }
+
+      :host button[type="submit"][waiting] svg {
+        display: block;
+      }
     `
   }
 
@@ -277,22 +288,24 @@ export default class SociSidebar extends SociComponent {
   }
 
   async login(){
-      let creds = {
-        email: this.select('input[type="email"]').value,
-        password: this.select('input[type="password"]').value
-      }
+    this.select('button[type="submit"]').toggleAttribute('waiting')
+    let creds = {
+      email: this.select('input[type="email"]').value,
+      password: this.select('input[type="password"]').value
+    }
 
-      console.log(creds)
+    console.log(creds)
 
-      let response = await soci.postData('login', creds)
-      if(response.token){
-        soci.log('Login Successful! Token:', response.token)
-        soci.storeToken(response.token)
-        this.toggleAttribute('noauth')
-      }
-      else {
-        console.log('invalid token')
-      }
+    let response = await soci.postData('login', creds)
+    if(response.token){
+      soci.log('Login Successful! Token:', response.token)
+      soci.storeToken(response.token)
+      this.toggleAttribute('noauth')
+    }
+    else {
+      console.log('invalid token')
+    }
+    this.select('button[type="submit"]').toggleAttribute('waiting')
   }
 
   tagClick(e){
@@ -400,7 +413,14 @@ export default class SociSidebar extends SociComponent {
           <input type="email" placeholder="Email address"/>
           <input type="password" placeholder="Password"/>
         </form>
-        <button type="submit" @click=${this.login}>login</button>
+        <button type="submit" @click=${this.login}>login
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="4" opacity="0.1"/>
+            <path d="M24.0909 2.18182C11.942 2.18182 2.09091 12.0329 2.09091 24.1818" stroke="currentColor" stroke-width="4">
+              <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="1s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+        </button>
         <div>OR</div>
         <button id="google">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#4285f4" d="M386 400c45-42 65-112 53-179H260v74h102c-4 24-18 44-38 57z"/><path fill="#34a853" d="M90 341a192 192 0 0 0 296 59l-62-48c-53 35-141 22-171-60z"/><path fill="#fbbc02" d="M153 292c-8-25-8-48 0-73l-63-49c-23 46-30 111 0 171z"/><path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55z"/></svg>
@@ -412,6 +432,9 @@ export default class SociSidebar extends SociComponent {
         </button>
 
         <soci-link>Create account</soci-link>
+
+
+
 
 
 
