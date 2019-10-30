@@ -11,19 +11,18 @@ export default class SociCommentList extends SociComponent {
         display: flex;
         width: 100%;
         justify-content: space-between;
-        margin: 18px -34px 0;
         color: var(--n3);
         font-weight: 500;
         font-size: 12px;
         border-top: 1px solid var(--n2);
+        box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 34px;
+        padding: 0 34px 0 64px;
         background: linear-gradient(var(--n1), #fff);
       }
       :host filtering {
         display: flex;
-        padding-left: 6px;
       }
       :host filter {
         margin-right: 32px;
@@ -44,6 +43,10 @@ export default class SociCommentList extends SociComponent {
         height: 4px;
         border-radius: 2px;
         background: var(--n4);
+      }
+      :host content {
+        display: block;
+        padding: 0 24px 24px 12px;
       }
     `
   }

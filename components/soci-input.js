@@ -11,34 +11,45 @@ export default class SociInput extends SociComponent {
       :host {
         position: relative;
         display: flex;
+        flex-direction: column;
+        min-height: 82px;
+        transition: min-height 0.1s ease-out, padding 0.1s ease-out;
+        padding-bottom: 0px;
+        overflow: hidden;
       }
-      :host textarea {
-        height: 36px;
-        margin-top: 2px;
-        border-radius: 18px;
-        background: var(--n1);
-        box-shadow: 0 0 0 2px var(--n2);
+      :host(:focus-within) {
+        min-height: 200px;
+        padding-bottom: 40px;
+      }
+
+      :host button[type="submit"] {
         border: 0;
-        padding: 0 40px 0 18px;
-        width: calc(100% - 40px);
-        resize: none;
-        transition: all 0.2s ease-out;
-        padding-top: 8px;
+        width: 120px;
+        border-radius: 12px;
+        height: 24px;
+        line-height: 24px;
+        background: var(--b3);
+        color: #fff;
+        cursor: pointer;
+        position: absolute;
+        bottom: 4px;
+        right: 32px;
+        padding: 0 8px;
         font-size: 14px;
       }
-
-      :host textarea:focus,
-      :host textarea:active {
+      :host button[type="submit"]:active,
+      :host button[type="submit"]:focus {
         outline: 0;
-        border-radius: 0;
-        padding-top: 12px;
-        box-shadow: 0 0 0 2px var(--b1);
-        height: 300px;
+        background: var(--b2);
       }
 
+
       :host soci-user {
-        --avatar-size: 40px;
+        --avatar-size: 24px;
         margin-right: 14px;
+        position: absolute;
+        top: 8px;
+        left: 12px;
       }
 
       :host soci-icon {
@@ -47,6 +58,14 @@ export default class SociInput extends SociComponent {
         top: 8px;
         cursor: pointer;
         color: var(--n3);
+      }
+      .ql-toolbar {
+        border-bottom: 1px solid var(--n2);
+        max-height: 40px;
+      }
+
+      #editor {
+        flex: 1;
       }
       /*!
       * Quill Editor v1.3.6
@@ -428,7 +447,7 @@ export default class SociInput extends SociComponent {
         text-align: right;
       }
       .ql-editor.ql-blank::before {
-        color: rgba(0,0,0,0.6);
+        color: var(--n3);
         content: attr(data-placeholder);
         font-style: italic;
         left: 15px;
@@ -887,10 +906,10 @@ export default class SociInput extends SociComponent {
         background-color: #000;
       }
       .ql-toolbar.ql-snow {
-        border: 1px solid #ccc;
         box-sizing: border-box;
         font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
         padding: 8px;
+        padding-left: 48px;
       }
       .ql-toolbar.ql-snow .ql-formats {
         margin-right: 15px;
@@ -981,9 +1000,6 @@ export default class SociInput extends SociComponent {
       .ql-snow a {
         color: #06c;
       }
-      .ql-container.ql-snow {
-        border: 1px solid #ccc;
-      }
     `
     return css
     
@@ -1001,7 +1017,8 @@ export default class SociInput extends SociComponent {
   connectedCallback(){
     this.editor = new Quill(this.select('#editor'), {
       modules: { toolbar: true },
-      theme: 'snow'
+      theme: 'snow',
+      placeholder: "Enter comment"
     })
   }
 
@@ -1009,10 +1026,8 @@ export default class SociInput extends SociComponent {
     return html`
       ${this.getCss()}
       <soci-user name="pwnies" avatar-only></soci-user>
-      <div>
-        <div id="editor"></div>
-      </div>
-      <soci-icon glyph="attachment"></soci-user>
+      <div id="editor"></div>
+      <button type="submit">Post comment</buttom>
     `
   }
 }
