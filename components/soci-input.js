@@ -75,8 +75,6 @@ export default class SociInput extends SociComponent {
       */
       .ql-container {
         box-sizing: border-box;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 13px;
         height: 100%;
         margin: 0px;
         position: relative;
@@ -121,17 +119,13 @@ export default class SociInput extends SociComponent {
       .ql-editor blockquote,
       .ql-editor h1,
       .ql-editor h2,
-      .ql-editor h3,
-      .ql-editor h4,
-      .ql-editor h5,
-      .ql-editor h6 {
+      .ql-editor h3 {
         margin: 0;
         padding: 0;
-        counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
       }
       .ql-editor ol,
       .ql-editor ul {
-        padding-left: 1.5em;
+        padding-left: 0;
       }
       .ql-editor ol > li,
       .ql-editor ul > li {
@@ -176,6 +170,12 @@ export default class SociInput extends SociComponent {
       .ql-editor ol li {
         counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
         counter-increment: list-0;
+      }
+      .ql-editor ol li[data-list="bullet"]:before {
+        content: '•';
+      }
+      .ql-editor ol li[data-list="bullet"].ql-indent-1:before {
+        content: '◦';
       }
       .ql-editor ol li:before {
         content: counter(list-0, decimal) '. ';
@@ -366,86 +366,6 @@ export default class SociInput extends SociComponent {
       .ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
         padding-right: 28.5em;
       }
-      .ql-editor .ql-video {
-        display: block;
-        max-width: 100%;
-      }
-      .ql-editor .ql-video.ql-align-center {
-        margin: 0 auto;
-      }
-      .ql-editor .ql-video.ql-align-right {
-        margin: 0 0 0 auto;
-      }
-      .ql-editor .ql-bg-black {
-        background-color: #000;
-      }
-      .ql-editor .ql-bg-red {
-        background-color: #e60000;
-      }
-      .ql-editor .ql-bg-orange {
-        background-color: #f90;
-      }
-      .ql-editor .ql-bg-yellow {
-        background-color: #ff0;
-      }
-      .ql-editor .ql-bg-green {
-        background-color: #008a00;
-      }
-      .ql-editor .ql-bg-blue {
-        background-color: #06c;
-      }
-      .ql-editor .ql-bg-purple {
-        background-color: #93f;
-      }
-      .ql-editor .ql-color-white {
-        color: #fff;
-      }
-      .ql-editor .ql-color-red {
-        color: #e60000;
-      }
-      .ql-editor .ql-color-orange {
-        color: #f90;
-      }
-      .ql-editor .ql-color-yellow {
-        color: #ff0;
-      }
-      .ql-editor .ql-color-green {
-        color: #008a00;
-      }
-      .ql-editor .ql-color-blue {
-        color: #06c;
-      }
-      .ql-editor .ql-color-purple {
-        color: #93f;
-      }
-      .ql-editor .ql-font-serif {
-        font-family: Georgia, Times New Roman, serif;
-      }
-      .ql-editor .ql-font-monospace {
-        font-family: Monaco, Courier New, monospace;
-      }
-      .ql-editor .ql-size-small {
-        font-size: 0.75em;
-      }
-      .ql-editor .ql-size-large {
-        font-size: 1.5em;
-      }
-      .ql-editor .ql-size-huge {
-        font-size: 2.5em;
-      }
-      .ql-editor .ql-direction-rtl {
-        direction: rtl;
-        text-align: inherit;
-      }
-      .ql-editor .ql-align-center {
-        text-align: center;
-      }
-      .ql-editor .ql-align-justify {
-        text-align: justify;
-      }
-      .ql-editor .ql-align-right {
-        text-align: right;
-      }
       .ql-editor.ql-blank::before {
         color: var(--n3);
         content: attr(data-placeholder);
@@ -499,7 +419,7 @@ export default class SociInput extends SociComponent {
       .ql-snow .ql-toolbar .ql-picker-item:hover,
       .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
       .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-        color: #06c;
+        color: var(--b2);
       }
       .ql-snow.ql-toolbar button:hover .ql-fill,
       .ql-snow .ql-toolbar button:hover .ql-fill,
@@ -529,7 +449,7 @@ export default class SociInput extends SociComponent {
       .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
       .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
       .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
-        fill: #06c;
+        fill: var(--b2);
       }
       .ql-snow.ql-toolbar button:hover .ql-stroke,
       .ql-snow .ql-toolbar button:hover .ql-stroke,
@@ -559,25 +479,7 @@ export default class SociInput extends SociComponent {
       .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
       .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
       .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
-        stroke: #06c;
-      }
-      @media (pointer: coarse) {
-        .ql-snow.ql-toolbar button:hover:not(.ql-active),
-        .ql-snow .ql-toolbar button:hover:not(.ql-active) {
-          color: #444;
-        }
-        .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-fill,
-        .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-fill,
-        .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill,
-        .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill {
-          fill: #444;
-        }
-        .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
-        .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
-        .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
-        .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
-          stroke: #444;
-        }
+        stroke: var(--b2);
       }
       .ql-snow {
         box-sizing: border-box;
@@ -627,7 +529,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-snow .ql-fill,
       .ql-snow .ql-stroke.ql-fill {
-        fill: #444;
+        fill: var(--n3);
       }
       .ql-snow .ql-empty {
         fill: none;
@@ -660,27 +562,18 @@ export default class SociInput extends SociComponent {
       .ql-snow .ql-editor h3 {
         font-size: 1.17em;
       }
-      .ql-snow .ql-editor h4 {
-        font-size: 1em;
-      }
-      .ql-snow .ql-editor h5 {
-        font-size: 0.83em;
-      }
-      .ql-snow .ql-editor h6 {
-        font-size: 0.67em;
-      }
       .ql-snow .ql-editor a {
         text-decoration: underline;
       }
       .ql-snow .ql-editor blockquote {
-        border-left: 4px solid #ccc;
+        border-left: 4px solid var(--n2);
         margin-bottom: 5px;
         margin-top: 5px;
         padding-left: 16px;
       }
       .ql-snow .ql-editor code,
       .ql-snow .ql-editor pre {
-        background-color: #f0f0f0;
+        background-color: var(--n1);
         border-radius: 3px;
       }
       .ql-snow .ql-editor pre {
@@ -739,14 +632,14 @@ export default class SociInput extends SociComponent {
         padding-top: 5px;
       }
       .ql-snow .ql-picker.ql-expanded .ql-picker-label {
-        color: #ccc;
+        color: var(--n2);
         z-index: 2;
       }
       .ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-fill {
-        fill: #ccc;
+        fill: var(--n2);
       }
       .ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
-        stroke: #ccc;
+        stroke: var(--n2);
       }
       .ql-snow .ql-picker.ql-expanded .ql-picker-options {
         display: block;
@@ -922,10 +815,10 @@ export default class SociInput extends SociComponent {
         box-shadow: rgba(0,0,0,0.2) 0 2px 8px;
       }
       .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
-        border-color: #ccc;
+        border-color: var(--n2);
       }
       .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
-        border-color: #ccc;
+        border-color: var(--n2);
       }
       .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item.ql-selected,
       .ql-toolbar.ql-snow .ql-color-picker .ql-picker-item:hover {
@@ -936,7 +829,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-snow .ql-tooltip {
         background-color: #fff;
-        border: 1px solid #ccc;
+        border: 1px solid var(--n2);
         box-shadow: 0px 0px 5px #ddd;
         color: #444;
         padding: 5px 12px;
@@ -949,7 +842,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-snow .ql-tooltip input[type=text] {
         display: none;
-        border: 1px solid #ccc;
+        border: 1px solid var(--n2);
         font-size: 13px;
         height: 26px;
         margin: 0px;
@@ -964,7 +857,7 @@ export default class SociInput extends SociComponent {
         vertical-align: top;
       }
       .ql-snow .ql-tooltip a.ql-action::after {
-        border-right: 1px solid #ccc;
+        border-right: 1px solid var(--n2);
         content: 'Edit';
         margin-left: 16px;
         padding-right: 8px;
