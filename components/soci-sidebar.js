@@ -97,6 +97,24 @@ export default class SociSidebar extends SociComponent {
         background: transparent;
       }
 
+      :host #user soci-icon {
+        color: var(--n3);
+        right: 12px;
+        top: 16px;
+        left: auto;
+        width: 32px;
+        height: 32px;
+        --hover-color: transparent;
+        cursor: pointer;
+      }
+      :host #user soci-icon:hover {
+        --hover-color: var(--n1);
+        color: var(--n4);
+      }
+      :host #user soci-icon:active {
+        --hover-color: var(--n2);
+      }
+
       :host #tags {
         padding-bottom: 20px;
       }
@@ -377,6 +395,9 @@ export default class SociSidebar extends SociComponent {
           <a href="user" @click=${this.localLink}>
             <soci-user size="large" name="pwnies"></soci-user>
           </a>
+          <soci-link href="submit">
+            <soci-icon glyph="create"></soci-icon>
+          </soci-link>
         </section>
         <section id="search">
           <input placeholder="search"></input>
@@ -430,14 +451,7 @@ export default class SociSidebar extends SociComponent {
           Login with Facebook
           <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 512 512"><path d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z" fill="#fff"/></svg>
         </button>
-
         <soci-link>Create account</soci-link>
-
-
-
-
-
-
       </noauth>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">

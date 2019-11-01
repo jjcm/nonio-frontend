@@ -17,6 +17,8 @@ soci-router
       include pages/home.pug
     soci-route#user(pattern="^user$")
       include pages/user.pug
+    soci-route#submit(pattern="^submit$")
+      include pages/submit.pug
     soci-route#post(pattern=".*")
       include pages/post.pug
 
