@@ -2,12 +2,15 @@ const API_URL = 'https://api.non.io/'
 
 let soci = {
   init: () => {
-    soci.token = localStorage.getItem('jwt')
-
+  },
+  get token() {
+    return localStorage.getItem('jwt')
+  },
+  set token(val) {
+    localStorage.setItem('jwt', token)
   },
   storeToken: (token) => {
     soci.token = token
-    localStorage.setItem('jwt', token)
   },
   refreshToken: () => {
 

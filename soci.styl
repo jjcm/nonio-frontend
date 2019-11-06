@@ -138,3 +138,70 @@ body
   min-width: 1200px
   padding: 0 40px
   margin: 0 auto
+  input
+    border: none;
+    height: 32px;
+    font-size: 14px;
+    width: 140px
+    margin: 0 0 8px 12px;
+    padding: 0;
+    border-bottom: 2px solid var(--n2);
+    &::placeholder 
+      text-transform: none;
+      font-size: 12px;
+
+    &:active
+    &:focus
+      border-bottom: 2px solid var(--b2);
+      outline: 0
+
+  .tabs
+    display: flex
+    color: var(--n3)
+    margin-top: 24px
+    .tab
+      margin-right: 42px
+      font-weight: 500
+      position: relative
+      cursor: pointer
+      &:hover
+        color: var(--n4)
+      &[active]
+        color: var(--n4)
+        &:after
+          content: ''
+          height: 4px
+          width: 16px
+          background-color: var(--n4)
+          display: block
+          position: absolute
+          top: -4px
+          border-radius: 2px
+          left: calc(50% - 8px)
+
+
+  .drop-area
+    width: 540px
+    height: 240px
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    border 2px dashed var(--n2)
+    margin-top: 18px
+    border-radius: 8px
+    .label
+      font-weight: 500
+      color: var(--n3)
+      margin-bottom: 12px
+    button
+      border-radius: 14px
+      height: 28px
+      color: var(--n0)
+      cursor: pointer
+      background: var(--b3)
+      border: none
+      padding: 0 8px
+      outline: none
+      &:active
+        background: var(--b2)
