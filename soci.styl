@@ -253,3 +253,51 @@ body
       outline: none
       &:active
         background: var(--b2)
+
+soci-sidebar
+  input
+    margin: 0 0 8px
+    padding: 0
+    border: 0
+    border-bottom: 2px solid var(--n2)
+    height: 38px
+    font-size: 14px
+    width: 100%
+
+  input::placeholder
+    text-transform: none
+    font-size: 12px
+
+  input:focus,
+  input:active
+    box-shadow: none
+    outline: none
+    border-bottom: 2px solid var(--b1)
+
+  button
+    margin-top: 8px
+    border-radius: 16px
+    height: 32px
+    outline: 0
+    border: 0
+    width: 100%
+    text-align: center
+    font-weight: 600
+    border: 1px solid var(--n2)
+    background: #fff
+    cursor: pointer
+    position: relative
+    svg
+      position: absolute
+      width: 24px
+      height: 24px
+      left: 4px
+      top: 3px
+      display: none
+
+    &:hover
+      background: var(--n1)
+
+  &[waiting] 
+    svg 
+      display: block

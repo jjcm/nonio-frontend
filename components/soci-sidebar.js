@@ -208,25 +208,6 @@ export default class SociSidebar extends SociComponent {
         padding-left: 0;
       }
 
-      :host noauth input {
-        margin: 0 0 8px;
-        padding: 0;
-        border-bottom: 2px solid var(--n2);
-      }
-      :host noauth input::placeholder {
-        text-transform: none;
-        font-size: 12px;
-      }
-
-      :host noauth input:focus,
-      :host noauth input:active {
-        box-shadow: none;
-        border-bottom: 2px solid var(--b1);
-      }
-
-      :host noauth button {
-        margin-top: 8px;
-      }
 
       :host noauth div {
         text-align: center;
@@ -246,6 +227,7 @@ export default class SociSidebar extends SociComponent {
         background: #fff;
         cursor: pointer;
         position: relative;
+        margin: 0 0 8px;
       }
 
       :host button svg {
@@ -279,17 +261,6 @@ export default class SociSidebar extends SociComponent {
         text-align: center;
       }
 
-      :host button[type="submit"] svg {
-        height: 22px;
-        width: 22px;
-        top: 4px;
-        left: 4px;
-        display: none;
-      }
-
-      :host button[type="submit"][waiting] svg {
-        display: block;
-      }
     `
   }
 
@@ -366,7 +337,7 @@ export default class SociSidebar extends SociComponent {
         </a>
       `)}
     `
-    render(tags, this)
+    render(tags, this.querySelector('tags'))
   }
 
   connectedCallback(){
@@ -414,7 +385,7 @@ export default class SociSidebar extends SociComponent {
         <section id="tags">
           <soci-icon glyph="tags"></soci-icon>
           <h2>Tags</h2>
-          <slot></slot>
+          <slot name="tags"></slot>
         </section>
         <section id="comments">
           <soci-icon glyph="comments"></soci-icon>
@@ -430,18 +401,8 @@ export default class SociSidebar extends SociComponent {
           <path d="M21.4813 0.599998V23H17.2253L6.05725 9.4V23H0.93725V0.599998H5.22525L16.3612 14.2V0.599998H21.4813ZM46.6915 23.384C44.3662 23.384 42.2648 22.8827 40.3875 21.88C38.5315 20.8773 37.0702 19.5013 36.0035 17.752C34.9582 15.9813 34.4355 13.9973 34.4355 11.8C34.4355 9.60267 34.9582 7.62933 36.0035 5.88C37.0702 4.10933 38.5315 2.72267 40.3875 1.72C42.2648 0.717333 44.3662 0.216 46.6915 0.216C49.0168 0.216 51.1075 0.717333 52.9635 1.72C54.8195 2.72267 56.2808 4.10933 57.3475 5.88C58.4142 7.62933 58.9475 9.60267 58.9475 11.8C58.9475 13.9973 58.4142 15.9813 57.3475 17.752C56.2808 19.5013 54.8195 20.8773 52.9635 21.88C51.1075 22.8827 49.0168 23.384 46.6915 23.384ZM46.6915 18.968C48.0142 18.968 49.2088 18.6693 50.2755 18.072C51.3422 17.4533 52.1742 16.6 52.7715 15.512C53.3902 14.424 53.6995 13.1867 53.6995 11.8C53.6995 10.4133 53.3902 9.176 52.7715 8.088C52.1742 7 51.3422 6.15733 50.2755 5.56C49.2088 4.94133 48.0142 4.632 46.6915 4.632C45.3688 4.632 44.1742 4.94133 43.1075 5.56C42.0408 6.15733 41.1982 7 40.5795 8.088C39.9822 9.176 39.6835 10.4133 39.6835 11.8C39.6835 13.1867 39.9822 14.424 40.5795 15.512C41.1982 16.6 42.0408 17.4533 43.1075 18.072C44.1742 18.6693 45.3688 18.968 46.6915 18.968ZM92.45 0.599998V23H88.194L77.026 9.4V23H71.906V0.599998H76.194L87.33 14.2V0.599998H92.45ZM106.812 0.599998H111.996V23H106.812V0.599998ZM137.223 23.384C134.897 23.384 132.796 22.8827 130.919 21.88C129.063 20.8773 127.601 19.5013 126.535 17.752C125.489 15.9813 124.967 13.9973 124.967 11.8C124.967 9.60267 125.489 7.62933 126.535 5.88C127.601 4.10933 129.063 2.72267 130.919 1.72C132.796 0.717333 134.897 0.216 137.223 0.216C139.548 0.216 141.639 0.717333 143.495 1.72C145.351 2.72267 146.812 4.10933 147.879 5.88C148.945 7.62933 149.479 9.60267 149.479 11.8C149.479 13.9973 148.945 15.9813 147.879 17.752C146.812 19.5013 145.351 20.8773 143.495 21.88C141.639 22.8827 139.548 23.384 137.223 23.384ZM137.223 18.968C138.545 18.968 139.74 18.6693 140.807 18.072C141.873 17.4533 142.705 16.6 143.303 15.512C143.921 14.424 144.231 13.1867 144.231 11.8C144.231 10.4133 143.921 9.176 143.303 8.088C142.705 7 141.873 6.15733 140.807 5.56C139.74 4.94133 138.545 4.632 137.223 4.632C135.9 4.632 134.705 4.94133 133.639 5.56C132.572 6.15733 131.729 7 131.111 8.088C130.513 9.176 130.215 10.4133 130.215 11.8C130.215 13.1867 130.513 14.424 131.111 15.512C131.729 16.6 132.572 17.4533 133.639 18.072C134.705 18.6693 135.9 18.968 137.223 18.968Z" fill="currentColor"/>
         </svg>
         <h2>Login to your account</h2>
-        <form>
-          <input type="email" placeholder="Email address"/>
-          <input type="password" placeholder="Password"/>
-        </form>
-        <button type="submit" @click=${this.login}>login
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="4" opacity="0.1"/>
-            <path d="M24.0909 2.18182C11.942 2.18182 2.09091 12.0329 2.09091 24.1818" stroke="currentColor" stroke-width="4">
-              <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="1s" repeatCount="indefinite"/>
-            </path>
-          </svg>
-        </button>
+        <slot name="login">
+        </slot>
         <div>OR</div>
         <button id="google">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#4285f4" d="M386 400c45-42 65-112 53-179H260v74h102c-4 24-18 44-38 57z"/><path fill="#34a853" d="M90 341a192 192 0 0 0 296 59l-62-48c-53 35-141 22-171-60z"/><path fill="#fbbc02" d="M153 292c-8-25-8-48 0-73l-63-49c-23 46-30 111 0 171z"/><path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55z"/></svg>

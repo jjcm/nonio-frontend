@@ -9,7 +9,7 @@ link(rel="stylesheet" href="soci.styl")
 //include user.pug
 //-include colors.pug
 soci-router
-  soci-sidebar
+  include sidebar.pug
   #pages
     soci-route#tags(pattern="^#")
       include pages/tags.pug
@@ -18,7 +18,7 @@ soci-router
     soci-route#user(pattern="^user$")
       include pages/user.pug
     soci-route#submit(pattern="^submit$")
-      include pages/submit.pug
+      //include pages/submit.pug
     soci-route#post(pattern=".*")
       include pages/post.pug
 
