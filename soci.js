@@ -7,7 +7,7 @@ let soci = {
     return localStorage.getItem('jwt')
   },
   set token(val) {
-    localStorage.setItem('jwt', token)
+    localStorage.setItem('jwt', val)
   },
   storeToken: (token) => {
     soci.token = token

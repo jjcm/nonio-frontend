@@ -1,8 +1,8 @@
 soci-sidebar
-  form(slot="login")
+  div(slot="login")
     <input type="email" placeholder="Email address"/>
     <input type="password" placeholder="Password"/>
-    <button type="submit" @click=${this.login}>login
+    <button type="submit" onclick="this.closest('soci-sidebar').login()">login
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="4" opacity="0.1"/>
         <path d="M24.0909 2.18182C11.942 2.18182 2.09091 12.0329 2.09091 24.1818" stroke="currentColor" stroke-width="4">

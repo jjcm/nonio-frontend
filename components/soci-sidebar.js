@@ -115,10 +115,6 @@ export default class SociSidebar extends SociComponent {
         --hover-color: var(--n2);
       }
 
-      :host #tags {
-        padding-bottom: 20px;
-      }
-
       :host a {
         display: block;
         text-decoration: none;
@@ -137,20 +133,16 @@ export default class SociSidebar extends SociComponent {
         margin-bottom: 20px;
       }
 
-      ::slotted(a) {
-        display: block;
+      :host tags a {
         padding-left: 54px;
-        text-decoration: none;
-        line-height: 32px;
         position: relative;
-        color: var(--n4);
       }
 
-      ::slotted(a:hover) {
+      :host tags a:hover {
         background: var(--n1);
       }
 
-      ::slotted(svg) {
+      :host tags svg {
         position: absolute;
         left: 20px;
       }
@@ -277,24 +269,24 @@ export default class SociSidebar extends SociComponent {
   }
 
   async login(){
-    this.select('button[type="submit"]').toggleAttribute('waiting')
+    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
     let creds = {
-      email: this.select('input[type="email"]').value,
-      password: this.select('input[type="password"]').value
+      email: this.querySelector('input[type="email"]').value,
+      password: this.querySelector('input[type="password"]').value
     }
-
-    console.log(creds)
 
     let response = await soci.postData('login', creds)
     if(response.token){
+      console.log('heyp')
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       this.toggleAttribute('noauth')
+      console.log(this)
     }
     else {
       console.log('invalid token')
     }
-    this.select('button[type="submit"]').toggleAttribute('waiting')
+    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
   }
 
   tagClick(e){
@@ -337,7 +329,7 @@ export default class SociSidebar extends SociComponent {
         </a>
       `)}
     `
-    render(tags, this.querySelector('tags'))
+    render(tags, this.select('tags'))
   }
 
   connectedCallback(){
@@ -385,7 +377,7 @@ export default class SociSidebar extends SociComponent {
         <section id="tags">
           <soci-icon glyph="tags"></soci-icon>
           <h2>Tags</h2>
-          <slot name="tags"></slot>
+          <tags></tags>
         </section>
         <section id="comments">
           <soci-icon glyph="comments"></soci-icon>
