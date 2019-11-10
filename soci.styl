@@ -143,7 +143,10 @@ body
   box-sizing: border-box
   .url
     display: flex
+    align-items: center
+    position: relative
     height: 32px
+    min-width: 540px
     line-height: 28px
     border: 2px solid var(--n2)
     box-sizing: border-box
@@ -151,22 +154,31 @@ body
     font-size: 14px
     padding: 0 8px
     border-radius: 16px
-    transition: all 0.2s ease-in-out 0.3s
+    transition: all 0.1s ease-in-out, color 0s ease-in-out
+    margin: 0 -2px
     &[available="true"]
-      text-decoration: underline
-      background: var(--b2)
-      border: 2px solid var(--b2);
+      background: var(--g1)
+      border: 2px solid var(--g1);
       color: #fff
       cursor: pointer
       input
         cursor: pointer
-
     &[available="false"]
       border: 2px solid var(--r3);
+      soci-icon
+        color: var(--r3)
+    .error
+      position: absolute
+      left: 2px
+      bottom: -24px
+      color: var(--r3)
+      height: 20px
+
   label
     cursor: inherit
   input
     text-decoration: inherit
+    font-weight: bold
     border: none
     outline: none
     padding: 0
@@ -175,9 +187,14 @@ body
     background: transparent
     color: inherit
     &::placeholder 
+      font-weight: normal
       text-transform: none;
       font-size: 14px
       padding-left: 12px
+  soci-icon
+    pointer-events: none
+    position: absolute
+    right: 2px
 
   /*
   input

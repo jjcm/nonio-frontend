@@ -1,11 +1,12 @@
-#submit
+#submit-container
   h1 Submit post
-  .url-container
-    label http://non.io/
-    input(type="text" placeholder="  post url")
-    soci-icon(glyph="spinner")
-    soci-icon(glyph="error")
-    soci-icon(glyph="success")
+  .url
+    label(for="path") http://non.io/
+    input#path(type="text" placeholder="  post url")
+    soci-icon
+    .error
+
+script(src="pages/submit.js")
   
 
     
