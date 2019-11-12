@@ -26,13 +26,14 @@ export default class SociTagInput extends SociComponent {
       }
       :host input {
         border: none;
-        background: none;
+        background: inherit;
         height: 100%;
-        padding: 0 calc(var(--tag-height) / 2.5);
+        padding: 0 calc(var(--tag-height) / 2.5) 0 calc(var(--tag-height) / 2.5 + 1ch);
         border-radius: calc(var(--tag-height) / 2);
         font-size: inherit;
         cursor: pointer;
         width: 100%;
+        position: relative;
       }
       :host input:focus,
       :host input:active {
@@ -43,18 +44,24 @@ export default class SociTagInput extends SociComponent {
       :host input::placeholder {
         text-align: center;
         font-size: calc(var(--tag-height) / 1.5);
+        background: var(--n1);
+        box-shadow: 0 0 0 20px var(--n1);
       }
       :host input:focus::placeholder {
         color: transparent;
+        background: transparent;
+        box-shadow: none;
       }
       :host slot {
         display: inline-block;
       }
-      :host slot:before {
-        content: '#';
+      :host container {
+        position: relative;
       }
-      :host([upvoted]) slot:before {
-        content: '▲';
+      :host container div {
+        position: absolute;
+        left: calc(var(--tag-height) / 2.5);
+        font-weight: 300;
       }
     `
   }
@@ -86,6 +93,7 @@ export default class SociTagInput extends SociComponent {
         }
       </style>
       <container>
+        <div>#</div>
         <input type="text" placeholder="+"></input>
       </container>
     `

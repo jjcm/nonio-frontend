@@ -141,6 +141,8 @@ body
   padding: 0 40px
   margin: 0 auto
   box-sizing: border-box
+  h1, h2
+    padding-left: 2px
   .url
     display: flex
     align-items: center
@@ -154,7 +156,6 @@ body
     font-size: 14px
     padding: 0 8px
     border-radius: 16px
-    margin: 0 -2px
     transition: none
     &[available="true"]
       background: var(--g1)
@@ -223,34 +224,41 @@ body
           left: calc(50% - 8px)
 
   .drop-area
-    width: 540px
+    width: 100%
     height: 240px
     display: flex
     align-items: center
     justify-content: center
     flex-direction: column
     border 2px dashed var(--n2)
+    box-sizing: border-box
     margin-top: 18px
     border-radius: 8px
     .label
       font-weight: 500
       color: var(--n3)
       margin-bottom: 12px
-    button
-      border-radius: 14px
-      height: 28px
-      color: var(--n0)
-      cursor: pointer
-      background: var(--b3)
-      border: none
-      padding: 0 8px
-      outline: none
-      &:active
-        background: var(--b2)
+  button
+    border-radius: 14px
+    height: 28px
+    color: var(--n0)
+    cursor: pointer
+    background: var(--b3)
+    border: none
+    padding: 0 8px
+    outline: none
+    min-width: 100px
+    &:active
+      background: var(--b2)
 
+  h2
+    font-weight: 500
+    font-size: 17px
+    margin-top: 36px
   .tags
     display: grid
     grid-template-columns: repeat(3, 1fr)
+    margin-bottom: 36px
     grid-column-gap: 10px
     soci-tag-input
       flex: 1
