@@ -248,6 +248,15 @@ body
       &:active
         background: var(--b2)
 
+  .tags
+    display: grid
+    grid-template-columns: repeat(3, 1fr)
+    grid-column-gap: 10px
+    soci-tag-input
+      flex: 1
+      --tag-height: 30px
+
+
 soci-sidebar
   input
     margin: 0 0 8px
