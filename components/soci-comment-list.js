@@ -48,6 +48,14 @@ export default class SociCommentList extends SociComponent {
         display: block;
         padding: 0 24px 24px 12px;
       }
+      :host soci-input {
+        min-height: 82px;
+      }
+      :host soci-input:focus-within {
+        min-height: 200px;
+        padding-bottom: 40px;
+      }
+
     `
   }
 

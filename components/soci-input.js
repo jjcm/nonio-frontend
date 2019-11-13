@@ -12,37 +12,11 @@ export default class SociInput extends SociComponent {
         position: relative;
         display: flex;
         flex-direction: column;
-        min-height: 82px;
+        min-height: 200px;
         transition: min-height 0.1s ease-out, padding 0.1s ease-out;
         padding-bottom: 0px;
         overflow: hidden;
       }
-      :host(:focus-within) {
-        min-height: 200px;
-        padding-bottom: 40px;
-      }
-
-      :host button[type="submit"] {
-        border: 0;
-        width: 120px;
-        border-radius: 12px;
-        height: 24px;
-        line-height: 24px;
-        background: var(--b3);
-        color: #fff;
-        cursor: pointer;
-        position: absolute;
-        bottom: 4px;
-        right: 32px;
-        padding: 0 8px;
-        font-size: 14px;
-      }
-      :host button[type="submit"]:active,
-      :host button[type="submit"]:focus {
-        outline: 0;
-        background: var(--b2);
-      }
-
 
       :host soci-user {
         --avatar-size: 24px;
@@ -59,6 +33,9 @@ export default class SociInput extends SociComponent {
         cursor: pointer;
         color: var(--n3);
       }
+      :host([show-user]) .ql-toolbar.ql-snow {
+        padding-left: 48px;
+      }
       .ql-toolbar {
         border-bottom: 1px solid var(--n2);
         max-height: 40px;
@@ -66,6 +43,8 @@ export default class SociInput extends SociComponent {
 
       #editor {
         flex: 1;
+        display: flex;
+        flex-direction: column;
       }
       /*!
       * Quill Editor v1.3.6
@@ -97,6 +76,7 @@ export default class SociInput extends SociComponent {
         padding: 0;
       }
       .ql-editor {
+        flex: 1;
         box-sizing: border-box;
         line-height: 1.42;
         height: 100%;
@@ -802,7 +782,6 @@ export default class SociInput extends SociComponent {
         box-sizing: border-box;
         font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
         padding: 8px;
-        padding-left: 48px;
       }
       .ql-toolbar.ql-snow .ql-formats {
         margin-right: 15px;
@@ -911,16 +890,16 @@ export default class SociInput extends SociComponent {
     this.editor = new Quill(this.select('#editor'), {
       modules: { toolbar: true },
       theme: 'snow',
-      placeholder: "Enter comment"
+      placeholder: this.getAttribute('placeholder') || "Enter comment"
     })
   }
 
   render(){
+    let user = this.hasAttribute('show-user') ? html`<soci-user name="pwnies" avatar-only></soci-user>` : ''
     return html`
       ${this.getCss()}
-      <soci-user name="pwnies" avatar-only></soci-user>
+      ${user}
       <div id="editor"></div>
-      <button type="submit">Post comment</buttom>
     `
   }
 }
