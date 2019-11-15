@@ -31,6 +31,12 @@ window.customElements.define('soci-route', SociRoute)
 import SociRouter from "./soci-router.js"
 window.customElements.define('soci-router', SociRouter)
 
+import SociTab from "./soci-tab.js"
+window.customElements.define('soci-tab', SociTab)
+
+import SociTabGroup from "./soci-tab-group.js"
+window.customElements.define('soci-tab-group', SociTabGroup)
+
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
 
