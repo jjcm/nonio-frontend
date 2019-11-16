@@ -30,6 +30,8 @@ export default class SociTab extends SociComponent {
   }
 
   activate(){
+    console.log('activate')
+    console.log(this)
     if(this.hasAttribute('active')) return 0
     this.innerHTML = this.data
     this.setAttribute('activating', '')
@@ -57,6 +59,8 @@ export default class SociTab extends SociComponent {
   connectedCallback(){
     this.data = this.innerHTML 
     this.innerHTML = ''
+
+    this.activate = this.activate.bind(this)
   }
 
   static get observedAttributes() {

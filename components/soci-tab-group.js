@@ -51,6 +51,8 @@ export default class SociTabGroup extends SociComponent {
     `
   }
 
+
+
   render(){
     return html`
       ${this.getCss()}
