@@ -12,6 +12,7 @@ export default class SociTabGroup extends SociComponent {
         color: var(--n3);
         margin-top: 36px;
         margin-bottom: 18px;
+        user-select: none;
       }
       tab {
         display: block;
