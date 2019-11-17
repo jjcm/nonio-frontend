@@ -16,6 +16,7 @@ export default class SociInput extends SociComponent {
         transition: min-height 0.1s ease-out, padding 0.1s ease-out;
         padding-bottom: 0px;
         overflow: hidden;
+        box-sizing: border-box;
       }
 
       :host soci-user {

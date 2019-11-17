@@ -9,29 +9,15 @@ export default class SociTab extends SociComponent {
     return `
       :host {
         display: none;
-        width: 100%;
-        height: 100vh;
-        overflow: auto;
-        box-sizing: border-box;
-        transition: opacity 0.1s ease-in-out;
       }
       :host([activating]),
       :host([active]) {
-        display: flex;
-      }
-
-      :host([active]) {
-        opacity: 1;
-      }
-      :host([activating]) {
-        opacity: 0;
+        display: block;
       }
     `
   }
 
   activate(){
-    console.log('activate')
-    console.log(this)
     if(this.hasAttribute('active')) return 0
     this.innerHTML = this.data
     this.setAttribute('activating', '')
@@ -41,7 +27,7 @@ export default class SociTab extends SociComponent {
 
       let e = new CustomEvent('tabactivate', {bubbles: false})
       this.dispatchEvent(e)
-    },1)
+    }, 1)
   }
 
   deactivate(){
@@ -61,17 +47,6 @@ export default class SociTab extends SociComponent {
     this.innerHTML = ''
 
     this.activate = this.activate.bind(this)
-  }
-
-  static get observedAttributes() {
-    return ['name']
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'name') {
-      //register this with the tab group here
-
-    }
   }
 
   render(){

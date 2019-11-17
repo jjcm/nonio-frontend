@@ -199,30 +199,6 @@ body
     position: absolute
     right: 2px
 
-  .tabs
-    display: flex
-    color: var(--n3)
-    margin-top: 36px
-    .tab
-      margin-right: 42px
-      font-weight: 500
-      position: relative
-      cursor: pointer
-      &:hover
-        color: var(--n4)
-      &[active]
-        color: var(--n4)
-        &:after
-          content: ''
-          height: 4px
-          width: 16px
-          background-color: var(--n4)
-          display: block
-          position: absolute
-          top: -4px
-          border-radius: 2px
-          left: calc(50% - 8px)
-
   .drop-area
     width: 100%
     height: 240px
@@ -232,12 +208,18 @@ body
     flex-direction: column
     border 2px dashed var(--n2)
     box-sizing: border-box
-    margin-top: 18px
     border-radius: 8px
     .label
       font-weight: 500
       color: var(--n3)
       margin-bottom: 12px
+  soci-tab
+    soci-input
+      width: 100%
+      height: 240px
+    &[name="Blog"]
+      soci-input
+        height: 550px
   button
     border-radius: 14px
     height: 28px
@@ -273,7 +255,7 @@ body
 soci-sidebar
   input
     margin: 0 0 8px
-    padding: 0
+    padding: 0 10px
     border: 0
     border-bottom: 2px solid var(--n2)
     height: 38px

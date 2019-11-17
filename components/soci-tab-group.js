@@ -11,6 +11,7 @@ export default class SociTabGroup extends SociComponent {
         display: flex;
         color: var(--n3);
         margin-top: 36px;
+        margin-bottom: 18px;
       }
       tab {
         display: block;
@@ -41,17 +42,32 @@ export default class SociTabGroup extends SociComponent {
 
   createTabs(){
     let tabs = Array.from(this.querySelectorAll('soci-tab'))
+    this.activateTab = this.activateTab.bind(this)
     return html`
-      ${tabs.map((tab) => {
+      ${tabs.map((tab, i) => {
         let name = tab.getAttribute('name')
         if(!name) this.log('Tab is missing a name')
-        let active = tab.hasAttribute('active')
-        return html`<tab @click=${tab.activate} ?active=${active}>${name}</tab>`
+        return html`<tab @click=${this.activateTab} ?active=${i==0}>${name}</tab>`
       })}
     `
   }
 
+  activateTab(e){
+    let prevTab = this.select('[active]')
+    if(prevTab) prevTab.removeAttribute('active')
+    let tab = e.currentTarget
+    tab.toggleAttribute('active')
+    console.log(tab)
+    let name = tab.innerText
+    let tabs = Array.from(this.querySelectorAll('soci-tab'))
+    tabs.forEach(tab=>tab[tab.getAttribute('name') == name ? 'activate' : 'deactivate']())
+  }
 
+  connectedCallback(){
+    let firstTab = this.querySelector('soci-tab')
+    if(firstTab) firstTab.activate()
+    else this.log('Tab group has no children - add some tabs ya kook')
+  }
 
   render(){
     return html`

@@ -6,24 +6,36 @@
     soci-icon
     .error
   
-  .tabs
-    .tab(active) Image
-    .tab Video
-    .tab Audio
-    .tab Blog
-  
   soci-tab-group
     soci-tab(name="Image")
-      h1 Im an image
+      .drop-area
+        .label drag image(s) here
+        button select image(s)
+      h2 Description
+      soci-input(placeholder="Enter description")
+
     soci-tab(name="Video")
-      h1 Im an vid
+      .drop-area
+        .label drag video here
+        button select video
+      h2 Description
+      soci-input(placeholder="Enter description")
+        
+    soci-tab(name="Audio")
+      .drop-area
+        .label drag track or album here
+        button select file
+      h2 Description
+      soci-input(placeholder="Enter description")
 
-  .drop-area
-    .label drag image here
-    button select image
+    soci-tab(name="Blog")
+      soci-input(placeholder="Write your best")
 
-  h2 Description
-  soci-input(placeholder="Enter description")
+    soci-tab(name="HTML")
+      .drop-area
+        .label drag zip of webpage
+        button select zip
+  
 
   h2 Tags
   .tags
