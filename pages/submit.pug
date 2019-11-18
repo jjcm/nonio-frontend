@@ -9,22 +9,23 @@
   soci-tab-group
     soci-tab(name="Image")
       .drop-area
-        .label drag image(s) here
-        button select image(s)
+        .label drag image here
+        label(for="file") select video
+        input#file(type="file" accept="video/*") 
       h2 Description
       soci-input(placeholder="Enter description")
 
     soci-tab(name="Video")
       .drop-area
         .label drag video here
-        button select video
+        input#file(type="file" accept="video/*") 
       h2 Description
       soci-input(placeholder="Enter description")
         
     soci-tab(name="Audio")
       .drop-area
-        .label drag track or album here
-        button select file
+        .label drag track or here
+        input(type="file" accept="audio/*") 
       h2 Description
       soci-input(placeholder="Enter description")
 
