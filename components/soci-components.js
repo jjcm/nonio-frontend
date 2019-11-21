@@ -7,6 +7,9 @@ window.customElements.define('soci-comment', SociComment)
 import SociCommentList from "./soci-comment-list.js"
 window.customElements.define('soci-comment-list', SociCommentList)
 
+import SociFileDrop from "./soci-file-drop.js"
+window.customElements.define('soci-file-drop', SociFileDrop)
+
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 

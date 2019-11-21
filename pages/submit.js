@@ -1,14 +1,16 @@
 let submit = {
-  init: () => {
+  init() {
   },
-  onActivate: () => {
+  onActivate() {
     submit.input = document.querySelector('#submit input#path')
     submit.statusIcon = document.querySelector('#submit .url soci-icon')
     submit.input.addEventListener('keydown', submit.onKeyDown)
   },
+
+  //logic for the url bar
   keyDownTimer: null,
   error: null,
-  onKeyDown: () => {
+  onKeyDown() {
     document.querySelector('#submit .url').removeAttribute('available')
     submit.statusIcon.glyph = ''
     clearTimeout(submit.keyDownTimer)
@@ -31,12 +33,12 @@ let submit = {
       }
     },1)
   },
-  setURLError: (message) => {
+  setURLError(message) {
     submit.statusIcon.glyph = 'error'
     document.querySelector('#submit .url').setAttribute('available', false)
     document.querySelector('#submit .error').innerHTML = message
   },
-  checkURL: async () => {
+  async checkURL(){
     submit.statusIcon.glyph = 'spinner'
 
     let url = submit.input.value
@@ -57,7 +59,9 @@ let submit = {
     }
 
   },
-  onDeactivate: () => {
+  submit() {
+    console.log('hi')
+
   }
 }
 

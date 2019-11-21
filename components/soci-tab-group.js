@@ -48,26 +48,28 @@ export default class SociTabGroup extends SociComponent {
       ${tabs.map((tab, i) => {
         let name = tab.getAttribute('name')
         if(!name) this.log('Tab is missing a name')
-        return html`<tab @click=${this.activateTab} ?active=${i==0}>${name}</tab>`
+        return html`<tab name=${name} @click=${this.activateTab} ?active=${i==0}>${name}</tab>`
       })}
     `
   }
 
   activateTab(e){
-    let prevTab = this.select('[active]')
-    if(prevTab) prevTab.removeAttribute('active')
     let tab = e.currentTarget
-    tab.toggleAttribute('active')
-    console.log(tab)
     let name = tab.innerText
     let tabs = Array.from(this.querySelectorAll('soci-tab'))
     tabs.forEach(tab=>tab[tab.getAttribute('name') == name ? 'activate' : 'deactivate']())
   }
 
+  tabActivated(e){
+    let prevTab = this.select('[active]')
+    if(prevTab) prevTab.removeAttribute('active')
+
+    let name = e.target.getAttribute('name')
+    this.select(`tab[name=${name}]`).setAttribute('active', '')
+  }
+
   connectedCallback(){
-    let firstTab = this.querySelector('soci-tab')
-    if(firstTab) firstTab.activate()
-    else this.log('Tab group has no children - add some tabs ya kook')
+    this.addEventListener('tabactivate', this.tabActivated)
   }
 
   render(){

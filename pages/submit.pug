@@ -8,14 +8,16 @@
   
   soci-tab-group
     soci-tab(name="Image")
-      .drop-area
-        .label drag image here
-        label(for="file") select video
-        input#file(type="file" accept="video/*") 
+      soci-file-drop(type="image")
+      //
+        .drop-area
+          .label drag image here
+          label(for="file") select video
+          input#file(type="file" accept="video/*") 
       h2 Description
       soci-input(placeholder="Enter description")
 
-    soci-tab(name="Video")
+    soci-tab(name="Video" default)
       .drop-area
         .label drag video here
         input#file(type="file" accept="video/*") 
@@ -44,7 +46,7 @@
     soci-tag-input
     soci-tag-input
 
-  button submit
+  button(onclick="submit.submit()") submit
 
 script(src="pages/submit.js")
   

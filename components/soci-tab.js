@@ -24,9 +24,7 @@ export default class SociTab extends SociComponent {
     setTimeout(()=>{
       this.removeAttribute('activating')
       this.setAttribute('active', '')
-
-      let e = new CustomEvent('tabactivate', {bubbles: false})
-      this.dispatchEvent(e)
+      this.fire('tabactivate')
     }, 1)
   }
 
@@ -35,6 +33,7 @@ export default class SociTab extends SociComponent {
       this.removeAttribute('active')
       this.data = this.innerHTML
       this.innerHTML = ''
+      this.fire('tabdeactivate')
     }
   }
 
@@ -47,6 +46,8 @@ export default class SociTab extends SociComponent {
     this.innerHTML = ''
 
     this.activate = this.activate.bind(this)
+
+    if(this.hasAttribute('default')) this.activate()
   }
 
   render(){
