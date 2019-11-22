@@ -10,16 +10,20 @@ export default class SociTabGroup extends SociComponent {
       tabs {
         display: flex;
         color: var(--n3);
-        margin-top: 36px;
-        margin-bottom: 18px;
+        margin-top: 28px;
+        margin-bottom: 10px;
         user-select: none;
       }
       tab {
         display: block;
-        margin-right: 42px;
+        margin-right: 32px;
         font-weight: 500;
         position: relative;
         cursor: pointer;
+        padding: 8px;
+      }
+      tab:first-child {
+        padding-left: 0;
       }
       tab:hover {
         color: var(--n4);
@@ -34,11 +38,14 @@ export default class SociTabGroup extends SociComponent {
         background-color: var(--n4);
         display: block;
         position: absolute;
-        top: -4px;
+        top: 4px;
         border-radius: 2px;
         left: calc(50% - 8px);
       }
-    `
+      tab[active]:first-child:after {
+        left: calc(50% - 12px);
+      }
+    ` 
   }
 
   createTabs(){

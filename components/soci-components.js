@@ -52,5 +52,8 @@ window.customElements.define('soci-tag-group', SociTagGroup)
 import SociTagInput from "./soci-tag-input.js"
 window.customElements.define('soci-tag-input', SociTagInput)
 
+import SociUrlInput from "./soci-url-input.js"
+window.customElements.define('soci-url-input', SociUrlInput)
+
 import SociUser from "./soci-user.js"
 window.customElements.define('soci-user', SociUser)

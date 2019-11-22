@@ -1,33 +1,21 @@
 #submit-container
   h1 Submit post
-  .url
-    label(for="path") http://non.io/
-    input#path(type="text" placeholder="post-url" spellcheck="false")
-    soci-icon
-    .error
+  
+  soci-url-input
   
   soci-tab-group
     soci-tab(name="Image")
       soci-file-drop(type="image")
-      //
-        .drop-area
-          .label drag image here
-          label(for="file") select video
-          input#file(type="file" accept="video/*") 
       h2 Description
       soci-input(placeholder="Enter description")
 
     soci-tab(name="Video" default)
-      .drop-area
-        .label drag video here
-        input#file(type="file" accept="video/*") 
+      soci-file-drop(type="video")
       h2 Description
       soci-input(placeholder="Enter description")
         
     soci-tab(name="Audio")
-      .drop-area
-        .label drag track or here
-        input(type="file" accept="audio/*") 
+      soci-file-drop(type="audio")
       h2 Description
       soci-input(placeholder="Enter description")
 
@@ -35,9 +23,7 @@
       soci-input(placeholder="Write your best")
 
     soci-tab(name="HTML")
-      .drop-area
-        .label drag zip of webpage
-        button select zip
+      soci-file-drop(type="html")
   
 
   h2 Tags
