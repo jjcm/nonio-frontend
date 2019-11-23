@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociTag extends SociComponent {
   constructor() {
@@ -6,6 +6,8 @@ export default class SociTag extends SociComponent {
   }
 
   css(){
+    let bgColor = this.getAttribute('color') || 'n2'
+    let color = bgColor == 'n2' ? 'n3' : 'n0'
     return `
       :host {
         display: inline-block;
@@ -24,10 +26,14 @@ export default class SociTag extends SociComponent {
       :host(:hover) {
         filter: brightness(0.9) contrast(1.2);
       }
-      :host slot {
+      :host([upvoted]) {
+        background: var(--${bgColor});
+        color: var(--${color});
+      }
+      slot {
         display: inline-block;
       }
-      :host slot:before {
+      slot:before {
         content: '#';
       }
       :host([upvoted]) slot:before {
@@ -36,12 +42,21 @@ export default class SociTag extends SociComponent {
     `
   }
 
+  html(){ return `
+    <slot></slot>
+    <score></score>
+  `}
+
+  connectedCallback(){
+    this.addEventListener('click', this.vote)
+  }
+
   static get observedAttributes() {
     return ['color', 'name', 'upvoted', 'score']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'score') this.select('#score').innerHTML = 
+    if(name == 'score') this.select('score').innerHTML = 
       newValue != 0 ? 
         '&bull; ' + newValue :
         ''
@@ -53,27 +68,5 @@ export default class SociTag extends SociComponent {
       score + (this.toggleAttribute('upvoted') ? 1 : -1)
     )
     this.fire('vote')
-  }
-
-  connectedCallback(){
-    this.addEventListener('click', this.vote)
-  }
-
-  render(){
-    let bgColor = this.getAttribute('color') || 'n2'
-    let color = bgColor == 'n2' ? 'n3' : 'n0'
-    return html`
-      ${this.getCss()}
-      <style>
-        :host([upvoted]) {
-          background: var(--${bgColor});
-          color: var(--${color});
-        }
-      </style>
-      <x id="container">
-        <slot></slot>
-        <x id="score"></x>
-      </x>
-    `
   }
 }

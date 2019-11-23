@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociRouter extends SociComponent {
   constructor() {
@@ -29,31 +29,6 @@ export default class SociRouter extends SociComponent {
     `
   }
 
-  activate(){
-    if(this.hasAttribute('active')) return 0
-    this.innerHTML = this.data
-    this.setAttribute('activating', '')
-    setTimeout(()=>{
-      this.removeAttribute('activating')
-      this.setAttribute('active', '')
-
-      let e = new CustomEvent('routeactivate', {bubbles: false})
-      this.dispatchEvent(e)
-    },1)
-  }
-
-  deactivate(){
-    if(this.hasAttribute('active')){
-      this.removeAttribute('active')
-      this.data = this.innerHTML
-      this.innerHTML = ''
-    }
-  }
-
-  get active() {
-    return this.hasAttribute('active')
-  }
-
   connectedCallback(){
     this.data = this.innerHTML 
     this.innerHTML = ''
@@ -74,11 +49,28 @@ export default class SociRouter extends SociComponent {
     }
   }
 
+  get active() {
+    return this.hasAttribute('active')
+  }
 
-  render(){
-    return html`
-      ${this.getCss()}
-      <slot></slot>
-    `
+  activate(){
+    if(this.hasAttribute('active')) return 0
+    this.innerHTML = this.data
+    this.setAttribute('activating', '')
+    setTimeout(()=>{
+      this.removeAttribute('activating')
+      this.setAttribute('active', '')
+
+      let e = new CustomEvent('routeactivate', {bubbles: false})
+      this.dispatchEvent(e)
+    },1)
+  }
+
+  deactivate(){
+    if(this.hasAttribute('active')){
+      this.removeAttribute('active')
+      this.data = this.innerHTML
+      this.innerHTML = ''
+    }
   }
 }

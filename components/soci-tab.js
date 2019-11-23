@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociTab extends SociComponent {
   constructor() {
@@ -15,6 +15,15 @@ export default class SociTab extends SociComponent {
         display: block;
       }
     `
+  }
+
+  connectedCallback(){
+    this.data = this.innerHTML 
+    this.innerHTML = ''
+
+    this.activate = this.activate.bind(this)
+
+    if(this.hasAttribute('default')) this.activate()
   }
 
   activate(){
@@ -39,21 +48,5 @@ export default class SociTab extends SociComponent {
 
   get active() {
     return this.hasAttribute('active')
-  }
-
-  connectedCallback(){
-    this.data = this.innerHTML 
-    this.innerHTML = ''
-
-    this.activate = this.activate.bind(this)
-
-    if(this.hasAttribute('default')) this.activate()
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <slot></slot>
-    `
   }
 }

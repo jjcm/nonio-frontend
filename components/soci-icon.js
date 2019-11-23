@@ -1,4 +1,4 @@
-import {SociComponent, html, render} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 const icons = {
   attachment: '<path fill-rule="evenodd" clip-rule="evenodd" d="M7 7.35484C7 5.50201 8.45507 4 10.25 4C12.0449 4 13.5 5.50201 13.5 7.35484V15.3548C13.5 16.495 12.6046 17.4194 11.5 17.4194C10.3954 17.4194 9.5 16.495 9.5 15.3548V7.6129H10.5V15.3548C10.5 15.9249 10.9477 16.3871 11.5 16.3871C12.0523 16.3871 12.5 15.9249 12.5 15.3548V7.35484C12.5 6.07211 11.4926 5.03226 10.25 5.03226C9.00736 5.03226 8 6.07211 8 7.35484V15.3548C8 17.3502 9.567 18.9677 11.5 18.9677C13.433 18.9677 15 17.3502 15 15.3548V9.16129H16V15.3548C16 17.9203 13.9853 20 11.5 20C9.01472 20 7 17.9203 7 15.3548V7.35484Z" fill="currentColor"/>',
@@ -19,19 +19,21 @@ export default class SociIcon extends SociComponent {
     super()
   }
 
-  css(){
-    return `
-      :host {
-        width: 24px;
-        height: 24px;
-      }
+  css(){ return `
+    :host {
+      width: 24px;
+      height: 24px;
+    }
 
-      :host svg {
-        width: inherit;
-        height: inherit;
-      }
-    `
-  }
+    svg {
+      width: inherit;
+      height: inherit;
+    }
+  `}
+
+  html(){ return `
+    <svg viewBox="0 0 24 24" fill='currentColor'></svg>
+  `}
 
   static get observedAttributes() {
     return ['glyph']
@@ -44,12 +46,5 @@ export default class SociIcon extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     let svg = this.select('svg')
     if(name == 'glyph') svg.innerHTML = icons[newValue]
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <svg viewBox="0 0 24 24" fill='currentColor'></svg>
-    `
   }
 }

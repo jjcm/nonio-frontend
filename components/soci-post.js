@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociPost extends SociComponent {
   constructor() {
@@ -8,7 +8,7 @@ export default class SociPost extends SociComponent {
   css(){
     let FOOTER_HEIGHT = 300
     return `
-      :host {
+       :host {
         background: var(--n0);
         box-sizing: border-box;
         display: flex;
@@ -20,7 +20,7 @@ export default class SociPost extends SociComponent {
         overflow-x: hidden;
       }
 
-      :host content img {
+       content img {
         width: 100%;
         max-height: calc(100vh - ${FOOTER_HEIGHT}px);
         object-fit: contain;
@@ -29,7 +29,7 @@ export default class SociPost extends SociComponent {
         margin-bottom: -100%;
       }
 
-      :host content img#bg {
+       content img#bg {
         position: inherit;
         z-index: 9;
         left: 0;
@@ -39,22 +39,22 @@ export default class SociPost extends SociComponent {
         margin-bottom: 0;
       }
 
-      :host content {
+       content {
         display: block;
       }
 
-      :host footer {
+       footer {
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: flex;
         position: relative;
         background: #fff;
       }
 
-      :host #details-container {
+       #details-container {
         min-width: 400px;
       }
 
-      :host #details {
+       #details {
         max-width: 900px;
         margin: 0 auto;
         box-sizing: border-box;
@@ -63,14 +63,14 @@ export default class SociPost extends SociComponent {
         top: 0;
       }
 
-      :host h1 {
+       h1 {
         font-size: 32px;
         line-height: 36px;
         margin: 12px 0 18px;
         font-weight: 400;
       }
 
-      :host soci-comment-list {
+       soci-comment-list {
         display: block;
         border-left: 2px solid rgba(0,0,0,0.08);
         width: 100%;
@@ -78,27 +78,49 @@ export default class SociPost extends SociComponent {
         position: relative;
       }
 
-      :host soci-user {
+       soci-user {
         margin-top: -2px;
         --avatar-size: 24px;
         --font-weight: 400;
         --font-size: 16px;
       }
 
-      :host description {
+       description {
         margin-top: 18px;
         line-height: 24px;
         display: block;
       }
 
       @media (max-width: 1180px) { 
-        :host footer {
+         footer {
           display: block;
         }
 
       }
     `
   }
+
+  html(){ return `
+    <content>
+      <img src="example-data/cat.jpg"/>
+      <img id="bg" src="example-data/cat.jpg"/>
+    </content>
+    <footer>
+      <div id="details-container">
+        <div id="details">
+          <soci-user size="large" name="pwnies"></soci-user>
+          <h1>lowfi hip hop radio - beats to relax/study to</h1>
+          <soci-tag-group score="234" size="large">
+            <soci-tag>wtf</soci-tag>
+          </soci-tag-group>
+          <description>
+            Just a test of some filler details and making some line wraps happen who knows what should actually be in here but hey we're loading it in all fancy like ya know? Dont event sweat it brah.
+          </description>
+        </div>
+      </div>
+      <soci-comment-list></soci-comment-list>
+    </footer>
+  `}
 
   static get observedAttributes() {
     return ['title', 'score', 'time', 'thumbnail', 'type', 'comments', 'href']
@@ -126,61 +148,5 @@ export default class SociPost extends SociComponent {
         this.select('soci-comment-list').setAttribute('href', newValue)
         break
     }
-  }
-
-  open(fromElement){
-    if(fromElement){
-      let pos = fromElement.getBoundingClientRect()
-
-      this.style.width = pos.width
-      this.style.height = pos.height
-      this.style.left = pos.left
-      this.style.top = pos.top
-
-      //document.body.appendChild(this)
-      setTimeout(()=>{
-        this.style.width = ""
-        this.style.height = ""
-        this.style.top = ""
-        this.style.left = ""
-        setTimeout(()=>{
-          this.setAttribute('open', '')
-          let currentLocation = document.location.pathname + document.location.hash
-          this._prevLocation = {
-            url: currentLocation,
-            title: document.title
-          }
-
-          let router = document.querySelector('soci-router')
-          if(router) router.updateUrl(this.getAttribute('title'), this.getAttribute('url'))
-        }, 2)
-      }, 1)
-    }
-
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <content>
-        <img src="example-data/cat.jpg"/>
-        <img id="bg" src="example-data/cat.jpg"/>
-      </content>
-      <footer>
-        <div id="details-container">
-          <div id="details">
-            <soci-user size="large" name="pwnies"></soci-user>
-            <h1>lowfi hip hop radio - beats to relax/study to</h1>
-            <soci-tag-group score="234" size="large">
-              <soci-tag>wtf</soci-tag>
-            </soci-tag-group>
-            <description>
-              Just a test of some filler details and making some line wraps happen who knows what should actually be in here but hey we're loading it in all fancy like ya know? Dont event sweat it brah.
-            </description>
-          </div>
-        </div>
-        <soci-comment-list></soci-comment-list>
-      </footer>
-    `
   }
 }

@@ -1,4 +1,4 @@
-import {SociComponent, html, render} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociCommentList extends SociComponent {
   constructor() {
@@ -7,7 +7,7 @@ export default class SociCommentList extends SociComponent {
 
   css(){
     return `
-      :host controls {
+      controls {
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -21,19 +21,19 @@ export default class SociCommentList extends SociComponent {
         padding: 0 34px 0 64px;
         background: linear-gradient(var(--n1), #fff);
       }
-      :host filtering {
+      filtering {
         display: flex;
       }
-      :host filter {
+      filter {
         margin-right: 32px;
         position: relative;
         cursor: pointer;
       }
-      :host filter:hover,
-      :host filter[active] {
+      filter:hover,
+      filter[active] {
         color: var(--n4);
       }
-      :host filter[active]:after {
+      filter[active]:after {
         content: '';
         display: block;
         position: absolute;
@@ -44,18 +44,32 @@ export default class SociCommentList extends SociComponent {
         border-radius: 2px;
         background: var(--n4);
       }
-      :host content {
+      content {
         display: block;
         padding: 0 24px 24px 12px;
       }
-      :host soci-input {
+      soci-input {
         min-height: 82px;
       }
-      :host soci-input:focus-within {
+      soci-input:focus-within {
         min-height: 200px;
         padding-bottom: 40px;
       }
+    `
+  }
 
+  html(){ return `
+      <soci-input></soci-input>
+      <controls>
+        <filtering @click=_filter>
+          <filter active>Top</filter>
+          <filter>New</filter>
+        </filtering>
+        <comment-count>0 comments</comment-count>
+      </controls>
+      <content>
+        <slot></slot>
+      </content>
     `
   }
 
@@ -78,9 +92,9 @@ export default class SociCommentList extends SociComponent {
   _filter(e){
     let current = this.select('filter[active]')
     if(current) current.removeAttribute('active')
-    e.currentTarget.toggleAttribute('active')
+    e.target.toggleAttribute('active')
 
-    let filteredAttr = e.currentTarget.innerHTML == 'Top' ? 'score' : 'date'
+    let filteredAttr = e.target.innerHTML == 'Top' ? 'score' : 'date'
     let comments = Array.from(this.children)
     comments = comments.sort((a,b)=>{
       return parseInt(b.getAttribute(filteredAttr)) - parseInt(a.getAttribute(filteredAttr))
@@ -246,19 +260,20 @@ export default class SociCommentList extends SociComponent {
       },
     ]
 
-    render(this.createComments(data), this)
+    this.innerHTML = this.createComments(data)
+
   }
 
   createComments(comments){
-    return html`
-      ${comments.map((comment) => html`
+    return `
+      ${comments.map((comment) => `
         <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
           ${comment.content}
           <div slot="replies">
             ${this.recurseComments(comment)}
           </div>
         </soci-comment>
-      `)}
+      `).join('')}
     `
   }
 
@@ -266,23 +281,5 @@ export default class SociCommentList extends SociComponent {
     if(comment.children){
       return this.createComments(comment.children)
     }
-  }
-
-  render(){
-    this._filter = this._filter.bind(this)
-    return html`
-      ${this.getCss()}
-      <soci-input></soci-input>
-      <controls>
-        <filtering>
-          <filter @click=${this._filter} active>Top</filter>
-          <filter @click=${this._filter}>New</filter>
-        </filtering>
-        <comment-count>0 comments</comment-count>
-      </controls>
-      <content>
-        <slot></slot>
-      </content>
-    `
   }
 }

@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociInput extends SociComponent {
   constructor() {
@@ -19,7 +19,7 @@ export default class SociInput extends SociComponent {
         box-sizing: border-box;
       }
 
-      :host soci-user {
+      soci-user {
         --avatar-size: 24px;
         margin-right: 14px;
         position: absolute;
@@ -27,7 +27,7 @@ export default class SociInput extends SociComponent {
         left: 12px;
       }
 
-      :host soci-icon {
+      soci-icon {
         position: absolute;
         right: 8px;
         top: 8px;
@@ -875,16 +875,14 @@ export default class SociInput extends SociComponent {
       }
     `
     return css
-    
   }
 
-  get value(){
-    let text = this.select('textarea').value
-    text = text.replace(/^(#{1,3}) +(.*)/gm, (match, level, text)=>{
-      return `<h${level.length}>${text}<h${level.length}>`
-    })
-    text = text.replace(/^a/g, 'b')
-    return text
+  html(){
+    let user = this.hasAttribute('show-user') ? `<soci-user name="pwnies" avatar-only></soci-user>` : ''
+    return `
+      ${user}
+      <div id="editor"></div>
+    `
   }
 
   connectedCallback(){
@@ -895,12 +893,12 @@ export default class SociInput extends SociComponent {
     })
   }
 
-  render(){
-    let user = this.hasAttribute('show-user') ? html`<soci-user name="pwnies" avatar-only></soci-user>` : ''
-    return html`
-      ${this.getCss()}
-      ${user}
-      <div id="editor"></div>
-    `
+  get value(){
+    let text = this.select('textarea').value
+    text = text.replace(/^(#{1,3}) +(.*)/gm, (match, level, text)=>{
+      return `<h${level.length}>${text}<h${level.length}>`
+    })
+    text = text.replace(/^a/g, 'b')
+    return text
   }
 }

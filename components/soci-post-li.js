@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociPostLi extends SociComponent {
   constructor() {
@@ -19,19 +19,19 @@ export default class SociPostLi extends SociComponent {
         transition: all 0.3s;
         opacity: 1;
       }
-      :host #top {
+      #top {
         display: flex;
         justify-content: space-between;
         margin-bottom: 8px;
       }
-      :host #time {
+      #time {
         font-size: 12px;
         color: var(--n3);
         letter-spacing: -0.16px;
         text-align: right;
         line-height: 16px;
       }
-      :host #mid {
+      #mid {
         display: flex;
         font-size: 14px;
         text-decoration: none;
@@ -45,7 +45,7 @@ export default class SociPostLi extends SociComponent {
         margin-bottom: 8px;
         cursor: pointer;
       }
-      :host img {
+      img {
         display: none;
         width: 96px;
         min-width: 96px;
@@ -55,17 +55,17 @@ export default class SociPostLi extends SociComponent {
         object-fit: cover;
         margin-right: 8px;
       }
-      :host img[src] {
+      img[src] {
         display: block;
       }
-      :host #bot {
+      #bot {
         display: flex;
         line-height: 20px;
         align-items: center;
         position: relative;
         padding-right: 100px;
       }
-      :host #tags {
+      #tags {
         margin-left: 8px;
         overflow: hidden;
         overflow-x: auto;
@@ -74,17 +74,17 @@ export default class SociPostLi extends SociComponent {
         border-radius: 10px;
         scrollbar-width: none;
       }
-      :host #tags::-webkit-scrollbar {
+      #tags::-webkit-scrollbar {
         display: none;
       }
-      :host #score {
+      #score {
         white-space: nowrap;
         display: block;
       }
-      :host #score span {
+      #score span {
         margin-left: 4px;
       }
-      :host #add-tag {
+      #add-tag {
         background: var(--n1);
         height: 20px;
         width: 32px;
@@ -98,10 +98,10 @@ export default class SociPostLi extends SociComponent {
         margin-left: 4px;
         cursor: pointer;
       }
-      :host #add-tag:hover {
+      #add-tag:hover {
         background: var(--n2);
       }
-      :host #comments {
+      #comments {
         font-size: 12px;
         color: var(--n3);
         letter-spacing: -0.16px;
@@ -117,6 +117,40 @@ export default class SociPostLi extends SociComponent {
         color: var(--n2);
       }
     `
+  }
+
+  html(){ return `
+    <div id="top">
+      <slot name="user"></slot>
+      <div id="time"></div>
+    </div>
+    <a id="mid" @click=localLink>
+      <img id="thumbnail"></img>
+      <div id="title"></div>
+    </a>
+    <div id="bot">
+      <div id="score"></div>
+      <div id="tags"><slot name="tags"></slot></div>
+      <div id="add-tag">
+        <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="icon/tags" transform="translate(-4.000000, -5.000000)">
+                <g>
+                    <path d="M11.557416,6.29956503 C11.1595912,6.29956503 10.7780604,6.45760029 10.4967558,6.73890486 L6.49675579,10.7389049 C5.91096935,11.3246913 5.91096935,12.2744388 6.49675579,12.8602252 L10.4967558,16.8602252 C10.7780604,17.1415298 11.1595912,17.299565 11.557416,17.299565 L21.2959045,17.299565 C22.1243317,17.299565 22.7959045,16.6279922 22.7959045,15.799565 L22.7959045,7.79956503 C22.7959045,6.9711379 22.1243317,6.29956503 21.2959045,6.29956503 L11.557416,6.29956503 Z" id="Rectangle" stroke="#7B9089" transform="translate(14.012447, 11.799565) rotate(135.000000) translate(-14.012447, -11.799565) "></path>
+                    <path d="M15.9239992,8.86037916 L17.5218753,11.416981 C17.6682305,11.6511493 17.5970439,11.9596245 17.3628756,12.1059797 C17.2834098,12.1556458 17.191586,12.1819805 17.0978762,12.1819805 L13.9021238,12.1819805 C13.6259814,12.1819805 13.4021238,11.9581229 13.4021238,11.6819805 C13.4021238,11.5882707 13.4284585,11.4964468 13.4781247,11.416981 L15.0760008,8.86037916 C15.222356,8.62621089 15.5308312,8.55502431 15.7649995,8.70137948 C15.829384,8.74161983 15.8837588,8.79599459 15.9239992,8.86037916 Z" id="Triangle" stroke="#7B9089" transform="translate(15.500000, 10.181981) rotate(45.000000) translate(-15.500000, -10.181981) "></path>
+                    <rect id="Rectangle" fill="#7B9089" x="23" y="13" width="5" height="1" rx="0.5"></rect>
+                    <rect id="Rectangle" fill="#7B9089" transform="translate(25.500000, 13.500000) rotate(-270.000000) translate(-25.500000, -13.500000) " x="23" y="13" width="5" height="1" rx="0.5"></rect>
+                </g>
+            </g>
+        </g>
+        </svg>
+      </div>
+      <div id="comments"></div>
+    </div>
+  `}
+
+  connectedCallback(){
+    this.addEventListener('vote', this._tagVoted)
   }
 
   static get observedAttributes() {
@@ -148,14 +182,6 @@ export default class SociPostLi extends SociComponent {
     }
   }
 
-  _openPost(e) {
-    e.preventDefault()
-    let post = document.createElement('soci-post')
-    post.setAttribute('title', this.getAttribute('title'))
-    post.setAttribute('url', this.getAttribute('url'))
-    post.open(this)
-  }
-
   _updateTime() {
     function setTimeAgo(time, interval, unit){
       setTimeout(this._updateTime, interval * 1000)
@@ -171,11 +197,6 @@ export default class SociPostLi extends SociComponent {
     else if(time < 2629746) setTimeAgo(time, 604800, 'w')
     else if(time < 31556952) setTimeAgo(time, 2629746, 'm')
     else setTimeAgo(time, 31556952, 'y')
-  }
-
-  connectedCallback(){
-    this.addEventListener('vote', this._tagVoted)
-    
   }
 
   get score(){
@@ -201,37 +222,4 @@ export default class SociPostLi extends SociComponent {
     }
   }
 
-  render(){
-    this._openPost = this._openPost.bind(this)
-    return html`
-      ${this.getCss()}
-      <div id="top">
-        <slot name="user"></slot>
-        <div id="time"></div>
-      </div>
-      <a id="mid" @click=${this._openPost}>
-        <img id="thumbnail"></img>
-        <div id="title"></div>
-      </a>
-      <div id="bot">
-        <div id="score"></div>
-        <div id="tags"><slot name="tags"></slot></div>
-        <div id="add-tag">
-          <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="icon/tags" transform="translate(-4.000000, -5.000000)">
-                  <g>
-                      <path d="M11.557416,6.29956503 C11.1595912,6.29956503 10.7780604,6.45760029 10.4967558,6.73890486 L6.49675579,10.7389049 C5.91096935,11.3246913 5.91096935,12.2744388 6.49675579,12.8602252 L10.4967558,16.8602252 C10.7780604,17.1415298 11.1595912,17.299565 11.557416,17.299565 L21.2959045,17.299565 C22.1243317,17.299565 22.7959045,16.6279922 22.7959045,15.799565 L22.7959045,7.79956503 C22.7959045,6.9711379 22.1243317,6.29956503 21.2959045,6.29956503 L11.557416,6.29956503 Z" id="Rectangle" stroke="#7B9089" transform="translate(14.012447, 11.799565) rotate(135.000000) translate(-14.012447, -11.799565) "></path>
-                      <path d="M15.9239992,8.86037916 L17.5218753,11.416981 C17.6682305,11.6511493 17.5970439,11.9596245 17.3628756,12.1059797 C17.2834098,12.1556458 17.191586,12.1819805 17.0978762,12.1819805 L13.9021238,12.1819805 C13.6259814,12.1819805 13.4021238,11.9581229 13.4021238,11.6819805 C13.4021238,11.5882707 13.4284585,11.4964468 13.4781247,11.416981 L15.0760008,8.86037916 C15.222356,8.62621089 15.5308312,8.55502431 15.7649995,8.70137948 C15.829384,8.74161983 15.8837588,8.79599459 15.9239992,8.86037916 Z" id="Triangle" stroke="#7B9089" transform="translate(15.500000, 10.181981) rotate(45.000000) translate(-15.500000, -10.181981) "></path>
-                      <rect id="Rectangle" fill="#7B9089" x="23" y="13" width="5" height="1" rx="0.5"></rect>
-                      <rect id="Rectangle" fill="#7B9089" transform="translate(25.500000, 13.500000) rotate(-270.000000) translate(-25.500000, -13.500000) " x="23" y="13" width="5" height="1" rx="0.5"></rect>
-                  </g>
-              </g>
-          </g>
-          </svg>
-        </div>
-        <div id="comments"></div>
-      </div>
-    `
-  }
 }

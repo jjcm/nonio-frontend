@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociUser extends SociComponent {
   constructor() {
@@ -17,7 +17,7 @@ export default class SociUser extends SociComponent {
         --line-height: 16px;
       }
 
-      :host #avatar {
+      #avatar {
         width: var(--avatar-size);
         height: var(--avatar-size);
         border-radius: 50%;
@@ -25,7 +25,7 @@ export default class SociUser extends SociComponent {
         object-fit: cover;
       }
 
-      :host #username {
+      username {
         font-size: var(--font-size);
         font-weight: var(--font-weight);
         line-height: var(--line-height);
@@ -33,6 +33,7 @@ export default class SociUser extends SociComponent {
         margin-left: 4px;
         user-select: none;
         color: inherit;
+        display: block;
       }
 
       :host([op]) {
@@ -64,11 +65,16 @@ export default class SociUser extends SociComponent {
         --line-height: 84px;
       }
 
-      :host([avatar-only]) #username {
+      :host([avatar-only]) username {
         display: none;
       }
     `
   }
+
+  html(){ return `
+    <img id="avatar"></img>
+    <username></username>
+  `}
 
   static get observedAttributes() {
     return ['name', 'op']
@@ -76,16 +82,8 @@ export default class SociUser extends SociComponent {
 
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'name') {
-      this.select('#username').innerHTML = newValue
+      this.select('username').innerHTML = newValue
       this.select('#avatar').src = 'example-data/profile.jpg'
     }
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <img id="avatar"></img>
-      <div id="username"></div>
-    `
   }
 }

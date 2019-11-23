@@ -1,11 +1,10 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociRouter extends SociComponent {
   constructor() {
     super()
   }
-
 
   css(){
     return `
@@ -58,12 +57,5 @@ export default class SociRouter extends SociComponent {
         route.activate()
       } else route.deactivate()
     })
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <slot></slot>
-    `
   }
 }

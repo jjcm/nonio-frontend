@@ -1,4 +1,4 @@
-import {SociComponent, html, render} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociPostLi extends SociComponent {
   constructor() {
@@ -73,25 +73,49 @@ export default class SociPostLi extends SociComponent {
 
   async createPosts(data){
     data = await soci.getData('posts')
-    console.log(data)
+    data = [
+      {
+          "title": "asdf hi",
+          "user": "bob",
+          "time": "1568018893000",
+          "url": "url-example-1",
+          "tags": [
+              {
+                  "name": "wtf",
+                  "score": 10
+              }
+          ]
+      },
+      {
+          "title": "cats are known to be mind controlling beings from another plant, or perhaps area 51",
+          "user": "bob",
+          "time": "1568018893000",
+          "type": "image",
+          "url": "url-example-2",
+          "tags": [
+              {
+                  "name": "wtf",
+                  "score": 10
+              },
+              {
+                  "name": "photography",
+                  "score": 10
+              }
+          ]
+      },
+    ]
 
-    let posts = html`
-      ${data.map((post) => html`
-        <soci-post-li score=${post.score || 0} comments=${post.comments || 0} title=${post.title} type=${post.type} time=${post.time} url=${post.url}>
-          <soci-user name=${post.user} slot="user"></soci-user>
+    let posts = `
+      ${data.map((post) => `
+        <soci-post-li score=${post.score || 0} comments=${post.comments || 0} title="${post.title}" type=${post.type} time=${post.time} url="${post.url}">
+          <soci-user name="${post.user}" slot="user"></soci-user>
           <div slot="tags" style="white-space: nowrap;">
-            ${post.tags.map(tag => html`<soci-tag score=${tag.score}>${tag.name}</soci-tag>`)}
+            ${post.tags.map(tag => `<soci-tag score=${tag.score}>${tag.name}</soci-tag>`).join('')}
           </div>
         </soci-post-li>
-      `)}
+      `).join('')}
     `
-    render(posts, this)
-  }
 
-  render(){
-    return html`
-      ${this.getCss()}
-      <slot></slot>
-    `
+    this.innerHTML = posts
   }
 }

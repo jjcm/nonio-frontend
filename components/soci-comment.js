@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociComment extends SociComponent {
   constructor() {
@@ -13,12 +13,12 @@ export default class SociComment extends SociComponent {
         position: relative;
       }
 
-      :host top {
+      top {
         display: flex;
         align-items: flex-start;
       }
 
-      :host soci-user {
+      soci-user {
         --avatar-size: 40px;
         --font-size: 12px;
         --font-weight: normal;
@@ -26,7 +26,7 @@ export default class SociComment extends SociComponent {
         color: var(--b3);
       }
 
-      :host time {
+      time {
         color: var(--n3);
         display: inline;
         font-size: 12px;
@@ -34,14 +34,14 @@ export default class SociComment extends SociComponent {
         margin-left: 8px;
       }
 
-      :host #comment {
+      #comment {
         padding-left: 52px;
         margin-top: -18px;
         font-size: 14px;
         max-width: 900px;
       }
 
-      :host #actions {
+      #actions {
         display: flex;
         font-weight: 500;
         font-size: 14px;
@@ -51,23 +51,23 @@ export default class SociComment extends SociComponent {
         max-width: 900px;
       }
 
-      :host #view-replies {
+      #view-replies {
         position: relative;
         margin-left: 32px;
         cursor: pointer;
       }
 
-      :host #reply {
+      #reply {
         cursor: pointer;
       }
 
-      :host #reply:hover,
-      :host #view-replies:hover {
+      #reply:hover,
+      #view-replies:hover {
         text-decoration: underline;
       }
 
 
-      :host #view-replies:after {
+      #view-replies:after {
         content: '';
         display: block;
         width: 3px;
@@ -79,12 +79,12 @@ export default class SociComment extends SociComponent {
         left: -17px;
       }
 
-      :host #vote-container {
+      #vote-container {
         display: flex;
         margin-left: auto;
       }
 
-      :host #upvote {
+      #upvote {
         display: flex;
         align-items: center;
         height: 24px;
@@ -96,48 +96,48 @@ export default class SociComment extends SociComponent {
         --fill-color: transparent;
       }
 
-      :host #upvote soci-icon {
+      #upvote soci-icon {
         color: var(--n3);
       }
       
-      :host #upvote:hover {
+      #upvote:hover {
         background: var(--n2);
       }
 
-      :host #upvote[upvoted],
-      :host #upvote:active {
+      #upvote[upvoted],
+      #upvote:active {
         background: var(--g1);
         color: #fff;
         --fill-color: #fff;
       }
 
-      :host #upvote:hover soci-icon {
+      #upvote:hover soci-icon {
         color: var(--n4);
       }
 
-      :host #upvote[upvoted] soci-icon,
-      :host #upvote:active soci-icon {
+      #upvote[upvoted] soci-icon,
+      #upvote:active soci-icon {
         color: transparent;
 
       }
 
-      :host soci-icon[glyph=downvote] {
+      soci-icon[glyph=downvote] {
         cursor: pointer;
         color: var(--n3);
         --fill-color: transparent;
       }
 
-      :host soci-icon[glyph=downvote]:hover {
+      soci-icon[glyph=downvote]:hover {
         color: var(--n4);
       }
 
-      :host soci-icon[glyph=downvote][downvoted],
-      :host soci-icon[glyph=downvote]:active {
+      soci-icon[glyph=downvote][downvoted],
+      soci-icon[glyph=downvote]:active {
         color: var(--r2);
         --fill-color: var(--r2);
       }
 
-      :host #replies {
+      #replies {
         position: relative;
         overflow: hidden;
         height: 0;
@@ -152,7 +152,7 @@ export default class SociComment extends SociComponent {
         opacity: 1;
         transform: translateY(0);
       }
-      :host guide {
+      guide {
         display: block;
         position: absolute;
         left: 18px;
@@ -171,6 +171,32 @@ export default class SociComment extends SociComponent {
 
     `
   }
+
+  html(){ return `
+    <top>
+      <soci-user size="large"></soci-user>
+      <time>0s ago</time>
+    </top>
+    <div id="comment">
+      <slot></slot>
+    </div>
+    <div id="actions">
+      <div id="reply">Reply</div>
+      <div id="view-replies" @click=_toggleReplies></div>
+      <div id="vote-container">
+        <div id="upvote" @click=_upvote>
+          <soci-icon glyph="upvote"></soci-icon>
+          <div id="score"></div>
+        </div>
+        <soci-icon glyph="downvote" @click=_downvote></soci-icon>
+      </div>
+    </div>
+    <div id="replies">
+      <slot name="replies">
+      </slot>
+    </div>
+    <guide></guide>
+  `}
 
   static get observedAttributes() {
     return ['score', 'user', 'replies', 'date']
@@ -250,35 +276,4 @@ export default class SociComment extends SociComponent {
     }
   }
 
-  render(){
-    this._toggleReplies = this._toggleReplies.bind(this)
-    this._upvote = this._upvote.bind(this)
-    this._downvote = this._downvote.bind(this)
-    return html`
-      ${this.getCss()}
-      <top>
-        <soci-user size="large"></soci-user>
-        <time>0s ago</time>
-      </top>
-      <div id="comment">
-        <slot></slot>
-      </div>
-      <div id="actions">
-        <div id="reply">Reply</div>
-        <div id="view-replies" @click=${this._toggleReplies}></div>
-        <div id="vote-container">
-          <div id="upvote" @click=${this._upvote}>
-            <soci-icon glyph="upvote"></soci-icon>
-            <div id="score"></div>
-          </div>
-          <soci-icon glyph="downvote" @click=${this._downvote}></soci-icon>
-        </div>
-      </div>
-      <div id="replies">
-        <slot name="replies">
-        </slot>
-      </div>
-      <guide></guide>
-    `
-  }
 }

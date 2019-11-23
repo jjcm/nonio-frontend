@@ -1,11 +1,31 @@
-import {html, render} from "../lib/lit-html/lit-html.js"
-export {html, render} from "../lib/lit-html/lit-html.js"
-
-export class SociComponent extends HTMLElement {
+export default class SociComponent extends HTMLElement {
   constructor() {
     super()
     this._shadowRoot = this.attachShadow({'mode':'open'})
     if(this.render) render(this.render(), this._shadowRoot)
+    else {
+      this._shadowRoot.innerHTML = `
+        ${this.css ? `<style>${this.css()}</style>` : ''}
+        ${this.html ? this.html() : '<slot></slot>'}
+      `
+
+      this._shadowRoot.querySelectorAll('*').forEach(el=> {
+        Array.from(el.attributes).forEach(attr => {
+          const prefix = attr.name.charAt(0)
+          if(prefix == '@'){
+            this[attr.value] = this[attr.value].bind(this)
+            el.addEventListener(attr.name.slice(1), this[attr.value])
+            el.removeAttribute(attr.name)
+          }
+          if(prefix == '?'){
+            el[attr.value != "false" ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
+            el.removeAttribute(attr.name)
+          }
+        })
+      })
+
+      if(this.connected) this.connected()
+    }
   }
 
   select(s){
@@ -47,7 +67,7 @@ export class SociComponent extends HTMLElement {
 
   localLink(e){
     e.preventDefault()
-    window.history.pushState(null, null, this.href)
+    window.history.pushState(null, null, e.currentTarget.href)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
   }
 
@@ -90,5 +110,3 @@ export class SociComponent extends HTMLElement {
     }
   }
 }
-
-

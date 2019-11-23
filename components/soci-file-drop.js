@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociFileDrop extends SociComponent {
   constructor() {
@@ -74,6 +74,19 @@ export default class SociFileDrop extends SociComponent {
       }
     `
   }
+
+  html(){ return `
+    <div>drag file here</div>
+    <label for="file">select file</label>
+    <input id="file" type="file" accept="*"/>
+  `}
+
+  connectedCallback(){
+    ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(
+      e => this.addEventListener(e, this['_' + e])
+    )
+  }
+
   static get observedAttributes() {
     return ['type']
   }
@@ -90,12 +103,6 @@ export default class SociFileDrop extends SociComponent {
       this.select('label').innerHTML = `select ${newValue}`
       this.select('input').setAttribute('accept', TYPES[newValue])
     }
-  }
-
-  connectedCallback(){
-    ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(
-      e => this.addEventListener(e, this['_' + e])
-    )
   }
 
   _dragenter(e){
@@ -117,15 +124,5 @@ export default class SociFileDrop extends SociComponent {
     console.log(e.dataTransfer.files)
     this.select('div').innerHTML = "Image uploaded"
     this.select('label').innerHTML = e.dataTransfer.files[0].name
-
-  }
-
-  render(){
-    return html`
-      ${this.getCss()}
-      <div>drag file here</div>
-      <label for="file">select file</label>
-      <input id="file" type="file" accept="*"/>
-    `
   }
 }

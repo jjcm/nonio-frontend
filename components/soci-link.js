@@ -1,4 +1,4 @@
-import {SociComponent, html} from './soci-component.js'
+import SociComponent from './soci-component.js'
 
 export default class SociLink extends SociComponent {
   constructor() {
@@ -9,15 +9,13 @@ export default class SociLink extends SociComponent {
     return ['href']
   }
 
+  html(){ return `
+    <a style="text-decoration: inherit; color: inherit;" @click=localLink>
+    <slot></slot>
+    </a>
+  `}
+
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'href') this.select('a').href = newValue
-  }
-
-  render(){
-    return html`
-      <a style="text-decoration: inherit; color: inherit;" @click=${this.localLink}>
-      <slot></slot>
-      </a>
-    `
   }
 }
