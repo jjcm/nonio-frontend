@@ -105,20 +105,17 @@ export default class SociUrlInput extends SociComponent {
   }
 
   setURLError(message) {
-    console.log('check url')
     this.statusIcon.glyph = 'error'
     this.setAttribute('available', false)
     this.select('error').innerHTML = message
   }
 
   async checkURL(){
-    console.log('check url')
     this.statusIcon.glyph = 'spinner'
 
     let url = this.input.value
     let available = await soci.getData(`posts/url-is-available/${url}`)
     if(this.keyDownTimer || this.error) return 0
-    console.log(available)
     if(available === true){
       this.statusIcon.glyph = 'success'
       this.setAttribute('available', true)
@@ -131,6 +128,7 @@ export default class SociUrlInput extends SociComponent {
       else {
         message = 'URL is not available. Please choose a better one for your dumb meme.'
       }
+      this.setURLError(message)
     }
 
   }

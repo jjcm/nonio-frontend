@@ -179,30 +179,7 @@ export default class SociPost extends SociComponent {
             </description>
           </div>
         </div>
-        <soci-comment-list>
-          <soci-comment user="pwnies" score="1738" date="1571561809576">
-            heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
-            <div slot="replies">
-              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
-              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
-                <div slot="replies">
-                  <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
-                </div>
-              </soci-comment>
-            </div>
-          </soci-comment>
-          <soci-comment user="pwnies" score="138" date="1571653952138">
-            heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
-            <div slot="replies">
-              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
-              <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life
-                <div slot="replies">
-                  <soci-comment user="pwnies" score="1738">heyo im a comment this is amazing wow oh god I'm so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means I'm cutting off thousands of potential futures from my life</soci-comment>
-                </div>
-              </soci-comment>
-            </div>
-          </soci-comment>
-        </soci-comment-list>
+        <soci-comment-list></soci-comment-list>
       </footer>
     `
   }
