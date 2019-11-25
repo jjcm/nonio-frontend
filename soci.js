@@ -27,9 +27,10 @@ let soci = {
   },
   registerPage: (page, dom) => {
     page.dom = dom
+    page.init()
     if(page.onActivate) page.dom.addEventListener('routeactivate', page.onActivate)
     if(page.onDeactivate) page.dom.addEventListener('routedeactivate', page.onDeactivate)
-    page.init()
+    if(dom.active) page.onActivate()
   },
   postData: async function(url, data = {}) {
     const response = await fetch(API_URL + url, {
@@ -72,6 +73,17 @@ let soci = {
     console.group(groupLabel, style[0], style[1], style[2])
     console.info(details)
     console.groupEnd(groupLabel)
+  },
+
+  lazyload(path, parent) {
+    document.addEventListener('DOMContentLoaded', ()=>{
+
+      let resource = document.createElement('script')
+      resource.async = "true"
+      resource.src = path
+      let root = parent ? parent : document.head
+      root.appendChild(resource)
+    })
   }
 }
 

@@ -1,3 +1,10 @@
+
+import SociRoute from "./soci-route.js"
+window.customElements.define('soci-route', SociRoute)
+
+import SociRouter from "./soci-router.js"
+window.customElements.define('soci-router', SociRouter)
+
 import SociColumn from "./soci-column.js"
 window.customElements.define('soci-column', SociColumn)
 
@@ -27,12 +34,6 @@ window.customElements.define('soci-post-li', SociPostLi)
 
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
-
-import SociRoute from "./soci-route.js"
-window.customElements.define('soci-route', SociRoute)
-
-import SociRouter from "./soci-router.js"
-window.customElements.define('soci-router', SociRouter)
 
 import SociTab from "./soci-tab.js"
 window.customElements.define('soci-tab', SociTab)

@@ -36,7 +36,8 @@
 
   button(onclick="submit.submit()") submit
 
-script(src="pages/submit.js")
+script.
+  soci.lazyload('/pages/submit.js', document.currentScript.closest('soci-route'))
   
 
     

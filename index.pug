@@ -22,4 +22,6 @@ soci-router
     soci-route#post(pattern=".*")
       include pages/post.pug
 
-script(src="/lib/quill.js")
+
+script.
+  soci.lazyload('/lib/quill.js')

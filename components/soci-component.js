@@ -1,31 +1,37 @@
 export default class SociComponent extends HTMLElement {
   constructor() {
     super()
-    this._shadowRoot = this.attachShadow({'mode':'open'})
-    if(this.render) render(this.render(), this._shadowRoot)
-    else {
-      this._shadowRoot.innerHTML = `
-        ${this.css ? `<style>${this.css()}</style>` : ''}
-        ${this.html ? this.html() : '<slot></slot>'}
-      `
+    let route = (this.tagName == 'SOCI-ROUTE') ? null : this.closest('soci-route') 
+    if(route && route.getAttribute('pattern')){
+      let pattern = new RegExp(route.getAttribute('pattern'))
+      console.log(pattern)
+      if( pattern.test(document.location.pathname + document.location.hash)){
+      console.log(route.getAttribute('pattern'))
+      console.log(this)
 
-      this._shadowRoot.querySelectorAll('*').forEach(el=> {
-        Array.from(el.attributes).forEach(attr => {
-          const prefix = attr.name.charAt(0)
-          if(prefix == '@'){
-            this[attr.value] = this[attr.value].bind(this)
-            el.addEventListener(attr.name.slice(1), this[attr.value])
-            el.removeAttribute(attr.name)
-          }
-          if(prefix == '?'){
-            el[attr.value != "false" ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
-            el.removeAttribute(attr.name)
-          }
-        })
-      })
-
-      if(this.connected) this.connected()
+      }
     }
+
+    this._shadowRoot = this.attachShadow({'mode':'open'})
+    this._shadowRoot.innerHTML = `
+      ${this.css ? `<style>${this.css()}</style>` : ''}
+      ${this.html ? this.html() : '<slot></slot>'}
+    `
+
+    this._shadowRoot.querySelectorAll('*').forEach(el=> {
+      Array.from(el.attributes).forEach(attr => {
+        const prefix = attr.name.charAt(0)
+        if(prefix == '@'){
+          this[attr.value] = this[attr.value].bind(this)
+          el.addEventListener(attr.name.slice(1), this[attr.value])
+          el.removeAttribute(attr.name)
+        }
+        if(prefix == '?'){
+          el[attr.value != "false" ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
+          el.removeAttribute(attr.name)
+        }
+      })
+    })
   }
 
   select(s){
