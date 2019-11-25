@@ -122,7 +122,37 @@ export default class SociFileDrop extends SociComponent {
     e.preventDefault()
     e.stopPropagation()
     console.log(e.dataTransfer.files)
-    this.select('div').innerHTML = "Image uploaded"
+    this.select('div').innerHTML = "Image uploading..."
     this.select('label').innerHTML = e.dataTransfer.files[0].name
+    
+  }
+
+  upload(){
+    let data = new FormData();
+    let request = new XMLHttpRequest();
+
+    data.append('file', this.select('input').files[0])
+    data.append('url', 'a22')
+
+    // AJAX request finished
+    request.addEventListener('load', function(e) {
+      // request.response will hold the response from the server
+      console.log(request.response);
+    });
+
+    // Upload progress on request.upload
+    request.upload.addEventListener('progress', function(e) {
+      var percent_complete = (e.loaded / e.total)*100;
+      
+      // Percentage of upload completed
+      console.log(percent_complete);
+    });
+
+    // If server is sending a JSON response then set JSON response type
+    request.responseType = 'json';
+
+    // Send POST request to the server side script
+    request.open('post', 'http://localhost:8081/upload'); 
+    request.send(data);
   }
 }

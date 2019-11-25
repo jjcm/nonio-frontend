@@ -321,7 +321,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   connectedCallback(){
-    if(!this.authenticated) this.setAttribute('noauth', '')
+    if(!this.authToken) this.setAttribute('noauth', '')
     let tagsUrl = 'fake-routes/subscribed-tags.json'
     fetch(tagsUrl).then(
       response=>{

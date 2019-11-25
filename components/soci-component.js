@@ -1,17 +1,6 @@
 export default class SociComponent extends HTMLElement {
   constructor() {
     super()
-    let route = (this.tagName == 'SOCI-ROUTE') ? null : this.closest('soci-route') 
-    if(route && route.getAttribute('pattern')){
-      let pattern = new RegExp(route.getAttribute('pattern'))
-      console.log(pattern)
-      if( pattern.test(document.location.pathname + document.location.hash)){
-      console.log(route.getAttribute('pattern'))
-      console.log(this)
-
-      }
-    }
-
     this._shadowRoot = this.attachShadow({'mode':'open'})
     this._shadowRoot.innerHTML = `
       ${this.css ? `<style>${this.css()}</style>` : ''}
@@ -36,6 +25,32 @@ export default class SociComponent extends HTMLElement {
 
   select(s){
     return this.shadowRoot.querySelector(s)
+  }
+
+  async postData(url, data = {}) {
+    const response = await fetch(API_URL + url, {
+      method: 'POST', 
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', 
+      referrer: 'no-referrer', 
+      body: JSON.stringify(data) 
+    });
+    return await response.json();
+  }
+
+  async getData(url){
+    let options = {}
+    if(this.authToken) options.headers = { 
+      Authorization: "Bearer " + this.authToken
+    }
+
+    const response = await fetch(API_URL + url, options)
+    return await response.json()
   }
 
   forceBindThis(functions){
@@ -77,12 +92,12 @@ export default class SociComponent extends HTMLElement {
     window.dispatchEvent(new HashChangeEvent('hashchange'))
   }
 
-  get authenticated(){
+  get authToken(){
     let token = localStorage.getItem('jwt')
     if(!token) return false
     try {
       let expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)
-      if(expiry > Date.now() / 1000) return true
+      if(expiry > Date.now() / 1000) return token
       return false
     }
     catch {
