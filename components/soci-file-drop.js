@@ -1,5 +1,7 @@
 import SociComponent from './soci-component.js'
 
+const IMAGE_SERVER = '//images.non.io/'
+
 export default class SociFileDrop extends SociComponent {
   constructor() {
     super()
@@ -9,7 +11,7 @@ export default class SociFileDrop extends SociComponent {
     return `
       :host {
         width: 100%;
-        height: 240px;
+        min-height: 240px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -20,6 +22,8 @@ export default class SociFileDrop extends SociComponent {
         margin-bottom: 12px;
         position: relative;
         transition: border 0.2s ease;
+
+        --upload-progress: 0%;
       }
 
       :host([dragover]) {
@@ -44,6 +48,7 @@ export default class SociFileDrop extends SociComponent {
       :host([dragover]):before {
         opacity: 0.1;
         transition: opacity 0.1s ease-out;
+        z-index: -1;
       }
 
       input {
@@ -54,23 +59,45 @@ export default class SociFileDrop extends SociComponent {
         font-weight: 500;
         color: var(--n3);
         margin-bottom: 12px;
+        mix-blend-mode: multiply;
       }
 
       label {
         border-radius: 14px;
-        height: 28px;
+        height: 24px;
         color: var(--n0);
         cursor: pointer;
         background: var(--b3);
-        border: none;
-        padding: 0 8px;
-        line-height: 26px;
+        border: 2px solid var(--b3);
+        padding: 0 6px;
+        line-height: 22px;
         text-align: center;
         outline: none;
         min-width: 100px;
+        transition: height 0.1s ease-in-out;
+        user-select: none;
+        position: relative;
       }
       label:active {
         background: var(--b2);
+        border-color: var(--b2);
+      }
+      label.uploading {
+        height: 8px;
+        transition: all 0.1s ease-in-out;
+        background: #fff;
+        border-color: var(--g1);
+      }
+      label.uploading:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 8px;
+        width: var(--upload-progress);
+        transition: width 0.1s linear;
+        background: var(--g1);
       }
     `
   }
@@ -79,6 +106,8 @@ export default class SociFileDrop extends SociComponent {
     <div>drag file here</div>
     <label for="file">select file</label>
     <input id="file" type="file" accept="*"/>
+    <picture>
+    </picture>
   `}
 
   connectedCallback(){
@@ -121,28 +150,35 @@ export default class SociFileDrop extends SociComponent {
   _drop(e){
     e.preventDefault()
     e.stopPropagation()
-    console.log(e.dataTransfer.files)
-    this.select('div').innerHTML = "Image uploading..."
-    this.select('label').innerHTML = e.dataTransfer.files[0].name
-    
+    this.select('div').innerHTML = `Uploading ${e.dataTransfer.files[0].name}...`
+    this.select('label').innerHTML = ''
+    this.select('label').classList.add('uploading')
+    this.upload(e.dataTransfer.files[0])
   }
 
-  upload(){
+  upload(file){
     let data = new FormData();
     let request = new XMLHttpRequest();
 
-    data.append('file', this.select('input').files[0])
+    data.append('file', file || this.select('input').files[0])
     data.append('url', 'a22')
 
     // AJAX request finished
-    request.addEventListener('load', function(e) {
+    request.addEventListener('load', e => {
       // request.response will hold the response from the server
+      console.log('upload finished')
       console.log(request.response);
+
+      this.select('picture').innerHTML = `
+        <source srcset="${IMAGE_SERVER + request.response.path}">
+        <img src="${IMAGE_SERVER + request.response.path}">
+      `
     });
 
     // Upload progress on request.upload
-    request.upload.addEventListener('progress', function(e) {
-      var percent_complete = (e.loaded / e.total)*100;
+    request.upload.addEventListener('progress', e => {
+      var percent_complete = (e.loaded / e.total) * 100;
+      this.style.setProperty('--upload-progress', `${percent_complete}%`)
       
       // Percentage of upload completed
       console.log(percent_complete);
@@ -152,7 +188,7 @@ export default class SociFileDrop extends SociComponent {
     request.responseType = 'json';
 
     // Send POST request to the server side script
-    request.open('post', 'http://localhost:8081/upload'); 
+    request.open('post', IMAGE_SERVER + 'upload'); 
     request.send(data);
   }
 }
