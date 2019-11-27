@@ -96,8 +96,25 @@ export default class SociFileDrop extends SociComponent {
         left: 0;
         height: 8px;
         width: var(--upload-progress);
-        transition: width 0.1s linear;
+        transition: width 0.3s ease;
         background: var(--g1);
+      }
+      :host([preview]) {
+        min-height: 0;
+        border-color: transparent;
+        transition: all 0.2s ease-in-out;
+        overflow: hidden;
+      }
+      :host([preview]):before {
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+      }
+      :host([preview]) label,
+      :host([preview]) div {
+        display: none;
+      }
+      picture img {
+        max-width: 100%;
       }
     `
   }
@@ -161,33 +178,23 @@ export default class SociFileDrop extends SociComponent {
     let request = new XMLHttpRequest();
 
     data.append('file', file || this.select('input').files[0])
-    data.append('url', 'a22')
+    data.append('url', '')
 
-    // AJAX request finished
     request.addEventListener('load', e => {
-      // request.response will hold the response from the server
-      console.log('upload finished')
-      console.log(request.response);
-
       this.select('picture').innerHTML = `
         <source srcset="${IMAGE_SERVER + request.response.path}">
         <img src="${IMAGE_SERVER + request.response.path}">
       `
+      this.setAttribute('preview', '')
     });
 
-    // Upload progress on request.upload
     request.upload.addEventListener('progress', e => {
       var percent_complete = (e.loaded / e.total) * 100;
       this.style.setProperty('--upload-progress', `${percent_complete}%`)
-      
-      // Percentage of upload completed
-      console.log(percent_complete);
     });
 
-    // If server is sending a JSON response then set JSON response type
     request.responseType = 'json';
 
-    // Send POST request to the server side script
     request.open('post', IMAGE_SERVER + 'upload'); 
     request.send(data);
   }
