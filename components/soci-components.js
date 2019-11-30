@@ -58,3 +58,6 @@ window.customElements.define('soci-url-input', SociUrlInput)
 
 import SociUser from "./soci-user.js"
 window.customElements.define('soci-user', SociUser)
+
+import SociVideo from "./soci-video.js"
+window.customElements.define('soci-video', SociVideo)
