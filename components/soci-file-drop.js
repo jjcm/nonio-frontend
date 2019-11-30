@@ -186,6 +186,7 @@ export default class SociFileDrop extends SociComponent {
         <img src="${IMAGE_SERVER + request.response.path}">
       `
       this.setAttribute('preview', '')
+      this.fileUrl = request.response.path
     });
 
     request.upload.addEventListener('progress', e => {
@@ -196,6 +197,24 @@ export default class SociFileDrop extends SociComponent {
     request.responseType = 'json';
 
     request.open('post', IMAGE_SERVER + 'upload'); 
+    request.send(data);
+  }
+
+  move(url){
+    if(this.fileUrl.replace(/\.webp$/, '') == url) return url
+    let data = new FormData()
+    let request = new XMLHttpRequest()
+
+    data.append('oldUrl', this.fileUrl)
+    data.append('url', url)
+
+    request.addEventListener('load', e => {
+      this.fileUrl = request.response.path
+      return this.fileUrl
+    })
+
+    request.responseType = 'json';
+    request.open('post', IMAGE_SERVER + 'move'); 
     request.send(data);
   }
 }
