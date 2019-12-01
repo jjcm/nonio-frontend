@@ -900,11 +900,10 @@ export default class SociInput extends SociComponent {
   }
 
   get value(){
-    let text = this.select('textarea').value
-    text = text.replace(/^(#{1,3}) +(.*)/gm, (match, level, text)=>{
-      return `<h${level.length}>${text}<h${level.length}>`
-    })
-    text = text.replace(/^a/g, 'b')
-    return text
+    return JSON.stringify(this.editor.getContents())
+  }
+
+  set value(val){
+    this.editor.setContents(JSON.parse(val))
   }
 }
