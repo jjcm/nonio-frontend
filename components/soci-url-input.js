@@ -2,8 +2,11 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociUrlInput extends SociComponent {
+  static formAssociated = true
+
   constructor() {
     super()
+    this._internals = this.attachInternals()
   }
 
   css() { return `
@@ -72,7 +75,7 @@ export default class SociUrlInput extends SociComponent {
   `}
 
   html() { return `
-    <label for="path">http://non.io/</label>
+    <label for="path">https:${config.HOST}/</label>
     <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
@@ -81,26 +84,54 @@ export default class SociUrlInput extends SociComponent {
   connectedCallback() {
     this._input = this.select('input')
     this._statusIcon = this.select('soci-icon')
-    this._input.addEventListener('keydown', this.onKeyDown.bind(this))
+
     this._keyDownTimer = null
     this._error = null
+
+    this._input.addEventListener('keydown', this._onKeyDown.bind(this))
+    this._input.addEventListener('change', this._onChange.bind(this))
+    this.addEventListener('focus', this._onFocus.bind(this))
+
+    this._internals.setValidity({customError: true}, 'Submissions require a url')
   }
 
-  onKeyDown() {
+  checkValidity() {
+    return this._internals.checkValidity()
+  }
+
+  get value() {
+    return this._input.value
+  }
+
+  set value(val) {
+    this._input.value = val
+    this._internals.setFormValue(val)
+  }
+
+  _onFocus(e) {
+    this._input.focus()
+  }
+
+  _onChange(e) {
+    this._internals.setFormValue(this.value)
+  }
+
+  _onKeyDown() {
     this.removeAttribute('available')
     this._statusIcon.glyph = ''
     clearTimeout(this._keyDownTimer)
     setTimeout(()=>{
-      if(!this._input.value.match(/^[a-zA-Z0-9\-\._]*$/)){
+      if(!this.value.match(/^[a-zA-Z0-9\-\._]*$/)){
         this._error = true
         this.setURLError('URL can only contain alphanumerics, periods, dashes, and underscores')
       }
-      else if(this._input.value == '') {
+      else if(this.value == '') {
         this._error = true
         this.setURLError("URL can't be empty")
       }
       else {
         this._error = false
+        this._internals.setValidity({})
         this.select('error').innerHTML = ''
         this._keyDownTimer = setTimeout(()=>{
           this._keyDownTimer = null
@@ -114,6 +145,7 @@ export default class SociUrlInput extends SociComponent {
     this._statusIcon.glyph = 'error'
     this.setAttribute('available', false)
     this.select('error').innerHTML = message
+    this._internals.setValidity({customError: true}, message)
   }
 
   async checkURL(){

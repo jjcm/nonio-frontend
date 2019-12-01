@@ -1,38 +1,40 @@
 #submit-container
   h1 Submit post
 
-  soci-url-input
-  
-  soci-tab-group
-    soci-tab(name="Image" default)
-      soci-file-drop(type="image")
-      h2 Description
-      soci-input(placeholder="Enter description")
+  form
+    input(type="text" name="asdf")
+    soci-url-input(name="asdf2" required tabindex=0)
+    
+    soci-tab-group
+      soci-tab(name="Image" default)
+        soci-file-drop(type="image")
+        h2 Description
+        soci-input(placeholder="Enter description")
 
-    soci-tab(name="Video")
-      soci-file-drop(type="video")
-      h2 Description
-      soci-input(placeholder="Enter description")
-        
-    soci-tab(name="Audio")
-      soci-file-drop(type="audio")
-      h2 Description
-      soci-input(placeholder="Enter description")
+      soci-tab(name="Video")
+        soci-file-drop(type="video")
+        h2 Description
+        soci-input(placeholder="Enter description")
+          
+      soci-tab(name="Audio")
+        soci-file-drop(type="audio")
+        h2 Description
+        soci-input(placeholder="Enter description")
 
-    soci-tab(name="Blog")
-      soci-input(placeholder="Write your best")
+      soci-tab(name="Blog")
+        soci-input(placeholder="Write your best")
 
-    soci-tab(name="HTML")
-      soci-file-drop(type="html")
-  
+      soci-tab(name="HTML")
+        soci-file-drop(type="html")
+    
 
-  h2 Tags
-  .tags
-    soci-tag-input
-    soci-tag-input
-    soci-tag-input
+    h2 Tags
+    .tags
+      soci-tag-input
+      soci-tag-input
+      soci-tag-input
 
-  button(onclick="submit.submit()") submit
+    button(onclick="submit.submit()") submit
 
 script.
   soci.lazyload('/pages/submit.js', document.currentScript.closest('soci-route'))
