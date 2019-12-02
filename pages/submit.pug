@@ -3,13 +3,13 @@
 
   form
     input(type="text" name="asdf")
-    soci-url-input(name="asdf2" required tabindex=0)
+    soci-url-input(name="url" required tabindex=0)
     
     soci-tab-group
       soci-tab(name="Image" default)
         soci-file-drop(type="image")
         h2 Description
-        soci-input(placeholder="Enter description")
+        soci-input(placeholder="Enter description" name="description")
 
       soci-tab(name="Video")
         soci-file-drop(type="video")
@@ -30,9 +30,9 @@
 
     h2 Tags
     .tags
-      soci-tag-input
-      soci-tag-input
-      soci-tag-input
+      soci-tag-input(required name="tag" tabindex=0)
+      soci-tag-input(tabindex=0)
+      soci-tag-input(tabindex=0)
 
     button(onclick="submit.submit()") submit
 

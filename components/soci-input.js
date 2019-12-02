@@ -1,8 +1,11 @@
 import SociComponent from './soci-component.js'
 
 export default class SociInput extends SociComponent {
+  static formAssociated = true
+
   constructor() {
     super()
+    this._internals = this.attachInternals()
   }
 
   css(){
@@ -891,11 +894,19 @@ export default class SociInput extends SociComponent {
     else this.setUpQuill()
   }
 
+  checkValidity() {
+    return this._internals.checkValidity()
+  }
+
   setUpQuill(){
     this.editor = new Quill(this.select('#editor'), {
       modules: { toolbar: true },
       theme: 'snow',
       placeholder: this.getAttribute('placeholder') || "Enter comment"
+    })
+
+    this.editor.on('text-change', ()=>{
+      this._internals.setFormValue(this.value)
     })
   }
 
@@ -905,5 +916,6 @@ export default class SociInput extends SociComponent {
 
   set value(val){
     this.editor.setContents(JSON.parse(val))
+    this._internals.setFormValue(val)
   }
 }

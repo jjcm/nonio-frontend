@@ -1,8 +1,11 @@
 import SociComponent from './soci-component.js'
 
 export default class SociTagInput extends SociComponent {
+  static formAssociated = true
+
   constructor() {
     super()
+    this._internals = this.attachInternals()
   }
 
   css(){
@@ -72,4 +75,33 @@ export default class SociTagInput extends SociComponent {
       <input type="text" placeholder="+"></input>
     </container>
   `}
+
+  connectedCallback(){
+    this._internals.setValidity({customError: true}, 'Submissions require at least one tag.')
+    this._input = this.select('input')
+
+    this._input.addEventListener('change', this._onChange.bind(this))
+    this.addEventListener('focus', this._onFocus.bind(this))
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity()
+  }
+
+  get value() {
+    return this._input.value
+  }
+
+  set value(val) {
+    this._input.value = val
+    this._internals.setFormValue(val)
+  }
+
+  _onFocus(e) {
+    this._input.focus()
+  }
+
+  _onChange(e) {
+    this._internals.setFormValue(this.value)
+  }
 }
