@@ -77,7 +77,7 @@ export default class SociTagInput extends SociComponent {
   `}
 
   connectedCallback(){
-    this._internals.setValidity({customError: true}, 'Submissions require at least one tag.')
+    if(this.hasAttribute('required')) this._internals.setValidity({customError: true}, 'Submissions require at least one tag.')
     this._input = this.select('input')
 
     this._input.addEventListener('change', this._onChange.bind(this))
@@ -102,6 +102,10 @@ export default class SociTagInput extends SociComponent {
   }
 
   _onChange(e) {
+    if(this.hasAttribute('required')){
+      if(this.value == '') this._internals.setValidity({customError: true}, 'Submissions require at least one tag.')
+      else this._internals.setValidity({})
+    }
     this._internals.setFormValue(this.value)
   }
 }
