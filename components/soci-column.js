@@ -181,7 +181,8 @@ export default class SociColumn extends SociComponent {
   }
 
   html(){
-    let data = 'fake-routes/posts.json'
+    //let data = 'fake-routes/posts.json'
+    let data = 'posts'
     return `
       <scroll-container>
         <cover-photo></cover-photo>

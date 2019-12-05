@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import config from '../config.js'
 
 export default class SociPostLi extends SociComponent {
   constructor() {
@@ -48,10 +49,13 @@ export default class SociPostLi extends SociComponent {
     return ['data', 'order', 'timespan', 'filter']
   }
 
-  attributeChangedCallback(name, oldValue, newValue){
+  async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case "data":
-        fetch(newValue).then(
+        let data = await this.getData(newValue)
+        if(data.posts) this.createPosts(data.posts)
+        /*
+        fetch(config.API_HOST + newValue).then(
           response=>{
             if(response.ok) return response.json()
             else this.log('JSON not found')
@@ -63,6 +67,7 @@ export default class SociPostLi extends SociComponent {
         ).catch(e=>{
           this.log(e)
         })
+        */
         break
       case "filter":
         // should put an infinite scroll here
@@ -72,7 +77,10 @@ export default class SociPostLi extends SociComponent {
   }
 
   async createPosts(data){
-    data = await soci.getData('posts')
+    console.log(data)
+    console.log(data.map)
+    //data = await soci.getData('posts')
+    /*
     data = [
       {
           "title": "asdf hi",
@@ -104,6 +112,7 @@ export default class SociPostLi extends SociComponent {
           ]
       },
     ]
+    */
 
     let posts = `
       ${data.map((post) => `
