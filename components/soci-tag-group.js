@@ -41,13 +41,42 @@ export default class SociTagGroup extends SociComponent {
       text-align: center;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       color: var(--n4);
       margin-left: 4px;
       cursor: pointer;
+      overflow: hidden;
+      position: relative;
     }
     #add-tag:hover {
       background: var(--n2);
+    }
+    #add-tag input {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      opacity: 0;
+      pointer-events: none;
+      width: calc(100% - 2px);
+      border: 0;
+      height: 18px;
+      border-radius: 9px;
+      padding-left: 24px;
+      border: var(--n1) 1px solid;
+    }
+    #add-tag svg {
+      position: absolute;
+      left: 7px;
+    }
+    #add-tag[active] {
+      width: 150px;
+    }
+    #add-tag[active] input {
+      opacity: 1;
+    }
+    #add-tag[active] input:focus,
+    #add-tag[active] input:active {
+      outline: 0;
+      box-shadow: 1px solid var(--b3);
     }
     #arrow {
       color: var(--n2);
@@ -81,7 +110,8 @@ export default class SociTagGroup extends SociComponent {
       <path d="M7.632 13.384L6.288 11.872L10.464 8.056H0.936V5.848H10.464L6.288 2.032L7.632 0.519999L14.232 6.904V7L7.632 13.384Z" fill="currentColor"/>
     </svg>
     <div id="tags" @click=_tagVote><slot></slot></div>
-    <div id="add-tag">
+    <div id="add-tag" @click=_addTag>
+      <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="icon/tags" transform="translate(-4.000000, -5.000000)">
@@ -104,6 +134,13 @@ export default class SociTagGroup extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score')
       this.select('#score').innerHTML = `▲ ${newValue}`
+  }
+
+  _addTag(e){
+    this.select('#add-tag').toggleAttribute('active')
+    let input = this.select('input')
+    input.focus()
+
   }
 
   _tagVote(e){
