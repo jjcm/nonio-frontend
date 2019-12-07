@@ -1,13 +1,13 @@
 export default class SociComponent extends HTMLElement {
   constructor() {
     super()
-    this._shadowRoot = this.attachShadow({'mode':'open'})
-    this._shadowRoot.innerHTML = `
+    this.attachShadow({'mode':'open'})
+    this.shadowRoot.innerHTML = `
       ${this.css ? `<style>${this.css()}</style>` : ''}
       ${this.html ? this.html() : '<slot></slot>'}
     `
 
-    this._shadowRoot.querySelectorAll('*').forEach(el=> {
+    this.shadowRoot.querySelectorAll('*').forEach(el=> {
       Array.from(el.attributes).forEach(attr => {
         const prefix = attr.name.charAt(0)
         if(prefix == '@'){
