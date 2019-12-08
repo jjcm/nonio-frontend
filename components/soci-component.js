@@ -1,3 +1,5 @@
+import config from '../config.js'
+
 export default class SociComponent extends HTMLElement {
   constructor() {
     super()
@@ -16,7 +18,7 @@ export default class SociComponent extends HTMLElement {
           el.removeAttribute(attr.name)
         }
         if(prefix == '?'){
-          el[attr.value != "false" ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
+          el[attr.value != 'false' ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
           el.removeAttribute(attr.name)
         }
       })
@@ -28,7 +30,7 @@ export default class SociComponent extends HTMLElement {
   }
 
   async postData(url, data = {}) {
-    const response = await fetch(API_URL + url, {
+    const response = await fetch(config.API_HOST + url, {
       method: 'POST', 
       mode: 'cors',
       cache: 'no-cache',
@@ -39,22 +41,18 @@ export default class SociComponent extends HTMLElement {
       redirect: 'follow', 
       referrer: 'no-referrer', 
       body: JSON.stringify(data) 
-    });
-    return await response.json();
+    })
+    return await response.json()
   }
 
   async getData(url){
     let options = {}
     if(this.authToken) options.headers = { 
-      Authorization: "Bearer " + this.authToken
+      Authorization: 'Bearer ' + this.authToken
     }
 
-    const response = await fetch(API_URL + url, options)
+    const response = await fetch(config.API_HOST + url, options)
     return await response.json()
-  }
-
-  forceBindThis(functions){
-    functions.forEach(key => (this[key] = this[key].bind(this)));
   }
 
   fire(event, detail, attr){
@@ -82,10 +80,6 @@ export default class SociComponent extends HTMLElement {
     console.groupEnd(groupLabel)
   }
 
-  getCss(){
-    if(this.css) return html`<style>${this.css()}</style>`
-  }
-
   localLink(e){
     e.preventDefault()
     window.history.pushState(null, null, e.currentTarget.href)
@@ -100,9 +94,11 @@ export default class SociComponent extends HTMLElement {
       if(expiry > Date.now() / 1000) return token
       return false
     }
-    catch {
+    catch(err) {
       return false
     }
+
+
   }
 
   updateTime(time, dom){

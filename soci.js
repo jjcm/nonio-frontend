@@ -17,7 +17,7 @@ let soci = {
   },
   checkTokenExpired: () => {
     try {
-      let expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)
+      let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
       if(expiry < Date.now()) return true
       return false
     }
@@ -40,13 +40,13 @@ let soci = {
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + soci.token
+        'Authorization': 'Bearer ' + soci.token
       },
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // no-referrer, *client
       body: JSON.stringify(data) 
-    });
-    return await response.json();
+    })
+    return await response.json()
   },
   getData: async function(url){
     /* Use this if we ever switch to a secure server for non.io only
@@ -58,7 +58,7 @@ let soci = {
 
     let options = {}
     if(soci.token) options.headers = { 
-      Authorization: "Bearer " + soci.token
+      Authorization: 'Bearer ' + soci.token
     }
 
     const response = await fetch(API_URL + url, options)
@@ -80,7 +80,7 @@ let soci = {
     document.addEventListener('DOMContentLoaded', ()=>{
 
       let resource = document.createElement('script')
-      resource.async = "true"
+      resource.async = 'true'
       resource.src = path
       let root = parent ? parent : document.head
       root.appendChild(resource)

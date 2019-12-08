@@ -216,13 +216,13 @@ export default class SociColumn extends SociComponent {
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
-      case "filter":
+      case 'filter':
         this.filterPosts(newValue)
         break
-      case "tag":
+      case 'tag':
         this.select('#tag-title').innerHTML = '#' + newValue
         break
-      case "subscribers":
+      case 'subscribers':
         let subs = newValue || 0
         this.select('subscribers').innerHTML = subs + ' subscribers'
         break
@@ -251,8 +251,8 @@ export default class SociColumn extends SociComponent {
   }
 
   filterPosts(filter){
-    filter = filter || "all"
-    Array.from(this.select("filters").children).forEach(child => {
+    filter = filter || 'all'
+    Array.from(this.select('filters').children).forEach(child => {
       if(child.innerHTML == filter) child.setAttribute('selected', '')
       else child.removeAttribute('selected')
     })
@@ -276,10 +276,10 @@ export default class SociColumn extends SociComponent {
   getColorSchemes(){
     let schemes = ''
     let colors = {
-      "red": 'r1',
-      "teal": 't2',
-      "orange": 'o1',
-      "purple": 'p2'
+      'red': 'r1',
+      'teal': 't2',
+      'orange': 'o1',
+      'purple': 'p2'
     }
 
     for(let color in colors){

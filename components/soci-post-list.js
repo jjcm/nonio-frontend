@@ -1,5 +1,4 @@
 import SociComponent from './soci-component.js'
-import config from '../config.js'
 
 export default class SociPostLi extends SociComponent {
   constructor() {
@@ -51,7 +50,7 @@ export default class SociPostLi extends SociComponent {
 
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
-      case "data":
+      case 'data':
         let data = await this.getData(newValue)
         if(data.posts) this.createPosts(data.posts)
         /*
@@ -69,7 +68,7 @@ export default class SociPostLi extends SociComponent {
         })
         */
         break
-      case "filter":
+      case 'filter':
         // should put an infinite scroll here
         
         break
