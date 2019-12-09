@@ -9,6 +9,9 @@ module.exports = {
         'Atomics': 'readonly',
         'SharedArrayBuffer': 'readonly'
     },
+    'settings': {
+        'import/parser': 'babel-eslint'
+    },
     'parserOptions': {
         'ecmaVersion': 2019,
         'sourceType': 'module'
@@ -28,6 +31,7 @@ module.exports = {
         'semi': [
             'error',
             'never'
-        ]
+        ],
+        'no-case-declarations': off
     }
 }

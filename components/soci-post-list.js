@@ -52,6 +52,7 @@ export default class SociPostLi extends SociComponent {
     switch(name){
       case 'data':
         let data = await this.getData(newValue)
+        console.log(data)
         if(data.posts) this.createPosts(data.posts)
         /*
         fetch(config.API_HOST + newValue).then(
