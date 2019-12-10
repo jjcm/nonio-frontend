@@ -1,4 +1,4 @@
-header
+header(load-order="primary")
   .hero
     soci-user(size="x-large" name="pwnies")
     .subtitle Conjurer for Deep Design and Theoretical Ideas
@@ -12,7 +12,7 @@ header
     .label subscribers
     .up  +0.4%
 
-.content
+.content(load-order="secondary")
   .col
     .col-header
       soci-icon(glyph="tags")
@@ -25,4 +25,3 @@ header
     soci-post-list(data="fake-routes/posts.json")
 
 script(src="pages/user.js")
-link(rel="stylesheet" href="pages/user.styl")

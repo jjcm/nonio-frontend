@@ -18,7 +18,8 @@ export default class SociTab extends SociComponent {
   }
 
   connectedCallback(){
-    this.data = this.innerHTML 
+    this.removeAttribute('active')
+    this.dataset.tabData = this.dataset.tabData || this.innerHTML 
     this.innerHTML = ''
 
     this.activate = this.activate.bind(this)
@@ -28,7 +29,8 @@ export default class SociTab extends SociComponent {
 
   activate(){
     if(this.hasAttribute('active')) return 0
-    this.innerHTML = this.data
+    this.innerHTML = this.dataset.tabData
+    this.dataset.tabData = ''
     this.setAttribute('activating', '')
     setTimeout(()=>{
       this.removeAttribute('activating')
@@ -40,7 +42,7 @@ export default class SociTab extends SociComponent {
   deactivate(){
     if(this.hasAttribute('active')){
       this.removeAttribute('active')
-      this.data = this.innerHTML
+      this.dataset.tabData = this.dataset.tabData || this.innerHTML 
       this.innerHTML = ''
       this.fire('tabdeactivate')
     }

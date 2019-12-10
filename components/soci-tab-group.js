@@ -73,6 +73,7 @@ export default class SociTabGroup extends SociComponent {
 
   _tabClick(e){
     let tab = e.target
+    if(tab.tagName != 'TAB') return 0
     let name = tab.innerText
     let tabs = Array.from(this.querySelectorAll('soci-tab'))
     tabs.forEach(tab=>tab[tab.getAttribute('name') == name ? 'activate' : 'deactivate']())
