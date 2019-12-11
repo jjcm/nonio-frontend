@@ -18,11 +18,12 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 34px 0 64px;
+        padding: 0 14px 0 64px;
         background: linear-gradient(var(--n1), #fff);
       }
       filtering {
         display: flex;
+        width: 100%;
       }
       filter {
         margin-right: 32px;
@@ -44,9 +45,13 @@ export default class SociCommentList extends SociComponent {
         border-radius: 2px;
         background: var(--n4);
       }
+      comment-count {
+        white-space: nowrap;
+        margin-right: 2px;
+      }
       content {
         display: block;
-        padding: 0 24px 24px 12px;
+        padding: 0 12px 24px;
       }
       soci-input {
         min-height: 82px;
@@ -55,17 +60,51 @@ export default class SociCommentList extends SociComponent {
         min-height: 200px;
         padding-bottom: 40px;
       }
+      button-container {
+        padding-top: 6px;
+        max-width: 0;
+        min-width: 0;
+        overflow: hidden;
+        position: relative;
+        padding-left: 0;
+        transition: all 0.1s var(--soci-ease);
+      }
+      button-container[active] {
+        max-width: 60px;
+        min-width: 52px;
+        padding-left: 6px;
+      }
+      button {
+        border: 0;
+        border-radius: 10px;
+        background: var(--b2);
+        height: 20px;
+        color: #fff;
+        padding: 0 8px;
+        font-size: 12px;
+      }
+      button:focus {
+        outline: 0;
+        box-shadow: 0 0 0 2px var(--b1);
+      }
+      button:active {
+        box-shadow: none;
+        background: var(--b3);
+      }
     `
   }
 
   html(){ return `
-      <soci-input></soci-input>
+      <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
       <controls>
         <filtering @click=_filter>
           <filter active>Top</filter>
           <filter>New</filter>
         </filtering>
         <comment-count>0 comments</comment-count>
+        <button-container>
+          <button>submit</button>
+        </button-container>
       </controls>
       <content>
         <slot></slot>
@@ -87,6 +126,15 @@ export default class SociCommentList extends SociComponent {
 
   connectedCallback(){
     this.renderComments()
+  }
+
+  _onFocus(){
+    this.select('button-container').setAttribute('active', '')
+  }
+
+  _onBlur(){
+    if(this.select('soci-input').value == '{"ops":[{"insert":"\\n"}]}')
+      this.select('button-container').removeAttribute('active')
   }
 
   _filter(e){
