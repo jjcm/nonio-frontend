@@ -18,7 +18,7 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 14px 0 64px;
+        padding: 0 14px 0 22px;
         background: linear-gradient(var(--n1), #fff);
       }
       filtering {

@@ -14,7 +14,39 @@ body
   position: relative
 
 #home
-  padding: 0 16px
+  .other-platforms-illustration
+    width: 100%
+    height: 300px
+    border-radius: 3px
+    background: var(--n2)
+  #home-container
+    max-width: 1200px
+    margin: 0 auto
+    padding: 24px 36px
+  .header
+    display: flex
+    align-items: center
+    .dash
+      width: 20px
+      height: 2px
+      background: var(--n3)
+      margin-left: 20px
+    h1
+      margin: 0
+      margin-left: 20px
+      transform: translateY(-2px)
+  .columns
+    display: flex
+    .image
+      width: 100%
+      height: 200px
+      border-radius: 3px
+      background: var(--n2)
+    .column
+      width: 100%
+      margin-left: 20px
+      &:first-child
+        margin-left: 0
 #user
   padding: 30px 50px
   &[active]
@@ -90,15 +122,6 @@ body
       soci-post-list
         padding: 0
 
-#home
-  h1
-    transform: translateY(10px)
-    opacity: 0
-    transition: all 0.3s ease-in-out
-  &[active]
-    h1
-      transform: translateY(0)
-      opacity: 1
 #tags
   scroll-snap-type: x proximity;
   scroll-padding: 16px;
