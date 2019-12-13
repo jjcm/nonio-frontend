@@ -83,7 +83,7 @@ export default class SociUser extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'name') {
       this.select('username').innerHTML = newValue
-      this.select('#avatar').src = 'example-data/profile.jpg'
+      this.select('#avatar').src = '/example-data/profile.jpg'
     }
   }
 }

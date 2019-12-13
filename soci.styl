@@ -7,6 +7,9 @@ input
 body
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
 
+h1:first-child
+  margin-top: 0
+
 #pages
   height: 100vh
   overflow: hidden
@@ -14,6 +17,8 @@ body
   position: relative
 
 #home
+  svg
+    color: var(--b3)
   .other-platforms-illustration
     width: 100%
     height: 300px
@@ -27,14 +32,17 @@ body
     display: flex
     align-items: center
     .dash
-      width: 20px
+      width: 100%
       height: 2px
-      background: var(--n3)
+      background: var(--n2)
       margin-left: 20px
     h1
       margin: 0
       margin-left: 20px
+      white-space: nowrap
       transform: translateY(-2px)
+    svg
+      min-width: 200px
   .columns
     display: flex
     .image
@@ -334,3 +342,7 @@ soci-route[active]
   [load-order="tertiary"]
     transform: translateY(0px)
     opacity: 1
+
+#new-user
+  #new-user-container
+    padding: 24px 36px

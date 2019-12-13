@@ -102,8 +102,8 @@ export default class SociPost extends SociComponent {
 
   html(){ return `
     <content>
-      <img src="example-data/cat.jpg"/>
-      <img id="bg" src="example-data/cat.jpg"/>
+      <img src="/example-data/cat.jpg"/>
+      <img id="bg" src="/example-data/cat.jpg"/>
     </content>
     <footer>
       <div id="details-container">

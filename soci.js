@@ -15,6 +15,9 @@ let soci = {
   refreshToken: () => {
 
   },
+  clearToken: () => {
+    localStorage.removeItem('jwt')
+  },
   checkTokenExpired: () => {
     try {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)

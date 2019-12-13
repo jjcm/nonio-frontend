@@ -1,8 +1,8 @@
 title nonio
-script(src="soci.js")
-script(src="components/soci-components.js" type="module")
-link(rel="stylesheet" href="soci-tokens.styl")
-link(rel="stylesheet" href="soci.styl")
+script(src="/soci.js")
+script(src="/components/soci-components.js" type="module")
+link(rel="stylesheet" href="/soci-tokens.styl")
+link(rel="stylesheet" href="/soci.styl")
 
 //-include components.pug
 //include home.pug
@@ -15,9 +15,11 @@ soci-router
       include pages/tags.pug
     soci-route#home(pattern="^$")
       include pages/home.pug
-    soci-route#user(pattern="^user$")
+    soci-route#new-user(pattern="^user/create/?$")
+      include pages/new-user.pug
+    soci-route#user(pattern="^user/?$")
       include pages/user.pug
-    soci-route#submit(pattern="^submit$")
+    soci-route#submit(pattern="^submit/?$")
       include pages/submit.pug
     soci-route#post(pattern=".*")
       include pages/post.pug

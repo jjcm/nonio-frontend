@@ -185,7 +185,7 @@ export default class SociSidebar extends SociComponent {
       }
 
       noauth {
-        padding: 64px 22px 0;
+        padding: 84px 22px 0;
         left: -280px;
       }
 
@@ -231,7 +231,7 @@ export default class SociSidebar extends SociComponent {
 
       #facebook {
         border: 0;
-        background: #3A559F;
+        background: var(--b3);
         color: #fff;
       }
 
@@ -290,9 +290,6 @@ export default class SociSidebar extends SociComponent {
         </section>
       </auth>
       <noauth>
-        <svg width="150" height="24" viewBox="0 0 150 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21.4813 0.599998V23H17.2253L6.05725 9.4V23H0.93725V0.599998H5.22525L16.3612 14.2V0.599998H21.4813ZM46.6915 23.384C44.3662 23.384 42.2648 22.8827 40.3875 21.88C38.5315 20.8773 37.0702 19.5013 36.0035 17.752C34.9582 15.9813 34.4355 13.9973 34.4355 11.8C34.4355 9.60267 34.9582 7.62933 36.0035 5.88C37.0702 4.10933 38.5315 2.72267 40.3875 1.72C42.2648 0.717333 44.3662 0.216 46.6915 0.216C49.0168 0.216 51.1075 0.717333 52.9635 1.72C54.8195 2.72267 56.2808 4.10933 57.3475 5.88C58.4142 7.62933 58.9475 9.60267 58.9475 11.8C58.9475 13.9973 58.4142 15.9813 57.3475 17.752C56.2808 19.5013 54.8195 20.8773 52.9635 21.88C51.1075 22.8827 49.0168 23.384 46.6915 23.384ZM46.6915 18.968C48.0142 18.968 49.2088 18.6693 50.2755 18.072C51.3422 17.4533 52.1742 16.6 52.7715 15.512C53.3902 14.424 53.6995 13.1867 53.6995 11.8C53.6995 10.4133 53.3902 9.176 52.7715 8.088C52.1742 7 51.3422 6.15733 50.2755 5.56C49.2088 4.94133 48.0142 4.632 46.6915 4.632C45.3688 4.632 44.1742 4.94133 43.1075 5.56C42.0408 6.15733 41.1982 7 40.5795 8.088C39.9822 9.176 39.6835 10.4133 39.6835 11.8C39.6835 13.1867 39.9822 14.424 40.5795 15.512C41.1982 16.6 42.0408 17.4533 43.1075 18.072C44.1742 18.6693 45.3688 18.968 46.6915 18.968ZM92.45 0.599998V23H88.194L77.026 9.4V23H71.906V0.599998H76.194L87.33 14.2V0.599998H92.45ZM106.812 0.599998H111.996V23H106.812V0.599998ZM137.223 23.384C134.897 23.384 132.796 22.8827 130.919 21.88C129.063 20.8773 127.601 19.5013 126.535 17.752C125.489 15.9813 124.967 13.9973 124.967 11.8C124.967 9.60267 125.489 7.62933 126.535 5.88C127.601 4.10933 129.063 2.72267 130.919 1.72C132.796 0.717333 134.897 0.216 137.223 0.216C139.548 0.216 141.639 0.717333 143.495 1.72C145.351 2.72267 146.812 4.10933 147.879 5.88C148.945 7.62933 149.479 9.60267 149.479 11.8C149.479 13.9973 148.945 15.9813 147.879 17.752C146.812 19.5013 145.351 20.8773 143.495 21.88C141.639 22.8827 139.548 23.384 137.223 23.384ZM137.223 18.968C138.545 18.968 139.74 18.6693 140.807 18.072C141.873 17.4533 142.705 16.6 143.303 15.512C143.921 14.424 144.231 13.1867 144.231 11.8C144.231 10.4133 143.921 9.176 143.303 8.088C142.705 7 141.873 6.15733 140.807 5.56C139.74 4.94133 138.545 4.632 137.223 4.632C135.9 4.632 134.705 4.94133 133.639 5.56C132.572 6.15733 131.729 7 131.111 8.088C130.513 9.176 130.215 10.4133 130.215 11.8C130.215 13.1867 130.513 14.424 131.111 15.512C131.729 16.6 132.572 17.4533 133.639 18.072C134.705 18.6693 135.9 18.968 137.223 18.968Z" fill="currentColor"/>
-        </svg>
         <h2>Login to your account</h2>
         <slot name="login">
         </slot>
@@ -305,7 +302,7 @@ export default class SociSidebar extends SociComponent {
           Login with Facebook
           <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 512 512"><path d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z" fill="#fff"/></svg>
         </button>
-        <soci-link>Create account</soci-link>
+        <soci-link href="user/create">Create account</soci-link>
       </noauth>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -314,7 +311,7 @@ export default class SociSidebar extends SociComponent {
         <links>
           <soci-link href="#">About</soci-link>
           <soci-link href="#">Feedback</soci-link>
-          <soci-link href="#">Help</soci-link>
+          <soci-link @click=logout href="/">Logout</soci-link>
         </links>
       </section>
     `
@@ -322,7 +319,7 @@ export default class SociSidebar extends SociComponent {
 
   connectedCallback(){
     if(!this.authToken) this.setAttribute('noauth', '')
-    let tagsUrl = 'fake-routes/subscribed-tags.json'
+    let tagsUrl = '/fake-routes/subscribed-tags.json'
     fetch(tagsUrl).then(
       response=>{
         if(response.ok) return response.json()
@@ -367,6 +364,11 @@ export default class SociSidebar extends SociComponent {
       console.log('invalid token')
     }
     this.querySelector('button[type="submit"]').toggleAttribute('waiting')
+  }
+
+  logout(){
+    soci.clearToken()
+    this.setAttribute('noauth', '')
   }
 
   _tagClick(e){
