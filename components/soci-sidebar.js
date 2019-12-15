@@ -509,6 +509,12 @@ export default class SociSidebar extends SociComponent {
     this.setAttribute('create', '')
   }
 
+  get _dragOffset(){
+    let leftOffset = this.state.x - (this.state.xDown - this.state.mouseClientX)
+    leftOffset = Math.min(228, Math.max(52, leftOffset))
+    return leftOffset
+  }
+
   _mouseDown(e){
     this.state.xDown = e.clientX
     document.addEventListener('mousemove', this._mouseMove)
@@ -518,8 +524,8 @@ export default class SociSidebar extends SociComponent {
   _mouseMove(e){
     let sidebar = document.querySelector('soci-sidebar')
     sidebar.setAttribute('dragging', '')
-    sidebar.state.delta = sidebar.state.xDown - e.clientX
-    sidebar._contributionHandle.style.left = (sidebar.state.x - sidebar.state.delta) + 'px'
+    sidebar.state.mouseClientX = e.clientX
+    sidebar._contributionHandle.style.left = sidebar._dragOffset + 'px'
   }
 
   _mouseUp(){
@@ -527,7 +533,6 @@ export default class SociSidebar extends SociComponent {
     sidebar.removeAttribute('dragging')
     document.removeEventListener('mousemove', sidebar._mouseMove)
     document.removeEventListener('mouseup', sidebar._mouseUp)
-    sidebar.state.x = sidebar.state.x - sidebar.state.delta
-    sidebar._contributionHandle.style.left = sidebar.state.x + 'px'
+    sidebar.state.x = sidebar._dragOffset
   }
 }
