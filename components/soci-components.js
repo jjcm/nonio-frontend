@@ -11,6 +11,9 @@ window.customElements.define('soci-column', SociColumn)
 import SociComment from "./soci-comment.js"
 window.customElements.define('soci-comment', SociComment)
 
+import SociContributionSlider from "./soci-contribution-slider.js"
+window.customElements.define('soci-contribution-slider', SociContributionSlider)
+
 import SociCommentList from "./soci-comment-list.js"
 window.customElements.define('soci-comment-list', SociCommentList)
 

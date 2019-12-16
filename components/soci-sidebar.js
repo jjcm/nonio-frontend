@@ -285,41 +285,6 @@ export default class SociSidebar extends SociComponent {
       input[type="email"] {
         margin-bottom: 24px;
       }
-
-      slider {
-        position: relative;
-        display: block;
-        margin-top: 8px;
-      }
-
-      slider-track {
-        height: 4px;
-        width: 100%;
-        background: var(--b1);
-        display: block;
-        opacity: 0.4;
-        position: relative;
-      }
-
-      slider-track::before {
-        content: '';
-        width: 40px;
-        height: 4px;
-        background: var(--n3);
-        border-right: 2px solid #fff;
-        display: block;
-      }
-
-      slider-handle {
-        width: 16px;
-        height: 16px;
-        background: var(--b2);
-        display: block;
-        position: absolute;
-        top: -6px;
-        left: 110px;
-        border-radius: 8px;
-      }
     `
   }
 
@@ -384,10 +349,7 @@ export default class SociSidebar extends SociComponent {
         <input type="password" placeholder="Password"/>
         <input type="password" placeholder="Confirm Password"/>
         <h2>Contribution</h2>
-        <slider>
-          <slider-track></slider-track>
-          <slider-handle @mousedown=_mouseDown></slider-handle>
-        </slider>
+        <soci-contribution-slider></soci-contribution-slider>
       </create>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,10 +379,6 @@ export default class SociSidebar extends SociComponent {
     ).catch(e=>{
       this.log(e)
     })
-
-    this.state = {}
-    this.state.x = 110
-    this._contributionHandle = this.select('slider-handle')
   }
 
   static get observedAttributes() {
@@ -507,32 +465,5 @@ export default class SociSidebar extends SociComponent {
   _createAccount(){
     this.removeAttribute('noauth')
     this.setAttribute('create', '')
-  }
-
-  get _dragOffset(){
-    let leftOffset = this.state.x - (this.state.xDown - this.state.mouseClientX)
-    leftOffset = Math.min(228, Math.max(52, leftOffset))
-    return leftOffset
-  }
-
-  _mouseDown(e){
-    this.state.xDown = e.clientX
-    document.addEventListener('mousemove', this._mouseMove)
-    document.addEventListener('mouseup', this._mouseUp)
-  }
-
-  _mouseMove(e){
-    let sidebar = document.querySelector('soci-sidebar')
-    sidebar.setAttribute('dragging', '')
-    sidebar.state.mouseClientX = e.clientX
-    sidebar._contributionHandle.style.left = sidebar._dragOffset + 'px'
-  }
-
-  _mouseUp(){
-    let sidebar = document.querySelector('soci-sidebar')
-    sidebar.removeAttribute('dragging')
-    document.removeEventListener('mousemove', sidebar._mouseMove)
-    document.removeEventListener('mouseup', sidebar._mouseUp)
-    sidebar.state.x = sidebar._dragOffset
   }
 }
