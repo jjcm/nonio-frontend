@@ -10,6 +10,11 @@ export default class SociContributionSlider extends SociComponent {
 
   css(){
     return `
+      :host {
+        margin-bottom: 16px;
+        display: block;
+      }
+
       h2 {
         font-size: 14px;
         text-transform: uppercase;
@@ -47,13 +52,23 @@ export default class SociContributionSlider extends SociComponent {
       slider-handle {
         width: 16px;
         height: 16px;
-        background: var(--b2);
+        background: var(--b1);
         display: block;
         position: absolute;
         top: -6px;
         left: 110px;
         border-radius: 8px;
         cursor: pointer;
+        box-shadow: 0 0 0 8px var(--b2) inset;
+        transition: box-shadow 0.1s var(--soci-ease-out);
+      }
+
+      slider-handle:focus {
+        outline: 0;
+      }
+
+      slider-handle:focus:not(:active) {
+        box-shadow: 0 0 0 2px var(--b2) inset;
       }
 
       info {
@@ -106,7 +121,7 @@ export default class SociContributionSlider extends SociComponent {
     return `
       <slider>
         <slider-track></slider-track>
-        <slider-handle @mousedown=_mouseDown></slider-handle>
+        <slider-handle @mousedown=_mouseDown tabindex="0"></slider-handle>
       </slider>
       <info>
         <server>
@@ -197,5 +212,6 @@ export default class SociContributionSlider extends SociComponent {
     document.removeEventListener('mouseup', this._mouseUp)
     this.state.x = this._dragOffset
     this.previousElementSibling.innerHTML = 'Contribution'
+    this._contributionHandle.blur()
   }
 }

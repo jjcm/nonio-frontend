@@ -267,9 +267,12 @@ export default class SociSidebar extends SociComponent {
         margin-top: 50px;
       }
 
+      create button {
+        margin-top: 16px;
+      }
+
       input {
         margin: 0 0 8px;
-        padding: 0 10px;
         border: 0;
         border-bottom: 2px solid var(--n2);
         height: 38px;
@@ -284,6 +287,15 @@ export default class SociSidebar extends SociComponent {
 
       input[type="email"] {
         margin-bottom: 24px;
+      }
+
+      cc-details {
+        display: flex;
+      }
+
+      cc-details input:first-child {
+        min-width: 160px;
+        margin-right: 12px;
       }
     `
   }
@@ -350,6 +362,14 @@ export default class SociSidebar extends SociComponent {
         <input type="password" placeholder="Confirm Password"/>
         <h2>Contribution</h2>
         <soci-contribution-slider></soci-contribution-slider>
+        <h2>Billing</h2>
+        <input type="text" placeholder="Credit Card Name"/>
+        <input type="text" placeholder="Credit Card Number"/>
+        <cc-details>
+          <input type="text" placeholder="Exp. Date"/>
+          <input type="text" placeholder="CCV"/>
+        </cc-details>
+        <button type="submit">Create Account</buttom>
       </create>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
