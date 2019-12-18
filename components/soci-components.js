@@ -29,6 +29,9 @@ window.customElements.define('soci-input', SociInput)
 import SociLink from "./soci-link.js"
 window.customElements.define('soci-link', SociLink)
 
+import SociPassword from "./soci-password.js"
+window.customElements.define('soci-password', SociPassword)
+
 import SociPost from "./soci-post.js"
 window.customElements.define('soci-post', SociPost)
 

@@ -177,6 +177,13 @@ export default class SociSidebar extends SociComponent {
         margin-right: 28px;
       }
 
+
+
+      :host([noauth]) #footer soci-link#logout {
+        display: none;
+      }
+
+
       #footer svg {
         margin-bottom: 12px;
       }
@@ -251,10 +258,12 @@ export default class SociSidebar extends SociComponent {
 
       noauth soci-link {
         display: block;
-        margin-top: 24px;
+        margin-top: 28px;
         font-size: 13px;
         color: var(--b2);
-        text-decoration: underline;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        opacity: 0.7;
         cursor: pointer;
         text-align: center;
       }
@@ -352,7 +361,7 @@ export default class SociSidebar extends SociComponent {
           <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 512 512"><path d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z" fill="#fff"/></svg>
         </button>
         -->
-        <soci-link href="/user/create" @click=_createAccount>Create account</soci-link>
+        <soci-link #create href="/user/create" @click=_createAccount>create account</soci-link>
       </noauth>
       <create>
         <h2>Essentials</h2>
@@ -369,7 +378,7 @@ export default class SociSidebar extends SociComponent {
           <input type="text" placeholder="Exp. Date"/>
           <input type="text" placeholder="CCV"/>
         </cc-details>
-        <button type="submit">Create Account</buttom>
+        <button type="submit">Create Account</button>
       </create>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -378,7 +387,7 @@ export default class SociSidebar extends SociComponent {
         <links>
           <soci-link href="#">About</soci-link>
           <soci-link href="#">Feedback</soci-link>
-          <soci-link @click=logout href="/">Logout</soci-link>
+          <soci-link id="logout" @click=logout href="/">Logout</soci-link>
         </links>
       </section>
     `
@@ -399,6 +408,8 @@ export default class SociSidebar extends SociComponent {
     ).catch(e=>{
       this.log(e)
     })
+
+    this.addEventListener('keydown', this._submitFormOnEnter)
   }
 
   static get observedAttributes() {
@@ -413,19 +424,30 @@ export default class SociSidebar extends SociComponent {
   }
 
   async login(){
-    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
     let creds = {
-      email: this.querySelector('input[type="email"]').value,
-      password: this.querySelector('input[type="password"]').value
+      email: this.querySelector('input[type="email"]'),
+      password: this.querySelector('input[type="password"]')
     }
 
+    if(!creds.email.checkValidity()){
+      creds.email.focus()
+      return 0
+    }
+
+    if(!creds.password.checkValidity()){
+      creds.password.focus()
+      return 0
+    }
+
+    creds.email = creds.email.value
+    creds.password = creds.password.value
+
+    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
     let response = await soci.postData('login', creds)
     if(response.token){
-      console.log('heyp')
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       this.toggleAttribute('noauth')
-      console.log(this)
     }
     else {
       console.log('invalid token')
@@ -437,6 +459,14 @@ export default class SociSidebar extends SociComponent {
     soci.clearToken()
     this.removeAttribute('create')
     this.setAttribute('noauth', '')
+    this.select('#logout').innerHTML = "Logout"
+  }
+
+  _submitFormOnEnter(e){
+    if(e.key == "Enter"){
+      window.focus()
+      this.login()
+    }
   }
 
   _tagClick(e){
@@ -485,5 +515,6 @@ export default class SociSidebar extends SociComponent {
   _createAccount(){
     this.removeAttribute('noauth')
     this.setAttribute('create', '')
+    this.select('#logout').innerHTML = "Login"
   }
 }
