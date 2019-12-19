@@ -21,20 +21,20 @@ export default class SociSidebar extends SociComponent {
         box-sizing: border-box;
       }
 
-      :host([noauth]) noauth {
+      :host([noauth]) #noauth {
         left: 0;
       }
 
-      :host([noauth]) auth {
+      :host([noauth]) #auth {
         left: 280px;
       }
 
-      :host([create]) create {
+      :host([create]) #create {
         left: 0;
       }
 
-      :host([create]) auth,
-      :host([create]) noauth {
+      :host([create]) #auth,
+      :host([create]) #noauth {
         left: 280px;
       }
 
@@ -42,7 +42,7 @@ export default class SociSidebar extends SociComponent {
         user-select: none;
       }
 
-      auth input::placeholder, h2 {
+      #auth input::placeholder, h2 {
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -50,7 +50,7 @@ export default class SociSidebar extends SociComponent {
         color: var(--n3);
       }
 
-      auth input {
+      #auth input {
         margin-bottom: 0;
         border-bottom: 0 !important;
         padding-left: 54px;
@@ -165,6 +165,8 @@ export default class SociSidebar extends SociComponent {
         width: 280px;
         color: var(--n3);
         background: #fff;
+        border-top: 2px solid transparent;
+        transition: border-top 0.3s var(--soci-ease);
       }
 
       #footer links {
@@ -179,7 +181,7 @@ export default class SociSidebar extends SociComponent {
 
 
 
-      :host([noauth]) #footer soci-link#logout {
+      :host([#noauth]) #footer soci-link#logout {
         display: none;
       }
 
@@ -188,10 +190,11 @@ export default class SociSidebar extends SociComponent {
         margin-bottom: 12px;
       }
 
-      auth,
-      noauth,
-      create {
+      panel {
         position: absolute;
+        height: calc(100% - 90px);
+        overflow-y: auto;
+        overflow-x: hidden;
         display: block;
         top: 0;
         left: 0;
@@ -200,21 +203,21 @@ export default class SociSidebar extends SociComponent {
         transition: left 0.2s ease-in-out;
       }
 
-      create,
-      noauth {
-        padding: 24px 22px 0;
+      #create,
+      #noauth {
+        padding: 24px 22px 20px;
         left: -280px;
       }
 
-      noauth svg {
+      #noauth svg {
         margin-bottom: 24px;
       }
 
-      noauth h2 {
+      #noauth h2 {
         padding-left: 0;
       }
 
-      noauth div {
+      #noauth div {
         text-align: center;
         color: var(--n3);
         margin: 20px 0;
@@ -256,7 +259,7 @@ export default class SociSidebar extends SociComponent {
         opacity: 0.94;
       }
 
-      noauth soci-link {
+      #noauth soci-link {
         display: block;
         margin-top: 28px;
         font-size: 13px;
@@ -268,15 +271,22 @@ export default class SociSidebar extends SociComponent {
         text-align: center;
       }
 
-      auth h2 {
+      #auth content {
+        display: block;
+        height: calc(100% - 66px);
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      #auth h2 {
         padding-left: 54px;
       }
 
-      create h2:not(:first-child) {
+      #create h2:not(:first-child) {
         margin-top: 50px;
       }
 
-      create button {
+      #create button {
         margin-top: 16px;
       }
 
@@ -306,12 +316,18 @@ export default class SociSidebar extends SociComponent {
         min-width: 160px;
         margin-right: 12px;
       }
+
+      @media(max-height: 780px){
+        #footer {
+          border-top: 2px solid var(--n1);
+        }
+      }
     `
   }
 
   html(){
     return `
-      <auth>
+      <panel id="auth">
         <section id="user">
           <soci-link href="user">
             <soci-user size="large" name="pwnies"></soci-user>
@@ -320,33 +336,35 @@ export default class SociSidebar extends SociComponent {
             <soci-icon glyph="create"></soci-icon>
           </soci-link>
         </section>
-        <section id="search">
-          <input placeholder="search"></input>
-          <soci-icon glyph="search"></soci-icon>
-        </section>
-        <section id="home">
-          <soci-icon glyph="home"></soci-icon>
-          <h2>Home</h2>
+        <content>
+          <section id="search">
+            <input placeholder="search"></input>
+            <soci-icon glyph="search"></soci-icon>
+          </section>
+          <section id="home">
+            <soci-icon glyph="home"></soci-icon>
+            <h2>Home</h2>
 
-          <a href="#">Trending</a>
-          <a href="#">New</a>
-          <a href="#">Top</a>
-        </section>
-        <section id="tags" @click=_tagClick>
-          <soci-icon glyph="tags"></soci-icon>
-          <h2>Tags</h2>
-          <tags></tags>
-        </section>
-        <section id="comments">
-          <soci-icon glyph="comments"></soci-icon>
-          <h2>Comments</h2>
+            <a href="#">Trending</a>
+            <a href="#">New</a>
+            <a href="#">Top</a>
+          </section>
+          <section id="tags" @click=_tagClick>
+            <soci-icon glyph="tags"></soci-icon>
+            <h2>Tags</h2>
+            <tags></tags>
+          </section>
+          <section id="comments">
+            <soci-icon glyph="comments"></soci-icon>
+            <h2>Comments</h2>
 
-          <a href="#">Trending</a>
-          <a href="#">New</a>
-          <a href="#">Top</a>
-        </section>
-      </auth>
-      <noauth>
+            <a href="#">Trending</a>
+            <a href="#">New</a>
+            <a href="#">Top</a>
+          </section>
+        </content>
+      </panel>
+      <panel id="noauth">
         <h2>Login to your account</h2>
         <slot name="login">
         </slot>
@@ -362,8 +380,8 @@ export default class SociSidebar extends SociComponent {
         </button>
         -->
         <soci-link #create href="/user/create" @click=_createAccount>create account</soci-link>
-      </noauth>
-      <create>
+      </panel>
+      <panel id="create">
         <h2>Essentials</h2>
         <input placeholder="Username"/>
         <input type="email" placeholder="Email address"/>
@@ -379,7 +397,7 @@ export default class SociSidebar extends SociComponent {
           <input type="text" placeholder="CCV"/>
         </cc-details>
         <button type="submit">Create Account</button>
-      </create>
+      </panel>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path opacity="0.4" d="M13.5 0.999999V15H10.84L3.86 6.5V15H0.66V0.999999H3.34L10.3 9.5V0.999999H13.5ZM29.2564 15.24C27.8031 15.24 26.4897 14.9267 25.3164 14.3C24.1564 13.6733 23.2431 12.8133 22.5764 11.72C21.9231 10.6133 21.5964 9.37333 21.5964 8C21.5964 6.62667 21.9231 5.39333 22.5764 4.3C23.2431 3.19333 24.1564 2.32667 25.3164 1.7C26.4897 1.07333 27.8031 0.76 29.2564 0.76C30.7097 0.76 32.0164 1.07333 33.1764 1.7C34.3364 2.32667 35.2497 3.19333 35.9164 4.3C36.5831 5.39333 36.9164 6.62667 36.9164 8C36.9164 9.37333 36.5831 10.6133 35.9164 11.72C35.2497 12.8133 34.3364 13.6733 33.1764 14.3C32.0164 14.9267 30.7097 15.24 29.2564 15.24ZM29.2564 12.48C30.0831 12.48 30.8297 12.2933 31.4964 11.92C32.1631 11.5333 32.6831 11 33.0564 10.32C33.4431 9.64 33.6364 8.86667 33.6364 8C33.6364 7.13333 33.4431 6.36 33.0564 5.68C32.6831 5 32.1631 4.47333 31.4964 4.1C30.8297 3.71333 30.0831 3.52 29.2564 3.52C28.4297 3.52 27.6831 3.71333 27.0164 4.1C26.3497 4.47333 25.8231 5 25.4364 5.68C25.0631 6.36 24.8764 7.13333 24.8764 8C24.8764 8.86667 25.0631 9.64 25.4364 10.32C25.8231 11 26.3497 11.5333 27.0164 11.92C27.6831 12.2933 28.4297 12.48 29.2564 12.48ZM57.8555 0.999999V15H55.1955L48.2155 6.5V15H45.0155V0.999999H47.6955L54.6555 9.5V0.999999H57.8555ZM66.8319 0.999999H70.0719V15H66.8319V0.999999ZM85.8384 15.24C84.3851 15.24 83.0718 14.9267 81.8984 14.3C80.7384 13.6733 79.8251 12.8133 79.1584 11.72C78.5051 10.6133 78.1784 9.37333 78.1784 8C78.1784 6.62667 78.5051 5.39333 79.1584 4.3C79.8251 3.19333 80.7384 2.32667 81.8984 1.7C83.0718 1.07333 84.3851 0.76 85.8384 0.76C87.2918 0.76 88.5984 1.07333 89.7584 1.7C90.9184 2.32667 91.8318 3.19333 92.4984 4.3C93.1651 5.39333 93.4984 6.62667 93.4984 8C93.4984 9.37333 93.1651 10.6133 92.4984 11.72C91.8318 12.8133 90.9184 13.6733 89.7584 14.3C88.5984 14.9267 87.2918 15.24 85.8384 15.24ZM85.8384 12.48C86.6651 12.48 87.4118 12.2933 88.0784 11.92C88.7451 11.5333 89.2651 11 89.6384 10.32C90.0251 9.64 90.2184 8.86667 90.2184 8C90.2184 7.13333 90.0251 6.36 89.6384 5.68C89.2651 5 88.7451 4.47333 88.0784 4.1C87.4118 3.71333 86.6651 3.52 85.8384 3.52C85.0118 3.52 84.2651 3.71333 83.5984 4.1C82.9318 4.47333 82.4051 5 82.0184 5.68C81.6451 6.36 81.4584 7.13333 81.4584 8C81.4584 8.86667 81.6451 9.64 82.0184 10.32C82.4051 11 82.9318 11.5333 83.5984 11.92C84.2651 12.2933 85.0118 12.48 85.8384 12.48Z" fill="currentColor"/>
