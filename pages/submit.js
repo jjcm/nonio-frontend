@@ -21,6 +21,11 @@ let submit = {
         url: data.get('url'),
         content: data.get('description'),
         type: document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
+      }).then(e=>{
+        if(e.url){
+          window.history.pushState(null, null, e.url)
+          window.dispatchEvent(new HashChangeEvent('hashchange'))
+        }
       })
     }
   }
