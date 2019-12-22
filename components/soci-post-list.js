@@ -51,8 +51,7 @@ export default class SociPostLi extends SociComponent {
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'data':
-        let data = await this.getData(newValue)
-        console.log(data)
+        let data = await this.getData(newValue, this.authToken)
         if(data.posts) this.createPosts(data.posts)
         /*
         fetch(config.API_HOST + newValue).then(
@@ -77,8 +76,6 @@ export default class SociPostLi extends SociComponent {
   }
 
   async createPosts(data){
-    console.log(data)
-    console.log(data.map)
     //data = await soci.getData('posts')
     /*
     data = [

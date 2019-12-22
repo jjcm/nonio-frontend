@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import config from '../config.js'
 
 export default class SociPost extends SociComponent {
   constructor() {
@@ -109,7 +110,7 @@ export default class SociPost extends SociComponent {
       <div id="details-container">
         <div id="details">
           <soci-user size="large" name="pwnies"></soci-user>
-          <h1>lowfi hip hop radio - beats to relax/study to</h1>
+          <h1></h1>
           <soci-tag-group score="234" size="large">
             <soci-tag>wtf</soci-tag>
           </soci-tag-group>
@@ -123,30 +124,64 @@ export default class SociPost extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments', 'href']
+    return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'href']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'title':
+        console.log('updating title')
         this.select('h1').innerHTML = newValue
         break
       case 'type':
-        if(newValue.match(/video|image/)) this.select('#thumbnail').src = 'example-data/cat.jpg'
+        this.loadContent(newValue)
         break
       case 'time':
-        this._updateTime = this._updateTime.bind(this)
-        this._updateTime()
+        console.log('updating time')
+        break
+      case 'user':
+        console.log('updating user')
+        this.select('soci-user').setAttribute('name', newValue)
         break
       case 'score':
+        console.log('updating score')
         this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
         break
       case 'comments':
+        console.log('updating comments')
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break
       case 'href':
+        console.log('updating href')
         this.select('soci-comment-list').setAttribute('href', newValue)
+        this.loadPost(newValue)
         break
     }
+  }
+
+  loadPost(url) {
+    this.getData('/posts/' + url).then(post => {
+      for(let key in post) {
+        console.log(key)
+        this.setAttribute(key, post[key])
+      }
+    })
+
+    this.loadContent('image')
+  }
+
+  loadContent(type) {
+    let host = ''
+    switch(type){
+      case 'image':
+        host = config.IMAGE_HOST
+        this.select('img').src = `${host}/${this.href}.webp`
+        this.select('img#bg').src = `${host}/${this.href}.webp`
+        break
+    }
+  }
+
+  get href(){
+    return this.getAttribute('href')
   }
 }

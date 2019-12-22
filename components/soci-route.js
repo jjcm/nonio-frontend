@@ -54,6 +54,8 @@ export default class SociRouter extends SociComponent {
   }
 
   activate(){
+    console.log('activating!')
+    console.log(this)
     if(this.hasAttribute('active')) return 0
     this.innerHTML = this.data
     this.setAttribute('activating', '')

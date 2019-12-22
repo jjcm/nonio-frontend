@@ -52,8 +52,10 @@ export default class SociRouter extends SociComponent {
   }
 
   route(path){
+    let matchFound = false
     this.querySelectorAll('soci-route').forEach(route=>{
-      if(route.pattern.test(path)){
+      if(!matchFound && route.pattern.test(path)){
+        matchFound = true
         route.activate()
       } else route.deactivate()
     })

@@ -3,5 +3,5 @@ export default {
   HOST: '//non.io',
   API_HOST: '//api.non.io',
   VIDEO_HOST: '//video.non.io',
-  IMAGE_HOST: '//image.non.io',
+  IMAGE_HOST: '//images.non.io',
 }

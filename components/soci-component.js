@@ -45,10 +45,10 @@ export default class SociComponent extends HTMLElement {
     return await response.json()
   }
 
-  async getData(url){
+  async getData(url, auth){
     let options = {}
-    if(this.authToken) options.headers = { 
-      Authorization: 'Bearer ' + this.authToken
+    if(auth) options.headers = { 
+      Authorization: 'Bearer ' + auth
     }
 
     const response = await fetch(config.API_HOST + url, options)
