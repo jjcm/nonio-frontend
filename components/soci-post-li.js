@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import config from '../config.js'
 
 export default class SociPostLi extends SociComponent {
   constructor() {
@@ -163,7 +164,7 @@ export default class SociPostLi extends SociComponent {
         this.select('#title').innerHTML = newValue
         break
       case 'type':
-        if(newValue.match(/video|image/)) this.select('#thumbnail').src = 'example-data/cat.jpg'
+        this.loadContent(newValue)
         break
       case 'time':
         this._updateTime = this._updateTime.bind(this)
@@ -208,6 +209,10 @@ export default class SociPostLi extends SociComponent {
     this.setAttribute('score', val)
   }
 
+  get url(){
+    return this.getAttribute('url')
+  }
+
   _tagVoted(e){
     let tag = e.target.closest('soci-tag')
     if(tag.hasAttribute('upvoted')){
@@ -222,4 +227,13 @@ export default class SociPostLi extends SociComponent {
     }
   }
 
+  loadContent(type) {
+    let host = ''
+    switch(type){
+      case 'image':
+        host = config.THUMBNAIL_HOST
+        this.select('#thumbnail').src = `${host}/${this.url}.webp`
+        break
+    }
+  }
 }
