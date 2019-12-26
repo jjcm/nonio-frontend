@@ -899,6 +899,8 @@ export default class SociInput extends SociComponent {
   }
 
   setUpQuill(){
+    if(this._quillInitialized) return 0
+    this._quillInitialized = true
     this.editor = new Quill(this.select('#editor'), {
       modules: { toolbar: true },
       theme: 'snow',

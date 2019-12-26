@@ -15,7 +15,16 @@ let submit = {
     if(submit.form.checkValidity()){
       e.preventDefault()
       let data = new FormData(submit.form)
+      console.log(data)
+      let a = {
+        title: data.get('title'),
+        url: data.get('url'),
+        content: data.get('description'),
+        type: document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
+      }
+      console.log(a)
 
+      return 0
       soci.postData('post/create', {
         title: data.get('title'),
         url: data.get('url'),

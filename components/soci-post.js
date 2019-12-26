@@ -127,32 +127,30 @@ export default class SociPost extends SociComponent {
     return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'href']
   }
 
+  connectedCallback(){
+    this.select('content').addEventListener('click', this._click)
+  }
+
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'title':
-        console.log('updating title')
         this.select('h1').innerHTML = newValue
         break
       case 'type':
         this.loadContent(newValue)
         break
       case 'time':
-        console.log('updating time')
         break
       case 'user':
-        console.log('updating user')
         this.select('soci-user').setAttribute('name', newValue)
         break
       case 'score':
-        console.log('updating score')
         this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
         break
       case 'comments':
-        console.log('updating comments')
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break
       case 'href':
-        console.log('updating href')
         this.select('soci-comment-list').setAttribute('href', newValue)
         this.loadPost(newValue)
         break
@@ -162,7 +160,6 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.getData('/posts/' + url).then(post => {
       for(let key in post) {
-        console.log(key)
         this.setAttribute(key, post[key])
       }
     })

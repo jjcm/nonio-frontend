@@ -30,8 +30,8 @@ export default class SociRouter extends SociComponent {
   }
 
   connectedCallback(){
-    this.data = this.innerHTML 
-    this.innerHTML = ''
+    this.data = []
+    this._detachChildren()
 
     let pattern = this.getAttribute('pattern') || ''
     this.pattern = new RegExp(pattern)
@@ -57,7 +57,7 @@ export default class SociRouter extends SociComponent {
     console.log('activating!')
     console.log(this)
     if(this.hasAttribute('active')) return 0
-    this.innerHTML = this.data
+    this._attachChildren()
     this.setAttribute('activating', '')
     setTimeout(()=>{
       this.removeAttribute('activating')
@@ -71,8 +71,19 @@ export default class SociRouter extends SociComponent {
   deactivate(){
     if(this.hasAttribute('active')){
       this.removeAttribute('active')
-      this.data = this.innerHTML
-      this.innerHTML = ''
+      this._detachChildren()
+    }
+  }
+
+  _detachChildren(){
+    while(this.children.length){
+      this.data.push(this.removeChild(this.children[0]))
+    }
+  }
+
+  _attachChildren(){
+    while(this.data.length){
+      this.appendChild(this.data.shift())
     }
   }
 }
