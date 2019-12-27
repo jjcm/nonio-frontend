@@ -1,6 +1,5 @@
 import SociComponent from './soci-component.js'
-
-const IMAGE_SERVER = '//images.non.io/'
+import config from '../config.js'
 
 export default class SociFileDrop extends SociComponent {
   constructor() {
@@ -182,8 +181,8 @@ export default class SociFileDrop extends SociComponent {
 
     request.addEventListener('load', e => {
       this.select('picture').innerHTML = `
-        <source srcset="${IMAGE_SERVER + request.response.path}">
-        <img src="${IMAGE_SERVER + request.response.path}">
+        <source srcset="${config.IMAGE_HOST + request.response.path}">
+        <img src="${config.IMAGE_HOST + request.response.path}">
       `
       this.setAttribute('preview', '')
       this.fileUrl = request.response.path
@@ -196,7 +195,7 @@ export default class SociFileDrop extends SociComponent {
 
     request.responseType = 'json';
 
-    request.open('post', IMAGE_SERVER + 'upload'); 
+    request.open('post', config.IMAGE_HOST + 'upload'); 
     request.send(data);
   }
 
@@ -214,7 +213,7 @@ export default class SociFileDrop extends SociComponent {
     })
 
     request.responseType = 'json';
-    request.open('post', IMAGE_SERVER + 'move'); 
+    request.open('post', config.IMAGE_HOST + 'move'); 
     request.send(data);
   }
 }
