@@ -177,7 +177,7 @@ export default class SociFileDrop extends SociComponent {
     let request = new XMLHttpRequest();
 
     data.append('file', file || this.select('input').files[0])
-    data.append('url', '')
+    data.append('url', this.closest('form').querySelector('soci-url-input').value)
 
     request.addEventListener('load', e => {
       this.select('picture').innerHTML = `
