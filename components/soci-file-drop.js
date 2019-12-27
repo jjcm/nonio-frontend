@@ -181,8 +181,8 @@ export default class SociFileDrop extends SociComponent {
 
     request.addEventListener('load', e => {
       this.select('picture').innerHTML = `
-        <source srcset="${config.IMAGE_HOST + request.response.path}">
-        <img src="${config.IMAGE_HOST + request.response.path}">
+        <source srcset="${config.IMAGE_HOST + '/' + request.response.path}">
+        <img src="${config.IMAGE_HOST + '/' + request.response.path}">
       `
       this.setAttribute('preview', '')
       this.fileUrl = request.response.path
@@ -195,7 +195,7 @@ export default class SociFileDrop extends SociComponent {
 
     request.responseType = 'json';
 
-    request.open('post', config.IMAGE_HOST + 'upload'); 
+    request.open('post', config.IMAGE_HOST + '/upload'); 
     request.send(data);
   }
 
@@ -213,7 +213,7 @@ export default class SociFileDrop extends SociComponent {
     })
 
     request.responseType = 'json';
-    request.open('post', config.IMAGE_HOST + 'move'); 
+    request.open('post', config.IMAGE_HOST + '/move'); 
     request.send(data);
   }
 }
