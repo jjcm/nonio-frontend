@@ -329,10 +329,10 @@ export default class SociSidebar extends SociComponent {
     return `
       <panel id="auth">
         <section id="user">
-          <soci-link href="user">
+          <soci-link href="/user">
             <soci-user size="large" name="pwnies"></soci-user>
           </soci-link>
-          <soci-link href="submit">
+          <soci-link href="/submit">
             <soci-icon glyph="create"></soci-icon>
           </soci-link>
         </section>
