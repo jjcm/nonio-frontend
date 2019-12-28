@@ -481,10 +481,11 @@ export default class SociSidebar extends SociComponent {
   }
 
   _submitFormOnEnter(e){
-    //TODO: only make this happen when its in the login state
-    if(e.key == "Enter"){
-      window.focus()
-      this.login()
+    if(this.hasAttribute('noauth')){
+      if(e.key == "Enter"){
+        window.focus()
+        this.login()
+      }
     }
   }
 
