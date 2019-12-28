@@ -427,7 +427,7 @@ export default class SociSidebar extends SociComponent {
       this.log(e)
     })
 
-    this.addEventListener('keydown', this._submitFormOnEnter)
+    this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
   }
 
   static get observedAttributes() {
@@ -480,12 +480,10 @@ export default class SociSidebar extends SociComponent {
     this.select('#logout').innerHTML = "Logout"
   }
 
-  _submitFormOnEnter(e){
-    if(this.hasAttribute('noauth')){
-      if(e.key == "Enter"){
-        window.focus()
-        this.login()
-      }
+  _loginOnEnter(e){
+    if(e.key == "Enter"){
+      window.focus()
+      this.login()
     }
   }
 
