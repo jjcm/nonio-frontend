@@ -19,6 +19,8 @@ export default class SociPostLi extends SociComponent {
         max-height: 160px;
         transition: all 0.3s;
         opacity: 1;
+        padding-left: 116px;
+        position: relative;
       }
       #top {
         display: flex;
@@ -38,7 +40,7 @@ export default class SociPostLi extends SociComponent {
         text-decoration: none;
         color: var(--n4);
         letter-spacing: -0.08px;
-        line-height: 18px;
+        line-height: 20px;
         width: 100%;
         max-height: 72px;
         overflow: hidden;
@@ -50,11 +52,14 @@ export default class SociPostLi extends SociComponent {
         display: none;
         width: 96px;
         min-width: 96px;
-        height: 72px;
+        height: calc(100% - 24px);
         min-height: 72px;
         border-radius: 3px;
         object-fit: cover;
         margin-right: 8px;
+        position: absolute;
+        left: 12px;
+        top: 12px;
       }
       img[src] {
         display: block;
