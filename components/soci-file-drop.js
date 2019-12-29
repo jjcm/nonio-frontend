@@ -200,6 +200,8 @@ export default class SociFileDrop extends SociComponent {
   }
 
   move(url){
+    console.log(this)
+    console.log(this.fileUrl)
     if(this.fileUrl.replace(/\.webp$/, '') == url) return url
     let data = new FormData()
     let request = new XMLHttpRequest()
