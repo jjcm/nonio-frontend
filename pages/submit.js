@@ -17,7 +17,7 @@ let submit = {
       let data = new FormData(submit.form)
       let fileDrop = document.querySelector('#submit soci-file-drop')
       let newPath = await fileDrop.move(data.get('url') + '.webp')
-      console.log('new path: ' + newpath)
+      console.log('new path: ' + newPath)
       soci.postData('post/create', {
         title: data.get('title'),
         url: data.get('url'),
