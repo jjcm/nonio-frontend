@@ -199,7 +199,7 @@ export default class SociFileDrop extends SociComponent {
     request.send(data);
   }
 
-  move(url){
+  async move(url){
     console.log(this)
     console.log(this.fileUrl)
     if(this.fileUrl.replace(/\.webp$/, '') == url) return url

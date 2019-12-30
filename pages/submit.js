@@ -15,6 +15,9 @@ let submit = {
     if(submit.form.checkValidity()){
       e.preventDefault()
       let data = new FormData(submit.form)
+      let fileDrop = document.querySelector('#submit soci-file-drop')
+      let newPath = await fileDrop.move(data.get('url'))
+      console.log(newPath)
       soci.postData('post/create', {
         title: data.get('title'),
         url: data.get('url'),
