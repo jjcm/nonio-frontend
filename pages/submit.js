@@ -11,7 +11,7 @@ let submit = {
     let submitButton = document.querySelector('#submit button')
     submitButton.addEventListener('click', submit.submit)
   },
-  submit(e) {
+  async submit(e) {
     if(submit.form.checkValidity()){
       e.preventDefault()
       let data = new FormData(submit.form)
