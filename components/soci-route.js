@@ -30,7 +30,13 @@ export default class SociRouter extends SociComponent {
   }
 
   connectedCallback(){
-    this.data = []
+    this.currentDom = []
+    /* Routes have two copies of their DOM. One is a simple string representation
+    *  of the DOM, the other is the detached children in their current state. The 
+    *  first is great if we need a fresh copy of the route, but the second is good
+    *  If we want to preserve the state of things like input fields and js listeners
+    */
+    this.domCopy = this.innerHTML
     this._detachChildren()
 
     let pattern = this.getAttribute('pattern') || ''
@@ -53,11 +59,12 @@ export default class SociRouter extends SociComponent {
     return this.hasAttribute('active')
   }
 
-  activate(){
-    console.log('activating!')
-    console.log(this)
+  activate(refresh){
     if(this.hasAttribute('active')) return 0
-    this._attachChildren()
+    // If refresh is true, we load a fresh copy of the route. Otherwise we load
+    // the previous state.
+    if(refresh) this.innerHTML = this.domCopy
+    else this._attachChildren()
     this.setAttribute('activating', '')
     setTimeout(()=>{
       this.removeAttribute('activating')
@@ -77,13 +84,13 @@ export default class SociRouter extends SociComponent {
 
   _detachChildren(){
     while(this.children.length){
-      this.data.push(this.removeChild(this.children[0]))
+      this.currentDom.push(this.removeChild(this.children[0]))
     }
   }
 
   _attachChildren(){
-    while(this.data.length){
-      this.appendChild(this.data.shift())
+    while(this.currentDom.length){
+      this.appendChild(this.currentDom.shift())
     }
   }
 }
