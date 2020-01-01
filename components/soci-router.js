@@ -19,6 +19,7 @@ export default class SociRouter extends SociComponent {
     history.replaceState(details, '', document.location.pathname + document.location.hash)
     window.addEventListener('popstate', this.onPopState.bind(this))
     window.addEventListener('hashchange', this.onHashChange.bind(this))
+    window.addEventListener('link', this.onHashChange.bind(this))
     this.onHashChange()
   }
 
@@ -35,28 +36,20 @@ export default class SociRouter extends SociComponent {
     this.onHashChange()
   }
 
-  updateUrl(title, path){
-    if(path == this._currentPath) return 0
-    this._currentUrl = path
-    window.history.pushState(null, title, path)
-    window.dispatchEvent(new HashChangeEvent('hashchange'))
-    document.title = title
-  }
-
   onHashChange(e){
     let path = window.location.pathname.replace(config.BASE_URL, '') + window.location.hash
     path = path.slice(1)
     if(path == this._currentPath) return 0
     this._currentPath = path
-    this.route(path)
+    this.route(path, e && e.detail == 'refresh')
   }
 
-  route(path){
+  route(path, refresh){
     let matchFound = false
     this.querySelectorAll('soci-route').forEach(route=>{
       if(!matchFound && route.pattern.test(path)){
         matchFound = true
-        route.activate()
+        route.activate(refresh)
       } else route.deactivate()
     })
   }

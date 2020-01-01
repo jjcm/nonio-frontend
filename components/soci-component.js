@@ -83,7 +83,7 @@ export default class SociComponent extends HTMLElement {
   localLink(e){
     e.preventDefault()
     window.history.pushState(null, null, e.currentTarget.href)
-    window.dispatchEvent(new HashChangeEvent('hashchange'))
+    window.dispatchEvent(new HashChangeEvent('hashchange', {detail: 'asdf'}))
   }
 
   get authToken(){
