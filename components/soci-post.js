@@ -115,7 +115,7 @@ export default class SociPost extends SociComponent {
             <soci-tag>wtf</soci-tag>
           </soci-tag-group>
           <description>
-            Just a test of some filler details and making some line wraps happen who knows what should actually be in here but hey we're loading it in all fancy like ya know? Dont event sweat it brah.
+            <soci-input readonly></soci-input>
           </description>
         </div>
       </div>
@@ -145,7 +145,7 @@ export default class SociPost extends SociComponent {
         this.select('soci-user').setAttribute('name', newValue)
         break
       case 'score':
-        this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
+        this.select('soci-tag-group').setAttribute('score', newValue)
         break
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
@@ -160,7 +160,8 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.getData('/posts/' + url).then(post => {
       for(let key in post) {
-        this.setAttribute(key, post[key])
+        if(key == 'content') this.renderDescription(post[key])
+        else this.setAttribute(key, post[key])
       }
     })
 
@@ -176,6 +177,10 @@ export default class SociPost extends SociComponent {
         this.select('img#bg').src = `${host}/${this.href}.webp`
         break
     }
+  }
+
+  renderDescription(description){
+    this.select('soci-input').value = description
   }
 
   get href(){

@@ -16,14 +16,17 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         max-width: 1200px;
-        margin-right: 16px;
-        border-radius: 8px 8px 0 0;
         overflow: hidden;
         min-width: 400px;
       }
-
-      :host(:first-child){
-        margin-left: 16px;
+      
+      separator {
+        height: 100%;
+        right: 0; 
+        width: 2px;
+        position: absolute;
+        display: block;
+        color: #f00;
       }
 
       scroll-container {
@@ -43,7 +46,7 @@ export default class SociColumn extends SociComponent {
       }
 
       sub-header {
-        height: 88px;
+        display: block;
         width: 100%;
         color: #fff;
         z-index: 2;
@@ -65,7 +68,6 @@ export default class SociColumn extends SociComponent {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: 8px 8px 0 0;
       }
 
       sticky-header soci-icon {
@@ -77,17 +79,6 @@ export default class SociColumn extends SociComponent {
 
       sticky-header soci-icon:hover {
         background: rgba(255,255,255,0.2);
-      }
-
-      cover-photo {
-        height: 160px;
-        z-index: 1;
-        display: block;
-        width: 100%;
-        top: 0;
-        background-image: url('example-data/cover-example.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
       }
 
       info {
@@ -125,14 +116,20 @@ export default class SociColumn extends SociComponent {
         font-size: 16px;
       }
 
-      filters {
+      filter-container {
         display: flex;
-        flex-direction: flex-end;
+        justify-content: space-between;
         padding: 0 12px;
         border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      filter {
+      filters {
+        display: flex;
+        flex-direction: flex-end;
+      }
+
+      filter,
+      sort {
         opacity: 0.5;
         text-transform: capitalize;
         position: relative;
@@ -143,19 +140,18 @@ export default class SociColumn extends SociComponent {
         line-height: 18px;
       }
 
-      filter:first-child {
-        margin-right: auto;
-      }
-
-      filter:hover {
+      filter:hover,
+      sort:hover {
         opacity: 0.7;
       }
 
-      filter[selected] {
+      filter[selected],
+      sort[selected] {
         opacity: 1;
       }
 
-      filter[selected]::after {
+      filter[selected]::after,
+      sort[selected]::after {
         content:'';
         display: block;
         position: absolute;
@@ -175,17 +171,14 @@ export default class SociColumn extends SociComponent {
       }
 
       soci-post-list {
-        min-height: calc(100% - 297px);
+        min-height: calc(100% - 137px);
       }
     `
   }
 
   html(){
-    //let data = 'fake-routes/posts.json'
-    let data = '/posts'
     return `
       <scroll-container>
-        <cover-photo></cover-photo>
         <content>
           <sticky-header>
             <div id="tag-title"></div>
@@ -196,26 +189,39 @@ export default class SociColumn extends SociComponent {
               <subscribers>69 subscribers</subscribers>
               <button>Subscribe</button>
             </info>
-            <filters @click=filterClick>
-              <filter selected>all</filter>
-              <filter>images</filter>
-              <filter>videos</filter>
-              <filter>audio</filter>
-              <filter>blogs</filter>
-            </filters>
+            <filter-container>
+              <sorts @click=sortClick>
+                <sort selected>popular</sort>
+                <sort>day</sort>
+                <sort>week</sort>
+                <sort>month</sort>
+                <sort>year</sort>
+              </sorts>
+              <filters @click=filterClick>
+                <filter selected>all</filter>
+                <filter>images</filter>
+                <filter>videos</filter>
+                <filter>audio</filter>
+                <filter>blogs</filter>
+              </type-filters>
+            <filter-container>
           </sub-header>
-          <soci-post-list data=${data}></soci-post-list>
+          <soci-post-list data='/posts'></soci-post-list>
         </content>
       </scroll-container>
+      <separator></separator>
     `
   }
 
   static get observedAttributes() {
-    return ['tag', 'color', 'filter']
+    return ['tag', 'color', 'filter', 'sort']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
+      case 'sort':
+        this.sortPosts(newValue)
+        break
       case 'filter':
         this.filterPosts(newValue)
         break
@@ -248,6 +254,37 @@ export default class SociColumn extends SociComponent {
   }
   set filter(val){
     return this.setAttribute('filter', val)
+  }
+
+  sortPosts(sort){
+    sort = sort || 'popular'
+    Array.from(this.select('sorts').children).forEach(child => {
+      if(child.innerHTML == sort) child.setAttribute('selected', '')
+      else child.removeAttribute('selected')
+    })
+
+    switch(sort){
+      case 'day':
+        sort = '/posts/top/day'
+        break
+      case 'week':
+        sort = '/posts/top/week'
+        break
+      case 'month':
+        sort = '/posts/top/month'
+        break
+      case 'year':
+        sort = '/posts/top/year'
+        break
+      default:
+        sort = '/posts'
+    }
+
+    this.select('soci-post-list').setAttribute('data', sort)
+  }
+
+  sortClick(e){
+    this.setAttribute('sort', e.target.innerHTML)
   }
 
   filterPosts(filter){

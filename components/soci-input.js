@@ -876,6 +876,10 @@ export default class SociInput extends SociComponent {
       .ql-snow a {
         color: #06c;
       }
+
+      :host([readonly]) .ql-editor {
+        padding: 0;
+      }
     `
     return css
   }
@@ -899,13 +903,21 @@ export default class SociInput extends SociComponent {
   }
 
   setUpQuill(){
+    let readOnly = this.hasAttribute('readonly')
+    let opts = readOnly ? 
+      { 
+        modules: { toolbar: false },
+        theme: 'snow',
+        readOnly: true 
+      } : 
+      {
+        modules: { toolbar: true },
+        theme: 'snow',
+        placeholder: this.getAttribute('placeholder') || "Enter comment"
+      }
     if(this._quillInitialized) return 0
     this._quillInitialized = true
-    this.editor = new Quill(this.select('#editor'), {
-      modules: { toolbar: true },
-      theme: 'snow',
-      placeholder: this.getAttribute('placeholder') || "Enter comment"
-    })
+    this.editor = new Quill(this.select('#editor'), opts)
 
     this.editor.on('text-change', ()=>{
       this._internals.setFormValue(this.value)

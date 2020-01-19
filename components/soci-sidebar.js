@@ -480,6 +480,27 @@ export default class SociSidebar extends SociComponent {
     this.select('#logout').innerHTML = "Logout"
   }
 
+  async register(){
+    let fields = {
+      username: this.select('#create input[placeholder="Username"]'),
+      email: this.select('#create input[type="email"]'),
+      password: this.select('#create input[type="password"]'),
+      //eventually this will be the rest of the stuff - i.e. payment deets
+    }
+
+    console.log(fields)
+    console.log(this.select('#create'))
+
+    let response = await soci.postData('register', {
+      username: fields.username.value,
+      email: fields.email.value,
+      password: fields.password.value
+    })
+
+    console.log(response)
+
+  }
+
   _loginOnEnter(e){
     if(e.key == "Enter"){
       window.focus()
