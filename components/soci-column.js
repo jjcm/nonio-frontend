@@ -300,15 +300,6 @@ export default class SociColumn extends SociComponent {
     this.setAttribute('filter', e.target.innerHTML)
   }
 
-  connectedCallback(){
-    this.select('scroll-container').addEventListener('scroll', this._onScroll.bind(this))
-  }
-
-  _onScroll(){
-    let scroll = Math.min(this.select('scroll-container').scrollTop, 160)
-    this.select('cover-photo').style.backgroundPositionY = `${scroll >> 1}px`
-  }
-
   getColorSchemes(){
     let schemes = ''
     let colors = {
