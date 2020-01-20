@@ -16,7 +16,8 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
-        min-width: 400px;
+        /* heh */
+        min-width: 420px; 
       }
       
       separator {
@@ -204,8 +205,8 @@ export default class SociColumn extends SociComponent {
                 <filter>videos</filter>
                 <filter>audio</filter>
                 <filter>blogs</filter>
-              </type-filters>
-            <filter-container>
+              </filters>
+            </filter-container>
           </sub-header>
           <soci-post-list data='/posts'></soci-post-list>
         </content>
