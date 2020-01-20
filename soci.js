@@ -21,11 +21,12 @@ let soci = {
   checkTokenExpired: () => {
     try {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
-      if(expiry < Date.now()) return true
-      return false
+      console.log(expiry)
+      if(expiry < Date.now()) return false
+      return true
     }
     catch {
-      return false
+      return true
     }
   },
   registerPage: (page, dom) => {

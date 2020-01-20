@@ -396,7 +396,7 @@ export default class SociSidebar extends SociComponent {
           <input type="text" placeholder="Exp. Date"/>
           <input type="text" placeholder="CCV"/>
         </cc-details>
-        <button type="submit">Create Account</button>
+        <button type="submit" @click=register>Create Account</button>
       </panel>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -488,16 +488,17 @@ export default class SociSidebar extends SociComponent {
       //eventually this will be the rest of the stuff - i.e. payment deets
     }
 
-    console.log(fields)
-    console.log(this.select('#create'))
-
     let response = await soci.postData('register', {
       username: fields.username.value,
       email: fields.email.value,
       password: fields.password.value
     })
 
-    console.log(response)
+    if(response.token){
+      soci.log('Login Successful! Token:', response.token)
+      soci.storeToken(response.token)
+      this.toggleAttribute('create')
+    }
 
   }
 

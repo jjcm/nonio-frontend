@@ -47,6 +47,10 @@ window.customElements.define('soci-tab', SociTab)
 import SociTabGroup from "./soci-tab-group.js"
 window.customElements.define('soci-tab-group', SociTabGroup)
 
+import {SociSelect, SociOption} from "./soci-select.js"
+window.customElements.define('soci-select', SociSelect)
+window.customElements.define('soci-option', SociOption)
+
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
 

@@ -122,9 +122,9 @@ export default class SociColumn extends SociComponent {
         border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      filters {
+      filters,
+      sorts {
         display: flex;
-        flex-direction: flex-end;
       }
 
       filter,
@@ -189,13 +189,15 @@ export default class SociColumn extends SociComponent {
               <button>Subscribe</button>
             </info>
             <filter-container>
-              <sorts @click=sortClick>
-                <sort selected>popular</sort>
-                <sort>day</sort>
-                <sort>week</sort>
-                <sort>month</sort>
-                <sort>year</sort>
-              </sorts>
+              <soci-select>
+                <soci-option slot="selected">Popular</soci-option>
+                <soci-option>New</soci-option>
+                <soci-option value="day">Top - Day</soci-option>
+                <soci-option value="week">Top - Week</soci-option>
+                <soci-option value="month">Top - Month</soci-option>
+                <soci-option value="year">Top - Year</soci-option>
+                <soci-option value="all">Top - All Time</soci-option>
+              </soci-select>
               <filters @click=filterClick>
                 <filter selected>all</filter>
                 <filter>images</filter>
@@ -210,6 +212,10 @@ export default class SociColumn extends SociComponent {
       </scroll-container>
       <separator></separator>
     `
+  }
+
+  connectedCallback() {
+    this.select('soci-select').addEventListener('selected', this._sortChanged.bind(this))
   }
 
   static get observedAttributes() {
@@ -315,5 +321,10 @@ export default class SociColumn extends SociComponent {
       }`
     }
     return schemes
+  }
+
+  _sortChanged(){
+    let sort = this.select('soci-select').value
+    this.sortPosts(sort)
   }
 }
