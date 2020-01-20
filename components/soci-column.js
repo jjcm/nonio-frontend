@@ -263,10 +263,6 @@ export default class SociColumn extends SociComponent {
 
   sortPosts(sort){
     sort = sort || 'popular'
-    Array.from(this.select('sorts').children).forEach(child => {
-      if(child.innerHTML == sort) child.setAttribute('selected', '')
-      else child.removeAttribute('selected')
-    })
 
     switch(sort){
       case 'day':
