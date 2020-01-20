@@ -284,10 +284,6 @@ export default class SociColumn extends SociComponent {
     this.select('soci-post-list').setAttribute('data', sort)
   }
 
-  sortClick(e){
-    this.setAttribute('sort', e.target.innerHTML)
-  }
-
   filterPosts(filter){
     filter = filter || 'all'
     Array.from(this.select('filters').children).forEach(child => {
