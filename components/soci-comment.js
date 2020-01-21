@@ -49,6 +49,21 @@ export default class SociComment extends SociComponent {
         margin-top: 12px;
         align-items: center;
         max-width: 900px;
+        user-select: none;
+      }
+      
+      #cancel-reply {
+        display: none;
+        cursor: pointer;
+      }
+
+      #actions.replying #cancel-reply {
+        display: block;
+      }
+
+      #actions.replying #reply,
+      #actions.replying #view-replies {
+        display: none;
       }
 
       #view-replies {
@@ -62,6 +77,7 @@ export default class SociComment extends SociComponent {
       }
 
       #reply:hover,
+      #cancel-reply:hover,
       #view-replies:hover {
         text-decoration: underline;
       }
@@ -169,6 +185,20 @@ export default class SociComment extends SociComponent {
         opacity: 1;
       }
 
+      #comment-reply {
+        height: 0px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.1s ease-out, margin 0s linear;
+        margin-left: 50px;
+        border: 1px solid transparent;
+      }
+
+      #comment-reply.active {
+        margin-top: 8px;
+        height: 200px;
+        border: 1px solid var(--n2);
+      }
     `
   }
 
@@ -181,8 +211,9 @@ export default class SociComment extends SociComponent {
       <slot></slot>
     </div>
     <div id="actions">
-      <div id="reply">Reply</div>
+      <div id="reply" @click=_reply>Reply</div>
       <div id="view-replies" @click=_toggleReplies></div>
+      <div id="cancel-reply" @click=_cancelReply>Cancel</div>
       <div id="vote-container">
         <div id="upvote" @click=_upvote>
           <soci-icon glyph="upvote"></soci-icon>
@@ -191,6 +222,7 @@ export default class SociComment extends SociComponent {
         <soci-icon glyph="downvote" @click=_downvote></soci-icon>
       </div>
     </div>
+    <div id="comment-reply"></div>
     <div id="replies">
       <slot name="replies">
       </slot>
@@ -216,17 +248,6 @@ export default class SociComment extends SociComponent {
     }
   }
 
-  _toggleReplies(e){
-    this.toggleAttribute('expanded')
-    let button = e.currentTarget
-    if(this.hasAttribute('expanded')){
-      button.innerHTML = "Hide replies"
-    }
-    else {
-      button.innerHTML = `View ${this.querySelectorAll('soci-comment').length} replies`
-    }
-  }
-
   connectedCallback(){
     let numberOfReplies = this.querySelectorAll('soci-comment').length
     if(numberOfReplies)
@@ -248,6 +269,36 @@ export default class SociComment extends SociComponent {
 
   set score(val){
     this.setAttribute('score', val)
+  }
+
+  _reply(){
+    let replyContainer = this.select('#comment-reply')
+    replyContainer.innerHTML = '<soci-input></soci-input>'
+    replyContainer.classList.add('active')
+
+    this.select('#actions').classList.add('replying')
+    if(!this.hasAttribute('expanded')) this._toggleReplies()
+  }
+
+  _cancelReply(){
+    let replyContainer = this.select('#comment-reply')
+    replyContainer.classList.remove('active')
+    this.select('#actions').classList.remove('replying')
+    setTimeout(()=>{
+      replyContainer.innerHTML = ''
+    }, 200)
+  }
+
+  _toggleReplies(e){
+    this.toggleAttribute('expanded')
+    console.log(this.hasAttribute('expanded'))
+    let button = this.select('#view-replies')
+    if(this.hasAttribute('expanded')){
+      button.innerHTML = "Hide replies"
+    }
+    else {
+      button.innerHTML = `View ${this.querySelectorAll('soci-comment').length} replies`
+    }
   }
 
   _upvote(){
