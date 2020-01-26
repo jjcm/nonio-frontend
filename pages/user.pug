@@ -17,11 +17,11 @@ header(load-order="primary")
     .col-header
       soci-icon(glyph="tags")
       | My Posts
-    soci-post-list(data="/posts")
+    soci-post-list.my-posts(data="/posts")
   .col
     .col-header
       soci-icon(glyph="comments")
       | Comments
-    soci-post-list(data="/posts")
+    soci-post-list.my-comments(data="/posts")
 
 script(src="/pages/user.js")
