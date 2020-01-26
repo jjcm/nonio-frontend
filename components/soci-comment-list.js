@@ -14,7 +14,6 @@ export default class SociCommentList extends SociComponent {
         color: var(--n3);
         font-weight: 500;
         font-size: 12px;
-        border-top: 1px solid var(--n2);
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
@@ -95,7 +94,6 @@ export default class SociCommentList extends SociComponent {
   }
 
   html(){ return `
-      <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
       <controls>
         <filtering @click=_filter>
           <filter active>Top</filter>
@@ -106,6 +104,7 @@ export default class SociCommentList extends SociComponent {
           <button>submit</button>
         </button-container>
       </controls>
+      <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
       <content>
         <slot></slot>
       </content>
