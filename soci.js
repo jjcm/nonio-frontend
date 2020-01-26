@@ -29,6 +29,14 @@ let soci = {
       return true
     }
   },
+  get username() {
+    return localStorage.getItem('username')
+  },
+  set username(val) {
+    localStorage.setItem('username', val)
+    let e = new CustomEvent('username-updated', {detail: {username: val}})
+    document.dispatchEvent(e)
+  },
   registerPage: (page, dom) => {
     page.dom = dom
     page.init()

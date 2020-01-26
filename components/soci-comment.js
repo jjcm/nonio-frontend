@@ -195,7 +195,7 @@ export default class SociComment extends SociComponent {
       }
 
       #comment-reply.active {
-        margin-top: 8px;
+        margin-top: 12px;
         height: 200px;
         border: 1px solid var(--n2);
       }

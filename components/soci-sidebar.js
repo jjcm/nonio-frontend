@@ -330,7 +330,7 @@ export default class SociSidebar extends SociComponent {
       <panel id="auth">
         <section id="user">
           <soci-link href="/user">
-            <soci-user size="large" name="pwnies"></soci-user>
+            <soci-user size="large" self></soci-user>
           </soci-link>
           <soci-link href="/submit" refresh>
             <soci-icon glyph="create"></soci-icon>
@@ -465,6 +465,7 @@ export default class SociSidebar extends SociComponent {
     if(response.token){
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
+      soci.username = response.username
       this.toggleAttribute('noauth')
     }
     else {
@@ -497,6 +498,7 @@ export default class SociSidebar extends SociComponent {
     if(response.token){
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
+      soci.username = response.username
       this.toggleAttribute('create')
     }
 

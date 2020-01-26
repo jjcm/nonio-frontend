@@ -76,14 +76,28 @@ export default class SociUser extends SociComponent {
     <username></username>
   `}
 
+  connectedCallback(){
+    document.addEventListener('username-updated', this._updateUser.bind(this))
+  }
+
   static get observedAttributes() {
-    return ['name', 'op']
+    return ['name', 'op', 'self']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'name') {
-      this.select('username').innerHTML = newValue
-      this.select('#avatar').src = '/example-data/profile.jpg'
+    switch(name) {
+      case 'name':
+        this.select('username').innerHTML = newValue
+        this.select('#avatar').src = '/example-data/profile.jpg'
+        break
+      case 'self':
+        this._updateUser()
+        break
     }
+  }
+
+  _updateUser(){
+    let username = soci.username
+    this.setAttribute('name', username)
   }
 }
