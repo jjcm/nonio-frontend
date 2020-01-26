@@ -11,7 +11,7 @@ export default class SociComment extends SociComponent {
         margin-top: 4px;
         display: block;
         position: relative;
-        padding: 10px 10px 5px 10px;
+        padding: 8px 12px 4px 12px; 
         border: 1px solid var(--n1);
         border-radius: 4px;
       }
@@ -22,10 +22,6 @@ export default class SociComment extends SociComponent {
       }
 
       soci-user {
-        --avatar-size: 40px;
-        --font-size: 12px;
-        --font-weight: normal;
-        --line-height: 18px;
         color: var(--b3);
       }
 
@@ -38,8 +34,7 @@ export default class SociComment extends SociComponent {
       }
 
       #comment {
-        padding-left: 52px;
-        margin-top: -18px;
+        margin-top: 4px;
         font-size: 14px;
         max-width: 900px;
       }
@@ -48,7 +43,6 @@ export default class SociComment extends SociComponent {
         display: flex;
         font-weight: 500;
         font-size: 11px;
-        padding-left: 52px;
         margin-top: 6px;
         align-items: center;
         max-width: 900px;
@@ -171,17 +165,11 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         height: 0;
-        padding-left: 2px;
-        opacity: 0;
         margin-top: 0;
-        transition: all 0.1s ease-out, margin 0s linear;
-        transform: translateY(-2px);
       }
 
       :host([expanded]) #replies {
         height: auto;
-        opacity: 1;
-        transform: translateY(0);
         margin-top: 4px;
       }
 
@@ -190,7 +178,6 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         transition: all 0.1s ease-out, margin 0s linear;
-        margin-left: 3px;
         border: 1px solid transparent;
       }
 
@@ -205,7 +192,7 @@ export default class SociComment extends SociComponent {
 
   html(){ return `
     <top>
-      <soci-user size="large"></soci-user>
+      <soci-user size="small"></soci-user>
       <div id="vote-container">
         <div id="upvote" @click=_upvote>
           <soci-icon glyph="upvote"></soci-icon>

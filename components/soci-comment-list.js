@@ -54,24 +54,25 @@ export default class SociCommentList extends SociComponent {
       }
       soci-input {
         min-height: 82px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        margin: 8px 12px;
       }
       soci-input:focus-within {
         min-height: 200px;
         padding-bottom: 40px;
       }
       button-container {
-        padding-top: 6px;
-        max-width: 0;
-        min-width: 0;
+        display: block;
+        height: 0;
         overflow: hidden;
         position: relative;
-        padding-left: 0;
+        padding-left: 12px;
         transition: all 0.1s var(--soci-ease);
       }
       button-container[active] {
-        max-width: 60px;
-        min-width: 52px;
-        padding-left: 6px;
+        height: 20px;
+        margin-bottom: 16px;
       }
       button {
         border: 0;
@@ -100,11 +101,11 @@ export default class SociCommentList extends SociComponent {
           <filter>New</filter>
         </filtering>
         <comment-count>0 comments</comment-count>
-        <button-container>
-          <button>submit</button>
-        </button-container>
       </controls>
       <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
+      <button-container>
+        <button>submit</button>
+      </button-container>
       <content>
         <slot></slot>
       </content>
@@ -137,6 +138,7 @@ export default class SociCommentList extends SociComponent {
   }
 
   _filter(e){
+    if(e.target.tagName != 'FILTER') return 0
     let current = this.select('filter[active]')
     if(current) current.removeAttribute('active')
     e.target.toggleAttribute('active')
