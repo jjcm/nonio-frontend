@@ -383,7 +383,7 @@ export default class SociSidebar extends SociComponent {
       </panel>
       <panel id="create">
         <h2>Essentials</h2>
-        <input placeholder="Username"/>
+        <soci-username-input></soci-username-input>
         <input type="email" placeholder="Email address"/>
         <input type="password" placeholder="Password"/>
         <input type="password" placeholder="Confirm Password"/>
@@ -483,7 +483,7 @@ export default class SociSidebar extends SociComponent {
 
   async register(){
     let fields = {
-      username: this.select('#create input[placeholder="Username"]'),
+      username: this.select('#create soci-username-input'),
       email: this.select('#create input[type="email"]'),
       password: this.select('#create input[type="password"]'),
       //eventually this will be the rest of the stuff - i.e. payment deets

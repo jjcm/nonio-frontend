@@ -12,11 +12,11 @@ export default class SociUsernameInput extends SociComponent {
   css() { return `
     :host {
       position: relative;
+      display: block;
     }
 
     input {
       margin: 0 0 8px;
-      padding: 0 10px;
       border: 0;
       border-bottom: 2px solid var(--n2);
       height: 38px;
@@ -29,47 +29,59 @@ export default class SociUsernameInput extends SociComponent {
       border-bottom: 2px solid var(--b1);
     }
 
-    svg {
-      display: none;
-      fill: none;
-      stroke: var(--n2);
-      stroke-width: 2px;
-      stroke-dasharray: 56.55;
-      stroke-dashoffset: calc(56.55 * (1 - var(--entropy-percent)));
-      transition: stroke-dashoffset 0.3s ease;
-      height: 20px;
-      width: 20px;
-      position: absolute;
-      top: 2px;
-      right: 0px;
-    }
-
-    :host(:focus-within) svg {
+    :host(:focus-within) soci-icon {
       display: block;
     }
 
-    path { 
-      stroke: #fff;
-      stroke-width: 2px;
+    soci-icon {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      display: none;
     }
 
-    :host([valid]) svg {
-      stroke: none;
-      fill: var(--t2);
-      transition: none;
+    :host([available="false"]) input:focus {
+      border-bottom: 2px solid var(--r3);
+    }
+
+    :host([available="false"]) soci-icon {
+      display: block;
+      color: var(--r3);
+    }
+
+    :host([available="true"]) input:focus {
+      border-bottom: 2px solid var(--g1);
+    }
+
+    :host([available="true"]) soci-icon {
+      color: var(--g1);
+    }
+
+    error {
+      display: block;
+      height: 0;
+      transition: all 0.2s ease-out;
+      line-height: 20px;
+      font-size: 11px;
+      color: var(--r3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    :host([available="false"]) error {
+      height: 40px;
     }
   `}
 
   html() { return `
-    <svg>
-      <circle cx="10" cy="10" r="9"></circle>
-      <path d="M5 9.5 L8.5 13 L14.5 7"/>
-    </svg>
     <input id="path" type="text" placeholder="Username" spellcheck="false"/>
+    <soci-icon></soci-icon>
+    <error></error>
   `}
 
   connectedCallback() {
     this._input = this.select('input')
+    this._statusIcon = this.select('soci-icon')
 
     this._keyDownTimer = null
     this._error = null
@@ -103,6 +115,28 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   _onKeyDown() {
+    this.removeAttribute('available')
+    this._statusIcon.glyph = ''
+    clearTimeout(this._keyDownTimer)
+    setTimeout(()=>{
+      if(!this.value.match(/^[a-zA-Z0-9\-\._]*$/)){
+        this._error = true
+        this.setUsernameError('Invalid characters')
+      }
+      else if(this.value == '') {
+        this._error = true
+        this.setURLError("Username kinda necessary")
+      }
+      else {
+        this._error = false
+        this._internals.setValidity({})
+        //this.select('error').innerHTML = ''
+        this._keyDownTimer = setTimeout(()=>{
+          this._keyDownTimer = null
+          this.checkUsername()
+        }, 500)
+      }
+    },1)
   }
 
   setUsernameError(message) {
@@ -128,9 +162,18 @@ export default class SociUsernameInput extends SociComponent {
         message = available.error
       }
       else {
-        message = 'Username is not available. Please choose a better one for your dumb meme.'
+        let messages = [
+          'Choose a better one for your dumb meme account.',
+          'Choose a better one to post your Bob Ross paintings.',
+          'It was probably a bad one anyway.',
+          'Maybe try "juggaloboi95" instead?',
+          'Maybe try surrounding it in xXx____xXx?',
+          'Maybe add a _420 at the end?',
+        ]
+
+        message = messages[Math.floor(Math.random() * messages.length)]
       }
-      this.setUsernameError(message)
+      this.setUsernameError('Username is not available. ' + message)
     }
   }
 }

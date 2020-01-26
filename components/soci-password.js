@@ -91,8 +91,6 @@ export default class SociPassword extends SociComponent {
   checkEntropy(){
     const ENTROPY_REQUIREMENT = 40
     let value = this.value
-    console.log(this)
-    console.log(value)
     let charsets = {
       numbers: false,
       lowercase: false,
@@ -121,35 +119,5 @@ export default class SociPassword extends SociComponent {
     else this.removeAttribute('valid')
 
     this.style.setProperty('--entropy-percent', entropyPercent)
-  }
-
-  setURLError(message) {
-    this._statusIcon.glyph = 'error'
-    this.setAttribute('available', false)
-    this.select('error').innerHTML = message
-    this._internals.setValidity({customError: true}, message)
-  }
-
-  async checkURL(){
-    this._statusIcon.glyph = 'spinner'
-
-    let url = this._input.value
-    let available = await fetch(`${config.API_HOST}/posts/url-is-available/${url}`)
-    if(this._keyDownTimer || this._error) return 0
-    if(await available.json() === true){
-      this._statusIcon.glyph = 'success'
-      this.setAttribute('available', true)
-    }
-    else {
-      let message = ''
-      if(available.error){
-        message = available.error
-      }
-      else {
-        message = 'URL is not available. Please choose a better one for your dumb meme.'
-      }
-      this.setURLError(message)
-    }
-
   }
 }

@@ -49,6 +49,7 @@ export default class SociPost extends SociComponent {
         display: flex;
         position: relative;
         background: #fff;
+        z-index: 10;
       }
 
        #details-container {
