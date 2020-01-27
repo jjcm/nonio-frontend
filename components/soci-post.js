@@ -19,6 +19,7 @@ export default class SociPost extends SociComponent {
         width: 100%;
         height: 100%;
         overflow-x: hidden;
+        min-width: 420px;
       }
 
        content img {
@@ -53,11 +54,10 @@ export default class SociPost extends SociComponent {
       }
 
        #details-container {
-        min-width: 400px;
+        min-width: 500px;
       }
 
        #details {
-        max-width: 900px;
         margin: 0 auto;
         box-sizing: border-box;
         padding: 12px 18px 24px;
@@ -65,11 +65,30 @@ export default class SociPost extends SociComponent {
         top: 0;
       }
 
-       h1 {
+      title-container {
+        display: block;
+        padding-left: 52px;
+        margin-bottom: 12px;
+      }
+
+      h1 {
         font-size: 24px;
         line-height: 28px;
-        margin: 4px 0 10px;
+        margin-top: -4px;
         font-weight: 400;
+        margin-bottom: 0;
+      }
+
+      meta-data {
+        display: block;
+        margin-top: 4px;
+        color: var(--n3);
+      }
+
+      soci-user[username-only] {
+        --font-size: 16px;
+        --font-weight: 700;
+        color: var(--n4);
       }
 
        soci-comment-list {
@@ -80,11 +99,10 @@ export default class SociPost extends SociComponent {
         position: relative;
       }
 
-       soci-user {
-        margin-top: -2px;
-        --avatar-size: 24px;
-        --font-weight: 400;
-        --font-size: 16px;
+       soci-user[avatar-only] {
+        --avatar-size: 40px;
+        position: absolute;
+        left: 18px;
       }
 
        description {
@@ -115,7 +133,7 @@ export default class SociPost extends SociComponent {
         border-radius: 4px;
       }
 
-      @media (max-width: 1180px) { 
+      @media (max-width: 1280px) { 
          footer {
           display: block;
         }
@@ -132,8 +150,13 @@ export default class SociPost extends SociComponent {
     <footer>
       <div id="details-container">
         <div id="details">
-          <soci-user size="large" name="pwnies"></soci-user>
-          <h1></h1>
+          <soci-user name="pwnies" avatar-only></soci-user>
+          <title-container>
+            <h1></h1>
+            <meta-data>
+              by <soci-user name="pwnies" username-only></soci-user> &nbsp; | &nbsp; Published: Jan 22, 2020
+            </meta-data>
+          </title-container>
           <soci-tag-group score="234" size="large">
             <soci-tag>wtf</soci-tag>
           </soci-tag-group>

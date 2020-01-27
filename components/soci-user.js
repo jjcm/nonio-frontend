@@ -79,6 +79,14 @@ export default class SociUser extends SociComponent {
       :host([avatar-only]) username {
         display: none;
       }
+      
+      :host([username-only]) img {
+        display: none;
+      }
+
+      :host([username-only]) username {
+        margin-left: 0;
+      }
     `
   }
 
