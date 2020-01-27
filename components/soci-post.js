@@ -60,15 +60,15 @@ export default class SociPost extends SociComponent {
         max-width: 900px;
         margin: 0 auto;
         box-sizing: border-box;
-        padding: 24px 36px;
+        padding: 12px 18px 24px;
         position: sticky;
         top: 0;
       }
 
        h1 {
-        font-size: 32px;
-        line-height: 36px;
-        margin: 12px 0 18px;
+        font-size: 24px;
+        line-height: 28px;
+        margin: 4px 0 10px;
         font-weight: 400;
       }
 
@@ -88,7 +88,7 @@ export default class SociPost extends SociComponent {
       }
 
        description {
-        margin-top: 18px;
+        margin-top: 12px;
         line-height: 24px;
         display: block;
       }
@@ -107,6 +107,12 @@ export default class SociPost extends SociComponent {
 
       soci-comment soci-comment soci-comment soci-comment soci-comment {
         --border-color: var(--l1);
+      }
+
+      soci-input {
+        padding: 8px;
+        border: 1px solid #eee;
+        border-radius: 4px;
       }
 
       @media (max-width: 1180px) { 

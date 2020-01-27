@@ -84,12 +84,17 @@ export default class SociTagGroup extends SociComponent {
     }
 
     :host([size="large"]) {
-      --height: 24px;
+      --height: 20px;
       --tag-font-size: 14px;
     }
 
     :host([size="large"]) #score {
-      font-size: 24px;
+      font-size: 18px;
+      color: var(--n3);
+    }
+
+    :host([size="large"]) #arrow {
+      width: 12px;
     }
 
     soci-user {
