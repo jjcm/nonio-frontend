@@ -117,8 +117,8 @@ export default class SociComment extends SociComponent {
         align-items: center;
         height: 20px;
         line-height: 20px;
-        padding: 0 9px 0 2px;
-        border-radius: 12px;
+        padding-right: 5px;
+        border-radius: 3px;
         font-size: 12px;
         background: var(--n1);
         cursor: pointer;
@@ -205,7 +205,7 @@ export default class SociComment extends SociComponent {
 
       #comment-reply.active actions button {
         border: 0;
-        border-radius: 10px;
+        border-radius: 3px;
         background: var(--b2);
         height: 20px;
         color: #fff;
@@ -312,7 +312,7 @@ export default class SociComment extends SociComponent {
 
   _reply(){
     let replyContainer = this.select('#comment-reply')
-    replyContainer.innerHTML = '<soci-input show-user></soci-input><actions><button>submit</button><button class="cancel">cancel</button></actions>'
+    replyContainer.innerHTML = '<soci-input show-user placeholder="Enter reply"></soci-input><actions><button>submit</button><button class="cancel">cancel</button></actions>'
     replyContainer.querySelector('.cancel').addEventListener('click', this._cancelReply.bind(this))
     replyContainer.classList.add('active')
 

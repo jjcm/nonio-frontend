@@ -67,7 +67,7 @@ export default class SociPost extends SociComponent {
 
       title-container {
         display: block;
-        padding-left: 52px;
+        padding-left: 60px;
         margin-bottom: 12px;
       }
 
@@ -100,7 +100,7 @@ export default class SociPost extends SociComponent {
       }
 
        soci-user[avatar-only] {
-        --avatar-size: 40px;
+        --avatar-size: 48px;
         position: absolute;
         left: 18px;
       }

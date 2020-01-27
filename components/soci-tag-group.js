@@ -19,8 +19,9 @@ export default class SociTagGroup extends SociComponent {
       overflow-x: auto;
       height: var(--height);
       line-height: 16px;
-      border-radius: calc(var(--height) / 2);
+      border-radius: 3px;
       scrollbar-width: none;
+      margin-left: 8px;
     }
     :host::-webkit-scrollbar {
       display: none;
@@ -33,11 +34,12 @@ export default class SociTagGroup extends SociComponent {
       margin-left: 4px;
     }
     #add-tag {
-      background: var(--n1);
+      border: 1px solid var(--n1);
+      box-sizing: border-box;
       height: var(--height);
       width: 32px;
       min-width: 32px;
-      border-radius: calc(var(--height) / 2);
+      border-radius: 3px;
       text-align: center;
       display: inline-flex;
       align-items: center;
@@ -48,7 +50,7 @@ export default class SociTagGroup extends SociComponent {
       position: relative;
     }
     #add-tag:hover {
-      background: var(--n2);
+      background: var(--n1);
     }
     #add-tag input {
       position: absolute;
@@ -59,7 +61,7 @@ export default class SociTagGroup extends SociComponent {
       width: calc(100% - 2px);
       border: 0;
       height: 18px;
-      border-radius: 9px;
+      border-radius: 3px;
       padding-left: 24px;
       border: var(--n1) 1px solid;
     }
@@ -78,10 +80,6 @@ export default class SociTagGroup extends SociComponent {
       outline: 0;
       box-shadow: 1px solid var(--b3);
     }
-    #arrow {
-      color: var(--n2);
-      padding: 0 8px;
-    }
 
     :host([size="large"]) {
       --height: 20px;
@@ -89,8 +87,15 @@ export default class SociTagGroup extends SociComponent {
     }
 
     :host([size="large"]) #score {
-      font-size: 18px;
+      font-size: 24px;
       color: var(--n3);
+      min-width: 48px;
+      text-align: center;
+      transform: translateY(-2px);
+    }
+
+    :host([size="large"]) #tags {
+      margin-left: 10px;
     }
 
     :host([size="large"]) #arrow {
@@ -111,9 +116,6 @@ export default class SociTagGroup extends SociComponent {
 
   html(){ return `
     <div id="score"></div>
-    <svg id="arrow" width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7.632 13.384L6.288 11.872L10.464 8.056H0.936V5.848H10.464L6.288 2.032L7.632 0.519999L14.232 6.904V7L7.632 13.384Z" fill="currentColor"/>
-    </svg>
     <div id="tags" @click=_tagVote><slot></slot></div>
     <div id="add-tag" @click=_addTag>
       <input type="text"></input>
@@ -138,7 +140,7 @@ export default class SociTagGroup extends SociComponent {
 
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score')
-      this.select('#score').innerHTML = `▲ ${newValue}`
+      this.select('#score').innerHTML = `${newValue}`
   }
 
   _addTag(e){
