@@ -15,7 +15,6 @@ export default class SociInput extends SociComponent {
         position: relative;
         display: flex;
         flex-direction: column;
-        min-height: 200px;
         transition: min-height 0.1s ease-out, padding 0.1s ease-out;
         padding-bottom: 0px;
         overflow: hidden;
@@ -23,11 +22,10 @@ export default class SociInput extends SociComponent {
       }
 
       soci-user {
-        --avatar-size: 24px;
         margin-right: 14px;
         position: absolute;
-        top: 8px;
-        left: 12px;
+        top: 6px;
+        left: 10px;
       }
 
       soci-icon {
@@ -38,7 +36,7 @@ export default class SociInput extends SociComponent {
         color: var(--n3);
       }
       :host([show-user]) .ql-toolbar.ql-snow {
-        padding-left: 48px;
+        padding-left: 40px;
       }
       .ql-toolbar {
         border-bottom: 1px solid var(--n2);
@@ -785,7 +783,7 @@ export default class SociInput extends SociComponent {
       .ql-toolbar.ql-snow {
         box-sizing: border-box;
         font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-        padding: 8px;
+        padding: 4px;
       }
       .ql-toolbar.ql-snow .ql-formats {
         margin-right: 15px;
@@ -885,7 +883,7 @@ export default class SociInput extends SociComponent {
   }
 
   html(){
-    let user = this.hasAttribute('show-user') ? `<soci-user name="pwnies" avatar-only></soci-user>` : ''
+    let user = this.hasAttribute('show-user') ? `<soci-user self size="small" avatar-only></soci-user>` : ''
     return `
       ${user}
       <div id="editor"></div>

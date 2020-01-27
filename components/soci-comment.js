@@ -8,12 +8,33 @@ export default class SociComment extends SociComponent {
   css(){
     return `
       :host {
+        --border-color: transparent
         margin-top: 4px;
         display: block;
         position: relative;
-        padding: 8px 12px 4px 12px; 
-        border: 1px solid var(--n1);
-        border-radius: 4px;
+        padding: 0px 12px; 
+        margin: 12px 0 8px;
+      }
+
+      :host(:last-child) {
+        margin-bottom: 0;
+      }
+
+      comment {
+        display: block;
+        position: relative;
+      }
+
+      comment:after {
+        content: '';
+        height: 100%;
+        width: 2px;
+        left: -12px;
+        top: 0;
+        position: absolute;
+        display: block;
+        background-color: var(--border-color);
+        border-radius: 1px;
       }
 
       top {
@@ -48,16 +69,11 @@ export default class SociComment extends SociComponent {
         max-width: 900px;
         user-select: none;
       }
+
+      #actions.replying {
+        margin-top: 0;
+      }
       
-      #cancel-reply {
-        display: none;
-        cursor: pointer;
-      }
-
-      #actions.replying #cancel-reply {
-        display: block;
-      }
-
       #actions.replying #reply,
       #actions.replying #view-replies {
         display: none;
@@ -74,7 +90,6 @@ export default class SociComment extends SociComponent {
       }
 
       #reply:hover,
-      #cancel-reply:hover,
       #view-replies:hover {
         text-decoration: underline;
       }
@@ -165,51 +180,87 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         height: 0;
-        margin-top: 0;
       }
 
       :host([expanded]) #replies {
         height: auto;
-        margin-top: 4px;
       }
 
       #comment-reply {
         height: 0px;
         position: relative;
         overflow: hidden;
-        transition: all 0.1s ease-out, margin 0s linear;
         border: 1px solid transparent;
       }
 
       #comment-reply.active {
-        margin-top: 12px;
-        height: 200px;
+        margin-top: 10px;
+        height: auto;
+      }
+
+      #comment-reply.active actions {
+        display: flex;
+        margin: 4px 0 8px;
+      }
+
+      #comment-reply.active actions button {
+        border: 0;
+        border-radius: 10px;
+        background: var(--b2);
+        height: 20px;
+        color: #fff;
+        padding: 0 8px;
+        font-size: 12px;
+        margin-right: 4px;
+        cursor: pointer;
+      }
+
+      #comment-reply.active actions button.cancel {
+        background: var(--n1);
+        color: var(--n4);
+      }
+
+      #comment-reply.active actions button:hover {
+        filter: brightness(0.95);
+      }
+
+      #comment-reply.active actions button:focus,
+      #comment-reply.active actions button:active {
+        filter: brightness(0.9);
+        outline: 0;
+      }
+
+      soci-input {
         border: 1px solid #eee;
         border-radius: 4px;
+        min-height: 140px;
       }
+
+
     `
   }
 
   html(){ return `
-    <top>
-      <soci-user size="small"></soci-user>
-      <div id="vote-container">
-        <div id="upvote" @click=_upvote>
-          <soci-icon glyph="upvote"></soci-icon>
-          <div id="score"></div>
+    <comment>
+      <top>
+        <soci-user size="small"></soci-user>
+        <div id="vote-container">
+          <div id="upvote" @click=_upvote>
+            <soci-icon glyph="upvote"></soci-icon>
+            <div id="score"></div>
+          </div>
+          <soci-icon glyph="downvote" @click=_downvote></soci-icon>
         </div>
-        <soci-icon glyph="downvote" @click=_downvote></soci-icon>
+        <time>0s ago</time>
+      </top>
+      <div id="comment">
+        <slot></slot>
       </div>
-      <time>0s ago</time>
-    </top>
-    <div id="comment">
-      <slot></slot>
-    </div>
-    <div id="actions">
-      <div id="reply" @click=_reply>reply</div>
-      <div id="view-replies" @click=_toggleReplies></div>
-      <div id="cancel-reply" @click=_cancelReply>cancel</div>
-    </div>
+      <div id="actions">
+        <div id="reply" @click=_reply>reply</div>
+        <div id="view-replies" @click=_toggleReplies></div>
+      </div>
+    </comment>
     <div id="comment-reply"></div>
     <div id="replies">
       <slot name="replies">
@@ -261,7 +312,8 @@ export default class SociComment extends SociComponent {
 
   _reply(){
     let replyContainer = this.select('#comment-reply')
-    replyContainer.innerHTML = '<soci-input></soci-input>'
+    replyContainer.innerHTML = '<soci-input show-user></soci-input><actions><button>submit</button><button class="cancel">cancel</button></actions>'
+    replyContainer.querySelector('.cancel').addEventListener('click', this._cancelReply.bind(this))
     replyContainer.classList.add('active')
 
     this.select('#actions').classList.add('replying')
@@ -279,7 +331,6 @@ export default class SociComment extends SociComponent {
 
   _toggleReplies(e){
     this.toggleAttribute('expanded')
-    console.log(this.hasAttribute('expanded'))
     let button = this.select('#view-replies')
     if(this.hasAttribute('expanded')){
       button.innerHTML = "hide replies"

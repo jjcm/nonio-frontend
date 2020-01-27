@@ -46,17 +46,17 @@ export default class SociCommentList extends SociComponent {
       }
       comment-count {
         white-space: nowrap;
-        margin-right: 2px;
+        margin-right: 6px;
       }
       content {
         display: block;
-        padding: 0 12px 24px;
+        padding: 0 6px 24px;
       }
       soci-input {
         min-height: 82px;
         border: 1px solid #eee;
         border-radius: 4px;
-        margin: 8px 12px;
+        margin: 8px 18px;
       }
       soci-input:focus-within {
         min-height: 200px;
@@ -166,6 +166,68 @@ export default class SociCommentList extends SociComponent {
             score: "1234",
             date: Date.now() - 10000000,
             content: 'heyo im a comment',
+            children: [
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 10000000,
+                content: 'heyo im a comment',
+                children: [
+                  {
+                    user: "pwnies",
+                    score: "1234",
+                    date: Date.now() - 10000000,
+                    content: 'heyo im a comment',
+                    children: [
+                      {
+                        user: "pwnies",
+                        score: "1234",
+                        date: Date.now() - 10000000,
+                        content: 'heyo im a comment',
+                      },
+                      {
+                        user: "pwnies",
+                        score: "1234",
+                        date: Date.now() - 10000000,
+                        content: 'heyo im a comment',
+                      }
+                    ]
+                  },
+                  {
+                    user: "pwnies",
+                    score: "1234",
+                    date: Date.now() - 10000000,
+                    content: 'heyo im a comment',
+                  }
+                ]
+              },
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 10000000,
+                content: 'heyo im a comment',
+              }
+            ]
+          },
+          {
+            user: "pwnies",
+            score: "1234",
+            date: Date.now() - 10000000,
+            content: 'heyo im a comment',
+            children: [
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 10000000,
+                content: 'heyo im a comment',
+              },
+              {
+                user: "pwnies",
+                score: "1234",
+                date: Date.now() - 10000000,
+                content: 'heyo im a comment',
+              }
+            ]
           }
         ]
       },
@@ -327,8 +389,6 @@ export default class SociCommentList extends SociComponent {
   }
 
   recurseComments(comment){
-    if(comment.children){
-      return this.createComments(comment.children)
-    }
+    return comment.children ? this.createComments(comment.children) : ''
   }
 }

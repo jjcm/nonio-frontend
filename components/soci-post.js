@@ -93,6 +93,22 @@ export default class SociPost extends SociComponent {
         display: block;
       }
 
+      soci-comment soci-comment {
+        --border-color: var(--r1);
+      }
+
+      soci-comment soci-comment soci-comment {
+        --border-color: var(--o1);
+      }
+
+      soci-comment soci-comment soci-comment soci-comment {
+        --border-color: var(--y1);
+      }
+
+      soci-comment soci-comment soci-comment soci-comment soci-comment {
+        --border-color: var(--l1);
+      }
+
       @media (max-width: 1180px) { 
          footer {
           display: block;
