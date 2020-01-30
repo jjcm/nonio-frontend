@@ -8,21 +8,20 @@ link(rel="stylesheet" href="/soci.styl")
 //include home.pug
 //include user.pug
 //-include colors.pug
-soci-router
-  include sidebar.pug
-  #pages
-    soci-route#tags(pattern="^#")
-      include pages/tags.pug
-    soci-route#home(pattern="^$")
-      include pages/home.pug
-    soci-route#new-user(pattern="^user/create/?$")
-      include pages/new-user.pug
-    soci-route#user(pattern="^user/?$")
-      include pages/user.pug
-    soci-route#submit(pattern="^submit/?$")
-      include pages/submit.pug
-    soci-route#post(pattern=".*")
-      include pages/post.pug
+include sidebar.pug
+#pages
+  soci-route#tags(test="both" path="^/#")
+    include pages/tags.pug
+  soci-route#home(path="^$")
+    include pages/home.pug
+  soci-route#new-user(path="^/user/create")
+    include pages/new-user.pug
+  soci-route#user(path="/user")
+    include pages/user.pug
+  soci-route#submit(path="/submit")
+    include pages/submit.pug
+  soci-route#post(default)
+    include pages/post.pug
 
 
 script.
