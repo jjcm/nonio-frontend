@@ -365,5 +365,4 @@ export default class SociComment extends SociComponent {
       this.score++
     }
   }
-
 }

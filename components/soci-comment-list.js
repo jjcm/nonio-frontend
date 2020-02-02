@@ -391,4 +391,14 @@ export default class SociCommentList extends SociComponent {
   recurseComments(comment){
     return comment.children ? this.createComments(comment.children) : ''
   }
+
+  addComment(post, parent, text){
+    this.postData('/comments/create', {
+      post: 'painting',
+      parent: null,
+      text: text,
+      content: 'asdf',
+      type: 'asdf'
+    })
+  }
 }
