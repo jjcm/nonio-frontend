@@ -3,7 +3,7 @@ import SociRoute from "./soci-route.js"
 window.customElements.define('soci-route', SociRoute)
 
 import SociRouter from "./soci-router.js"
-window.customElements.define('soci-router', SociRouter)
+window.sociRouter = new SociRouter()
 
 import SociColumn from "./soci-column.js"
 window.customElements.define('soci-column', SociColumn)

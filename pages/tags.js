@@ -2,7 +2,9 @@ let tags = {
   init: () => {
   },
   onActivate: () => {
+    console.log('activate')
     let urlTags = window.location.hash.split('+').map(tag => tag.replace('#',''))
+    console.log(urlTags)
     let activeTags = Array.from(tags.dom.querySelectorAll('soci-column')).map(c => c.getAttribute('tag'))
     if(urlTags.toString() != activeTags.toString()){
       tags.dom.innerHTML = ''
