@@ -53,20 +53,6 @@ export default class SociPostLi extends SociComponent {
       case 'data':
         let data = await this.getData(newValue, this.authToken)
         if(data.posts) this.createPosts(data.posts)
-        /*
-        fetch(config.API_HOST + newValue).then(
-          response=>{
-            if(response.ok) return response.json()
-            else this.log('JSON not found')
-          }
-        ).then(
-          json=>{
-            if(json) this.createPosts(json)
-          }
-        ).catch(e=>{
-          this.log(e)
-        })
-        */
         break
       case 'filter':
         // should put an infinite scroll here
@@ -76,47 +62,13 @@ export default class SociPostLi extends SociComponent {
   }
 
   async createPosts(data){
-    //data = await soci.getData('posts')
-    /*
-    data = [
-      {
-          "title": "asdf hi",
-          "user": "bob",
-          "time": "1568018893000",
-          "url": "url-example-1",
-          "tags": [
-              {
-                  "name": "wtf",
-                  "score": 10
-              }
-          ]
-      },
-      {
-          "title": "cats are known to be mind controlling beings from another plant, or perhaps area 51",
-          "user": "bob",
-          "time": "1568018893000",
-          "type": "image",
-          "url": "url-example-2",
-          "tags": [
-              {
-                  "name": "wtf",
-                  "score": 10
-              },
-              {
-                  "name": "photography",
-                  "score": 10
-              }
-          ]
-      },
-    ]
-    */
-
+    console.log(data)
     let posts = `
       ${data.map((post) => `
         <soci-post-li score=${post.score || 0} comments=${post.comments || 0} title="${post.title}" type=${post.type || 'image'} time=${post.time} url="${post.url}">
           <soci-user name="${post.user}" slot="user"></soci-user>
           <div slot="tags" style="white-space: nowrap;">
-            ${post.tags.map(tag => `<soci-tag score=${tag.score}>${tag.name}</soci-tag>`).join('')}
+            ${post.tags.map(tag => `<soci-tag score=${tag.score}>${tag.tag}</soci-tag>`).join('')}
           </div>
         </soci-post-li>
       `).join('')}

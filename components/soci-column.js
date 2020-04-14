@@ -267,16 +267,16 @@ export default class SociColumn extends SociComponent {
 
     switch(sort){
       case 'day':
-        sort = '/posts/top/day'
+        sort = '/posts?sort=top&time=day'
         break
       case 'week':
-        sort = '/posts/top/week'
+        sort = '/posts?sort=top&time=week'
         break
       case 'month':
-        sort = '/posts/top/month'
+        sort = '/posts?sort=top&time=month'
         break
       case 'year':
-        sort = '/posts/top/year'
+        sort = '/posts?sort=top&time=year'
         break
       default:
         sort = '/posts'

@@ -153,7 +153,15 @@ export default class SociTagGroup extends SociComponent {
     this.postData('/posttags/create', {
       post: document.location.pathname.slice(1),
       tag: tagName
+    }).then(res => {
+      console.log(res)
     })
+
+    let newTag = document.createElement('soci-tag')
+    newTag.innerHTML = tagName
+    newTag.setAttribute('score', 1)
+    this.appendChild(newTag)
+
     this._cancelAddTag()
   }
 

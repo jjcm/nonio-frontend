@@ -22,7 +22,9 @@ export default class SociTag extends SociComponent {
         font-weight: 600;
         user-select: none;
         transition: background 0.1s var(--soci-ease-out);
+        margin-right: 4px;
       }
+
       :host(:hover) {
         filter: brightness(0.9) contrast(1.2);
       }
