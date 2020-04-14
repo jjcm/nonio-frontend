@@ -192,7 +192,7 @@ export default class SociColumn extends SociComponent {
             <filter-container>
               <soci-select>
                 <soci-option slot="selected">Popular</soci-option>
-                <soci-option>New</soci-option>
+                <soci-option value="new">New</soci-option>
                 <soci-option value="day">Top - Day</soci-option>
                 <soci-option value="week">Top - Week</soci-option>
                 <soci-option value="month">Top - Month</soci-option>
@@ -263,26 +263,31 @@ export default class SociColumn extends SociComponent {
   }
 
   sortPosts(sort){
+    let params = []
     sort = sort || 'popular'
 
     switch(sort){
+      case 'new':
+        params.push('sort=new')
+        break
       case 'day':
-        sort = '/posts?sort=top&time=day'
+        params.push('sort=top', 'time=day')
         break
       case 'week':
-        sort = '/posts?sort=top&time=week'
+        params.push('sort=top', 'time=week')
         break
       case 'month':
-        sort = '/posts?sort=top&time=month'
+        params.push('sort=top', 'time=month')
         break
       case 'year':
-        sort = '/posts?sort=top&time=year'
+        params.push('sort=top', 'time=year')
         break
-      default:
-        sort = '/posts'
     }
 
-    this.select('soci-post-list').setAttribute('data', sort)
+    if(this.tag) params.push(`tag=${this.tag}`)
+    let paramString = params.length > 0 ? `?${params.join('&')}` : ''
+
+    this.select('soci-post-list').setAttribute('data', '/posts' + paramString)
   }
 
   filterPosts(filter){
