@@ -44,26 +44,22 @@ export default class SociTagGroup extends SociComponent {
       display: inline-flex;
       align-items: center;
       color: var(--n4);
-      margin-left: 4px;
       cursor: pointer;
       overflow: hidden;
       position: relative;
     }
-    #add-tag:hover {
+    #add-tag:not([active]):hover {
       background: var(--n1);
     }
     #add-tag input {
       position: absolute;
-      top: 1px;
-      left: 1px;
       opacity: 0;
       pointer-events: none;
       width: calc(100% - 2px);
       border: 0;
       height: 18px;
-      border-radius: 3px;
-      padding-left: 24px;
-      border: var(--n1) 1px solid;
+      padding-left: 28px;
+      line-height: 18px;
     }
     #add-tag svg {
       position: absolute;
@@ -74,6 +70,7 @@ export default class SociTagGroup extends SociComponent {
     }
     #add-tag[active] input {
       opacity: 1;
+      pointer-events: all;
     }
     #add-tag[active] input:focus,
     #add-tag[active] input:active {
@@ -110,6 +107,7 @@ export default class SociTagGroup extends SociComponent {
       height: var(--height);
       line-height: var(--height);
       font-size: var(--tag-font-size);
+      margin-right: 4px;
     }
 
   `}
@@ -117,7 +115,7 @@ export default class SociTagGroup extends SociComponent {
   html(){ return `
     <div id="score"></div>
     <div id="tags" @click=_tagVote><slot></slot></div>
-    <div id="add-tag" @click=_addTag>
+    <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -138,16 +136,61 @@ export default class SociTagGroup extends SociComponent {
     return ['score']
   }
 
+  connectedCallback(){
+    this._cancelAddTag = this._cancelAddTag.bind(this)
+    this._inputKeyListener = this._inputKeyListener.bind(this)
+  }
+
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score')
       this.select('#score').innerHTML = `${newValue}`
   }
 
-  _addTag(e){
-    this.select('#add-tag').toggleAttribute('active')
+  addTag(){
+    let input = this.select('#add-tag input')
+    let tagName = input.value
+
+    this.postData('/posttags/create', {
+      post: document.location.pathname.slice(1),
+      tag: tagName
+    }).then(res => {
+      console.log(res)
+    })
+
+    let newTag = document.createElement('soci-tag')
+    newTag.innerHTML = tagName
+    newTag.setAttribute('score', 1)
+    this.appendChild(newTag)
+
+    this._cancelAddTag()
+  }
+
+  _addTagClick(e){
+    let button = this.select('#add-tag')
+    if(button.hasAttribute('active')) return 0
+    button.toggleAttribute('active')
     let input = this.select('input')
     input.focus()
+    document.addEventListener('click', this._cancelAddTag)
+    document.addEventListener('keydown', this._inputKeyListener)
+  }
 
+  _cancelAddTag(e){
+    let button = e ? e.path[0].closest('#add-tag') : null
+    if(button) return 0
+
+    this.select('#add-tag').removeAttribute('active')
+    this.select('#add-tag input').value = ''
+    document.removeEventListener('click', this._cancelAddTag)
+  }
+
+  _inputKeyListener(e){
+    if(e.key == 'Enter') {
+      this.addTag()
+    }
+    else if (e.key == 'Escape') {
+      this._cancelAddTag()
+    }
   }
 
   _tagVote(e){

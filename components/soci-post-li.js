@@ -135,6 +135,8 @@ export default class SociPostLi extends SociComponent {
       <div id="title"></div>
     </a>
     <div id="bot">
+      <soci-tag-group><slot name="tags"></slot></soci-tag-group>
+      <!--
       <div id="score"></div>
       <div id="tags"><slot name="tags"></slot></div>
       <div id="add-tag">
@@ -151,6 +153,7 @@ export default class SociPostLi extends SociComponent {
         </g>
         </svg>
       </div>
+      -->
       <div id="comments"></div>
     </div>
   `}
@@ -176,7 +179,8 @@ export default class SociPostLi extends SociComponent {
         this._updateTime()
         break
       case 'score':
-        this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
+        //this.select('#score').innerHTML = `▲ ${newValue} <span>→</span>`
+        this.select('soci-tag-group').setAttribute('score', newValue)
         break;
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')

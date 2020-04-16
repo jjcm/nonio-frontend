@@ -77,6 +77,7 @@ export default class SociPost extends SociComponent {
         margin-top: -4px;
         font-weight: 400;
         margin-bottom: 0;
+        min-height: 28px;
       }
 
       meta-data {
@@ -154,11 +155,10 @@ export default class SociPost extends SociComponent {
           <title-container>
             <h1></h1>
             <meta-data>
-              by <soci-user name="pwnies" username-only></soci-user> &nbsp; | &nbsp; Published: Jan 22, 2020
+              by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
             </meta-data>
           </title-container>
           <soci-tag-group score="234" size="large">
-            <soci-tag>wtf</soci-tag>
           </soci-tag-group>
           <description>
             <soci-input readonly></soci-input>
@@ -180,23 +180,36 @@ export default class SociPost extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'title':
+        console.log('title')
         this.select('h1').innerHTML = newValue
         break
       case 'type':
+        console.log('type')
         this.loadContent(newValue)
         break
       case 'time':
+        console.log('time')
+        let date = new Date(parseInt(newValue))
+        this.select('time').innerHTML = date.toLocaleDateString(undefined, {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        })
         break
       case 'user':
-        this.select('soci-user').setAttribute('name', newValue)
+        console.log('user')
+        this.selectAll('soci-user').forEach(user => user.setAttribute('name', newValue))
         break
       case 'score':
+        console.log('score')
         this.select('soci-tag-group').setAttribute('score', newValue)
         break
       case 'comments':
+        console.log('comments')
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break
       case 'href':
+        console.log('href')
         this.select('soci-comment-list').setAttribute('href', newValue)
         this.loadPost(newValue)
         break
@@ -206,8 +219,18 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.getData('/posts/' + url).then(post => {
       for(let key in post) {
-        if(key == 'content') this.renderDescription(post[key])
-        else this.setAttribute(key, post[key])
+        switch(key){
+          case 'content':
+            this.renderDescription(post[key])
+            break
+          case 'tags':
+            this.setAttribute(key, post[key].map(tag=>tag.tag).join(','))
+            this.createTags(post[key])
+            break
+          default:
+            this.setAttribute(key, post[key])
+            break
+        }
       }
     })
 
@@ -215,14 +238,26 @@ export default class SociPost extends SociComponent {
   }
 
   loadContent(type) {
-    let host = ''
     switch(type){
       case 'image':
-        host = config.IMAGE_HOST
-        this.select('img').src = `${host}/${this.href}.webp`
-        this.select('img#bg').src = `${host}/${this.href}.webp`
+        this.select('img').src = `${config.THUMBNAIL_HOST}/${this.href}.webp`
+        this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.href}.webp`
+        setTimeout(()=>{
+          this.select('img').src = `${config.IMAGE_HOST}/${this.href}.webp`
+        },1)
         break
     }
+  }
+
+  createTags(tags){
+    let tagContainer = this.select('soci-tag-group')
+    tagContainer.innerHTML = ''
+    tags.forEach(tag=>{
+      let newTag = document.createElement('soci-tag')
+      newTag.innerHTML = tag.tag
+      newTag.setAttribute('score', 0)
+      tagContainer.appendChild(newTag)
+    })
   }
 
   renderDescription(description){

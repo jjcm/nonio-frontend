@@ -29,6 +29,10 @@ export default class SociComponent extends HTMLElement {
     return this.shadowRoot.querySelector(s)
   }
 
+  selectAll(s){
+    return this.shadowRoot.querySelectorAll(s)
+  }
+
   async postData(url, data = {}) {
     const response = await fetch(config.API_HOST + url, {
       method: 'POST', 
