@@ -135,7 +135,7 @@ export default class SociPostLi extends SociComponent {
       <div id="title"></div>
     </a>
     <div id="bot">
-      <soci-tag-group><slot name="tags"></slot></soci-tag-group>
+      <soci-tag-group url=${this.url}><slot name="tags"></slot></soci-tag-group>
       <!--
       <div id="score"></div>
       <div id="tags"><slot name="tags"></slot></div>

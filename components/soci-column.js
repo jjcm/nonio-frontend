@@ -47,6 +47,8 @@ export default class SociColumn extends SociComponent {
 
       sub-header {
         display: block;
+        position: sticky;
+        top: 48px;
         width: 100%;
         color: #fff;
         z-index: 2;
@@ -59,11 +61,11 @@ export default class SociColumn extends SociComponent {
         background-color: inherit;
         position: sticky;
         top: 0;
-        height: 68px;
+        height: 48px;
         width: 100%;
         z-index: 2;
         display: block;
-        padding: 0 24px;
+        padding: 0 16px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
@@ -81,17 +83,9 @@ export default class SociColumn extends SociComponent {
         background: rgba(255,255,255,0.2);
       }
 
-      info {
-        padding: 0 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      }
-
-      info button {
+      sticky-header button {
         height: 24px;
-        border-radius: 12px;
+        border-radius: 3px;
         background: transparent;
         outline: none;
         border: none;
@@ -100,20 +94,18 @@ export default class SociColumn extends SociComponent {
         color: #fff;
         font-size: 14px;
         font-weight: 500;
-        margin-right: -2px;
         cursor: pointer;
+        opacity: 0.5;
       }
 
-      info button:hover {
+      sticky-header button:hover {
         background: rgba(255,255,255,0.2);
+        opacity: 1;
       }
 
-      info button:active {
+      sticky-header button:active {
         background: rgba(255,255,255,1);
-      }
-
-      subscribers {
-        font-size: 16px;
+        color: var(--n3);
       }
 
       filter-container {
@@ -182,13 +174,9 @@ export default class SociColumn extends SociComponent {
         <content>
           <sticky-header>
             <div id="tag-title"></div>
-            <soci-icon glyph="filter"></soci-icon>
+            <button>subscribe &middot; 112</button>
           </sticky-header>
           <sub-header>
-            <info>
-              <subscribers>69 subscribers</subscribers>
-              <button>Subscribe</button>
-            </info>
             <filter-container>
               <soci-select>
                 <soci-option slot="selected">Popular</soci-option>

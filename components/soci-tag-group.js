@@ -146,12 +146,20 @@ export default class SociTagGroup extends SociComponent {
       this.select('#score').innerHTML = `${newValue}`
   }
 
+  get url(){
+    return this.getAttribute('url')
+  }
+
+  set url(val){
+    return this.setAttribute('url', val)
+  }
+
   addTag(){
     let input = this.select('#add-tag input')
     let tagName = input.value
 
     this.postData('/posttags/create', {
-      post: document.location.pathname.slice(1),
+      post: this.url,
       tag: tagName
     }).then(res => {
       console.log(res)
