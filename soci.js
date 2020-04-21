@@ -97,7 +97,20 @@ let soci = {
       let root = parent ? parent : document.head
       root.appendChild(resource)
     })
+  },
+  votes: {},
+  loadVotes() {
+    soci.getData('votes').then(res=>{
+      let votes = {}
+      res.votes.forEach(vote => {
+        if(!votes[vote.postID]) votes[vote.postID] = []
+        votes[vote.postID].push(vote.tagID)
+      })
+      soci.votes = votes
+    })
   }
 }
+
+soci.loadVotes()
 
 document.addEventListener('DOMContentLoaded', soci.init)
