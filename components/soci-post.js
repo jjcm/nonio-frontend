@@ -256,6 +256,7 @@ export default class SociPost extends SociComponent {
       let newTag = document.createElement('soci-tag')
       newTag.innerHTML = tag.tag
       newTag.setAttribute('score', 0)
+      if(soci.votes[this.id]?.includes(tag.tagID)) newTag.toggleAttribute('upvoted')
       tagContainer.appendChild(newTag)
     })
   }
