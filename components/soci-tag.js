@@ -65,10 +65,26 @@ export default class SociTag extends SociComponent {
   }
 
   vote(){
-    let score = parseInt(this.getAttribute('score')) || 0
-    this.setAttribute('score', 
-      score + (this.toggleAttribute('upvoted') ? 1 : -1)
-    )
-    this.fire('vote')
+    const score = parseInt(this.getAttribute('score')) || 0
+    const upvoted = this.toggleAttribute('upvoted')
+    this.setAttribute('score', score + (upvoted ? 1 : -1))
+    this.fire('vote', {
+      tag: this.innerHTML,
+      upvoted: upvoted
+    })
+
+    const url = this.closest('[url]')
+    if(url) {
+      this.postData(`/posttag/${upvoted ? 'add' : 'remove'}-vote`, {
+        post: url.getAttribute('url'),
+        tag: this.innerHTML
+      }).then(val => {
+        console.log(val)
+      })
+    }
+    else {
+      console.warn('No parent element found with a url for tag:')
+      console.warn(this)
+    }
   }
 }

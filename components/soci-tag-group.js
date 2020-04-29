@@ -114,7 +114,7 @@ export default class SociTagGroup extends SociComponent {
 
   html(){ return `
     <div id="score"></div>
-    <div id="tags" @click=_tagVote><slot></slot></div>
+    <div id="tags"><slot></slot></div>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -139,6 +139,7 @@ export default class SociTagGroup extends SociComponent {
   connectedCallback(){
     this._cancelAddTag = this._cancelAddTag.bind(this)
     this._inputKeyListener = this._inputKeyListener.bind(this)
+    this.addEventListener('vote', this._tagVoted)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -152,6 +153,15 @@ export default class SociTagGroup extends SociComponent {
 
   set url(val){
     return this.setAttribute('url', val)
+  }
+
+  get score() {
+    let score = this.getAttribute('score') || 0
+    return parseInt(score)
+  }
+
+  set score(val){
+    return this.setAttribute('score', val)
   }
 
   addTag(){
@@ -201,18 +211,13 @@ export default class SociTagGroup extends SociComponent {
     }
   }
 
-  _tagVote(e){
-    let tag = e.target.closest('soci-tag')
-    if(!tag) return 0
-    if(tag.hasAttribute('upvoted')){
-      if(this.querySelectorAll('soci-tag[upvoted]').length == 1){
-        this.setAttribute('score', parseInt(this.getAttribute('score')) + 1)
-      }
-    }
-    else {
-      if(this.querySelectorAll('soci-tag[upvoted]').length == 0){
-        this.setAttribute('score', parseInt(this.getAttribute('score')) - 1)
-      }
+  _tagVoted(e){
+    const numVotedTags = this.querySelectorAll('soci-tag[upvoted]').length
+    
+    //if this is the first tag we've upvoted, or if we've removed all our votes, change the score
+    if(numVotedTags <= 1) {
+      this.score += numVotedTags ? 1 : -1
+      this.fire('scoreChanged', {score: this.score})
     }
   }
 }
