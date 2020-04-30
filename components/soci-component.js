@@ -41,7 +41,7 @@ export default class SociComponent extends HTMLElement {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.authToken
+        Authorization: 'Bearer ' + this.authToken,
       },
       redirect: 'follow', 
       referrer: 'no-referrer', 

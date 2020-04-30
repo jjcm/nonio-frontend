@@ -167,9 +167,14 @@ export default class SociTagGroup extends SociComponent {
   addTag(){
     let input = this.select('#add-tag input')
     let tagName = input.value
+    const url = this.closest('[url]')?.getAttribute('url')
+    if(!url) {
+      console.warn('No url found when creating tag.')
+      return 0
+    }
 
     this.postData('/posttags/create', {
-      post: this.url,
+      post: url,
       tag: tagName
     }).then(res => {
       console.log(res)
