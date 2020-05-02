@@ -393,7 +393,7 @@ export default class SociCommentList extends SociComponent {
   }
 
   addComment(post, parent, text){
-    this.postData('/comments/create', {
+    this.postData('/comment/create', {
       post: 'painting',
       parent: null,
       text: text,

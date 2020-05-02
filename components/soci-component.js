@@ -34,6 +34,7 @@ export default class SociComponent extends HTMLElement {
   }
 
   async postData(url, data = {}) {
+    console.log("I'm posting from right here!")
     const response = await fetch(config.API_HOST + url, {
       method: 'POST', 
       mode: 'cors',
@@ -41,7 +42,7 @@ export default class SociComponent extends HTMLElement {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.authToken,
+        Authorization: 'Bearer ' + this.authToken
       },
       redirect: 'follow', 
       referrer: 'no-referrer', 

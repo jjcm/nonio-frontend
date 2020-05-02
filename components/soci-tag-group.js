@@ -173,7 +173,7 @@ export default class SociTagGroup extends SociComponent {
       return 0
     }
 
-    this.postData('/posttags/create', {
+    this.postData('/posttag/create', {
       post: url,
       tag: tagName
     }).then(res => {
