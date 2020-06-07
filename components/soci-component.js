@@ -103,8 +103,6 @@ export default class SociComponent extends HTMLElement {
     catch(err) {
       return false
     }
-
-
   }
 
   updateTime(time, dom){

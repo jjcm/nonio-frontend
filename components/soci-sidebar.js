@@ -150,6 +150,11 @@ export default class SociSidebar extends SociComponent {
         position: absolute;
         left: 20px;
       }
+
+      #tags soci-icon[glyph="create"] {
+
+
+      }
       
       #comments {
         border-bottom: 0;
@@ -337,19 +342,8 @@ export default class SociSidebar extends SociComponent {
           </soci-link>
         </section>
         <content>
-          <section id="search">
-            <input placeholder="search"></input>
-            <soci-icon glyph="search"></soci-icon>
-          </section>
-          <section id="home">
-            <soci-icon glyph="home"></soci-icon>
-            <h2>Home</h2>
-
-            <a href="#">Trending</a>
-            <a href="#">New</a>
-            <a href="#">Top</a>
-          </section>
           <section id="tags" @click=_tagClick>
+            <soci-icon glyph="create"></soci-icon>
             <soci-icon glyph="tags"></soci-icon>
             <h2>Tags</h2>
             <tags></tags>

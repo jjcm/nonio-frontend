@@ -16,7 +16,11 @@ let submit = {
       e.preventDefault()
       let data = new FormData(submit.form)
       let fileDrop = document.querySelector('#submit soci-file-drop')
-      let newPath = await fileDrop.move(data.get('url') + '.webp')
+      let newPath = await fileDrop.move(data.get('url'))
+      if(newPath == null) {
+        console.error("Error moving file to its new url")
+        return 0
+      }
       soci.postData('post/create', {
         title: data.get('title'),
         url: data.get('url'),
