@@ -28,7 +28,7 @@ export default class SociPost extends SociComponent {
         object-fit: contain;
         position: relative;
         z-index: 10;
-        margin-bottom: -100%;
+        margin-bottom: -200%;
       }
 
        content img#bg {

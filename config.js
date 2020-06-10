@@ -1,8 +1,8 @@
 export default {
   BASE_URL: '/soci-components',
-  HOST: '//non.io',
-  API_HOST: '//api.non.io',
-  VIDEO_HOST: '//video.non.io',
+  HOST: 'https://non.io',
+  API_HOST: 'https://api.non.io',
+  VIDEO_HOST: 'https://video.non.io',
   IMAGE_HOST: 'https://image.non.io',
-  THUMBNAIL_HOST: '//thumbnail.non.io'
+  THUMBNAIL_HOST: 'https://thumbnail.non.io'
 }
