@@ -111,6 +111,10 @@ export default class SociTagGroup extends SociComponent {
       margin-right: 4px;
     }
 
+    :host([upvoted]) #score {
+      font-weight: bold;
+    }
+
   `}
 
   html(){ return `
@@ -141,6 +145,7 @@ export default class SociTagGroup extends SociComponent {
     this._cancelAddTag = this._cancelAddTag.bind(this)
     this._inputKeyListener = this._inputKeyListener.bind(this)
     this.addEventListener('vote', this._tagVoted)
+    this.toggleAttribute('upvoted', this.querySelectorAll('soci-tag[upvoted]').length)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -222,12 +227,15 @@ export default class SociTagGroup extends SociComponent {
   }
 
   _tagVoted(e){
-    const numVotedTags = this.querySelectorAll('soci-tag[upvoted]').length
-    
-    //if this is the first tag we've upvoted, or if we've removed all our votes, change the score
-    if(numVotedTags <= 1) {
-      this.score += numVotedTags ? 1 : -1
-      this.fire('scoreChanged', {score: this.score})
+    let numberOfUpvotes = this.querySelectorAll('soci-tag[upvoted]').length
+    if(numberOfUpvotes > 0){
+      this.toggleAttribute('upvoted', true)
+      if(numberOfUpvotes == 1 && e.detail.upvoted) this.score++
     }
+    else {
+      this.toggleAttribute('upvoted', false)
+      this.score--
+    }
+    this.fire('scoreChanged', {score: this.score})
   }
 }

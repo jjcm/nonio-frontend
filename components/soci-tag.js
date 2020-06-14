@@ -32,6 +32,11 @@ export default class SociTag extends SociComponent {
         background: var(--${bgColor});
         color: var(--${color});
       }
+      a,
+      a:visited {
+        color: inherit;
+        text-decoration: inherit;
+      }
       slot {
         display: inline-block;
       }
@@ -45,16 +50,19 @@ export default class SociTag extends SociComponent {
   }
 
   html(){ return `
-    <slot></slot>
-    <score></score>
+    <a>
+      <slot></slot>
+      <score></score>
+    </a>
   `}
 
   connectedCallback(){
     this.addEventListener('click', this.vote)
+    this.select('a').setAttribute('href', '/#' + this.innerHTML)
   }
 
   static get observedAttributes() {
-    return ['color', 'name', 'upvoted', 'score']
+    return ['color', 'name', 'upvoted', 'score', 'href']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -62,9 +70,16 @@ export default class SociTag extends SociComponent {
       newValue != 0 ? 
         '&bull; ' + newValue :
         ''
+    
+    else if(name == 'href') this.select('a').setAttribute('href', newValue)
   }
 
-  vote(){
+  slotchange(e){
+    console.log('slotchange')
+  }
+  
+  vote(e){
+    e.preventDefault()
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
     this.setAttribute('score', score + (upvoted ? 1 : -1))
