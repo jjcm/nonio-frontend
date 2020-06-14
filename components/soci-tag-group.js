@@ -21,7 +21,7 @@ export default class SociTagGroup extends SociComponent {
       line-height: 16px;
       border-radius: 3px;
       scrollbar-width: none;
-      margin-left: 8px;
+      margin-left: 3px;
     }
     :host::-webkit-scrollbar {
       display: none;
@@ -34,6 +34,7 @@ export default class SociTagGroup extends SociComponent {
       margin-left: 4px;
     }
     #add-tag {
+      margin-left: 8px;
       border: 1px solid var(--n1);
       box-sizing: border-box;
       height: var(--height);
@@ -114,7 +115,6 @@ export default class SociTagGroup extends SociComponent {
 
   html(){ return `
     <div id="score"></div>
-    <div id="tags"><slot></slot></div>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -130,6 +130,7 @@ export default class SociTagGroup extends SociComponent {
       </g>
       </svg>
     </div>
+    <div id="tags"><slot></slot></div>
   `}
 
   static get observedAttributes() {

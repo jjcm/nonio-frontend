@@ -69,7 +69,7 @@ export default class SociPostLi extends SociComponent {
         line-height: 20px;
         align-items: center;
         position: relative;
-        padding-right: 100px;
+        padding-right: 90px;
       }
       #tags {
         margin-left: 8px;
@@ -114,7 +114,6 @@ export default class SociPostLi extends SociComponent {
         text-align: right;
         line-height: 16px;
         white-space: nowrap;
-        margin-left: 24px;
         position: absolute;
         bottom: 2px;
         right: 0px;
