@@ -236,6 +236,7 @@ export default class SociTagGroup extends SociComponent {
       this.toggleAttribute('upvoted', false)
       this.score--
     }
+
     this.fire('scoreChanged', {score: this.score})
   }
 }

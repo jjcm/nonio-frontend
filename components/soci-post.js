@@ -158,7 +158,7 @@ export default class SociPost extends SociComponent {
               by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
             </meta-data>
           </title-container>
-          <soci-tag-group score="234" size="large">
+          <soci-tag-group size="large">
           </soci-tag-group>
           <description>
             <soci-input readonly></soci-input>

@@ -74,8 +74,12 @@ export default class SociTag extends SociComponent {
     else if(name == 'href') this.select('a').setAttribute('href', newValue)
   }
 
-  slotchange(e){
-    console.log('slotchange')
+  get score(){
+    return parseInt(this.getAttribute('score')) || 0
+  }
+
+  set score(val){
+    this.setAttribute('score', val)
   }
   
   vote(e){
@@ -84,6 +88,7 @@ export default class SociTag extends SociComponent {
     const upvoted = this.toggleAttribute('upvoted')
     this.setAttribute('score', score + (upvoted ? 1 : -1))
     this.fire('vote', {
+      dom: this,
       tag: this.innerHTML,
       upvoted: upvoted
     })
@@ -101,5 +106,8 @@ export default class SociTag extends SociComponent {
       console.warn('No parent element found with a url for tag:')
       console.warn(this)
     }
+
+    // if we're removing a vote, and it's the last vote, delete the tag
+    if(!upvoted && this.score == 0) this.remove()
   }
 }
