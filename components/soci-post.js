@@ -158,14 +158,13 @@ export default class SociPost extends SociComponent {
               by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
             </meta-data>
           </title-container>
-          <soci-tag-group size="large">
-          </soci-tag-group>
+          <slot name="tags"></slot>
           <description>
             <soci-input readonly></soci-input>
           </description>
         </div>
       </div>
-      <soci-comment-list></soci-comment-list>
+      <slot name="comments"></slot>
     </footer>
   `}
 
@@ -202,7 +201,7 @@ export default class SociPost extends SociComponent {
         break
       case 'score':
         console.log('score')
-        this.select('soci-tag-group').setAttribute('score', newValue)
+        this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break
       case 'comments':
         console.log('comments')
@@ -210,7 +209,7 @@ export default class SociPost extends SociComponent {
         break
       case 'href':
         console.log('href')
-        this.select('soci-comment-list').setAttribute('href', newValue)
+        this.querySelector('soci-comment-list').setAttribute('href', newValue)
         this.loadPost(newValue)
         break
     }
@@ -250,7 +249,7 @@ export default class SociPost extends SociComponent {
   }
 
   createTags(tags){
-    let tagContainer = this.select('soci-tag-group')
+    let tagContainer = this.querySelector('soci-tag-group')
     tagContainer.innerHTML = ''
     tags.forEach(tag=>{
       let newTag = document.createElement('soci-tag')
