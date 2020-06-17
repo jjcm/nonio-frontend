@@ -1,22 +1,22 @@
 [
     {
-        "name": "funny",
+        "tag": "funny",
         "color": "b3"
     },
     {
-        "name": "anime",
+        "tag": "anime",
         "color": "o3"
     },
     {
-        "name": "wtf",
+        "tag": "wtf",
         "color": "t3"
     },
     {
-        "name": "dota",
+        "tag": "dota",
         "color": "r3"
     },
     {
-        "name": "webcomponents",
+        "tag": "webcomponents",
         "color": "n3"
     }
 ]
