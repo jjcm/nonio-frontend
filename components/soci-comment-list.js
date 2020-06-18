@@ -104,7 +104,7 @@ export default class SociCommentList extends SociComponent {
       </controls>
       <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
       <button-container>
-        <button>submit</button>
+        <button @click=addComment>submit</button>
       </button-container>
       <content>
         <slot></slot>
@@ -113,19 +113,15 @@ export default class SociCommentList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['data']
+    return ['url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'data':
+      case 'url':
         this.renderComments(newValue)
         break
     }
-  }
-
-  connectedCallback(){
-    this.renderComments()
   }
 
   _onFocus(){
@@ -152,233 +148,238 @@ export default class SociCommentList extends SociComponent {
     comments.forEach(comment => this.appendChild(comment))
   }
 
-  async renderComments(){
-    //data = await soci.getData('comments')
-    let data = [
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-                children: [
-                  {
-                    user: "pwnies",
-                    score: "1234",
-                    date: Date.now() - 10000000,
-                    content: 'heyo im a comment',
-                    children: [
-                      {
-                        user: "pwnies",
-                        score: "1234",
-                        date: Date.now() - 10000000,
-                        content: 'heyo im a comment',
-                      },
-                      {
-                        user: "pwnies",
-                        score: "1234",
-                        date: Date.now() - 10000000,
-                        content: 'heyo im a comment',
-                      }
-                    ]
-                  },
-                  {
-                    user: "pwnies",
-                    score: "1234",
-                    date: Date.now() - 10000000,
-                    content: 'heyo im a comment',
-                  }
-                ]
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              }
-            ]
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              }
-            ]
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "123",
-        date: Date.now() - 10000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 100000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 100000,
-                content: 'heyo im a comment',
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 100000,
-                content: 'heyo im a comment',
-              },
-            ]
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now(),
-            content: 'heyo im a comment',
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now(),
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-    ]
+  async renderComments(url){
+    console.log(url)
+    let data = await this.getData('/comments/post/' + url)
+    data = data.comments
+    console.log(data)
+
+    if(data.length == 0) {
+      data = [
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+              children: [
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 10000000,
+                  content: 'heyo im a comment',
+                  children: [
+                    {
+                      user: "pwnies",
+                      score: "1234",
+                      date: Date.now() - 10000000,
+                      content: 'heyo im a comment',
+                      children: [
+                        {
+                          user: "pwnies",
+                          score: "1234",
+                          date: Date.now() - 10000000,
+                          content: 'heyo im a comment',
+                        },
+                        {
+                          user: "pwnies",
+                          score: "1234",
+                          date: Date.now() - 10000000,
+                          content: 'heyo im a comment',
+                        }
+                      ]
+                    },
+                    {
+                      user: "pwnies",
+                      score: "1234",
+                      date: Date.now() - 10000000,
+                      content: 'heyo im a comment',
+                    }
+                  ]
+                },
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 10000000,
+                  content: 'heyo im a comment',
+                }
+              ]
+            },
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+              children: [
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 10000000,
+                  content: 'heyo im a comment',
+                },
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 10000000,
+                  content: 'heyo im a comment',
+                }
+              ]
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "1234",
+          date: Date.now() - 100000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 10000000,
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+        {
+          user: "pwnies",
+          score: "123",
+          date: Date.now() - 10000,
+          content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
+          children: [
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now() - 100000,
+              content: 'heyo im a comment',
+              children: [
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 100000,
+                  content: 'heyo im a comment',
+                },
+                {
+                  user: "pwnies",
+                  score: "1234",
+                  date: Date.now() - 100000,
+                  content: 'heyo im a comment',
+                },
+              ]
+            },
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now(),
+              content: 'heyo im a comment',
+            },
+            {
+              user: "pwnies",
+              score: "1234",
+              date: Date.now(),
+              content: 'heyo im a comment',
+            }
+          ]
+        },
+      ]
+    }
 
     this.innerHTML = this.createComments(data)
-
   }
 
   createComments(comments){
     return `
       ${comments.map((comment) => `
-        <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
+        <soci-comment user=${comment.user} score=${comment.upvotes - comment.downvotes} date=${comment.date} content='${comment.content}'>
           ${comment.content}
           <div slot="replies">
             ${this.recurseComments(comment)}
@@ -392,13 +393,14 @@ export default class SociCommentList extends SociComponent {
     return comment.children ? this.createComments(comment.children) : ''
   }
 
-  addComment(post, parent, text){
+  addComment(){
     this.postData('/comment/create', {
-      post: 'painting',
-      parent: null,
-      text: text,
-      content: 'asdf',
-      type: 'asdf'
+      post: this.url,
+      content: this.select('soci-input').value
     })
+  }
+
+  get url(){
+    return this.getAttribute('url')
   }
 }

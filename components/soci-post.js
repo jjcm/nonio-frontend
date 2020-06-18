@@ -169,7 +169,7 @@ export default class SociPost extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'href']
+    return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
   }
 
   connectedCallback(){
@@ -179,15 +179,12 @@ export default class SociPost extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'title':
-        console.log('title')
         this.select('h1').innerHTML = newValue
         break
       case 'type':
-        console.log('type')
         this.loadContent(newValue)
         break
       case 'time':
-        console.log('time')
         let date = new Date(parseInt(newValue))
         this.select('time').innerHTML = date.toLocaleDateString(undefined, {
           day: 'numeric',
@@ -196,20 +193,16 @@ export default class SociPost extends SociComponent {
         })
         break
       case 'user':
-        console.log('user')
         this.selectAll('soci-user').forEach(user => user.setAttribute('name', newValue))
         break
       case 'score':
-        console.log('score')
         this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break
       case 'comments':
-        console.log('comments')
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break
-      case 'href':
-        console.log('href')
-        this.querySelector('soci-comment-list').setAttribute('href', newValue)
+      case 'url':
+        this.querySelector('soci-comment-list').setAttribute('url', newValue)
         this.loadPost(newValue)
         break
     }
@@ -226,6 +219,8 @@ export default class SociPost extends SociComponent {
             this.setAttribute(key, post[key].map(tag=>tag.tag).join(','))
             this.createTags(post[key])
             break
+          case 'url':
+            break
           default:
             this.setAttribute(key, post[key])
             break
@@ -239,10 +234,10 @@ export default class SociPost extends SociComponent {
   loadContent(type) {
     switch(type){
       case 'image':
-        this.select('img').src = `${config.THUMBNAIL_HOST}/${this.href}.webp`
-        this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.href}.webp`
+        this.select('img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+        this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{
-          this.select('img').src = `${config.IMAGE_HOST}/${this.href}.webp`
+          this.select('img').src = `${config.IMAGE_HOST}/${this.url}.webp`
         },1)
         break
     }
@@ -264,7 +259,7 @@ export default class SociPost extends SociComponent {
     this.select('soci-input').value = description
   }
 
-  get href(){
-    return this.getAttribute('href')
+  get url(){
+    return this.getAttribute('url')
   }
 }

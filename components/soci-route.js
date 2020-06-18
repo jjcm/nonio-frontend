@@ -88,7 +88,6 @@ export default class SociRouter extends SociComponent {
 
   test(){
     let routePath = this.getAttribute('path')
-    console.log(routePath)
     if(!routePath) return 0
     let path
     switch(this.getAttribute('test')) {

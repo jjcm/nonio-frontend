@@ -923,7 +923,7 @@ export default class SociInput extends SociComponent {
   }
 
   get value(){
-    return JSON.stringify(this.editor.getContents())
+    return JSON.stringify(this.editor.getContents().ops)
   }
 
   set value(val){

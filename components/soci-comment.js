@@ -117,7 +117,7 @@ export default class SociComment extends SociComponent {
         align-items: center;
         height: 20px;
         line-height: 20px;
-        padding-right: 5px;
+        padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
         background: var(--n1);
@@ -267,6 +267,7 @@ export default class SociComment extends SociComponent {
       </slot>
     </div>
     <guide></guide>
+    <soci-quill-render-field></soci-quill-render-field>
   `}
 
   static get observedAttributes() {
@@ -294,6 +295,8 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
+    console.log(this.getAttribute('content'))
+    this.select('soci-quill-render-field').ops = JSON.parse(this.getAttribute('content'))
   }
 
   disconnectedCallback(){
