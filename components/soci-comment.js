@@ -230,7 +230,7 @@ export default class SociComment extends SociComponent {
         outline: 0;
       }
 
-      soci-input {
+      soci-input:not([readonly]) {
         border: 1px solid #eee;
         border-radius: 4px;
         min-height: 140px;
@@ -254,6 +254,7 @@ export default class SociComment extends SociComponent {
         <time>0s ago</time>
       </top>
       <div id="comment">
+        <soci-input readonly></soci-input>
         <slot></slot>
       </div>
       <div id="actions">
@@ -267,11 +268,10 @@ export default class SociComment extends SociComponent {
       </slot>
     </div>
     <guide></guide>
-    <soci-quill-render-field></soci-quill-render-field>
   `}
 
   static get observedAttributes() {
-    return ['score', 'user', 'replies', 'date']
+    return ['score', 'user', 'replies', 'date', 'content']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -285,6 +285,8 @@ export default class SociComment extends SociComponent {
       case 'date':
         this.updateTime(newValue, this.select('time'))
         break
+      case 'content':
+        this.select('soci-input').value = newValue
     }
   }
 
@@ -295,8 +297,6 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
-    console.log(this.getAttribute('content'))
-    this.select('soci-quill-render-field').ops = JSON.parse(this.getAttribute('content'))
   }
 
   disconnectedCallback(){
