@@ -377,16 +377,23 @@ export default class SociCommentList extends SociComponent {
   }
 
   createComments(comments){
-    return `
+    let renderer = document.createElement('soci-input')
+    renderer.style.display = 'none'
+    document.body.appendChild(renderer)
+
+    let html = `
       ${comments.map((comment) => `
-        <soci-comment user=${comment.user} score=${comment.upvotes - comment.downvotes} date=${comment.date} content='${comment.content}'>
-          ${comment.content}
+        <soci-comment user=${comment.user} score=${comment.upvotes - comment.downvotes} date=${comment.date}'>
+          ${renderer.renderOpsToHTML(comment.content)}
           <div slot="replies">
             ${this.recurseComments(comment)}
           </div>
         </soci-comment>
       `).join('')}
     `
+
+    renderer.remove()
+    return html
   }
 
   recurseComments(comment){

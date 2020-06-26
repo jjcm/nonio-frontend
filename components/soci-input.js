@@ -926,6 +926,11 @@ export default class SociInput extends SociComponent {
     return JSON.stringify(this.editor.getContents())
   }
 
+  renderOpsToHTML(val){
+    if(val) this.value = val
+    return this.select('.ql-editor').innerHTML
+  }
+
   set value(val){
     this.editor.setContents(JSON.parse(val))
     this._internals.setFormValue(val)

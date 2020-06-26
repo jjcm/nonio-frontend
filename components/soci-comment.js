@@ -68,6 +68,7 @@ export default class SociComment extends SociComponent {
         align-items: center;
         max-width: 900px;
         user-select: none;
+        text-decoration: underline;
       }
 
       #actions.replying {
@@ -254,7 +255,6 @@ export default class SociComment extends SociComponent {
         <time>0s ago</time>
       </top>
       <div id="comment">
-        <soci-input readonly></soci-input>
         <slot></slot>
       </div>
       <div id="actions">
@@ -285,8 +285,6 @@ export default class SociComment extends SociComponent {
       case 'date':
         this.updateTime(newValue, this.select('time'))
         break
-      case 'content':
-        this.select('soci-input').value = newValue
     }
   }
 
@@ -317,6 +315,7 @@ export default class SociComment extends SociComponent {
     let replyContainer = this.select('#comment-reply')
     replyContainer.innerHTML = '<soci-input show-user placeholder="Enter reply"></soci-input><actions><button>submit</button><button class="cancel">cancel</button></actions>'
     replyContainer.querySelector('.cancel').addEventListener('click', this._cancelReply.bind(this))
+    replyContainer.querySelector('button').addEventListener('click', this._submitReply.bind(this))
     replyContainer.classList.add('active')
 
     this.select('#actions').classList.add('replying')
@@ -367,5 +366,17 @@ export default class SociComment extends SociComponent {
     else {
       this.score++
     }
+  }
+
+  _submitReply(){
+    this.postData('/comment/create', {
+      post: this.url,
+      content: this.select('soci-input').value,
+      parent: this.parentElement.id
+    })
+  }
+
+  get url(){
+    return this.closest('soci-comment-list').getAttribute('url')
   }
 }
