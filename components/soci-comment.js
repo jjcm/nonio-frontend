@@ -71,6 +71,14 @@ export default class SociComment extends SociComponent {
         text-decoration: underline;
       }
 
+      #actions > div {
+        cursor: pointer;
+      }
+
+      #actions > div:not(:first-child) {
+        margin-left: 12px;
+      }
+
       #actions.replying {
         margin-top: 0;
       }
@@ -82,17 +90,6 @@ export default class SociComment extends SociComponent {
 
       #view-replies {
         position: relative;
-        margin-left: 14px;
-        cursor: pointer;
-      }
-
-      #reply {
-        cursor: pointer;
-      }
-
-      #reply:hover,
-      #view-replies:hover {
-        text-decoration: underline;
       }
 
       #vote-container {
@@ -257,6 +254,7 @@ export default class SociComment extends SociComponent {
       </div>
       <div id="actions">
         <div id="reply" @click=_reply>reply</div>
+        <div id="delete" @click=_delete>delete</div>
         <div id="view-replies" @click=_toggleReplies></div>
       </div>
     </comment>
@@ -319,6 +317,10 @@ export default class SociComment extends SociComponent {
   set content(val){
     this._content = val
     this._renderContent()
+  }
+
+  get url(){
+    return this.closest('soci-comment-list').getAttribute('url')
   }
 
   _renderContent(){
@@ -391,11 +393,13 @@ export default class SociComment extends SociComponent {
     this.postData('/comment/create', {
       post: this.url,
       content: this.select('soci-input').value,
-      parent: this.getAttribute('comment-id')
+      parent: parseInt(this.getAttribute('comment-id'))
     })
   }
 
-  get url(){
-    return this.closest('soci-comment-list').getAttribute('url')
+  _delete(){
+    this.postData('/comment/delete', {
+      id: parseInt(this.getAttribute('comment-id'))
+    })
   }
 }
