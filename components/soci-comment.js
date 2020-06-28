@@ -68,11 +68,15 @@ export default class SociComment extends SociComponent {
         align-items: center;
         max-width: 900px;
         user-select: none;
-        text-decoration: underline;
+        color: var(--n3);
       }
 
       #actions > div {
         cursor: pointer;
+      }
+
+      #actions > div:hover {
+        text-decoration: underline;
       }
 
       #actions > div:not(:first-child) {
@@ -178,6 +182,7 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         height: 0;
+        height: auto;
       }
 
       :host([expanded]) #replies {

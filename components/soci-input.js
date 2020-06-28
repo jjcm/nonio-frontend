@@ -666,6 +666,7 @@ export default class SociInput extends SociComponent {
   }
 
   set value(val){
+    console.log(val)
     this.editor.setContents(JSON.parse(val))
     this._internals.setFormValue(val)
   }

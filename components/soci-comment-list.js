@@ -149,7 +149,6 @@ export default class SociCommentList extends SociComponent {
   }
 
   async renderComments(url){
-    console.log(url)
     let data = await this.getData('/comments/post/' + url)
     let comments = data.comments
 
@@ -161,35 +160,9 @@ export default class SociCommentList extends SociComponent {
       newComment.setAttribute('comment-id', comment.id)
       newComment.content = comment.content
 
-      this.appendChild(newComment)
+      let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"] div[slot="replies"]`) : this
+      parent.appendChild(newComment)
     })
-
-    //this.innerHTML = this.createComments(comments)
-
-  }
-
-  createComments(comments){
-    let renderer = document.createElement('soci-input')
-    renderer.style.display = 'none'
-    document.body.appendChild(renderer)
-
-    let html = `
-      ${comments.map((comment) => `
-        <soci-comment user=${comment.user} score=${comment.upvotes - comment.downvotes} date=${comment.date} comment-id=${comment.id} parent-id=${comment.parent}>
-          ${renderer.renderOpsToHTML(comment.content)}
-          <div slot="replies">
-            ${this.recurseComments(comment)}
-          </div>
-        </soci-comment>
-      `).join('')}
-    `
-
-    renderer.remove()
-    return html
-  }
-
-  recurseComments(comment){
-    return comment.children ? this.createComments(comment.children) : ''
   }
 
   addComment(){
