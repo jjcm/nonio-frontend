@@ -236,8 +236,6 @@ export default class SociComment extends SociComponent {
         border-radius: 4px;
         min-height: 140px;
       }
-
-
     `
   }
 
@@ -255,7 +253,7 @@ export default class SociComment extends SociComponent {
         <time>0s ago</time>
       </top>
       <div id="comment">
-        <slot></slot>
+        <slot name="content"></slot>
       </div>
       <div id="actions">
         <div id="reply" @click=_reply>reply</div>
@@ -295,6 +293,9 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
+
+    this.innerHTML = '<div slot="content"></div><div slot="replies"></div>'
+    this._renderContent()
   }
 
   disconnectedCallback(){
@@ -309,6 +310,23 @@ export default class SociComment extends SociComponent {
 
   set score(val){
     this.setAttribute('score', val)
+  }
+
+  get content() {
+    return this._content
+  }
+
+  set content(val){
+    this._content = val
+    this._renderContent()
+  }
+
+  _renderContent(){
+    let contentContainer = this.querySelector('div[slot="content"]')
+    if(contentContainer) {
+      let renderer = document.getElementById('comment-renderer')
+      contentContainer.innerHTML = renderer.renderOpsToHTML(this._content)
+    }
   }
 
   _reply(){
@@ -369,10 +387,11 @@ export default class SociComment extends SociComponent {
   }
 
   _submitReply(){
+    console.log(this)
     this.postData('/comment/create', {
       post: this.url,
       content: this.select('soci-input').value,
-      parent: this.parentElement.id
+      parent: this.getAttribute('comment-id')
     })
   }
 
