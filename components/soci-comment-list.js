@@ -50,7 +50,7 @@ export default class SociCommentList extends SociComponent {
       }
       content {
         display: block;
-        padding: 0 6px 24px;
+        padding: 0 8px 24px;
       }
       soci-input {
         min-height: 82px;

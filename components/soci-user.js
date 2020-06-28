@@ -34,14 +34,15 @@ export default class SociUser extends SociComponent {
         user-select: none;
         color: inherit;
         display: block;
+        border-radius: 3px;
       }
 
-      :host([op]) {
-        color: var(--b1);
-        font-weight: 700;
+      :host([op]) username {
+        font-weight: 900;
+        letter-spacing: 0.1px;
       }
 
-      :host([admin]) {
+      :host([admin]) username {
         color: var(--r1);
         font-weight: 900;
       }
@@ -87,6 +88,13 @@ export default class SociUser extends SociComponent {
       :host([username-only]) username {
         margin-left: 0;
       }
+
+      :host([size="small"][self]) username {
+        background: var(--b3);
+        padding: 0 6px;
+        color: #fff;
+        margin-right: -4px;
+      }
     `
   }
 
@@ -108,6 +116,7 @@ export default class SociUser extends SociComponent {
       case 'name':
         this.select('username').innerHTML = newValue
         this.select('#avatar').src = '/example-data/profile.jpg'
+        this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'self':
         this._updateUser()

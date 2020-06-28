@@ -79,17 +79,16 @@ export default class SociComment extends SociComponent {
         text-decoration: underline;
       }
 
+      #actions .confirmable:hover {
+        text-decoration: none;
+      }
+
       #actions > div:not(:first-child) {
         margin-left: 12px;
       }
 
       #actions.replying {
         margin-top: 0;
-      }
-      
-      #actions.replying #reply,
-      #actions.replying #view-replies {
-        display: none;
       }
 
       #view-replies {
@@ -126,6 +125,7 @@ export default class SociComment extends SociComponent {
         cursor: pointer;
         user-select: none;
         --fill-color: transparent;
+        margin-right: 2px;
       }
 
       #upvote soci-icon {
@@ -185,6 +185,32 @@ export default class SociComment extends SociComponent {
         height: auto;
       }
 
+      .confirmable {
+        display: flex;
+      }
+
+      .confirmable[active] > span:hover {
+        text-decoration: none;
+      }
+
+      .confirmable span:hover {
+        text-decoration: underline;
+      }
+
+      .confirm-controls {
+        display: none;
+      }
+
+      .confirmable[active] .confirm-controls {
+        display: flex;
+        margin-left: 4px;
+      }
+
+      .confirm-controls span:first-child {
+        margin-right: 4px;
+        color: var(--r3);
+      }
+
       :host([expanded]) #replies {
         height: auto;
       }
@@ -238,6 +264,10 @@ export default class SociComment extends SociComponent {
         border-radius: 4px;
         min-height: 140px;
       }
+
+      :host(:not([self])) .user-control {
+        display: none;
+      }
     `
   }
 
@@ -259,8 +289,22 @@ export default class SociComment extends SociComponent {
       </div>
       <div id="actions">
         <div id="reply" @click=_reply>reply</div>
-        <div id="delete" @click=_delete>delete</div>
         <div id="view-replies" @click=_toggleReplies></div>
+        <div id="edit" class="user-control" @click=_edit>edit</div>
+        <div id="delete" class="user-control confirmable">
+          <span @click=_promptDelete>delete</span>
+          <div class="confirm-controls">
+            <span @click=_delete>yes</span>
+            <span @click=_cancelDelete>no</span>
+          </div>
+        </div>
+        <div id="abandon" class="user-control confirmable">
+          <span @click=_promptAbandon>abandon</span>
+          <div class="confirm-controls">
+            <span @click=_abandon>yes</span>
+            <span @click=_cancelAbandon>no</span>
+          </div>
+        </div>
       </div>
     </comment>
     <div id="comment-reply"></div>
@@ -282,6 +326,8 @@ export default class SociComment extends SociComponent {
         break
       case 'user':
         this.select('soci-user').setAttribute('name', newValue)
+        this.toggleAttribute('self', newValue == soci.username) 
+        console.log(this.closest('soci-post')?.getAttribute('user')) 
         break
       case 'date':
         this.updateTime(newValue, this.select('time'))
@@ -299,6 +345,9 @@ export default class SociComment extends SociComponent {
 
     this.innerHTML = '<div slot="content"></div><div slot="replies"></div>'
     this._renderContent()
+
+    let user = this.select('soci-user')
+    user.toggleAttribute('op', user.getAttribute('name') == this.closest('soci-post')?.getAttribute('user')) 
   }
 
   disconnectedCallback(){
@@ -406,5 +455,37 @@ export default class SociComment extends SociComponent {
     this.postData('/comment/delete', {
       id: parseInt(this.getAttribute('comment-id'))
     })
+    
+    this.remove()
+  }
+
+  _cancelDelete(){
+    this.select('#delete').toggleAttribute('active', false)
+    this.select('#delete span').innerHTML = 'delete'
+  }
+
+  _promptDelete(){
+    this.select('#delete').toggleAttribute('active', true)
+    this.select('#delete span').innerHTML = 'confirm delete?'
+  }
+
+  _abandon(){
+    this.postData('/comment/abandon', {
+      id: parseInt(this.getAttribute('comment-id'))
+    })
+  }
+
+  _cancelAbandon(){
+    this.select('#abandon').toggleAttribute('active', false)
+    this.select('#abandon span').innerHTML = 'abandon'
+  }
+
+  _promptAbandon(){
+    this.select('#abandon').toggleAttribute('active', true)
+    this.select('#abandon span').innerHTML = 'confirm abandon?'
+  }
+
+  _edit(){
+    //todo
   }
 }
