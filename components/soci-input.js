@@ -639,11 +639,13 @@ export default class SociInput extends SociComponent {
     let opts = readOnly ? 
       { 
         modules: { toolbar: false },
+        formats: ['link', 'code', 'strike', 'underline', 'script', 'bold', 'blockquote', 'list', 'indent', 'code-block'],
         theme: 'snow',
         readOnly: true 
       } : 
       {
         modules: { toolbar: true },
+        formats: ['link', 'code', 'strike', 'underline', 'script', 'bold', 'blockquote', 'list', 'indent', 'code-block'],
         theme: 'snow',
         placeholder: this.getAttribute('placeholder') || "Enter comment"
       }
