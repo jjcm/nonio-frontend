@@ -327,7 +327,6 @@ export default class SociComment extends SociComponent {
       case 'user':
         this.select('soci-user').setAttribute('name', newValue)
         this.toggleAttribute('self', newValue == soci.username) 
-        console.log(this.closest('soci-post')?.getAttribute('user')) 
         break
       case 'date':
         this.updateTime(newValue, this.select('time'))
@@ -473,6 +472,9 @@ export default class SociComment extends SociComponent {
     this.postData('/comment/abandon', {
       id: parseInt(this.getAttribute('comment-id'))
     })
+
+    this.setAttribute('user', 'Anonymous coward')
+    this.toggleAttribute('self', false)
   }
 
   _cancelAbandon(){

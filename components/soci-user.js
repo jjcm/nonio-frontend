@@ -119,7 +119,9 @@ export default class SociUser extends SociComponent {
         this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'self':
-        this._updateUser()
+        if(newValue != null){
+          this._updateUser()
+        }
         break
     }
   }
