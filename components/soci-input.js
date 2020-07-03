@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import quillStyle from '../lib/quillStyle.js'
 
 export default class SociInput extends SociComponent {
   static formAssociated = true
@@ -48,12 +49,11 @@ export default class SociInput extends SociComponent {
         display: flex;
         flex-direction: column;
       }
-      /*!
-      * Quill Editor v1.3.6
-      * https://quilljs.com/
-      * Copyright (c) 2014, Jason Chen
-      * Copyright (c) 2013, salesforce.com
-      */
+
+      :host([readonly]) .ql-editor {
+        padding: 0;
+      }
+
       .ql-container {
         box-sizing: border-box;
         height: 100%;
@@ -90,272 +90,6 @@ export default class SociInput extends SociComponent {
         text-align: left;
         white-space: pre-wrap;
         word-wrap: break-word;
-      }
-      .ql-editor > * {
-        cursor: text;
-      }
-      .ql-editor p,
-      .ql-editor ol,
-      .ql-editor ul,
-      .ql-editor pre,
-      .ql-editor blockquote,
-      .ql-editor h1,
-      .ql-editor h2,
-      .ql-editor h3 {
-        margin: 0;
-        padding: 0;
-      }
-      .ql-editor ol,
-      .ql-editor ul {
-        padding-left: 0;
-      }
-      .ql-editor ol > li,
-      .ql-editor ul > li {
-        list-style-type: none;
-      }
-      .ql-editor ul[data-checked=true],
-      .ql-editor ul[data-checked=false] {
-        pointer-events: none;
-      }
-      .ql-editor ul[data-checked=true] > li *,
-      .ql-editor ul[data-checked=false] > li * {
-        pointer-events: all;
-      }
-      .ql-editor ul[data-checked=true] > li::before,
-      .ql-editor ul[data-checked=false] > li::before {
-        color: #777;
-        cursor: pointer;
-        pointer-events: all;
-      }
-      .ql-editor li::before {
-        display: inline-block;
-        white-space: nowrap;
-        width: 1.2em;
-      }
-      .ql-editor li:not(.ql-direction-rtl)::before {
-        margin-left: -1.5em;
-        margin-right: 0.3em;
-        text-align: right;
-      }
-      .ql-editor li.ql-direction-rtl::before {
-        margin-left: 0.3em;
-        margin-right: -1.5em;
-      }
-      .ql-editor ol li:not(.ql-direction-rtl),
-      .ql-editor ul li:not(.ql-direction-rtl) {
-        padding-left: 1.5em;
-      }
-      .ql-editor ol li.ql-direction-rtl,
-      .ql-editor ul li.ql-direction-rtl {
-        padding-right: 1.5em;
-      }
-      .ql-editor ol li {
-        counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-        counter-increment: list-0;
-      }
-      .ql-editor ol li[data-list="bullet"]:before {
-        content: '•';
-      }
-      .ql-editor ol li[data-list="bullet"].ql-indent-1:before {
-        content: '◦';
-      }
-      .ql-editor ol li:before {
-        content: counter(list-0, decimal) '. ';
-      }
-      .ql-editor ol li.ql-indent-1 {
-        counter-increment: list-1;
-      }
-      .ql-editor ol li.ql-indent-1:before {
-        content: counter(list-1, lower-alpha) '. ';
-      }
-      .ql-editor ol li.ql-indent-1 {
-        counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-2 {
-        counter-increment: list-2;
-      }
-      .ql-editor ol li.ql-indent-2:before {
-        content: counter(list-2, lower-roman) '. ';
-      }
-      .ql-editor ol li.ql-indent-2 {
-        counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-3 {
-        counter-increment: list-3;
-      }
-      .ql-editor ol li.ql-indent-3:before {
-        content: counter(list-3, decimal) '. ';
-      }
-      .ql-editor ol li.ql-indent-3 {
-        counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-4 {
-        counter-increment: list-4;
-      }
-      .ql-editor ol li.ql-indent-4:before {
-        content: counter(list-4, lower-alpha) '. ';
-      }
-      .ql-editor ol li.ql-indent-4 {
-        counter-reset: list-5 list-6 list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-5 {
-        counter-increment: list-5;
-      }
-      .ql-editor ol li.ql-indent-5:before {
-        content: counter(list-5, lower-roman) '. ';
-      }
-      .ql-editor ol li.ql-indent-5 {
-        counter-reset: list-6 list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-6 {
-        counter-increment: list-6;
-      }
-      .ql-editor ol li.ql-indent-6:before {
-        content: counter(list-6, decimal) '. ';
-      }
-      .ql-editor ol li.ql-indent-6 {
-        counter-reset: list-7 list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-7 {
-        counter-increment: list-7;
-      }
-      .ql-editor ol li.ql-indent-7:before {
-        content: counter(list-7, lower-alpha) '. ';
-      }
-      .ql-editor ol li.ql-indent-7 {
-        counter-reset: list-8 list-9;
-      }
-      .ql-editor ol li.ql-indent-8 {
-        counter-increment: list-8;
-      }
-      .ql-editor ol li.ql-indent-8:before {
-        content: counter(list-8, lower-roman) '. ';
-      }
-      .ql-editor ol li.ql-indent-8 {
-        counter-reset: list-9;
-      }
-      .ql-editor ol li.ql-indent-9 {
-        counter-increment: list-9;
-      }
-      .ql-editor ol li.ql-indent-9:before {
-        content: counter(list-9, decimal) '. ';
-      }
-      .ql-editor .ql-indent-1:not(.ql-direction-rtl) {
-        padding-left: 3em;
-      }
-      .ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
-        padding-left: 4.5em;
-      }
-      .ql-editor .ql-indent-1.ql-direction-rtl.ql-align-right {
-        padding-right: 3em;
-      }
-      .ql-editor li.ql-indent-1.ql-direction-rtl.ql-align-right {
-        padding-right: 4.5em;
-      }
-      .ql-editor .ql-indent-2:not(.ql-direction-rtl) {
-        padding-left: 6em;
-      }
-      .ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
-        padding-left: 7.5em;
-      }
-      .ql-editor .ql-indent-2.ql-direction-rtl.ql-align-right {
-        padding-right: 6em;
-      }
-      .ql-editor li.ql-indent-2.ql-direction-rtl.ql-align-right {
-        padding-right: 7.5em;
-      }
-      .ql-editor .ql-indent-3:not(.ql-direction-rtl) {
-        padding-left: 9em;
-      }
-      .ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
-        padding-left: 10.5em;
-      }
-      .ql-editor .ql-indent-3.ql-direction-rtl.ql-align-right {
-        padding-right: 9em;
-      }
-      .ql-editor li.ql-indent-3.ql-direction-rtl.ql-align-right {
-        padding-right: 10.5em;
-      }
-      .ql-editor .ql-indent-4:not(.ql-direction-rtl) {
-        padding-left: 12em;
-      }
-      .ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
-        padding-left: 13.5em;
-      }
-      .ql-editor .ql-indent-4.ql-direction-rtl.ql-align-right {
-        padding-right: 12em;
-      }
-      .ql-editor li.ql-indent-4.ql-direction-rtl.ql-align-right {
-        padding-right: 13.5em;
-      }
-      .ql-editor .ql-indent-5:not(.ql-direction-rtl) {
-        padding-left: 15em;
-      }
-      .ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
-        padding-left: 16.5em;
-      }
-      .ql-editor .ql-indent-5.ql-direction-rtl.ql-align-right {
-        padding-right: 15em;
-      }
-      .ql-editor li.ql-indent-5.ql-direction-rtl.ql-align-right {
-        padding-right: 16.5em;
-      }
-      .ql-editor .ql-indent-6:not(.ql-direction-rtl) {
-        padding-left: 18em;
-      }
-      .ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
-        padding-left: 19.5em;
-      }
-      .ql-editor .ql-indent-6.ql-direction-rtl.ql-align-right {
-        padding-right: 18em;
-      }
-      .ql-editor li.ql-indent-6.ql-direction-rtl.ql-align-right {
-        padding-right: 19.5em;
-      }
-      .ql-editor .ql-indent-7:not(.ql-direction-rtl) {
-        padding-left: 21em;
-      }
-      .ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
-        padding-left: 22.5em;
-      }
-      .ql-editor .ql-indent-7.ql-direction-rtl.ql-align-right {
-        padding-right: 21em;
-      }
-      .ql-editor li.ql-indent-7.ql-direction-rtl.ql-align-right {
-        padding-right: 22.5em;
-      }
-      .ql-editor .ql-indent-8:not(.ql-direction-rtl) {
-        padding-left: 24em;
-      }
-      .ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
-        padding-left: 25.5em;
-      }
-      .ql-editor .ql-indent-8.ql-direction-rtl.ql-align-right {
-        padding-right: 24em;
-      }
-      .ql-editor li.ql-indent-8.ql-direction-rtl.ql-align-right {
-        padding-right: 25.5em;
-      }
-      .ql-editor .ql-indent-9:not(.ql-direction-rtl) {
-        padding-left: 27em;
-      }
-      .ql-editor li.ql-indent-9:not(.ql-direction-rtl) {
-        padding-left: 28.5em;
-      }
-      .ql-editor .ql-indent-9.ql-direction-rtl.ql-align-right {
-        padding-right: 27em;
-      }
-      .ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
-        padding-right: 28.5em;
-      }
-      .ql-editor.ql-blank::before {
-        color: var(--n3);
-        content: attr(data-placeholder);
-        font-style: italic;
-        left: 15px;
-        pointer-events: none;
-        position: absolute;
-        right: 15px;
       }
       .ql-snow.ql-toolbar:after,
       .ql-snow .ql-toolbar:after {
@@ -874,10 +608,10 @@ export default class SociInput extends SociComponent {
       .ql-snow a {
         color: #06c;
       }
-
-      :host([readonly]) .ql-editor {
-        padding: 0;
+      .ql-editor > * {
+        cursor: text;
       }
+      ${quillStyle}
     `
     return css
   }
@@ -905,11 +639,13 @@ export default class SociInput extends SociComponent {
     let opts = readOnly ? 
       { 
         modules: { toolbar: false },
+        formats: ['link', 'code', 'strike', 'underline', 'script', 'bold', 'blockquote', 'list', 'indent', 'code-block'],
         theme: 'snow',
         readOnly: true 
       } : 
       {
         modules: { toolbar: true },
+        formats: ['link', 'code', 'strike', 'underline', 'script', 'bold', 'blockquote', 'list', 'indent', 'code-block'],
         theme: 'snow',
         placeholder: this.getAttribute('placeholder') || "Enter comment"
       }
@@ -926,8 +662,19 @@ export default class SociInput extends SociComponent {
     return JSON.stringify(this.editor.getContents())
   }
 
+  renderOpsToHTML(val){
+    if(val) this.value = val
+    return this.select('.ql-editor').innerHTML
+  }
+
   set value(val){
     this.editor.setContents(JSON.parse(val))
     this._internals.setFormValue(val)
   }
 }
+
+
+let renderer = document.createElement('soci-input')
+renderer.style.display = 'none'
+renderer.id = "comment-renderer"
+document.body.appendChild(renderer)

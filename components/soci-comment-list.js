@@ -50,7 +50,7 @@ export default class SociCommentList extends SociComponent {
       }
       content {
         display: block;
-        padding: 0 6px 24px;
+        padding: 0 8px 24px;
       }
       soci-input {
         min-height: 82px;
@@ -104,7 +104,7 @@ export default class SociCommentList extends SociComponent {
       </controls>
       <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
       <button-container>
-        <button>submit</button>
+        <button @click=addComment>submit</button>
       </button-container>
       <content>
         <slot></slot>
@@ -113,19 +113,15 @@ export default class SociCommentList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['data']
+    return ['url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'data':
+      case 'url':
         this.renderComments(newValue)
         break
     }
-  }
-
-  connectedCallback(){
-    this.renderComments()
   }
 
   _onFocus(){
@@ -152,253 +148,31 @@ export default class SociCommentList extends SociComponent {
     comments.forEach(comment => this.appendChild(comment))
   }
 
-  async renderComments(){
-    //data = await soci.getData('comments')
-    let data = [
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-                children: [
-                  {
-                    user: "pwnies",
-                    score: "1234",
-                    date: Date.now() - 10000000,
-                    content: 'heyo im a comment',
-                    children: [
-                      {
-                        user: "pwnies",
-                        score: "1234",
-                        date: Date.now() - 10000000,
-                        content: 'heyo im a comment',
-                      },
-                      {
-                        user: "pwnies",
-                        score: "1234",
-                        date: Date.now() - 10000000,
-                        content: 'heyo im a comment',
-                      }
-                    ]
-                  },
-                  {
-                    user: "pwnies",
-                    score: "1234",
-                    date: Date.now() - 10000000,
-                    content: 'heyo im a comment',
-                  }
-                ]
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              }
-            ]
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 10000000,
-                content: 'heyo im a comment',
-              }
-            ]
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "1234",
-        date: Date.now() - 100000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 10000000,
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-      {
-        user: "pwnies",
-        score: "123",
-        date: Date.now() - 10000,
-        content: 'heyo im a comment this is amazing wow oh god Im so bored what even is life how do I do this what steps do I take next there are so many decisions and each one means Im cutting off thousands of potential futures from my life',
-        children: [
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now() - 100000,
-            content: 'heyo im a comment',
-            children: [
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 100000,
-                content: 'heyo im a comment',
-              },
-              {
-                user: "pwnies",
-                score: "1234",
-                date: Date.now() - 100000,
-                content: 'heyo im a comment',
-              },
-            ]
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now(),
-            content: 'heyo im a comment',
-          },
-          {
-            user: "pwnies",
-            score: "1234",
-            date: Date.now(),
-            content: 'heyo im a comment',
-          }
-        ]
-      },
-    ]
+  async renderComments(url){
+    let data = await this.getData('/comments/post/' + url)
+    let comments = data.comments
 
-    this.innerHTML = this.createComments(data)
+    comments.forEach(comment => {
+      let newComment = document.createElement('soci-comment')
+      newComment.setAttribute('user', comment.user)
+      newComment.setAttribute('score', comment.upvotes - comment.downvotes)
+      newComment.setAttribute('date', comment.date)
+      newComment.setAttribute('comment-id', comment.id)
+      newComment.content = comment.content
 
-  }
-
-  createComments(comments){
-    return `
-      ${comments.map((comment) => `
-        <soci-comment user=${comment.user} score=${comment.score} date=${comment.date}>
-          ${comment.content}
-          <div slot="replies">
-            ${this.recurseComments(comment)}
-          </div>
-        </soci-comment>
-      `).join('')}
-    `
-  }
-
-  recurseComments(comment){
-    return comment.children ? this.createComments(comment.children) : ''
-  }
-
-  addComment(post, parent, text){
-    this.postData('/comment/create', {
-      post: 'painting',
-      parent: null,
-      text: text,
-      content: 'asdf',
-      type: 'asdf'
+      let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"] div[slot="replies"]`) : this
+      parent.appendChild(newComment)
     })
+  }
+
+  addComment(){
+    this.postData('/comment/create', {
+      post: this.url,
+      content: this.select('soci-input').value
+    })
+  }
+
+  get url(){
+    return this.getAttribute('url')
   }
 }

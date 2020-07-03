@@ -41,6 +41,9 @@ window.customElements.define('soci-post-li', SociPostLi)
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
 
+import SociQuillRenderField from "./soci-quill-render-field.js"
+window.customElements.define('soci-quill-render-field', SociQuillRenderField)
+
 import SociTab from "./soci-tab.js"
 window.customElements.define('soci-tab', SociTab)
 

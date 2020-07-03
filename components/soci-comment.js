@@ -68,30 +68,31 @@ export default class SociComment extends SociComponent {
         align-items: center;
         max-width: 900px;
         user-select: none;
+        color: var(--n3);
+      }
+
+      #actions > div {
+        cursor: pointer;
+      }
+
+      #actions > div:hover {
+        text-decoration: underline;
+      }
+
+      #actions .confirmable:hover {
+        text-decoration: none;
+      }
+
+      #actions > div:not(:first-child) {
+        margin-left: 12px;
       }
 
       #actions.replying {
         margin-top: 0;
       }
-      
-      #actions.replying #reply,
-      #actions.replying #view-replies {
-        display: none;
-      }
 
       #view-replies {
         position: relative;
-        margin-left: 14px;
-        cursor: pointer;
-      }
-
-      #reply {
-        cursor: pointer;
-      }
-
-      #reply:hover,
-      #view-replies:hover {
-        text-decoration: underline;
       }
 
       #vote-container {
@@ -117,13 +118,14 @@ export default class SociComment extends SociComponent {
         align-items: center;
         height: 20px;
         line-height: 20px;
-        padding-right: 5px;
+        padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
         background: var(--n1);
         cursor: pointer;
         user-select: none;
         --fill-color: transparent;
+        margin-right: 2px;
       }
 
       #upvote soci-icon {
@@ -180,6 +182,33 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         height: 0;
+        height: auto;
+      }
+
+      .confirmable {
+        display: flex;
+      }
+
+      .confirmable[active] > span:hover {
+        text-decoration: none;
+      }
+
+      .confirmable span:hover {
+        text-decoration: underline;
+      }
+
+      .confirm-controls {
+        display: none;
+      }
+
+      .confirmable[active] .confirm-controls {
+        display: flex;
+        margin-left: 4px;
+      }
+
+      .confirm-controls span:first-child {
+        margin-right: 4px;
+        color: var(--r3);
       }
 
       :host([expanded]) #replies {
@@ -230,13 +259,15 @@ export default class SociComment extends SociComponent {
         outline: 0;
       }
 
-      soci-input {
+      soci-input:not([readonly]) {
         border: 1px solid #eee;
         border-radius: 4px;
         min-height: 140px;
       }
 
-
+      :host(:not([self])) .user-control {
+        display: none;
+      }
     `
   }
 
@@ -254,11 +285,26 @@ export default class SociComment extends SociComponent {
         <time>0s ago</time>
       </top>
       <div id="comment">
-        <slot></slot>
+        <slot name="content"></slot>
       </div>
       <div id="actions">
         <div id="reply" @click=_reply>reply</div>
         <div id="view-replies" @click=_toggleReplies></div>
+        <div id="edit" class="user-control" @click=_edit>edit</div>
+        <div id="delete" class="user-control confirmable">
+          <span @click=_promptDelete>delete</span>
+          <div class="confirm-controls">
+            <span @click=_delete>yes</span>
+            <span @click=_cancelDelete>no</span>
+          </div>
+        </div>
+        <div id="abandon" class="user-control confirmable">
+          <span @click=_promptAbandon>abandon</span>
+          <div class="confirm-controls">
+            <span @click=_abandon>yes</span>
+            <span @click=_cancelAbandon>no</span>
+          </div>
+        </div>
       </div>
     </comment>
     <div id="comment-reply"></div>
@@ -270,7 +316,7 @@ export default class SociComment extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['score', 'user', 'replies', 'date']
+    return ['score', 'user', 'replies', 'date', 'content']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -280,6 +326,7 @@ export default class SociComment extends SociComponent {
         break
       case 'user':
         this.select('soci-user').setAttribute('name', newValue)
+        this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'date':
         this.updateTime(newValue, this.select('time'))
@@ -294,6 +341,12 @@ export default class SociComment extends SociComponent {
     else this.select('#view-replies').style.display = "none"
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
+
+    this.innerHTML = '<div slot="content"></div><div slot="replies"></div>'
+    this._renderContent()
+
+    let user = this.select('soci-user')
+    user.toggleAttribute('op', user.getAttribute('name') == this.closest('soci-post')?.getAttribute('user')) 
   }
 
   disconnectedCallback(){
@@ -310,10 +363,32 @@ export default class SociComment extends SociComponent {
     this.setAttribute('score', val)
   }
 
+  get content() {
+    return this._content
+  }
+
+  set content(val){
+    this._content = val
+    this._renderContent()
+  }
+
+  get url(){
+    return this.closest('soci-comment-list').getAttribute('url')
+  }
+
+  _renderContent(){
+    let contentContainer = this.querySelector('div[slot="content"]')
+    if(contentContainer) {
+      let renderer = document.getElementById('comment-renderer')
+      contentContainer.innerHTML = renderer.renderOpsToHTML(this._content)
+    }
+  }
+
   _reply(){
     let replyContainer = this.select('#comment-reply')
     replyContainer.innerHTML = '<soci-input show-user placeholder="Enter reply"></soci-input><actions><button>submit</button><button class="cancel">cancel</button></actions>'
     replyContainer.querySelector('.cancel').addEventListener('click', this._cancelReply.bind(this))
+    replyContainer.querySelector('button').addEventListener('click', this._submitReply.bind(this))
     replyContainer.classList.add('active')
 
     this.select('#actions').classList.add('replying')
@@ -364,5 +439,55 @@ export default class SociComment extends SociComponent {
     else {
       this.score++
     }
+  }
+
+  _submitReply(){
+    console.log(this)
+    this.postData('/comment/create', {
+      post: this.url,
+      content: this.select('soci-input').value,
+      parent: parseInt(this.getAttribute('comment-id'))
+    })
+  }
+
+  _delete(){
+    this.postData('/comment/delete', {
+      id: parseInt(this.getAttribute('comment-id'))
+    })
+    
+    this.remove()
+  }
+
+  _cancelDelete(){
+    this.select('#delete').toggleAttribute('active', false)
+    this.select('#delete span').innerHTML = 'delete'
+  }
+
+  _promptDelete(){
+    this.select('#delete').toggleAttribute('active', true)
+    this.select('#delete span').innerHTML = 'confirm delete?'
+  }
+
+  _abandon(){
+    this.postData('/comment/abandon', {
+      id: parseInt(this.getAttribute('comment-id'))
+    })
+
+    this.setAttribute('user', 'Anonymous coward')
+    this.toggleAttribute('self', false)
+  }
+
+  _cancelAbandon(){
+    this.select('#abandon').toggleAttribute('active', false)
+    this.select('#abandon span').innerHTML = 'abandon'
+  }
+
+  _promptAbandon(){
+    this.select('#abandon').toggleAttribute('active', true)
+    this.select('#abandon span').innerHTML = 'confirm abandon?'
+  }
+
+  _edit(){
+    //todo
   }
 }
