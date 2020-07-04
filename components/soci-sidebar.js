@@ -131,6 +131,7 @@ export default class SociSidebar extends SociComponent {
       #user soci-user {
         --spacing: 14px;
         --font-weight: 500;
+        --font-size: 14px;
       }
 
       a {
@@ -165,11 +166,6 @@ export default class SociSidebar extends SociComponent {
         left: 20px;
       }
 
-      #tags soci-icon[glyph="create"] {
-
-
-      }
-      
       #comments {
         border-bottom: 0;
       }

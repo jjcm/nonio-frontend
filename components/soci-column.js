@@ -54,21 +54,19 @@ export default class SociColumn extends SociComponent {
         width: 100%;
         z-index: 2;
         display: block;
-        padding: 0 4px;
+        padding: 0 8px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
 
-      :host([large]) header {
-        padding: 0 16px;
-      }
-
+      sorts,
       filters {
         display: flex;
       }
 
+      sort,
       filter {
         opacity: 0.5;
         text-transform: capitalize;
@@ -85,16 +83,20 @@ export default class SociColumn extends SociComponent {
       soci-select {
         position: relative;
         z-index: 2;
+        --height: 24px;
       }
 
+      sort:hover,
       filter:hover {
         opacity: 0.7;
       }
 
+      sort[selected],
       filter[selected] {
         opacity: 1;
       }
 
+      sort[selected]::after,
       filter[selected]::after {
         content:'';
         display: block;
@@ -122,10 +124,12 @@ export default class SociColumn extends SociComponent {
         min-height: calc(100% - 137px);
       }
 
+      sorts,
       filters {
         display: none;
       }
 
+      :host([large]) sorts,
       :host([large]) filters {
         display: flex;
       }
@@ -141,7 +145,7 @@ export default class SociColumn extends SociComponent {
       <scroll-container>
         <content>
           <header>
-            <soci-select>
+            <soci-select id="sort-select">
               <soci-option slot="selected">Popular</soci-option>
               <soci-option value="new">New</soci-option>
               <soci-option value="day">Top - Day</soci-option>
@@ -150,22 +154,22 @@ export default class SociColumn extends SociComponent {
               <soci-option value="year">Top - Year</soci-option>
               <soci-option value="all">Top - All Time</soci-option>
             </soci-select>
-            <filters @click=filterClick>
-              <filter selected>Popular</filter>
-              <filter>Week</filter>
-              <filter>Month</filter>
-              <filter>Year</filter>
-              <filter>All</filter>
-            </filters>
+            <sorts @click=_sortBarClick>
+              <sort selected>popular</sort>
+              <sort>week</sort>
+              <sort>month</sort>
+              <sort>year</sort>
+              <sort>all</sort>
+            </sorts>
             <div id="tag-title">#funny</div>
-            <soci-select>
+            <soci-select id="filter-select" dropdown-position="right">
               <soci-option slot="selected">All</soci-option>
               <soci-option value="images">Images</soci-option>
               <soci-option value="videos">Videos</soci-option>
               <soci-option value="audio">Audio</soci-option>
               <soci-option value="blogs">Blogs</soci-option>
             </soci-select>
-            <filters @click=filterClick>
+            <filters @click=_filterBarClick>
               <filter selected>all</filter>
               <filter>images</filter>
               <filter>videos</filter>
@@ -182,7 +186,6 @@ export default class SociColumn extends SociComponent {
 
   connectedCallback() {
     this.select('soci-select').addEventListener('selected', this._sortChanged.bind(this))
-    console.log('setting up resize listener for ' + this.getAttribute('tag'))
 
     this._ro = new ResizeObserver(observable => {
       this.toggleAttribute('large', this.offsetWidth > 800)
@@ -264,21 +267,31 @@ export default class SociColumn extends SociComponent {
     if(this.tag) params.push(`tag=${this.tag}`)
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
+    this._updateBar(this.select('sorts'), filter)
     this.select('soci-post-list').setAttribute('data', '/posts' + paramString)
   }
 
   filterPosts(filter){
     filter = filter || 'all'
-    Array.from(this.select('filters').children).forEach(child => {
-      if(child.innerHTML == filter) child.setAttribute('selected', '')
-      else child.removeAttribute('selected')
-    })
-
     this.select('soci-post-list').setAttribute('filter', filter)
+    this._updateBar(this.select('filters'), filter)
   }
 
-  filterClick(e){
+  _sortBarClick(e){
+    this.setAttribute('sort', e.target.innerHTML)
+    this._updateBar(e.currentTarget, e.target.innerHTML)
+  }
+
+  _filterBarClick(e){
     this.setAttribute('filter', e.target.innerHTML)
+    this._updateBar(e.currentTarget, e.target.innerHTML)
+  }
+
+  _updateBar(bar, value) {
+    Array.from(bar.children).forEach(child => {
+      if(child.innerHTML == value) child.setAttribute('selected', '')
+      else child.removeAttribute('selected')
+    })
   }
 
   getColorSchemes(){

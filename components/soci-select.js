@@ -47,16 +47,21 @@ export class SociSelect extends SociComponent {
       top: 0;
       left: 0;
       opacity: 0;
+      border-radius: 3px;
     }
 
     selected:hover::before {
       opacity: 0.1;
     }
 
+    :host([open]) selected::before {
+      opacity: 0.1;
+    }
+
     dropdown {
       display: none;
       position: absolute;
-      top: calc(var(--height) - 2px);
+      top: calc(var(--height) + 4px);
       cursor: pointer;
       background: var(--n0);
       border-radius: 3px;
@@ -68,8 +73,12 @@ export class SociSelect extends SociComponent {
       z-index: 1;
     }
 
-    dropdown[open] {
+    :host([open]) dropdown {
       display: block;
+    }
+
+    :host([dropdown-position="right"]) dropdown {
+      right: 0;
     }
 
   `}
@@ -98,15 +107,15 @@ export class SociSelect extends SociComponent {
   }
 
   openDropdown() {
-    this.select('dropdown').setAttribute('open', '')
+    this.setAttribute('open', '')
   }
 
   closeDropdown() {
-    this.select('dropdown').removeAttribute('open')
+    this.removeAttribute('open')
   }
 
   toggleDropdown() {
-    this.select('dropdown').toggleAttribute('open')
+    this.toggleAttribute('open')
   }
 }
 
@@ -117,8 +126,8 @@ export class SociOption extends SociComponent {
 
   css(){ return `
     :host(:not([slot="selected"])) {
-      height: var(--height);
-      line-height: var(--height);
+      height: 30px;
+      line-height: 30px;
       position: relative;
       user-select: none;
       cursor: pointer;
