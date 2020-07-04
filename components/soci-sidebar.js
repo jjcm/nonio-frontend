@@ -194,12 +194,9 @@ export default class SociSidebar extends SociComponent {
         margin-right: 28px;
       }
 
-
-
       :host([#noauth]) #footer soci-link#logout {
         display: none;
       }
-
 
       #footer svg {
         margin-bottom: 12px;
