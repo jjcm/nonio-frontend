@@ -104,7 +104,7 @@ export default class SociSidebar extends SociComponent {
       #user soci-link:first-child {
         display: flex;
         align-items: center;
-        padding-left: 24px;
+        padding-left: 22px;
         width: 100%;
         height: 100%;
         margin: 0;
@@ -129,9 +129,11 @@ export default class SociSidebar extends SociComponent {
       }
 
       #user soci-user {
-        --spacing: 14px;
+        --spacing: 12px;
         --font-weight: 500;
         --font-size: 14px;
+        --avatar-size: 20px;
+        --line-height: 20px;
       }
 
       a {
