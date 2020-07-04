@@ -15,6 +15,7 @@ export default class SociUser extends SociComponent {
         --font-weight: 300;
         --avatar-size: 16px;
         --line-height: 16px;
+        --spacing: 4px;
       }
 
       #avatar {
@@ -30,7 +31,7 @@ export default class SociUser extends SociComponent {
         font-weight: var(--font-weight);
         line-height: var(--line-height);
         letter-spacing: -0.16px;
-        margin-left: 4px;
+        margin-left: var(--spacing);
         user-select: none;
         color: inherit;
         display: block;
@@ -52,21 +53,9 @@ export default class SociUser extends SociComponent {
         --font-size: 12px;
         --font-weight: normal;
         --line-height: 18px;
+        --spacing: 6px;
       }
 
-      :host([size="small"]) username {
-        margin-left: 6px;
-      }
-
-      :host([size="large"]) {
-        --avatar-size: 24px;
-        --font-size: 16px;
-        --font-weight: bold;
-        --line-height: 24px;
-      }
-      :host([size="large"]) #avatar {
-        margin-right: 8px;
-      }
       :host([size="x-large"]) #avatar {
         --avatar-size: 120px;
         margin-right: 18px;

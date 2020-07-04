@@ -45,83 +45,31 @@ export default class SociColumn extends SociComponent {
         display: block;
       }
 
-      sub-header {
-        display: block;
-        position: sticky;
-        top: 48px;
-        width: 100%;
-        color: #fff;
-        z-index: 2;
-        box-sizing: border-box;
-        background-color: inherit;
-      }
-
-      sticky-header {
+      header {
         color: #fff;
         background-color: inherit;
         position: sticky;
         top: 0;
-        height: 48px;
+        height: 41px;
         width: 100%;
         z-index: 2;
         display: block;
-        padding: 0 16px;
+        padding: 0 4px;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
 
-      sticky-header soci-icon {
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        border-radius: 8px;
+      :host([large]) header {
+        padding: 0 16px;
       }
 
-      sticky-header soci-icon:hover {
-        background: rgba(255,255,255,0.2);
-      }
-
-      sticky-header button {
-        height: 24px;
-        border-radius: 3px;
-        background: transparent;
-        outline: none;
-        border: none;
-        margin: 1px;
-        box-shadow: 0 0 0 1px #fff;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        opacity: 0.5;
-      }
-
-      sticky-header button:hover {
-        background: rgba(255,255,255,0.2);
-        opacity: 1;
-      }
-
-      sticky-header button:active {
-        background: rgba(255,255,255,1);
-        color: var(--n3);
-      }
-
-      filter-container {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 12px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-      }
-
-      filters,
-      sorts {
+      filters {
         display: flex;
       }
 
-      filter,
-      sort {
+      filter {
         opacity: 0.5;
         text-transform: capitalize;
         position: relative;
@@ -130,40 +78,60 @@ export default class SociColumn extends SociComponent {
         font-weight: 500;
         font-size: 12px;
         line-height: 18px;
+        position: relative;
+        z-index: 2;
       }
 
-      filter:hover,
-      sort:hover {
+      soci-select {
+        position: relative;
+        z-index: 2;
+      }
+
+      filter:hover {
         opacity: 0.7;
       }
 
-      filter[selected],
-      sort[selected] {
+      filter[selected] {
         opacity: 1;
       }
 
-      filter[selected]::after,
-      sort[selected]::after {
+      filter[selected]::after {
         content:'';
         display: block;
         position: absolute;
-        top: -2px;
+        top: 32px;
         left: calc(50% - 8px);
         width: 16px;
         height: 4px;
         border-radius: 2px;
-        background: #fff;
+        background: #dcdef0;
       }
 
       #tag-title {
         font-weight: 600;
-        font-size: 24px;
-        line-height: 24px;
+        font-size: 20px;
+        line-height: 20px;
         letter-spacing: 0.7px;
+        width: calc(100% - 32px);
+        text-align: center;
+        position: absolute;
+        z-index: 1;
       }
 
       soci-post-list {
         min-height: calc(100% - 137px);
+      }
+
+      filters {
+        display: none;
+      }
+
+      :host([large]) filters {
+        display: flex;
+      }
+
+      :host([large]) soci-select {
+        display: none;
       }
     `
   }
@@ -172,30 +140,39 @@ export default class SociColumn extends SociComponent {
     return `
       <scroll-container>
         <content>
-          <sticky-header>
-            <div id="tag-title"></div>
-            <button>subscribe &middot; 112</button>
-          </sticky-header>
-          <sub-header>
-            <filter-container>
-              <soci-select>
-                <soci-option slot="selected">Popular</soci-option>
-                <soci-option value="new">New</soci-option>
-                <soci-option value="day">Top - Day</soci-option>
-                <soci-option value="week">Top - Week</soci-option>
-                <soci-option value="month">Top - Month</soci-option>
-                <soci-option value="year">Top - Year</soci-option>
-                <soci-option value="all">Top - All Time</soci-option>
-              </soci-select>
-              <filters @click=filterClick>
-                <filter selected>all</filter>
-                <filter>images</filter>
-                <filter>videos</filter>
-                <filter>audio</filter>
-                <filter>blogs</filter>
-              </filters>
-            </filter-container>
-          </sub-header>
+          <header>
+            <soci-select>
+              <soci-option slot="selected">Popular</soci-option>
+              <soci-option value="new">New</soci-option>
+              <soci-option value="day">Top - Day</soci-option>
+              <soci-option value="week">Top - Week</soci-option>
+              <soci-option value="month">Top - Month</soci-option>
+              <soci-option value="year">Top - Year</soci-option>
+              <soci-option value="all">Top - All Time</soci-option>
+            </soci-select>
+            <filters @click=filterClick>
+              <filter selected>Popular</filter>
+              <filter>Week</filter>
+              <filter>Month</filter>
+              <filter>Year</filter>
+              <filter>All</filter>
+            </filters>
+            <div id="tag-title">#funny</div>
+            <soci-select>
+              <soci-option slot="selected">All</soci-option>
+              <soci-option value="images">Images</soci-option>
+              <soci-option value="videos">Videos</soci-option>
+              <soci-option value="audio">Audio</soci-option>
+              <soci-option value="blogs">Blogs</soci-option>
+            </soci-select>
+            <filters @click=filterClick>
+              <filter selected>all</filter>
+              <filter>images</filter>
+              <filter>videos</filter>
+              <filter>audio</filter>
+              <filter>blogs</filter>
+            </filters>
+          </header>
           <soci-post-list data='/posts'></soci-post-list>
         </content>
       </scroll-container>
@@ -205,6 +182,18 @@ export default class SociColumn extends SociComponent {
 
   connectedCallback() {
     this.select('soci-select').addEventListener('selected', this._sortChanged.bind(this))
+    console.log('setting up resize listener for ' + this.getAttribute('tag'))
+
+    this._ro = new ResizeObserver(observable => {
+      this.toggleAttribute('large', this.offsetWidth > 800)
+    })
+
+    this._ro.observe(this)
+  }
+
+  disconnectedCallback(){
+    console.log('removing resize listener')
+    this._ro.unobserve(this)
   }
 
   static get observedAttributes() {

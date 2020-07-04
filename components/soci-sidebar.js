@@ -98,13 +98,13 @@ export default class SociSidebar extends SociComponent {
         top: 0;
         background: #fff;
         z-index: 10;
-        height: 64px;
+        height: 40px;
       }
 
       #user soci-link:first-child {
         display: flex;
         align-items: center;
-        padding-left: 20px;
+        padding-left: 24px;
         width: 100%;
         height: 100%;
         margin: 0;
@@ -112,11 +112,11 @@ export default class SociSidebar extends SociComponent {
 
       #user soci-icon {
         color: var(--n3);
-        right: 12px;
-        top: 16px;
+        right: 8px;
+        top: 8px;
         left: auto;
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         --hover-color: transparent;
         cursor: pointer;
       }
@@ -126,6 +126,11 @@ export default class SociSidebar extends SociComponent {
       }
       #user soci-icon:active {
         --hover-color: var(--n2);
+      }
+
+      #user soci-user {
+        --spacing: 14px;
+        --font-weight: 500;
       }
 
       a {
@@ -344,7 +349,7 @@ export default class SociSidebar extends SociComponent {
       <panel id="auth">
         <section id="user">
           <soci-link href="/user">
-            <soci-user size="large" self></soci-user>
+            <soci-user self></soci-user>
           </soci-link>
           <soci-link href="/submit" refresh>
             <soci-icon glyph="create"></soci-icon>
