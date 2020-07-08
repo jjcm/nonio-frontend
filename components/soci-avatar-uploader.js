@@ -1,0 +1,252 @@
+import SociComponent from './soci-component.js'
+import config from '../config.js'
+
+export default class SociFileDrop extends SociComponent {
+  constructor() {
+    super()
+  }
+
+  css(){
+    return `
+      :host {
+        min-height: 240px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 2px dashed var(--n2);
+        box-sizing: border-box;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        position: relative;
+        transition: border 0.2s ease;
+      }
+
+      :host([dragover]) {
+        border: 2px dashed var(--g1);
+        transition: border 0.1s ease-out;
+      }
+
+      :host:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--g1);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+      }
+
+      :host([dragover]):before {
+        opacity: 0.1;
+        transition: opacity 0.1s ease-out;
+        z-index: -1;
+      }
+
+      :host([preview]) {
+        min-height: 0;
+        border-color: transparent;
+        transition: all 0.2s ease-in-out;
+        overflow: hidden;
+      }
+      :host([preview]):before {
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+      }
+      img {
+        max-width: 420px;
+        max-height: 420px;
+        border-radius: 6px;
+      }
+      input {
+        display: none;
+      }
+      #resizer {
+        border: 2px solid #ccc;
+        position: absolute;
+      }
+      #preview-area {
+        border: 2px dashed #fff;
+        cursor: move;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        z-index: 2;
+        top: -2px;
+        left: -2px;
+      }
+      .resizer {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        z-index: 1;
+      }
+      #top-left {
+        top: 0;
+        left: 0;
+        cursor: nw-resize;
+      }
+      #top-right {
+        top: 0;
+        right: 0;
+        cursor: ne-resize;
+      }
+      #bottom-left {
+        bottom: 0;
+        left: 0;
+        cursor: sw-resize;
+      }
+      #bottom-right {
+        bottom: 0;
+        right: 0;
+        cursor: se-resize;
+      }
+
+    `
+  }
+
+  html(){ return `
+    <input id="file" type="file" accept="*"/>
+    <div id="resizer">
+      <div class="resizer" id="top-left"></div>
+      <div class="resizer" id="top-right"></div>
+      <div class="resizer" id="bottom-left"></div>
+      <div class="resizer" id="bottom-right"></div>
+      <div id="preview-area" @mousedown=_dragMouseDown></div>
+    </div>
+    <img src="/example-data/profile.jpg"/>
+  `}
+
+  connectedCallback(){
+    ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(
+      e => this.addEventListener(e, this['_' + e])
+    )
+
+    this.select("#file").addEventListener('change', this.upload.bind(this))
+    this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
+    this.select("#file").addEventListener('input', ()=>{console.log('file input')})
+  }
+
+  static get observedAttributes() {
+    return ['type']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue){
+    if(name == 'type') {
+      const TYPES = {
+        image: 'image/*',
+        video: 'video/*',
+        audio: 'audio/*',
+        html: 'zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed'
+      }
+      this.select('div').innerHTML = `drag ${newValue} here`
+      this.select('label').innerHTML = `select ${newValue}`
+      this.select('input').setAttribute('accept', TYPES[newValue])
+    }
+  }
+
+  _dragenter(e){
+    e.preventDefault()
+    this.setAttribute('dragover', '')
+  }
+
+  _dragover(e){
+    e.preventDefault()
+  }
+
+  _dragleave(e){
+    this.removeAttribute('dragover', '')
+  }
+
+  _drop(e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    let input = this.select('#file')
+    input.files = e.dataTransfer.files
+    let event = new Event('change')
+    input.dispatchEvent(event)
+
+    let preview = this.select('img')
+    let reader = new FileReader()
+    reader.addEventListener('load', e => {
+      preview.src = e.target.result
+    })
+    reader.addEventListener('loadend', ()=>{
+      console.log('ayy')
+      console.log(preview.offsetWidth)
+      let min = Math.min(preview.offsetWidth, preview.offsetHeight)
+      let resizer = this.select('#resizer')
+      resizer.style.width = min + 'px'
+      resizer.style.height = min + 'px'
+      this._positionX = (preview.offsetWidth - min) / 2
+      this._positionY = (preview.offsetHeight - min) / 2
+      resizer.style.left = this._positionX + 'px'
+      resizer.style.top = this._positionY + 'px'
+    })
+    reader.readAsDataURL(e.dataTransfer.files[0])
+  }
+
+  upload(){
+    return 0
+    console.log('upload time')
+    let data = new FormData()
+    let request = new XMLHttpRequest()
+
+    data.append('files', this.select('input').files[0])
+    data.append('url', this.closest('form').querySelector('soci-url-input').value)
+
+    request.open('post', config.IMAGE_HOST + '/upload') 
+
+    request.addEventListener('load', e => {
+      this.select('picture').innerHTML = `
+        <source srcset="${config.IMAGE_HOST + '/' + request.response}.webp">
+        <img src="${config.IMAGE_HOST + '/' + request.response}.webp">
+      `
+      this.setAttribute('preview', '')
+      this.fileUrl = request.response
+    })
+
+    request.upload.addEventListener('progress', e => {
+      var percent_complete = (e.loaded / e.total) * 100
+      this.style.setProperty('--upload-progress', `${percent_complete}%`)
+    })
+
+    request.open('post', config.IMAGE_HOST + '/upload') 
+    request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
+    request.send(data)
+  }
+
+  _positionX = 0
+  _positionY = 0
+  _mouseDownX = 0
+  _mouseDownY = 0
+  _deltaX = 0
+  _deltaY = 0
+  _dragMouseDown(e){
+    this._dragMouseMove = this._dragMouseMove.bind(this)
+    this._dragMouseUp = this._dragMouseUp.bind(this)
+    document.addEventListener('mousemove', this._dragMouseMove)
+    document.addEventListener('mouseup', this._dragMouseUp)
+
+    this._mouseDownX = e.clientX
+    this._mouseDownY = e.clientY
+    this._resizer = this.select('#resizer')
+  }
+  _dragMouseMove(e){
+    this._deltaX = e.clientX - this._mouseDownX
+    this._deltaY = e.clientY - this._mouseDownY
+
+    this._resizer.style.top = (this._positionY + this._deltaY) + 'px'
+  }
+  _dragMouseUp(e){
+    console.log('mouseuptime')
+    document.removeEventListener('mousemove', this._dragMouseMove)
+    document.removeEventListener('mouseup', this._dragMouseUp)
+  }
+}
