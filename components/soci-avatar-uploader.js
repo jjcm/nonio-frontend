@@ -14,16 +14,17 @@ export default class SociFileDrop extends SociComponent {
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        border: 2px dashed var(--n2);
+        //border: 2px dashed var(--n2);
         box-sizing: border-box;
         border-radius: 8px;
         margin-bottom: 12px;
         position: relative;
-        transition: border 0.2s ease;
+        //transition: border 0.2s ease;
+        overflow: hidden;
       }
 
       :host([dragover]) {
-        border: 2px dashed var(--g1);
+        //border: 2px dashed var(--g1);
         transition: border 0.1s ease-out;
       }
 
@@ -66,7 +67,7 @@ export default class SociFileDrop extends SociComponent {
         display: none;
       }
       #resizer {
-        border: 2px solid #ccc;
+        //border: 2px solid #ccc;
         position: absolute;
       }
       #preview-area {
@@ -107,6 +108,21 @@ export default class SociFileDrop extends SociComponent {
         cursor: se-resize;
       }
 
+      svg {
+        height: 420px;
+        pointer-events: none;
+        width: 420px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.1s ease-in-out;
+      }
+
+      :host([drop]) svg {
+        opacity: 1;
+      }
+
     `
   }
 
@@ -116,9 +132,16 @@ export default class SociFileDrop extends SociComponent {
       <div class="resizer" id="top-left"></div>
       <div class="resizer" id="top-right"></div>
       <div class="resizer" id="bottom-left"></div>
-      <div class="resizer" id="bottom-right"></div>
+      <div class="resizer" id="bottom-right" @mousedown=_seResizeDown></div>
       <div id="preview-area" @mousedown=_dragMouseDown></div>
     </div>
+    <svg>
+      <mask id="mask">
+        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+        <circle cx="0" cy="0" r="10" fill="black"/>
+      </mask>
+      <rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#mask)"/>
+    </svg>
     <img src="/example-data/profile.jpg"/>
   `}
 
@@ -130,6 +153,7 @@ export default class SociFileDrop extends SociComponent {
     this.select("#file").addEventListener('change', this.upload.bind(this))
     this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
     this.select("#file").addEventListener('input', ()=>{console.log('file input')})
+    this._resizer = this.select('#resizer')
   }
 
   static get observedAttributes() {
@@ -152,7 +176,7 @@ export default class SociFileDrop extends SociComponent {
 
   _dragenter(e){
     e.preventDefault()
-    this.setAttribute('dragover', '')
+    this.toggleAttribute('dragover', true)
   }
 
   _dragover(e){
@@ -160,12 +184,14 @@ export default class SociFileDrop extends SociComponent {
   }
 
   _dragleave(e){
-    this.removeAttribute('dragover', '')
+    this.toggleAttribute('dragover', false)
   }
 
   _drop(e){
     e.preventDefault()
     e.stopPropagation()
+    this.toggleAttribute('dragover', false)
+    this.toggleAttribute('drop', true)
 
     let input = this.select('#file')
     input.files = e.dataTransfer.files
@@ -180,14 +206,21 @@ export default class SociFileDrop extends SociComponent {
     reader.addEventListener('loadend', ()=>{
       console.log('ayy')
       console.log(preview.offsetWidth)
-      let min = Math.min(preview.offsetWidth, preview.offsetHeight)
+      this._cropSize = Math.min(preview.offsetWidth, preview.offsetHeight)
       let resizer = this.select('#resizer')
-      resizer.style.width = min + 'px'
-      resizer.style.height = min + 'px'
-      this._positionX = (preview.offsetWidth - min) / 2
-      this._positionY = (preview.offsetHeight - min) / 2
+      resizer.style.width = this._cropSize + 'px'
+      resizer.style.height = this._cropSize + 'px'
+      this._positionX = (preview.offsetWidth - this._cropSize) / 2
+      this._positionY = (preview.offsetHeight - this._cropSize) / 2
       resizer.style.left = this._positionX + 'px'
       resizer.style.top = this._positionY + 'px'
+
+      this._mask = this.select('circle')
+      let radius = this._cropSize / 2
+      this._mask.setAttribute('r', radius)
+      this._mask.setAttribute('cx', radius + this._positionX)
+      this._mask.setAttribute('cy', radius + this._positionY)
+
     })
     reader.readAsDataURL(e.dataTransfer.files[0])
   }
@@ -236,17 +269,59 @@ export default class SociFileDrop extends SociComponent {
 
     this._mouseDownX = e.clientX
     this._mouseDownY = e.clientY
-    this._resizer = this.select('#resizer')
+    document.body.toggleAttribute('dragging', true)
   }
   _dragMouseMove(e){
     this._deltaX = e.clientX - this._mouseDownX
     this._deltaY = e.clientY - this._mouseDownY
 
-    this._resizer.style.top = (this._positionY + this._deltaY) + 'px'
+    let yPos = Math.min(
+      Math.max(this._positionY + this._deltaY, 0),
+      this.offsetHeight - this._cropSize 
+    ) 
+    this._resizer.style.top = yPos + 'px'
+    this._mask.setAttribute('cy', yPos + (this._cropSize / 2))
+
+    //TODO - Add x axis
   }
   _dragMouseUp(e){
-    console.log('mouseuptime')
     document.removeEventListener('mousemove', this._dragMouseMove)
     document.removeEventListener('mouseup', this._dragMouseUp)
+    document.body.toggleAttribute('dragging', false)
+  }
+
+  _seResizeDown(e){
+    this._seResizeMove = this._seResizeMove.bind(this)
+    this._seResizeUp = this._seResizeUp.bind(this)
+    document.addEventListener('mousemove', this._seResizeMove)
+    document.addEventListener('mouseup', this._seResizeUp)
+
+    this._mouseDownX = e.clientX
+    this._mouseDownY = e.clientY
+    document.body.toggleAttribute('dragging', true)
+  }
+  _seResizeMove(e){
+    this._deltaX = e.clientX - this._mouseDownX
+    this._deltaY = e.clientY - this._mouseDownY
+
+    let size = this._cropSize + Math.min(this._deltaY, this._deltaX)
+    this._setCropCircle(this._positionX, this._positionY, size)
+  }
+  _seResizeUp(e){
+    document.removeEventListener('mousemove', this._seResizeMove)
+    document.removeEventListener('mouseup', this._seResizeUp)
+    document.body.toggleAttribute('dragging', false)
+  }
+
+  _setCropCircle(x, y, size) {
+    this._resizer.style.width = size + 'px'
+    this._resizer.style.height = size + 'px'
+    this._resizer.style.left = x + 'px'
+    this._resizer.style.top = y + 'px'
+
+    let radius = size / 2
+    this._mask.setAttribute('r', radius)
+    this._mask.setAttribute('cx', radius + x)
+    this._mask.setAttribute('cy', radius + y)
   }
 }
