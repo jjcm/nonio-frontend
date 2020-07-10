@@ -67,10 +67,9 @@ export default class SociFileDrop extends SociComponent {
         display: none;
       }
       #resizer {
-        //border: 2px solid #ccc;
         position: absolute;
       }
-      #preview-area {
+      #drag {
         border: 2px dashed #fff;
         cursor: move;
         position: absolute;
@@ -87,25 +86,72 @@ export default class SociFileDrop extends SociComponent {
         height: 50%;
         z-index: 1;
       }
-      #top-left {
-        top: 0;
-        left: 0;
+      .resizer:before, .resizer:after {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        background: #fff;
+        display: block;
+        opacity: 0.2;
+      }
+      .resizer:before {
+        width: 10px;
+      }
+      .resizer:after {
+        height: 9px;
+      }
+      #nw {
+        top: -1px;
+        left: -1px;
         cursor: nw-resize;
       }
-      #top-right {
-        top: 0;
-        right: 0;
+      #nw:before {
+        top: -1px;
+        left: -1px;
+      }
+      #nw:after {
+        top: 0px;
+        left: -1px;
+      }
+      #ne {
+        top: -1px;
+        right: -1px;
         cursor: ne-resize;
       }
-      #bottom-left {
-        bottom: 0;
-        left: 0;
+      #ne:before {
+        top: -1px;
+        right: -1px;
+      }
+      #ne:after {
+        top: 0px;
+        right: -1px;
+      }
+      #sw {
+        bottom: -1px;
+        left: -1px;
         cursor: sw-resize;
       }
-      #bottom-right {
-        bottom: 0;
-        right: 0;
+      #sw:before {
+        bottom: -1px;
+        left: -1px;
+      }
+      #sw:after {
+        bottom: 0px;
+        left: -1px;
+      }
+      #se {
+        bottom: -1px;
+        right: -1px;
         cursor: se-resize;
+      }
+      #se:before {
+        bottom: -1px;
+        right: -1px;
+      }
+      #se:after {
+        bottom: 0px;
+        right: -1px;
       }
 
       svg {
@@ -128,12 +174,12 @@ export default class SociFileDrop extends SociComponent {
 
   html(){ return `
     <input id="file" type="file" accept="*"/>
-    <div id="resizer">
-      <div class="resizer" id="top-left"></div>
-      <div class="resizer" id="top-right"></div>
-      <div class="resizer" id="bottom-left"></div>
-      <div class="resizer" id="bottom-right" @mousedown=_seResizeDown></div>
-      <div id="preview-area" @mousedown=_dragMouseDown></div>
+    <div id="resizer" @mousedown=_dragMouseDown>
+      <div class="resizer" id="nw"></div>
+      <div class="resizer" id="ne"></div>
+      <div class="resizer" id="sw"></div>
+      <div class="resizer" id="se" @mousedown=_seResizeDown></div>
+      <div id="drag"></div>
     </div>
     <svg>
       <mask id="mask">
@@ -261,7 +307,14 @@ export default class SociFileDrop extends SociComponent {
   _mouseDownY = 0
   _deltaX = 0
   _deltaY = 0
+  _tempXPos = 0
+  _tempYPos = 0
+  _tempCropSize = 0
+  _dragging = false
   _dragMouseDown(e){
+    if(this._dragging) return 0
+    this._dragging = true
+    this._resizeAction = e.target.id
     this._dragMouseMove = this._dragMouseMove.bind(this)
     this._dragMouseUp = this._dragMouseUp.bind(this)
     document.addEventListener('mousemove', this._dragMouseMove)
@@ -269,25 +322,63 @@ export default class SociFileDrop extends SociComponent {
 
     this._mouseDownX = e.clientX
     this._mouseDownY = e.clientY
+    this._tempXPos = this._positionX
+    this._tempYPos = this._positionY
+    this._tempCropSize = this._cropSize
     document.body.toggleAttribute('dragging', true)
   }
   _dragMouseMove(e){
     this._deltaX = e.clientX - this._mouseDownX
     this._deltaY = e.clientY - this._mouseDownY
 
-    let yPos = Math.min(
-      Math.max(this._positionY + this._deltaY, 0),
-      this.offsetHeight - this._cropSize 
-    ) 
-    this._resizer.style.top = yPos + 'px'
-    this._mask.setAttribute('cy', yPos + (this._cropSize / 2))
+    switch(this._resizeAction){
+      case 'drag':
+        this._tempYPos = Math.min(
+          Math.max(this._positionY + this._deltaY, 0),
+          this.offsetHeight - this._cropSize 
+        ) 
+        this._tempXPos = Math.min(
+          Math.max(this._positionX + this._deltaX, 0),
+          this.offsetWidth - this._cropSize 
+        ) 
+        this._setCropCircle(this._tempXPos, this._tempYPos, this._cropSize)
+        break
+      case 'se':
+        this._tempCropSize = this._cropSize + Math.min(this._deltaY, this._deltaX)
+        this._setCropCircle(this._positionX, this._positionY, this._tempCropSize)
+        break
+      case 'nw':
+        this._tempCropSize = Math.min(
+          this._cropSize - Math.max(this._deltaY, this._deltaX), 
+          Math.min(this._positionX, this._positionY) + this._cropSize
+        )
+        this._tempXPos = this._positionX + this._cropSize - this._tempCropSize
+        this._tempYPos = this._positionY + this._cropSize - this._tempCropSize
+        this._setCropCircle(this._tempXPos, this._tempYPos, this._tempCropSize)
+        break
+      case 'ne':
+        this._tempCropSize = this._cropSize - Math.max(this._deltaY, this._deltaX * -1)
+        this._tempYPos = this._positionY + this._cropSize - this._tempCropSize
+        this._setCropCircle(this._positionX, this._tempYPos, this._tempCropSize)
+        break
+      case 'sw':
+        this._tempCropSize = this._cropSize - Math.max(this._deltaY * -1, this._deltaX)
+        this._tempXPos = this._positionX + this._cropSize - this._tempCropSize
+        this._setCropCircle(this._tempXPos, this._positionY, this._tempCropSize)
+        break
+    }
 
     //TODO - Add x axis
   }
   _dragMouseUp(e){
+    this._positionX = this._tempXPos
+    this._positionY = this._tempYPos
+    this._cropSize = this._tempCropSize
+
     document.removeEventListener('mousemove', this._dragMouseMove)
     document.removeEventListener('mouseup', this._dragMouseUp)
     document.body.toggleAttribute('dragging', false)
+    this._dragging = false
   }
 
   _seResizeDown(e){
