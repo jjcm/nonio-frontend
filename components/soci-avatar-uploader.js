@@ -344,7 +344,11 @@ export default class SociFileDrop extends SociComponent {
         this._setCropCircle(this._tempXPos, this._tempYPos, this._cropSize)
         break
       case 'se':
-        this._tempCropSize = this._cropSize + Math.min(this._deltaY, this._deltaX)
+        this._tempCropSize = Math.min(
+          this._cropSize + Math.min(this._deltaY, this._deltaX),
+          this.offsetWidth - this._positionX,
+          this.offsetHeight - this._positionY
+        )
         this._setCropCircle(this._positionX, this._positionY, this._tempCropSize)
         break
       case 'nw':
@@ -357,12 +361,20 @@ export default class SociFileDrop extends SociComponent {
         this._setCropCircle(this._tempXPos, this._tempYPos, this._tempCropSize)
         break
       case 'ne':
-        this._tempCropSize = this._cropSize - Math.max(this._deltaY, this._deltaX * -1)
+        this._tempCropSize = Math.min(
+          this._cropSize - Math.max(this._deltaY, this._deltaX * -1),
+          this.offsetWidth - this._positionX,
+          this._positionY + this._cropSize
+        )
         this._tempYPos = this._positionY + this._cropSize - this._tempCropSize
         this._setCropCircle(this._positionX, this._tempYPos, this._tempCropSize)
         break
       case 'sw':
-        this._tempCropSize = this._cropSize - Math.max(this._deltaY * -1, this._deltaX)
+        this._tempCropSize = Math.min(
+          this._cropSize - Math.max(this._deltaY * -1, this._deltaX),
+          this.offsetHeight - this._positionY,
+          this._positionX + this._cropSize
+        )
         this._tempXPos = this._positionX + this._cropSize - this._tempCropSize
         this._setCropCircle(this._tempXPos, this._positionY, this._tempCropSize)
         break
