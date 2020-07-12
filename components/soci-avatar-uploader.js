@@ -39,7 +39,7 @@ export default class SociFileDrop extends SociComponent {
       #resizer {
         position: absolute;
         opacity: 0;
-        transition: opacity 0.1s ease-in-out;
+        pointer-events: none;
       }
       #drag {
         border: 2px dashed #fff;
@@ -134,12 +134,14 @@ export default class SociFileDrop extends SociComponent {
         top: 0;
         left: 0;
         opacity: 0;
-        transition: opacity 0.1s ease-in-out;
+        pointer-events: none;
       }
 
       :host([cropping]) #resizer,
       :host([cropping]) svg {
         opacity: 1;
+        transition: opacity 0.1s ease-in-out;
+        pointer-events: all;
       }
 
       :host([cropping]) img {
@@ -150,7 +152,13 @@ export default class SociFileDrop extends SociComponent {
      actions {
         display: flex;
         justify-content: flex-end;
-        padding: 4px 0 8px;
+        height: 0;
+        overflow: hidden;
+      }
+
+      :host([cropping]) actions {
+        transition: height 0.2s var(--soci-ease);
+        height: 32px;
       }
 
       actions button {
@@ -161,7 +169,7 @@ export default class SociFileDrop extends SociComponent {
         color: #fff;
         padding: 0 8px;
         font-size: 12px;
-        margin-right: 4px;
+        margin: 4px 2px;
         cursor: pointer;
       }
 
@@ -203,7 +211,7 @@ export default class SociFileDrop extends SociComponent {
     </div>
     <actions>
       <button>submit</button>
-      <button class="cancel">cancel</button>
+      <button class="cancel" @click=_cancelCropPreview >cancel</button>
     </actions>
   `}
 
@@ -226,6 +234,7 @@ export default class SociFileDrop extends SociComponent {
     if(files == null || files.type.indexOf("image/") != 0) return 0
     this.toggleAttribute('cropping', true)
     let preview = this.select('img')
+    this._oldAvatarURL = preview.src
     let reader = new FileReader()
     reader.addEventListener('load', e => {
       preview.src = e.target.result
@@ -247,10 +256,13 @@ export default class SociFileDrop extends SociComponent {
       this._mask.setAttribute('r', radius)
       this._mask.setAttribute('cx', radius + this._positionX)
       this._mask.setAttribute('cy', radius + this._positionY)
-
     })
     reader.readAsDataURL(files)
+  }
 
+  _cancelCropPreview(){
+    this.select('img').src = this._oldAvatarURL
+    this.toggleAttribute('cropping', false)
   }
 
   _dragenter(e){
