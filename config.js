@@ -5,5 +5,5 @@ export default {
   VIDEO_HOST: 'https://video.non.io',
   IMAGE_HOST: 'https://image.non.io',
   THUMBNAIL_HOST: 'https://thumbnail.non.io',
-  AVATAR_HOST: 'http://localhost:8081'
+  AVATAR_HOST: 'https://avatar.non.io'
 }

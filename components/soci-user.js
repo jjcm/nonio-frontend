@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import config from '../config.js'
 
 export default class SociUser extends SociComponent {
   constructor() {
@@ -18,7 +19,7 @@ export default class SociUser extends SociComponent {
         --spacing: 4px;
       }
 
-      #avatar {
+      img {
         width: var(--avatar-size);
         height: var(--avatar-size);
         border-radius: 50%;
@@ -56,7 +57,7 @@ export default class SociUser extends SociComponent {
         --spacing: 6px;
       }
 
-      :host([size="x-large"]) #avatar {
+      :host([size="x-large"]) img {
         --avatar-size: 120px;
         margin-right: 18px;
       }
@@ -70,7 +71,7 @@ export default class SociUser extends SociComponent {
         display: none;
       }
       
-      :host([username-only]) img {
+      :host([username-only]) picture {
         display: none;
       }
 
@@ -88,7 +89,7 @@ export default class SociUser extends SociComponent {
   }
 
   html(){ return `
-    <img id="avatar"></img>
+    <picture></picture>
     <username></username>
   `}
 
@@ -104,7 +105,9 @@ export default class SociUser extends SociComponent {
     switch(name) {
       case 'name':
         this.select('username').innerHTML = newValue
-        this.select('#avatar').src = '/example-data/profile.jpg'
+        let picture = this.select('picture')
+        let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}/thumbnail/${newValue}.${format}" />`).join('')
+        picture.innerHTML = (newValue == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
         this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'self':
