@@ -4,5 +4,6 @@ export default {
   API_HOST: 'https://api.non.io',
   VIDEO_HOST: 'https://video.non.io',
   IMAGE_HOST: 'https://image.non.io',
-  THUMBNAIL_HOST: 'https://thumbnail.non.io'
+  THUMBNAIL_HOST: 'https://thumbnail.non.io',
+  AVATAR_HOST: 'http://localhost:8081'
 }

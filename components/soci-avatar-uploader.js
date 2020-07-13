@@ -13,12 +13,10 @@ export default class SociFileDrop extends SociComponent {
         flex-direction: column;
         margin-bottom: 12px;
       }
-
       :host([dragover]) #container {
         border: 2px dashed var(--g1);
         transition: border 0.1s ease-out;
       }
-
       #container {
         border-radius: 8px;
         position: relative;
@@ -27,7 +25,6 @@ export default class SociFileDrop extends SociComponent {
         transition: border 0.2s ease;
         margin: -2px;
       }
-
       img {
         max-width: 420px;
         max-height: 420px;
@@ -125,7 +122,6 @@ export default class SociFileDrop extends SociComponent {
         bottom: 0px;
         right: -1px;
       }
-
       svg {
         height: 420px;
         pointer-events: none;
@@ -136,31 +132,25 @@ export default class SociFileDrop extends SociComponent {
         opacity: 0;
         pointer-events: none;
       }
-
       :host([cropping]) #resizer,
       :host([cropping]) svg {
         opacity: 1;
         transition: opacity 0.1s ease-in-out;
         pointer-events: all;
       }
-
       :host([cropping]) img {
         pointer-events: none;
       }
-
-
-     actions {
+      actions {
         display: flex;
         justify-content: flex-end;
         height: 0;
         overflow: hidden;
       }
-
       :host([cropping]) actions {
         transition: height 0.2s var(--soci-ease);
         height: 32px;
       }
-
       actions button {
         border: 0;
         border-radius: 3px;
@@ -172,16 +162,13 @@ export default class SociFileDrop extends SociComponent {
         margin: 4px 2px;
         cursor: pointer;
       }
-
       actions button.cancel {
         background: var(--n1);
         color: var(--n4);
       }
-
       actions button:hover {
         filter: brightness(0.95);
       }
-
       actions button:focus,
       actions button:active {
         filter: brightness(0.9);
@@ -210,7 +197,7 @@ export default class SociFileDrop extends SociComponent {
       <img src="/example-data/profile.jpg" @click=_selectFile />
     </div>
     <actions>
-      <button>submit</button>
+      <button @click=upload>submit</button>
       <button class="cancel" @click=_cancelCropPreview >cancel</button>
     </actions>
   `}
@@ -220,7 +207,6 @@ export default class SociFileDrop extends SociComponent {
       e => this.addEventListener(e, this['_' + e])
     )
 
-    this.select("#file").addEventListener('change', this.upload.bind(this))
     this.select("#file").addEventListener('change', this._loadCropPreview.bind(this))
     this._resizer = this.select('#resizer')
   }
@@ -243,6 +229,14 @@ export default class SociFileDrop extends SociComponent {
       this.width = preview.offsetWidth
       this.height = preview.offsetHeight
       this._cropSize = Math.min(this.width, this.height)
+      if(this._cropSize < this._MINIMUMSIZE){
+        this._cancelCropPreview()
+        //TODO - add proper size too small message
+        this.log("File too small. Avatars must be a minimum of 240px on both sides.", "error")
+        return 0
+      }
+      this.scale = Math.min(preview.naturalHeight, preview.naturalWidth) / Math.min(preview.offsetHeight, preview.offsetWidth)
+      this._cropMinSize = this._MINIMUMSIZE / this.scale
       let resizer = this.select('#resizer')
       resizer.style.width = this._cropSize + 'px'
       resizer.style.height = this._cropSize + 'px'
@@ -291,17 +285,20 @@ export default class SociFileDrop extends SociComponent {
   }
 
   upload(){
-    return 0
     console.log('upload time')
     let data = new FormData()
     let request = new XMLHttpRequest()
 
     data.append('files', this.select('input').files[0])
-    data.append('url', this.closest('form').querySelector('soci-url-input').value)
+    data.append('size', Math.floor(this._cropSize * this.scale))
+    data.append('xoffset', Math.floor(this._positionX * this.scale))
+    data.append('yoffset', Math.floor(this._positionY * this.scale))
 
-    request.open('post', config.IMAGE_HOST + '/upload') 
+    request.open('post', config.AVATAR_HOST + '/upload') 
 
     request.addEventListener('load', e => {
+      console.log(request.response)
+      return 0
       this.select('picture').innerHTML = `
         <source srcset="${config.IMAGE_HOST + '/' + request.response}.webp">
         <img src="${config.IMAGE_HOST + '/' + request.response}.webp">
@@ -315,11 +312,12 @@ export default class SociFileDrop extends SociComponent {
       this.style.setProperty('--upload-progress', `${percent_complete}%`)
     })
 
-    request.open('post', config.IMAGE_HOST + '/upload') 
+    request.open('post', config.AVATAR_HOST + '/upload') 
     request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
     request.send(data)
   }
 
+  _MINIMUMSIZE = 240
   _positionX = 0
   _positionY = 0
   _mouseDownX = 0
@@ -365,37 +363,37 @@ export default class SociFileDrop extends SociComponent {
         this._setCropCircle(this._tempXPos, this._tempYPos, this._cropSize)
         break
       case 'se':
-        this._tempCropSize = Math.min(
+        this._tempCropSize = Math.max(Math.min(
           this._cropSize + Math.min(this._deltaY, this._deltaX),
           this.width - this._positionX,
           this.height - this._positionY
-        )
+        ), this._cropMinSize)
         this._setCropCircle(this._positionX, this._positionY, this._tempCropSize)
         break
       case 'nw':
-        this._tempCropSize = Math.min(
+        this._tempCropSize = Math.max(Math.min(
           this._cropSize - Math.max(this._deltaY, this._deltaX), 
-          Math.min(this._positionX, this._positionY) + this._cropSize
-        )
+          Math.min(this._positionX, this._positionY) + this._cropSize,
+        ), this._cropMinSize)
         this._tempXPos = this._positionX + this._cropSize - this._tempCropSize
         this._tempYPos = this._positionY + this._cropSize - this._tempCropSize
         this._setCropCircle(this._tempXPos, this._tempYPos, this._tempCropSize)
         break
       case 'ne':
-        this._tempCropSize = Math.min(
+        this._tempCropSize = Math.max(Math.min(
           this._cropSize - Math.max(this._deltaY, this._deltaX * -1),
           this.width - this._positionX,
           this._positionY + this._cropSize
-        )
+        ), this._cropMinSize)
         this._tempYPos = this._positionY + this._cropSize - this._tempCropSize
         this._setCropCircle(this._positionX, this._tempYPos, this._tempCropSize)
         break
       case 'sw':
-        this._tempCropSize = Math.min(
+        this._tempCropSize = Math.max(Math.min(
           this._cropSize - Math.max(this._deltaY * -1, this._deltaX),
           this.height - this._positionY,
           this._positionX + this._cropSize
-        )
+        ), this._cropMinSize)
         this._tempXPos = this._positionX + this._cropSize - this._tempCropSize
         this._setCropCircle(this._tempXPos, this._positionY, this._tempCropSize)
         break
