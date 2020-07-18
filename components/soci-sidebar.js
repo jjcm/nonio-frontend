@@ -352,6 +352,7 @@ export default class SociSidebar extends SociComponent {
         </section>
         <content>
           <section id="subscribed-tags" @click=_tagClick>
+            <soci-tag-li tag="art"></soci-tag-li>
             <soci-icon glyph="tags"></soci-icon>
             <h2>Subscribed Tags</h2>
             <tags></tags>

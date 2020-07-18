@@ -44,18 +44,18 @@ window.customElements.define('soci-post-li', SociPostLi)
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
 
-import SociTab from "./soci-tab.js"
-window.customElements.define('soci-tab', SociTab)
-
-import SociTabGroup from "./soci-tab-group.js"
-window.customElements.define('soci-tab-group', SociTabGroup)
-
 import {SociSelect, SociOption} from "./soci-select.js"
 window.customElements.define('soci-select', SociSelect)
 window.customElements.define('soci-option', SociOption)
 
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
+
+import SociTab from "./soci-tab.js"
+window.customElements.define('soci-tab', SociTab)
+
+import SociTabGroup from "./soci-tab-group.js"
+window.customElements.define('soci-tab-group', SociTabGroup)
 
 import SociTag from "./soci-tag.js"
 window.customElements.define('soci-tag', SociTag)
@@ -65,6 +65,9 @@ window.customElements.define('soci-tag-group', SociTagGroup)
 
 import SociTagInput from "./soci-tag-input.js"
 window.customElements.define('soci-tag-input', SociTagInput)
+
+import SociTagLi from "./soci-tag-li.js"
+window.customElements.define('soci-tag-li', SociTagLi)
 
 import SociUrlInput from "./soci-url-input.js"
 window.customElements.define('soci-url-input', SociUrlInput)
