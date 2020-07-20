@@ -18,8 +18,7 @@ export default class SociComponent extends HTMLElement {
           el.removeAttribute(attr.name)
         }
         if(prefix == '?'){
-          console.log(el)
-          el[attr.value != 'false' ? 'setAttribute' : 'removeAttribute'](attr.name.slice(1), '')
+          el.toggleAttribute(attr.name.slice(1), attr.value != 'false')
           el.removeAttribute(attr.name)
         }
       })

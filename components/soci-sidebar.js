@@ -345,7 +345,7 @@ export default class SociSidebar extends SociComponent {
           <soci-link href="/user">
             <soci-user self></soci-user>
           </soci-link>
-          <soci-link href="/submit" refresh>
+          <soci-link href="/submit" fresh>
             <soci-icon glyph="create"></soci-icon>
           </soci-link>
         </section>
