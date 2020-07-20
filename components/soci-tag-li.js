@@ -12,6 +12,7 @@ export default class SociTagLi extends SociComponent {
         --hash-color: var(--n3);
         position: relative;
         display: block;
+        overflow: hidden;
       }
 
       :host([subscribed]) {
@@ -64,6 +65,72 @@ export default class SociTagLi extends SociComponent {
         transform: rotate(45deg);
       }
 
+      :host([load-in]){
+        animation: load-in 0.2s var(--soci-ease) forwards;
+      }
+
+      :host([load-in][subscribed]) a {
+        animation: load-up 0.2s var(--soci-ease) forwards;
+      }
+      :host([load-in]:not([subscribed])) a {
+        animation: load-down 0.2s var(--soci-ease) forwards;
+      }
+
+      :host([load-out]){
+        animation: load-out 0.2s var(--soci-ease) forwards;
+      }
+
+      :host([load-out][subscribed]) a {
+        animation: load-down 0.2s var(--soci-ease) forwards;
+      }
+      :host([load-out]:not([subscribed])) a {
+        animation: load-up 0.2s var(--soci-ease) forwards;
+      }
+
+      @keyframes load-in {
+        from {
+          height: 0;
+          opacity: 0;
+        }
+
+        to {
+          height: 32px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes load-out {
+        from {
+          height: 32px;
+          opacity: 1;
+        }
+
+        to {
+          height: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes load-up {
+        from {
+          transform: translateY(10px);
+        }
+
+        to {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes load-down {
+        from {
+          transform: translateY(0px);
+        }
+
+        to {
+          transform: translateY(10px);
+        }
+      }
+
     `
   }
 
@@ -104,17 +171,14 @@ export default class SociTagLi extends SociComponent {
 
   _toggleSubscribe(e){
     e.preventDefault()
-    let subscribed = this.hasAttribute('subscribed')
-    this.fire('subscribe', {
+    let subscribing = !this.hasAttribute('subscribed')
+    this.fire(subscribing ? 'subscribe' : 'unsubscribe', {
       dom: this,
-      tag: this.innerHTML,
-      subscribed: subscribed
+      tag: this.innerHTML
     })
 
-    this.postData(`/subscription/${subscribed ? 'delete' : 'create'}`, {
+    this.postData(`/subscription/${subscribing ? 'create' : 'delete'}`, {
       tag: this.innerHTML
-    }).then(val => {
-      console.log(val)
     })
   }
 

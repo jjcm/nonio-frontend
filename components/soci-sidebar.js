@@ -411,29 +411,36 @@ export default class SociSidebar extends SociComponent {
 
   connectedCallback(){
     if(!this.authToken) this.setAttribute('noauth', '')
-    this._populateTags()
     this._populateSubscribedTags()
+    this._populateTags()
 
     this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
+    this.select('content').addEventListener('subscribe', this._createSubscribedTag.bind(this))
+    this.select('content').addEventListener('unsubscribe', this._removeSubscribedTag.bind(this))
   }
 
-  static get observedAttributes() {
-    return ['user']
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    switch(name){
-      case "user":
-        break
+  _createSubscribedTag(e){
+    let parentContainer = this.select('#subscribed-tags tags')
+    let currentTags = Array.from(parentContainer.children).map(el=>el.getAttribute('tag'))
+    if(currentTags.indexOf(e.detail.tag) == -1){
+      let tag = document.createElement('soci-tag-li')
+      tag.setAttribute('tag', e.detail.tag)
+      tag.toggleAttribute('load-in', true)
+      tag.toggleAttribute('subscribed', true)
+      this.select('#subscribed-tags tags').appendChild(tag)
     }
   }
 
-  _populateSubscribedTags(){
-    this.getData('/subscriptions', soci.token).then(response => {
-      this._createTags(response.subscriptions, this.select('#subscribed-tags tags'), true)
-    }).catch(e=>{
-      this.log(e)
-    })
+  _removeSubscribedTag(e){
+    e.detail.dom.toggleAttribute('load-out', true)
+    setTimeout(()=>{
+      e.detail.dom.remove()
+    }, 200)
+  }
+
+  async _populateSubscribedTags(){
+    let tags = await this.getData('/subscriptions', this.authToken)
+    this._createTags(tags.subscriptions, this.select('#subscribed-tags tags'), true)
   }
 
   async _populateTags(){
