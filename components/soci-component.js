@@ -66,10 +66,9 @@ export default class SociComponent extends HTMLElement {
     if(tempAttr) eval(tempAttr)
     this.removeAttribute(attr)
     let e = new CustomEvent(event, {detail: detail, bubbles: true})
-    if(!attr) attr = 'on' + event
     this.dispatchEvent(e)
     setTimeout(()=>{
-      this.setAttribute(attr, tempAttr)
+      if(tempAttr) this.setAttribute(attr, tempAttr)
     },1)
   }
 

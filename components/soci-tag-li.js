@@ -70,10 +70,10 @@ export default class SociTagLi extends SociComponent {
       }
 
       :host([load-in][subscribed]) a {
-        animation: load-up 0.2s var(--soci-ease) forwards;
+        animation: load-in-up 0.2s var(--soci-ease) forwards;
       }
       :host([load-in]:not([subscribed])) a {
-        animation: load-down 0.2s var(--soci-ease) forwards;
+        animation: load-in-down 0.2s var(--soci-ease) forwards;
       }
 
       :host([load-out]){
@@ -81,10 +81,10 @@ export default class SociTagLi extends SociComponent {
       }
 
       :host([load-out][subscribed]) a {
-        animation: load-down 0.2s var(--soci-ease) forwards;
+        animation: load-out-down 0.2s var(--soci-ease) forwards;
       }
       :host([load-out]:not([subscribed])) a {
-        animation: load-up 0.2s var(--soci-ease) forwards;
+        animation: load-out-up 0.2s var(--soci-ease) forwards;
       }
 
       @keyframes load-in {
@@ -111,26 +111,25 @@ export default class SociTagLi extends SociComponent {
         }
       }
 
-      @keyframes load-up {
-        from {
-          transform: translateY(10px);
-        }
-
-        to {
-          transform: translateY(0px);
-        }
+      @keyframes load-in-up {
+        from { transform: translateY(10px) }
+        to { transform: translateY(0px) }
       }
 
-      @keyframes load-down {
-        from {
-          transform: translateY(0px);
-        }
-
-        to {
-          transform: translateY(10px);
-        }
+      @keyframes load-out-up {
+        from { transform: translateY(0px) }
+        to { transform: translateY(-42px) }
       }
 
+      @keyframes load-in-down {
+        from { transform: translateY(-42px) }
+        to { transform: translateY(0px) }
+      }
+
+      @keyframes load-out-down {
+        from { transform: translateY(0px) }
+        to { transform: translateY(10px) }
+      }
     `
   }
 

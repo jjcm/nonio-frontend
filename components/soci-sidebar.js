@@ -421,25 +421,7 @@ export default class SociSidebar extends SociComponent {
     this.select('content').addEventListener('unsubscribe', this._removeSubscribedTag.bind(this))
   }
 
-  _createSubscribedTag(e){
-    let parentContainer = this.select('#subscribed-tags tags')
-    let currentTags = Array.from(parentContainer.children).map(el=>el.getAttribute('tag'))
-    if(currentTags.indexOf(e.detail.tag) == -1){
-      let tag = document.createElement('soci-tag-li')
-      tag.setAttribute('tag', e.detail.tag)
-      tag.toggleAttribute('load-in', true)
-      tag.toggleAttribute('subscribed', true)
-      this.select('#subscribed-tags tags').appendChild(tag)
-    }
-  }
-
-  _removeSubscribedTag(e){
-    e.detail.dom.toggleAttribute('load-out', true)
-    setTimeout(()=>{
-      e.detail.dom.remove()
-    }, 200)
-  }
-
+  // Logic for the tag lists
   _subscribedTags = [] 
   _commonTags = []
   _subscribedTagsLoaded = false
@@ -468,6 +450,50 @@ export default class SociSidebar extends SociComponent {
     }
   }
 
+  _createTags(data, dom, subscribed=false){
+    let tags = ` 
+      ${data.map((tag) => `
+        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''}></soci-tag-li>
+      `).join('')}
+    `
+    dom.innerHTML = tags
+  }
+
+  _createSubscribedTag(e){
+    if(this._subscribedTags.indexOf(e.detail.tag) == -1){
+      let tag = document.createElement('soci-tag-li')
+      tag.setAttribute('tag', e.detail.tag)
+      tag.toggleAttribute('load-in', true)
+      tag.toggleAttribute('subscribed', true)
+      this._subscribedTags.push(e.detail.tag)
+      this._commonTags.splice(this._commonTags.indexOf(e.detail.tag), 1)
+      console.log(this._commonTags)
+      this.select('#subscribed-tags tags').appendChild(tag)
+    }
+
+    e.detail.dom.toggleAttribute('load-out', true)
+    setTimeout(()=>{
+      e.detail.dom.remove()
+    }, 200)
+  }
+
+  _removeSubscribedTag(e){
+    if(this._subscribedTags.indexOf(e.detail.tag) == -1){
+      let tag = document.createElement('soci-tag-li')
+      tag.setAttribute('tag', e.detail.tag)
+      tag.toggleAttribute('load-in', true)
+      tag.toggleAttribute('subscribed', true)
+      this._commonTags.push(e.detail.tag)
+      this._subscribedTags.splice(this._subscribedTags.indexOf(e.detail.tag), 1)
+      this.select('#subscribed-tags tags').appendChild(tag)
+    }
+    e.detail.dom.toggleAttribute('load-out', true)
+    setTimeout(()=>{
+      e.detail.dom.remove()
+    }, 200)
+  }
+
+  // Account control actions
   async login(){
     let creds = {
       email: this.querySelector('input[type="email"]'),
@@ -538,15 +564,6 @@ export default class SociSidebar extends SociComponent {
       window.focus()
       this.login()
     }
-  }
-
-  _createTags(data, dom, subscribed=false){
-    let tags = ` 
-      ${data.map((tag) => `
-        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''}></soci-tag-li>
-      `).join('')}
-    `
-    dom.innerHTML = tags
   }
 
   _createAccount(){
