@@ -411,8 +411,10 @@ export default class SociSidebar extends SociComponent {
 
   connectedCallback(){
     if(!this.authToken) this.setAttribute('noauth', '')
-    this._populateTags()
-    this._populateSubscribedTags()
+    else {
+      this._populateTags()
+      this._populateSubscribedTags()
+    }
 
     this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
   }
@@ -472,6 +474,8 @@ export default class SociSidebar extends SociComponent {
       console.log('invalid token')
     }
     this.querySelector('button[type="submit"]').toggleAttribute('waiting')
+    this._populateSubscribedTags()
+    this._populateTags()
   }
 
   logout(){
