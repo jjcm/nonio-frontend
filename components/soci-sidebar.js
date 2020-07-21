@@ -409,38 +409,63 @@ export default class SociSidebar extends SociComponent {
     `
   }
 
-  connectedCallback(){
+  async connectedCallback(){
     if(!this.authToken) this.setAttribute('noauth', '')
     else {
-      this._populateTags()
-      this._populateSubscribedTags()
+      this._loadSubscribedTags()
+      this._loadCommonTags()
     }
 
     this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
+    this.select('content').addEventListener('subscribe', this._createSubscribedTag.bind(this))
+    this.select('content').addEventListener('unsubscribe', this._removeSubscribedTag.bind(this))
   }
 
-  static get observedAttributes() {
-    return ['user']
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    switch(name){
-      case "user":
-        break
+  _createSubscribedTag(e){
+    let parentContainer = this.select('#subscribed-tags tags')
+    let currentTags = Array.from(parentContainer.children).map(el=>el.getAttribute('tag'))
+    if(currentTags.indexOf(e.detail.tag) == -1){
+      let tag = document.createElement('soci-tag-li')
+      tag.setAttribute('tag', e.detail.tag)
+      tag.toggleAttribute('load-in', true)
+      tag.toggleAttribute('subscribed', true)
+      this.select('#subscribed-tags tags').appendChild(tag)
     }
   }
 
-  _populateSubscribedTags(){
-    this.getData('/subscriptions', soci.token).then(response => {
-      this._createTags(response.subscriptions, this.select('#subscribed-tags tags'), true)
-    }).catch(e=>{
-      this.log(e)
-    })
+  _removeSubscribedTag(e){
+    e.detail.dom.toggleAttribute('load-out', true)
+    setTimeout(()=>{
+      e.detail.dom.remove()
+    }, 200)
   }
 
-  async _populateTags(){
+  _subscribedTags = [] 
+  _commonTags = []
+  _subscribedTagsLoaded = false
+  _commonTagsLoaded = false
+
+  async _loadSubscribedTags(){
+    let tags = await this.getData('/subscriptions', this.authToken)
+    this._subscribedTags = tags.subscriptions.map(t=>t.tag)
+    this._subscribedTagsLoaded = true
+    this._populateTags()
+  }
+  async _loadCommonTags(){
     let tags = await this.getData('/tags', this.authToken)
-    this._createTags(tags.tags, this.select('#tags tags'))
+    this._commonTags = tags.tags.map(t=>t.tag)
+    this._commonTagsLoaded = true
+    this._populateTags()
+  }
+
+  _populateTags(){
+    if(this._subscribedTagsLoaded && this._commonTagsLoaded){
+      this._createTags(this._subscribedTags, this.select('#subscribed-tags tags'), true)
+      let filteredTags = this._commonTags.filter(t=>{
+        return this._subscribedTags.indexOf(t) == -1
+      })
+      this._createTags(filteredTags, this.select('#tags tags'))
+    }
   }
 
   async login(){
@@ -516,10 +541,9 @@ export default class SociSidebar extends SociComponent {
   }
 
   _createTags(data, dom, subscribed=false){
-    console.log(subscribed)
     let tags = ` 
       ${data.map((tag) => `
-        <soci-tag-li tag=${tag.tag} ${subscribed ? 'subscribed' : ''}></soci-tag-li>
+        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''}></soci-tag-li>
       `).join('')}
     `
     dom.innerHTML = tags
