@@ -467,7 +467,6 @@ export default class SociSidebar extends SociComponent {
       tag.toggleAttribute('subscribed', true)
       this._subscribedTags.push(e.detail.tag)
       this._commonTags.splice(this._commonTags.indexOf(e.detail.tag), 1)
-      console.log(this._commonTags)
       this.select('#subscribed-tags tags').appendChild(tag)
     }
 
@@ -478,14 +477,14 @@ export default class SociSidebar extends SociComponent {
   }
 
   _removeSubscribedTag(e){
-    if(this._subscribedTags.indexOf(e.detail.tag) == -1){
+    console.log('remove')
+    if(this._commonTags.indexOf(e.detail.tag) == -1){
       let tag = document.createElement('soci-tag-li')
       tag.setAttribute('tag', e.detail.tag)
       tag.toggleAttribute('load-in', true)
-      tag.toggleAttribute('subscribed', true)
       this._commonTags.push(e.detail.tag)
       this._subscribedTags.splice(this._subscribedTags.indexOf(e.detail.tag), 1)
-      this.select('#subscribed-tags tags').appendChild(tag)
+      this.select('#tags tags').prepend(tag)
     }
     e.detail.dom.toggleAttribute('load-out', true)
     setTimeout(()=>{
