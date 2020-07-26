@@ -12,6 +12,28 @@ body
 h1:first-child
   margin-top: 0
 
+button
+  border: 0
+  border-radius: 3px
+  background: var(--b2)
+  height: 20px
+  color: #fff
+  padding: 0 8px
+  font-size: 12px
+  margin-right: 4px
+  cursor: pointer
+  &.cancel
+    background: var(--n1)
+    color: var(--n4)
+  &:hover
+    filter: brightness(0.95)
+  &:active
+    filter: brightness(0.9)
+    outline: 0
+  &:focus
+    outline: var(--b1) auto 2px
+
+
 #pages
   height: 100vh
   overflow: hidden
@@ -59,78 +81,100 @@ h1:first-child
         margin-left: 0
 #user
   padding: 30px 50px
+  min-width: 420px
   &[active]
     display: block
   header
     display: flex
-    justify-content: space-between
+    flex-wrap: wrap
   .hero
-    position: relative
-    width: 100%
-    max-width: 400px
-    padding-right: 40px
-  .subtitle
-    font-size: 20px
-    font-weight: 500
-    line-height: 24px
-    color: var(--n3)
-    position: absolute
-    left: 140px
-    top: 76px
-
-  .money
-  .subscribers
-    padding-top: 16px
-    padding-right: 120px
-    position: relative
-    .title
-      font-size: 54px
+    margin-right: 20px
+    flex: 1
+    min-width: 420px
+    .description
+      text-align: justify
+  soci-user[avatar-only]
+    float: left
+    margin-right: 16px
+  soci-user[username-only]
+    margin-bottom: 8px
+  soci-input
+    border: 1px solid var(--n2)
+    border-radius: 3px
+    min-height: 240px
+  .stats
+    margin-top: 40px
+    .stat
+      white-space: nowrap
+      margin-right: 12px
+      &:last-child
+        margin-right: 0
+    label
       font-weight: 600
-      color: var(--n4)
-      margin-bottom: 10px
-    .label
-      font-size: 14px
-      text-transform: uppercase
-      color: var(--n3)
-    .up
-      color: var(--g2)
-      font-weight: bold
-      font-size: 16px
-      padding-left: 18px
-      position: absolute
-      right: 40px
-      top: 28px
-      &:before
-        position: absolute
-        left: 0
-        top: 3px
-        border-bottom: 12px solid var(--g2)
-        border-right: 6px solid transparent
-        border-left: 6px solid transparent
-        content: ''
-        display: block
-        width: 0
-        height: 0
+  .blocks
+    display: flex
+    flex-wrap: wrap
+    width: calc(100% + 40px)
+    .block
+      min-width: 240px
+      width: 100%
+      flex: 1
+      margin-right: 40px
+      margin-bottom: 20px
+      &.avatar
+        max-width: 420px
+        flex: 1
+      &.description
+        min-width: 380px
+        flex: 2
+      &.profit
+        min-width: calc(100% - 40px)
+        h2
+          margin-bottom: 0
+        h1
+          font-size: 60px
+          margin: 0
+          color: var(--g2)
+        .actions
+          justify-content: flex-start
 
+  .cc-details 
+    display: flex
+
+  .cc-details input:first-child 
+    min-width: 160px
+    margin-right: 12px
+
+  input 
+    margin: 0 0 8px
+    border: 0
+    border-bottom: 2px solid var(--n2)
+    height: 38px
+    font-size: 14px
+    width: 100%
+    &:focus
+      border-bottom: 2px solid var(--b1)
+      outline: 0
+
+  .actions
+    width: 100%
+    justify-content: flex-end
+    display: flex
+    margin-top: 8px
+    button:last-child
+      margin-right: 0
+  h2
+    margin-top: 0
   .content
     display: flex
-    margin-top: 40px
-    .col
-      border-top: 1px solid var(--n2)
+    soci-post-list
+      padding: 0
+    soci-tab-group
       width: 100%
-      margin-right: 40px
-      &:last-child
-        margin-right: 0px
-      .col-header
-        color: var(--n3)
-        text-transform: uppercase
-        display: flex
-        align-items: center
-        height: 60px
-        soci-icon
-          margin-right: 8px
-      soci-post-list
-        padding: 0
+
+@media screen and (max-width: 968px) 
+  #user .stats
+    margin-top: 12px
 
 #tags
   scroll-snap-type: x proximity;

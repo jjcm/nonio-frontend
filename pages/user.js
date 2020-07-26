@@ -1,10 +1,13 @@
 let user = {
   init: () => {
+    let tab = document.querySelector("#user soci-tab[name='Posts']")
+    tab.addEventListener('tabactivate', e=>{
+      let myPosts = document.querySelector('#user soci-post-list.my-posts')
+      myPosts.setAttribute('data', `/posts?user=${soci.username}`)
+    })
   },
   onActivate: () => {
-    let myPosts = document.querySelector('#user soci-post-list.my-posts')
-    myPosts.setAttribute('data', `/posts/user/${soci.username}`)
-    console.log('ayy')
+    console.log('ayy lmao')
   },
   onDeactivate: () => {
   }

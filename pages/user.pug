@@ -1,27 +1,78 @@
 header(load-order="primary")
   .hero
-    soci-user(size="x-large" self)
-    .subtitle Conjurer for Deep Design and Theoretical Ideas
-  .money
-    .title $4,269
-    .label current earnings
-    .up  +2.5%
+    soci-user(size="x-large" self avatar-only)
+    soci-user(size="x-large" self username-only)
+    .description I'm a dog who does dog things. Sometimes I poop on the carpet because I'm a bad dog, but usually I just worry lightly and paw at my owners to play with me despite them working on this very site right now yes avo I will play with you soon you impatient dog you just want to play with your rope toy why do you like it so much jesus christ leave me alone.
+  .stats
+    .stat 
+      label Posts: 
+      | 1
+    .stat 
+      label Post Karma: 
+      | 8
+    .stat 
+      label Comments: 
+      | 8
+    .stat 
+      label Comment Karma: 
+      | 53
 
-  .subscribers
-    .title 1.8k
-    .label subscribers
-    .up  +0.4%
+
 
 .content(load-order="secondary")
-  .col
-    .col-header
-      soci-icon(glyph="tags")
-      | My Posts
-    soci-post-list.my-posts(data="/posts")
-  .col
-    .col-header
-      soci-icon(glyph="comments")
-      | Comments
-    soci-post-list.my-comments(data="/posts")
+  soci-tab-group
+    soci-tab(name="Posts") 
+      soci-post-list.my-posts
+    soci-tab(name="Comments")
+      soci-comment-list.my-comments(data="/posts")
+    soci-tab(name="Settings" default)
+      .blocks
+        .block.avatar
+          h2 Avatar
+          soci-avatar-uploader
+        .block.description
+          h2 Description
+          soci-input(placeholder="Enter description")
+          .actions
+            button save
+            button(class="cancel") cancel
+        .block.password
+          h2 Change Password
+          form
+            input(placeholder="Old password")
+            input(placeholder="New password")
+            input(placeholder="Confirm new password")
+            .actions
+              button submit
+              button(class="cancel") cancel
+    soci-tab(name="Financials")
+      .blocks
+        .block.profit
+          h2 Post Profit
+          h1 $481.83
+          .actions
+            button withdrawl
+        .block.billing
+          h2 Billing Info
+          p Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.
+          form
+            input(placeholder="Credit Card Name")
+            input(placeholder="Credit Card Number")
+            .cc-details
+              input(placeholder="Exp. Date")
+              input(placeholder="CCV")
+            .actions
+              button save
+              button(class="cancel") cancel
+        .block.bank
+          h2 Withdrawl Location
+          p This is the account that money will be deposited in once you choose to withdrawl your post profit.
+          form
+            input(placeholder="Bank Name")
+            input(placeholder="Routing No.")
+            input(placeholder="Account No.")
+            .actions
+              button save
+              button(class="cancel") cancel
 
 script(src="/pages/user.js")

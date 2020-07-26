@@ -12,6 +12,8 @@ export default class SociFileDrop extends SociComponent {
         display: inline-flex;
         flex-direction: column;
         margin-bottom: 12px;
+        width: 100%;
+        flex: 1;
       }
       :host([dragover]) #container {
         border: 2px dashed var(--g1);
@@ -26,8 +28,7 @@ export default class SociFileDrop extends SociComponent {
         margin: -2px;
       }
       img {
-        max-width: 420px;
-        max-height: 420px;
+        width: 100%;
         border-radius: 6px;
       }
       input {
@@ -194,7 +195,7 @@ export default class SociFileDrop extends SociComponent {
         </mask>
         <rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#mask)"/>
       </svg>
-      <img src="/example-data/profile.jpg" @click=_selectFile />
+      <img @click=_selectFile />
     </div>
     <actions>
       <button @click=upload>submit</button>
@@ -209,6 +210,8 @@ export default class SociFileDrop extends SociComponent {
 
     this.select("#file").addEventListener('change', this._loadCropPreview.bind(this))
     this._resizer = this.select('#resizer')
+
+    this.select('img').setAttribute('src', `${config.AVATAR_HOST}/${soci.username}.webp`)
   }
 
   _selectFile(e){
