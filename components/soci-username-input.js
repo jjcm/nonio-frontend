@@ -150,7 +150,7 @@ export default class SociUsernameInput extends SociComponent {
     this._statusIcon.glyph = 'spinner'
 
     let username = this._input.value
-    let available = await fetch(`${config.API_HOST}/users/username-is-available/${username}`)
+    let available = await fetch(`${config.API_HOST}/user/username-is-available/${username}`)
     if(this._keyDownTimer || this._error) return 0
     if(await available.json() === true){
       this._statusIcon.glyph = 'success'

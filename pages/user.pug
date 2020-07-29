@@ -39,9 +39,9 @@ header(load-order="primary")
         .block.password
           h2 Change Password
           form
-            input(placeholder="Old password")
-            input(placeholder="New password")
-            input(placeholder="Confirm new password")
+            soci-password(name="oldPassword" placeholder="Old password")
+            soci-password(placeholder="New password")
+            soci-password(placeholder="Confirm new password")
             .actions
               button submit
               button(class="cancel") cancel
@@ -51,7 +51,7 @@ header(load-order="primary")
           h2 Post Profit
           h1 $481.83
           .actions
-            button withdrawl
+            button withdrawal
         .block.billing
           h2 Billing Info
           p Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.

@@ -152,7 +152,7 @@ export default class SociUrlInput extends SociComponent {
     this._statusIcon.glyph = 'spinner'
 
     let url = this._input.value
-    let available = await fetch(`${config.API_HOST}/posts/url-is-available/${url}`)
+    let available = await fetch(`${config.API_HOST}/post/url-is-available/${url}`)
     if(this._keyDownTimer || this._error) return 0
     if(await available.json() === true){
       this._statusIcon.glyph = 'success'
