@@ -67,7 +67,7 @@ export default class SociPassword extends SociComponent {
   `}
 
   connectedCallback() {
-    this._internals.setValidity({customError: true}, 'Not enough entropy')
+    this._internals.setValidity({customError: true}, 'Not strong enough. Add complexity until the circle fills.')
     this.innerHTML = ''
     this.field = document.createElement('input')
     this.field.setAttribute('type','password')
@@ -86,7 +86,14 @@ export default class SociPassword extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'placeholder') this.field?.setAttribute('placeholder', newValue)
+    switch(name){
+      case 'placeholder':
+        this.field?.setAttribute('placeholder', newValue)
+        break
+      case 'match':
+
+
+    }
   }
 
   checkValidity() {
@@ -115,7 +122,35 @@ export default class SociPassword extends SociComponent {
   }
 
   _onKeyDown() {
-    setTimeout(this.checkEntropy.bind(this), 1)
+    setTimeout(()=>{
+      if(!this.checkEntropy()){
+        this._updateValidity('Not strong enough. Add complexity until the circle fills.')
+      }
+      else if(!this.checkMatch()){
+        this._updateValidity('Passwords do not match.')
+      }
+      else {
+        this._updateValidity()
+      }
+    }, 1)
+  }
+
+  _updateValidity(message) {
+    if(!message){
+      this._internals.setValidity({})
+    }
+    else if(this._message != message){
+      this._message = message
+      this._internals.setValidity({customError: true}, message)
+    }
+  }
+
+  checkMatch(){
+    if(this.hasAttribute('match')){
+      let matchedField = this.closest('form').querySelector(`soci-password[name=${this.getAttribute('match')}]`)
+      return matchedField.value == this.value
+    }
+    return true
   }
 
   checkEntropy(){
@@ -145,15 +180,8 @@ export default class SociPassword extends SociComponent {
     let entropy = Math.log2(Math.pow(entropyBase, value.length))
     let entropyPercent = Math.min((entropy / ENTROPY_REQUIREMENT), 1)
 
-    if(entropyPercent == 1) {
-      this.setAttribute('valid', '')
-      this._internals.setValidity({})
-    }
-    else {
-      this.removeAttribute('valid')
-      this._internals.setValidity({customError: true}, 'Not enough entropy')
-    }
-
+    this.toggleAttribute('valid', entropyPercent == 1)
     this.style.setProperty('--entropy-percent', entropyPercent)
+    return entropyPercent == 1
   }
 }
