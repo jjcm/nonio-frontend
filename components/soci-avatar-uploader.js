@@ -14,6 +14,7 @@ export default class SociFileDrop extends SociComponent {
         margin-bottom: 12px;
         width: 100%;
         flex: 1;
+        cursor: pointer;
       }
       :host([dragover]) #container {
         border: 2px dashed var(--g1);
@@ -132,6 +133,9 @@ export default class SociFileDrop extends SociComponent {
         left: 0;
         opacity: 0;
         pointer-events: none;
+      }
+      :host([cropping]) {
+        cursor: default;
       }
       :host([cropping]) #resizer,
       :host([cropping]) svg {

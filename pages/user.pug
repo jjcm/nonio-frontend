@@ -43,8 +43,8 @@ header(load-order="primary")
             soci-password(name="newPassword" placeholder="New password")
             soci-password(name="confirmPassword" match="newPassword" placeholder="Confirm new password")
             .actions
-              button submit
-              button(class="cancel") cancel
+              soci-button submit
+              soci-button(subtle) cancel
     soci-tab(name="Financials")
       .blocks
         .block.profit
@@ -67,7 +67,7 @@ header(load-order="primary")
         .block.bank
           h2 Withdrawl Location
           p This is the account that money will be deposited in once you choose to withdrawl your post profit.
-          form
+          form.change-password
             input(placeholder="Bank Name")
             input(placeholder="Routing No.")
             input(placeholder="Account No.")

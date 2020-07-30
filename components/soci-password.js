@@ -105,6 +105,7 @@ export default class SociPassword extends SociComponent {
   }
 
   set value(val) {
+    this.field.value = val
     this._internals.setFormValue(val)
   }
 
@@ -132,6 +133,7 @@ export default class SociPassword extends SociComponent {
       else {
         this._updateValidity()
       }
+      this._internals.setFormValue(this.value)
     }, 1)
   }
 

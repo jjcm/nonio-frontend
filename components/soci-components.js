@@ -8,6 +8,9 @@ window.sociRouter = new SociRouter()
 import SociAvatarUploader from "./soci-avatar-uploader.js"
 window.customElements.define('soci-avatar-uploader', SociAvatarUploader)
 
+import SociButton from "./soci-button.js"
+window.customElements.define('soci-button', SociButton)
+
 import SociColumn from "./soci-column.js"
 window.customElements.define('soci-column', SociColumn)
 

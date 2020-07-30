@@ -44,6 +44,14 @@ let soci = {
     if(page.onDeactivate) page.dom.addEventListener('routedeactivate', page.onDeactivate)
     if(dom.active) page.onActivate()
   },
+  getJSONFromForm: form => {
+    let data = new FormData(form)
+    let json = {}
+    for(const [key, val] of data.entries()) {
+      json[key] = val
+    }
+    return json
+  },
   postData: async function(url, data = {}) {
     const response = await fetch(API_URL + url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
