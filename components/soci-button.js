@@ -194,7 +194,10 @@ export default class SociButton extends SociComponent {
   connectedCallback(){
     this.setAttribute('tabindex', 0)
     this.setAttribute('role', 'button')
-    this.addEventListener('click', this.wait.bind(this))
+    this.addEventListener('click', ()=>{
+      if(this.hasAttribute('async'))
+        this.wait()
+    })
   }
 
   wait(){
