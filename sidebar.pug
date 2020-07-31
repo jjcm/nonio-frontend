@@ -2,13 +2,6 @@ soci-sidebar
   div(slot="login")
     <input type="email" placeholder="Email address"/>
     <soci-password></soci-password>
-    <button type="submit" onclick="this.closest('soci-sidebar').login()">login
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="4" opacity="0.1"/>
-        <path d="M24.0909 2.18182C11.942 2.18182 2.09091 12.0329 2.09091 24.1818" stroke="currentColor" stroke-width="4">
-          <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="1s" repeatCount="indefinite"/>
-        </path>
-      </svg>
-    </button>
+    <soci-button async onclick="this.closest('soci-sidebar').login()">login</soci-button>
   </form>
   tags(slot="tags")

@@ -14,12 +14,18 @@ let user = {
   },
   changePassword: async e => {
     let button = e.currentTarget
-    let data = soci.getJSONFromForm(button.closest('form'))
-    let response = await soci.postData('user/change-password', data)
-    button.wait()
-    if(response == true) {
-      button.success()
-      user.cancelChangePassword()
+    let form = button.closest('form')
+    if(form.reportValidity()){
+      let data = soci.getJSONFromForm(button.closest('form'))
+      let response = await soci.postData('user/change-password', data)
+      button.wait()
+      if(response == true) {
+        button.success()
+        user.cancelChangePassword()
+      }
+      else {
+        button.error()
+      }
     }
     else {
       button.error()

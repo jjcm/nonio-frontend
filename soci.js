@@ -119,6 +119,6 @@ let soci = {
   }
 }
 
-soci.loadVotes()
+if(soci.token) soci.loadVotes()
 
 document.addEventListener('DOMContentLoaded', soci.init)

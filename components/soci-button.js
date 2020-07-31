@@ -8,10 +8,13 @@ export default class SociButton extends SociComponent {
   css(){
     return `
       :host {
+        display: inline-block;
         border: 0;
         border-radius: 3px;
         background: var(--b2);
         height: 20px;
+        min-height: 20px;
+        line-height: 18px;
         color: #fff;
         padding: 0 8px;
         font-size: 12px;
@@ -19,6 +22,7 @@ export default class SociButton extends SociComponent {
         cursor: pointer;
         position: relative;
         transition: background 0.1s var(--soci-ease);
+        float: right;
       }
 
       :host:after,

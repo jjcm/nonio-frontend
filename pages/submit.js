@@ -8,12 +8,11 @@ let submit = {
     let title = document.querySelector('#submit input[name="title"]')
     title.focus()
 
-    let submitButton = document.querySelector('#submit button')
-    submitButton.addEventListener('click', submit.submit)
+    submit.submitButton = document.querySelector('#submit soci-button')
+    submit.submitButton.addEventListener('click', submit.submit)
   },
   async submit(e) {
-    if(submit.form.checkValidity()){
-      e.preventDefault()
+    if(submit.form.reportValidity()){
       let data = new FormData(submit.form)
       let fileDrop = document.querySelector('#submit soci-file-drop')
       let newPath = await fileDrop.move(data.get('url'))
@@ -28,10 +27,17 @@ let submit = {
         type: document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
       }).then(e=>{
         if(e.url){
+          submit.submitButton.success()
           window.history.pushState(null, null, e.url)
           window.dispatchEvent(new HashChangeEvent('hashchange'))
         }
+        else {
+          submit.submitButton.error()
+        }
       })
+    }
+    else {
+      submit.submitButton.error()
     }
   }
 }

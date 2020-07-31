@@ -512,19 +512,22 @@ export default class SociSidebar extends SociComponent {
     creds.email = creds.email.value
     creds.password = creds.password.value
 
-    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
     let response = await soci.postData('login', creds)
     if(response.token){
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       soci.username = response.username
-      this.toggleAttribute('noauth')
+      this.querySelector('soci-button').success()
+      setTimeout(()=>{
+        this.toggleAttribute('noauth')
+      }, 400)
     }
     else {
       console.log('invalid token')
+      this.querySelector('soci-button').error()
     }
-    this.querySelector('button[type="submit"]').toggleAttribute('waiting')
-    this._populateSubscribedTags()
+    this._loadSubscribedTags()
+    this._loadCommonTags()
     this._populateTags()
   }
 
