@@ -92,7 +92,14 @@ export default class SociUser extends SociComponent {
   `}
 
   connectedCallback(){
-    document.addEventListener('username-updated', this._updateUser.bind(this))
+    this._updateUser = this._updateUser.bind(this)
+    this._updateAvatar = this._updateAvatar.bind(this)
+    document.addEventListener('username-updated', this._updateUser)
+    document.addEventListener('avatar-updated', this._updateAvatar)
+  }
+
+  disconnectedCallback(){
+
   }
 
   static get observedAttributes() {
@@ -103,9 +110,7 @@ export default class SociUser extends SociComponent {
     switch(name) {
       case 'name':
         this.select('username').innerHTML = newValue
-        let picture = this.select('picture')
-        let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}/thumbnail/${newValue}.${format}" />`).join('')
-        picture.innerHTML = (newValue == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
+        this._setImages(newValue)
         this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'self':
@@ -119,5 +124,17 @@ export default class SociUser extends SociComponent {
   _updateUser(){
     let username = soci.username
     this.setAttribute('name', username)
+  }
+
+  _updateAvatar(){
+    if(this.hasAttribute('self'))
+      this._setImages(soci.username, true)
+  }
+
+  _setImages(path, force = false){
+    let cacheBuster = force ? `?${Date.now()}` : ''
+    let picture = this.select('picture')
+    let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}/thumbnail/${path}.${format}${cacheBuster}" />`).join('')
+    picture.innerHTML = (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
   }
 }

@@ -25,7 +25,7 @@ export default class SociFileDrop extends SociComponent {
         position: relative;
         overflow: hidden;
         border: 2px dashed transparent;
-        transition: border 0.2s ease;
+        transition: border 0.2s var(--soci-ease), width 0.2s var(--soci-ease), height 0.2s var(--soci-ease);
         margin: -2px;
       }
       img {
@@ -47,7 +47,7 @@ export default class SociFileDrop extends SociComponent {
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        z-index: 2;
+        z-index: 4;
         top: -2px;
         left: -2px;
       }
@@ -55,7 +55,7 @@ export default class SociFileDrop extends SociComponent {
         position: absolute;
         width: 50%;
         height: 50%;
-        z-index: 1;
+        z-index: 3;
       }
       .resizer:before, .resizer:after {
         content: '';
@@ -129,6 +129,7 @@ export default class SociFileDrop extends SociComponent {
         pointer-events: none;
         width: 420px;
         position: absolute;
+        z-index: 2;
         top: 0;
         left: 0;
         opacity: 0;
@@ -140,11 +141,8 @@ export default class SociFileDrop extends SociComponent {
       :host([cropping]) #resizer,
       :host([cropping]) svg {
         opacity: 1;
-        transition: opacity 0.1s ease-in-out;
+        transition: opacity 0.1s var(--soci-ease);
         pointer-events: all;
-      }
-      :host([cropping]) img {
-        pointer-events: none;
       }
       actions {
         display: flex;
@@ -156,54 +154,64 @@ export default class SociFileDrop extends SociComponent {
         transition: height 0.2s var(--soci-ease);
         height: 32px;
       }
-      actions button {
-        border: 0;
-        border-radius: 3px;
-        background: var(--b2);
-        height: 20px;
-        color: #fff;
-        padding: 0 8px;
-        font-size: 12px;
-        margin: 4px 2px;
-        cursor: pointer;
+      actions soci-button {
+        margin: 8px 2px;
       }
-      actions button.cancel {
-        background: var(--n1);
-        color: var(--n4);
+
+      #preview {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 1;
       }
-      actions button:hover {
-        filter: brightness(0.95);
+
+      :host([cropping]) #preview {
+        opacity: 1;
+        position: relative;
       }
-      actions button:focus,
-      actions button:active {
-        filter: brightness(0.9);
-        outline: 0;
+
+      :host([cropping]) picture {
+        display: none;
       }
+
+      cropping {
+        display: block;
+        position: relative;
+        transition: all 0.2s var(--soci-ease);
+        transform: scale(1);
+        transform-origin: top left;
+      }
+
     `
   }
 
   html(){ return `
     <input id="file" type="file" accept="image/*"/>
     <div id="container">
-      <div id="resizer" @mousedown=_dragMouseDown>
-        <div class="resizer" id="nw"></div>
-        <div class="resizer" id="ne"></div>
-        <div class="resizer" id="sw"></div>
-        <div class="resizer" id="se"></div>
-        <div id="drag"></div>
-      </div>
-      <svg>
-        <mask id="mask">
-          <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-          <circle cx="0" cy="0" r="10" fill="black"/>
-        </mask>
-        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#mask)"/>
-      </svg>
-      <img @click=_selectFile />
+      <cropping>
+        <div id="resizer" @mousedown=_dragMouseDown>
+          <div class="resizer" id="nw"></div>
+          <div class="resizer" id="ne"></div>
+          <div class="resizer" id="sw"></div>
+          <div class="resizer" id="se"></div>
+          <div id="drag"></div>
+        </div>
+        <svg>
+          <mask id="mask">
+            <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+            <circle cx="0" cy="0" r="10" fill="black"/>
+          </mask>
+          <rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#mask)"/>
+        </svg>
+        <img id="preview" />
+      </cropping>
+      <picture @click=_selectFile >
+        <img/>
+      </picture>
     </div>
     <actions>
-      <button @click=upload>submit</button>
-      <button class="cancel" @click=_cancelCropPreview >cancel</button>
+      <soci-button async @click=upload>submit</soci-button>
+      <soci-button subtle @click=_cancelCropPreview >cancel</soci-button>
     </actions>
   `}
 
@@ -215,7 +223,19 @@ export default class SociFileDrop extends SociComponent {
     this.select("#file").addEventListener('change', this._loadCropPreview.bind(this))
     this._resizer = this.select('#resizer')
 
-    this.select('img').setAttribute('src', `${config.AVATAR_HOST}/${soci.username}.webp`)
+    this._loadCurrentAvatar()
+  }
+
+  _loadCurrentAvatar(){
+    let formats = [
+      {tag: 'source', extension: 'webp'},
+      {tag: 'source', extension: 'heic'},
+      {tag: 'img', extension: 'webp'},
+    ]
+    let html = formats.map(format=>{
+      return `<${format.tag} src${format.tag == 'source' ? 'set' : ''}="${config.AVATAR_HOST}/${soci.username}.${format.extension}?${Date.now()}">`
+    })
+    this.select('picture').innerHTML = html.join('')
   }
 
   _selectFile(e){
@@ -225,24 +245,23 @@ export default class SociFileDrop extends SociComponent {
   _loadCropPreview(e){
     let files = e?.target?.files[0]
     if(files == null || files.type.indexOf("image/") != 0) return 0
-    this.toggleAttribute('cropping', true)
-    let preview = this.select('img')
+    let preview = this.select('#preview')
     this._oldAvatarURL = preview.src
     let reader = new FileReader()
     reader.addEventListener('load', e => {
       preview.src = e.target.result
     })
     reader.addEventListener('loadend', ()=>{
-      this.width = preview.offsetWidth
-      this.height = preview.offsetHeight
-      this._cropSize = Math.min(this.width, this.height)
-      if(this._cropSize < this._MINIMUMSIZE){
-        this._cancelCropPreview()
-        //TODO - add proper size too small message
+      if(Math.min(preview.naturalWidth, preview.naturalHeight) < this._MINIMUMSIZE){
         this.log("File too small. Avatars must be a minimum of 240px on both sides.", "error")
         return 0
       }
-      this.scale = Math.min(preview.naturalHeight, preview.naturalWidth) / Math.min(preview.offsetHeight, preview.offsetWidth)
+      this.toggleAttribute('cropping', true)
+      let sizeBox = preview.getBoundingClientRect()
+      this.width = sizeBox.width
+      this.height = sizeBox.height
+      this._cropSize = Math.min(this.width, this.height)
+      this.scale = Math.min(preview.naturalHeight, preview.naturalWidth) / Math.min(this.width, this.height)
       this._cropMinSize = this._MINIMUMSIZE / this.scale
       let resizer = this.select('#resizer')
       resizer.style.width = this._cropSize + 'px'
@@ -262,8 +281,12 @@ export default class SociFileDrop extends SociComponent {
   }
 
   _cancelCropPreview(){
-    this.select('img').src = this._oldAvatarURL
     this.toggleAttribute('cropping', false)
+    this.select('#container').style.width = ''
+    this.select('#container').style.height = ''
+    this.select('cropping').style.transform = ''
+    this.select('svg').style.opacity = ''
+    this.select('#resizer').style.opacity = ''
   }
 
   _dragenter(e){
@@ -292,7 +315,6 @@ export default class SociFileDrop extends SociComponent {
   }
 
   upload(){
-    console.log('upload time')
     let data = new FormData()
     let request = new XMLHttpRequest()
 
@@ -304,14 +326,25 @@ export default class SociFileDrop extends SociComponent {
     request.open('post', config.AVATAR_HOST + '/upload') 
 
     request.addEventListener('load', e => {
-      console.log(request.response)
-      return 0
-      this.select('picture').innerHTML = `
-        <source srcset="${config.IMAGE_HOST + '/' + request.response}.webp">
-        <img src="${config.IMAGE_HOST + '/' + request.response}.webp">
-      `
-      this.setAttribute('preview', '')
-      this.fileUrl = request.response
+      this._loadCurrentAvatar()
+      this.select('soci-button').success()
+      let container = this.select('#container')
+      let sizeBox = container.getBoundingClientRect()
+      let size = Math.min(sizeBox.width, sizeBox.height)
+      container.style.width = (sizeBox.width - 4) + 'px'
+      container.style.height = (sizeBox.height - 4) + 'px'
+      setTimeout(()=>{
+        container.style.width = (size - 4) + 'px'
+        container.style.height = (size - 4) + 'px'
+        let scale = size / (this._cropSize + 4)
+        this.select('cropping').style.transform = `translate(-${this._positionX * scale}px, -${this._positionY * scale}px) scale(${scale})`
+        this.select('svg').style.opacity = 0
+        this.select('#resizer').style.opacity = 0
+        setTimeout(()=>{
+          this._cancelCropPreview()
+          this.fire('avatar-updated')
+        }, 200)
+      }, 400)
     })
 
     request.upload.addEventListener('progress', e => {
