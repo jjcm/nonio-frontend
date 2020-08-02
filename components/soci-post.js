@@ -145,8 +145,16 @@ export default class SociPost extends SociComponent {
 
   html(){ return `
     <content>
-      <img src="/example-data/cat.jpg"/>
-      <img id="bg" src="/example-data/cat.jpg"/>
+      <picture>
+        <source>
+        <source>
+        <img @load=_pictureLoaded src="/example-data/cat.jpg"/>
+      </picture>
+      <picture>
+        <source>
+        <source>
+        <img id="bg" src="/example-data/cat.jpg"/>
+      </picture>
     </content>
     <footer>
       <div id="details-container">
@@ -238,6 +246,7 @@ export default class SociPost extends SociComponent {
         this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{
           this.select('img').src = `${config.IMAGE_HOST}/${this.url}.webp`
+          this.select('source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
         },1)
         break
     }
@@ -261,5 +270,21 @@ export default class SociPost extends SociComponent {
 
   get url(){
     return this.getAttribute('url')
+  }
+
+  _pictureLoaded(e) {
+    let image = e.currentTarget
+    let width = image.naturalWidth
+    let height = image.naturalHeight
+    let sidebarWidth = document.querySelector('soci-sidebar').offsetWidth
+    if(width > window.innerWidth - sidebarWidth){
+      console.log('wide boi')
+    }
+    else if(height > window.innerHeight){
+      console.log('tall boi')
+    }
+    else {
+      console.log('mini boi')
+    }
   }
 }
