@@ -16,11 +16,13 @@ export default class SociPostLi extends SociComponent {
         border-radius: 8px;
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        max-height: 160px;
-        transition: all 0.3s;
+        height: 96px;
+        box-sizing: border-box;
         opacity: 1;
-        padding-left: 116px;
         position: relative;
+      }
+      content {
+        display: inline-block;
       }
       #top {
         display: flex;
@@ -51,15 +53,12 @@ export default class SociPostLi extends SociComponent {
       img {
         display: none;
         width: 96px;
-        min-width: 96px;
-        height: calc(100% - 24px);
-        min-height: 72px;
+        height: 100%;
         border-radius: 3px;
         object-fit: cover;
         margin-right: 8px;
-        position: absolute;
-        left: 12px;
-        top: 12px;
+        cursor: zoom-in;
+        float: left;
       }
       img[src] {
         display: block;
@@ -121,22 +120,37 @@ export default class SociPostLi extends SociComponent {
       :host([score="0"]) #score {
         color: var(--n2);
       }
+
+      :host([expanded]) {
+        height: 392px;
+        transition: height 0.1s var(--soci-ease);
+      }
+      :host([expanded]) img {
+        width: auto;
+        max-width: calc(100% - 400px);
+      }
+      :host #title {
+
+
+      }
     `
   }
 
   html(){ return `
-    <div id="top">
-      <slot name="user"></slot>
-      <div id="time"></div>
-    </div>
-    <a id="mid" @click=localLink>
-      <img id="thumbnail"></img>
-      <div id="title"></div>
-    </a>
-    <div id="bot">
-      <slot name="tags"></slot>
-      <div id="comments"></div>
-    </div>
+    <img id="thumbnail" @click=expand ></img>
+    <content>
+      <div id="top">
+        <slot name="user"></slot>
+        <div id="time"></div>
+      </div>
+      <a id="mid" @click=localLink>
+        <div id="title"></div>
+      </a>
+      <div id="bot">
+        <slot name="tags"></slot>
+        <div id="comments"></div>
+      </div>
+    </content>
   `}
 
   connectedCallback(){
@@ -200,6 +214,11 @@ export default class SociPostLi extends SociComponent {
 
   get url(){
     return this.getAttribute('url')
+  }
+
+  expand(){
+    console.log('expand')
+    this.toggleAttribute('expanded')
   }
 
   _scoreChanged(e){
