@@ -72,7 +72,7 @@ export default class SociButton extends SociComponent {
         height: 2px;
         transform: rotate(45deg);
         transition: all 0.1s var(--soci-ease), transform 0.1s var(--soci-ease-in);
-        left: calc(50% - 3.5px);
+        left: calc(50% - 4px);
         top: calc(50% - 1px);
         animation: inner-error-after 0.3s linear;
         background: #fff;
