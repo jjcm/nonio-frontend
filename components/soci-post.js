@@ -55,6 +55,7 @@ export default class SociPost extends SociComponent {
 
        #details-container {
         min-width: 500px;
+        width: 100%;
       }
 
        #details {
@@ -169,6 +170,7 @@ export default class SociPost extends SociComponent {
           <slot name="tags"></slot>
           <description>
             <soci-input readonly></soci-input>
+            <soci-quill-view></soci-quill-view>
           </description>
         </div>
       </div>

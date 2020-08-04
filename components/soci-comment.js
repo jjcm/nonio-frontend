@@ -381,6 +381,7 @@ export default class SociComment extends SociComponent {
     if(contentContainer) {
       let renderer = document.getElementById('comment-renderer')
       contentContainer.innerHTML = renderer.renderOpsToHTML(this._content)
+      console.log(this._content)
     }
   }
 

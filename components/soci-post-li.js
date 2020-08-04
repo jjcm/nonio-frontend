@@ -11,49 +11,19 @@ export default class SociPostLi extends SociComponent {
       :host {
         background: var(--n0);
         margin-bottom: 8px;
-        display: block;
+        display: flex;
         padding: 12px;
         border-radius: 8px;
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        height: 96px;
         box-sizing: border-box;
         opacity: 1;
         position: relative;
       }
-      content {
-        display: inline-block;
-      }
-      #top {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-      }
-      #time {
-        font-size: 12px;
-        color: var(--n3);
-        letter-spacing: -0.16px;
-        text-align: right;
-        line-height: 16px;
-      }
-      #mid {
-        display: flex;
-        font-size: 14px;
-        text-decoration: none;
-        color: var(--n4);
-        letter-spacing: -0.08px;
-        line-height: 20px;
-        width: 100%;
-        max-height: 72px;
-        overflow: hidden;
-        font-weight: 600;
-        margin-bottom: 8px;
-        cursor: pointer;
-      }
       img {
         display: none;
         width: 96px;
-        height: 100%;
+        height: 72px;
         border-radius: 3px;
         object-fit: cover;
         margin-right: 8px;
@@ -63,12 +33,39 @@ export default class SociPostLi extends SociComponent {
       img[src] {
         display: block;
       }
-      #bot {
+      content {
         display: flex;
+        flex-direction: column;
+        width: 100%;
+        overflow: hidden;
+      }
+      #top {
+        display: flex;
+        flex-direction: column;
+      }
+      #time {
+        font-size: 12px;
+        color: var(--n3);
+        letter-spacing: -0.16px;
+        text-align: right;
+        line-height: 16px;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+      }
+      #title {
+        font-size: 14px;
+        color: var(--n4);
+        letter-spacing: -0.08px;
         line-height: 20px;
-        align-items: center;
-        position: relative;
-        padding-right: 90px;
+        width: 100%;
+        max-height: 72px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        margin-top: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       #tags {
         margin-left: 8px;
@@ -114,25 +111,63 @@ export default class SociPostLi extends SociComponent {
         line-height: 16px;
         white-space: nowrap;
         position: absolute;
-        bottom: 2px;
-        right: 0px;
+        bottom: 12px;
+        right: 12px;
       }
       :host([score="0"]) #score {
         color: var(--n2);
       }
 
-      :host([expanded]) {
-        height: 392px;
-        transition: height 0.1s var(--soci-ease);
-      }
       :host([expanded]) img {
-        width: auto;
         max-width: calc(100% - 400px);
+        transition: all 0.1s var(--soci-ease);
+        margin-right: 12px;
       }
-      :host #title {
 
-
+      :host([expanded]) #top {
+        flex-direction: column-reverse;
       }
+
+      :host([expanded]) #title {
+        font-size: 20px;
+        line-height: 28px;
+        white-space: normal;
+        animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
+        opacity: 0;
+        margin-top: 4px;
+      }
+
+      :host([expanded]) #details {
+        animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
+        opacity: 0;
+        display: flex;
+        margin-bottom: 8px;
+      }
+
+      :host([expanded]) #time,
+      :host([expanded]) #comments {
+        position: static;
+        margin-left: 18px;
+      }
+
+      :host([expanded]) slot[name="tags"] {
+        display: block;
+        animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
+        opacity: 0;
+      }
+
+      @keyframes load-in {
+        from {
+          transform: translateY(4px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0px);
+          opacity: 1;
+        }
+      }
+
     `
   }
 
@@ -140,16 +175,16 @@ export default class SociPostLi extends SociComponent {
     <img id="thumbnail" @click=expand ></img>
     <content>
       <div id="top">
-        <slot name="user"></slot>
-        <div id="time"></div>
+        <div id="details">
+          <slot name="user"></slot>
+          <div id="time"></div>
+          <div id="comments"></div>
+        </div>
+        <soci-link href=${this.url}>
+          <div id="title"></div>
+        </soci-link>
       </div>
-      <a id="mid" @click=localLink>
-        <div id="title"></div>
-      </a>
-      <div id="bot">
-        <slot name="tags"></slot>
-        <div id="comments"></div>
-      </div>
+      <slot name="tags"></slot>
     </content>
   `}
 
@@ -180,7 +215,7 @@ export default class SociPostLi extends SociComponent {
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break;
       case 'url':
-        this.select('#mid').href = newValue
+        this.select('soci-link').href = newValue
         break;
 
     }
@@ -217,8 +252,20 @@ export default class SociPostLi extends SociComponent {
   }
 
   expand(){
-    console.log('expand')
     this.toggleAttribute('expanded')
+    let thumbnail = this.select('#thumbnail')
+    if(this.hasAttribute('expanded')){
+      thumbnail.style.height = '376px'
+      thumbnail.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
+      this.getData(`/posts/${this.url}`).then(e=>{
+        console.log(e)
+      })
+    }
+    else {
+      thumbnail.style.height = ''
+      thumbnail.style.width = ''
+    }
+
   }
 
   _scoreChanged(e){
