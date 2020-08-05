@@ -44,7 +44,7 @@ export default class SociQuillView extends SociComponent {
   }
 
   connectedCallback() {
-    this.render({"ops":[{"insert":"asdf\ntest"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"test2"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"heyo"},{"attributes":{"indent":1,"list":"ordered"},"insert":"\n"},{"insert":"waka"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"\nneat\nbullets!"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"heyo"},{"attributes":{"indent":1,"list":"bullet"},"insert":"\n"},{"insert":"wow"},{"attributes":{"indent":2,"list":"bullet"},"insert":"\n"}]})
+    this.render({"ops":[{"insert":"asdf"},{"attributes":{"link":"google.com"},"insert":"1234"},{"insert":"asdf\n1st level"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"3rd level"},{"attributes":{"indent":2,"list":"ordered"},"insert":"\n"},{"insert":"2nd level"},{"attributes":{"indent":1,"list":"ordered"},"insert":"\n"}]})
   }
 
   _tagMapping = {
@@ -56,17 +56,18 @@ export default class SociQuillView extends SociComponent {
   render(ops){
     ops = ops.ops
     let html = document.createElement('div')
-    let currentTag = ''
+    let currentText = ''
     let dom = null
     let parent = null
+    let prevNode = null
     ops.forEach(op => {
       while(op.insert.length > 1 && op.insert.indexOf('\n') != -1){
         let substring = op.insert.slice(0, op.insert.indexOf('\n'))
         op.insert = op.insert.slice(op.insert.indexOf('\n') + 1)
         dom = document.createElement('p')
-        dom.innerHTML = currentTag + substring
+        dom.innerHTML = currentText + substring
         html.appendChild(dom)
-        currentTag = ''
+        currentText = ''
       }
       if(op.attributes) {
         parent = html
@@ -74,7 +75,7 @@ export default class SociQuillView extends SociComponent {
           switch(key){
             case "header":
               dom = document.createElement(`h${op.attributes[key]}`)
-              dom.innerHTML = currentTag
+              dom.innerHTML = currentText
               break
             case "list":
               let listType = op.attributes.list == 'ordered' ? 'OL' : 'UL'
@@ -82,17 +83,22 @@ export default class SociQuillView extends SociComponent {
               console.log(`parent indent: ${parent.dataset.indent}, indent: ${indent}`)
               if(html.lastElementChild.tagName == listType && indent == html.lastElementChild.dataset.indent){
                 parent = html.lastElementChild
-                // HERE BE DRAGONS
               }
               else {
                 let container = document.createElement(listType)
                 container.setAttribute('data-indent', indent || 0)
-                html.appendChild(container)
                 parent = container
+                if(prevNode && indent > prevNode.dataset.indent){
+                  //still need to make sure that this works if there are multiple indent levels suddenly
+                  prevNode.appendChild(container)
+                }
+                else {
+                  html.appendChild(container)
+                }
               }
               dom = document.createElement('li')
               dom.setAttribute('data-indent', indent)
-              dom.innerHTML = currentTag
+              dom.innerHTML = currentText
               break
             default:
               dom = document.createElement(this._tagMapping[key] || key)
@@ -101,10 +107,11 @@ export default class SociQuillView extends SociComponent {
           }
         })
         parent.appendChild(dom)
-        currentTag = ''
+        prevNode = dom
+        currentText = ''
       }
       else {
-        currentTag += op.insert
+        currentText += op.insert
       }
     })
     this.select('pre').appendChild(html)
