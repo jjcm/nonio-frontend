@@ -109,7 +109,7 @@ export default class SociPost extends SociComponent {
 
        description {
         margin-top: 12px;
-        line-height: 24px;
+        line-height: 1.5;
         display: block;
       }
 
@@ -283,10 +283,10 @@ export default class SociPost extends SociComponent {
       console.log('wide boi')
     }
     else if(height > window.innerHeight){
-      console.log('tall boi')
+      //console.log('tall boi')
     }
     else {
-      console.log('mini boi')
+      //console.log('mini boi')
     }
   }
 }
