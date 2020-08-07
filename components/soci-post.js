@@ -107,10 +107,13 @@ export default class SociPost extends SociComponent {
         left: 18px;
       }
 
-       description {
+       slot[name="description"] {
         margin-top: 12px;
         line-height: 1.5;
         display: block;
+        padding: 8px;
+        border: 1px solid #eee;
+        border-radius: 4px;
       }
 
       soci-comment soci-comment {
@@ -127,12 +130,6 @@ export default class SociPost extends SociComponent {
 
       soci-comment soci-comment soci-comment soci-comment soci-comment {
         --border-color: var(--l1);
-      }
-
-      soci-input {
-        padding: 8px;
-        border: 1px solid #eee;
-        border-radius: 4px;
       }
 
       @media (max-width: 1280px) { 
@@ -168,10 +165,7 @@ export default class SociPost extends SociComponent {
             </meta-data>
           </title-container>
           <slot name="tags"></slot>
-          <description>
-            <soci-input readonly></soci-input>
-            <soci-quill-view></soci-quill-view>
-          </description>
+          <slot name="description"></slot>
         </div>
       </div>
       <slot name="comments"></slot>
@@ -267,7 +261,13 @@ export default class SociPost extends SociComponent {
   }
 
   renderDescription(description){
-    this.select('soci-input').value = description
+    let dom = this.querySelector('soci-quill-view[slot="description"]')
+    if(!dom){
+      dom = document.createElement('soci-quill-view')
+      dom.setAttribute('slot', 'description')
+      this.appendChild(dom)
+    }
+    dom.render(description)
   }
 
   get url(){
