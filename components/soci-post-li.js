@@ -135,10 +135,11 @@ export default class SociPostLi extends SociComponent {
         animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
         opacity: 0;
         margin-top: 4px;
+        margin-bottom: 12px;
       }
 
       :host([expanded]) #details {
-        animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
+        animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
         opacity: 0;
         display: flex;
         margin-bottom: 8px;
@@ -151,9 +152,17 @@ export default class SociPostLi extends SociComponent {
       }
 
       :host([expanded]) slot[name="tags"] {
+        margin-bottom: 12px;
         display: block;
-        animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
         opacity: 0;
+        animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
+      }
+
+      :host([expanded]) ::slotted(soci-quill-view) {
+        display: block;
+        opacity: 0;
+        animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
+        font-size: 14px;
       }
 
       @keyframes load-in {
@@ -185,6 +194,7 @@ export default class SociPostLi extends SociComponent {
         </soci-link>
       </div>
       <slot name="tags"></slot>
+      <slot name="description"></slot>
     </content>
   `}
 
@@ -257,13 +267,19 @@ export default class SociPostLi extends SociComponent {
     if(this.hasAttribute('expanded')){
       thumbnail.style.height = '376px'
       thumbnail.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
+      let description = document.createElement('soci-quill-view')
+      description.setAttribute('slot', 'description')
       this.getData(`/posts/${this.url}`).then(e=>{
-        console.log(e)
+        if(e.content.length){
+          description.render(e.content)
+          this.appendChild(description)
+        }
       })
     }
     else {
       thumbnail.style.height = ''
       thumbnail.style.width = ''
+      this.querySelector('soci-quill-view')?.remove()
     }
 
   }

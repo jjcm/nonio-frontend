@@ -177,7 +177,7 @@ export default class SociColumn extends SociComponent {
               <filter>blogs</filter>
             </filters>
           </header>
-          <soci-post-list data='/posts'></soci-post-list>
+          <slot name="posts"></slot><soci-post-list data='/posts'></soci-post-list>
         </content>
       </scroll-container>
       <separator></separator>
@@ -192,6 +192,11 @@ export default class SociColumn extends SociComponent {
     })
 
     this._ro.observe(this)
+
+    let posts = document.createElement('soci-post-list')
+    posts.setAttribute('data', '/posts')
+    posts.setAttribute('slot', 'posts')
+    this.appendChild(posts)
   }
 
   disconnectedCallback(){
