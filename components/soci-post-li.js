@@ -119,9 +119,13 @@ export default class SociPostLi extends SociComponent {
       }
 
       :host([expanded]) img {
-        max-width: calc(100% - 400px);
         transition: all 0.1s var(--soci-ease);
+        max-width: calc(100% - 400px);
         margin-right: 12px;
+      }
+
+      picture {
+        display: contents;
       }
 
       :host([expanded]) #top {
@@ -181,7 +185,11 @@ export default class SociPostLi extends SociComponent {
   }
 
   html(){ return `
-    <img id="thumbnail" @click=expand ></img>
+    <picture>
+      <source id="heic">
+      <source id="webp">
+      <img id="thumbnail" @click=expand />
+    </picture>
     <content>
       <div id="top">
         <div id="details">
@@ -203,7 +211,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'thumbnail', 'type', 'comments', 'url']
+    return ['title', 'score', 'time', 'type', 'comments', 'url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -268,6 +276,7 @@ export default class SociPostLi extends SociComponent {
       thumbnail.style.height = '376px'
       thumbnail.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
       let description = document.createElement('soci-quill-view')
+      this._setThumbnailSource(config.IMAGE_HOST)
       description.setAttribute('slot', 'description')
       this.getData(`/posts/${this.url}`).then(e=>{
         if(e.content.length){
@@ -288,12 +297,17 @@ export default class SociPostLi extends SociComponent {
     this.score = e.detail.score
   }
 
+  _setThumbnailSource(host){
+    this.select('#thumbnail').src = `${host}/${this.url}.webp`
+    this.select('#heic').src = `${host}/${this.url}.heic`
+    this.select('#webp').src = `${host}/${this.url}.webp`
+  }
+
   loadContent(type) {
     let host = ''
     switch(type){
       case 'image':
-        host = config.THUMBNAIL_HOST
-        this.select('#thumbnail').src = `${host}/${this.url}.webp`
+        this._setThumbnailSource(config.THUMBNAIL_HOST)
         break
     }
   }
