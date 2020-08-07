@@ -1,55 +1,16 @@
 import SociComponent from './soci-component.js'
 
-export default class SociQuillView extends SociComponent {
+export default class SociQuillView extends HTMLElement {
   constructor() {
     super()
   }
 
-  css(){
-    return `
-      :host {
-        display: block;
-      }
-
-      pre {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-        white-space: normal;
-        width: 100%;
-      }
-
-      h1, h2, h3 {
-        margin: 0;
-      }
-      h1 {
-        font-size: 2em;
-      }
-      h2 {
-        font-size: 1.5em;
-      }
-      h3 {
-        font-size: 1.17em;
-      }
-      p {
-        margin: 0;
-      }
-    `
-  }
-  
-  html(){
-    return `
-      <pre>
-      </pre>
-    `
+  static get observedAttributes() {
+    return ['ops']
   }
 
-  connectedCallback() {
-    this.ops = JSON.stringify({"ops":[{"insert":"Hey now this is a big test\n\nWe're gonna go "},{"attributes":{"underline":true,"bold":true},"insert":"HARD"},{"insert":"\n\nOk here's a header"},{"attributes":{"header":1},"insert":"\n"},{"insert":"heres a "},{"attributes":{"link":"google.com"},"insert":"link"},{"insert":" in the middle \n"},{"attributes":{"link":"non.io"},"insert":"heres one that's a whole line"},{"insert":"\n\nhow bout some...\nl"},{"attributes":{"italic":true},"insert":"ist"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"e"},{"attributes":{"bold":true},"insert":"lem"},{"insert":"ents"},{"attributes":{"indent":1,"list":"ordered"},"insert":"\n"},{"attributes":{"link":"reddit.com"},"insert":"with magic"},{"attributes":{"indent":2,"list":"ordered"},"insert":"\n"},{"insert":"Boom"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"pure happiness"},{"attributes":{"indent":1,"list":"bullet"},"insert":"\n"},{"insert":"hell yea"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"oh my what is this"},{"attributes":{"indent":1,"list":"ordered"},"insert":"\n"},{"insert":"\n"}]})
-    this.ops = JSON.stringify({"ops":[{"insert":"we're gonna go "},{"attributes":{"italic":true,"bold":true},"insert":"hard"},{"insert":"\ntesting this "},{"attributes":{"underline":true},"insert":"shit"},{"attributes":{"header":1},"insert":"\n"}]})
-    console.log(this.ops)
-    setTimeout(()=> {
-      this.previousElementSibling.value = this.ops
-    }, 1000)
-    this.render(JSON.parse(this.ops))
+  async attributeChangedCallback(name, oldValue, newValue){
+    if(name == 'ops') this.render(newValue)
   }
 
   _tagMapping = {
@@ -59,95 +20,109 @@ export default class SociQuillView extends SociComponent {
   }
 
   render(ops){
-    ops = ops.ops
-    let html = document.createElement('div')
-    let currentText = ''
-    let dom = null
-    let parent = null
-    let prevNode = null
-    ops.forEach(op => {
-      while(op.insert.length > 1 && op.insert.indexOf('\n') != -1){
-        let substring = op.insert.slice(0, op.insert.indexOf('\n'))
-        console.log(`substring: ${substring}`)
-        op.insert = op.insert.slice(op.insert.indexOf('\n') + 1)
-        console.log(`insert: ${op.insert}`)
-        dom = document.createElement('p')
-        dom.innerHTML = currentText + substring
-        html.appendChild(dom)
-        currentText = ''
+    try {
+      if(typeof ops == 'string') ops = JSON.parse(ops)
+      ops = ops.ops
+      let currentBlockText = ''
+      let parentContainer = this
+      let prevLi = null
+      let newLine = () => {
+        if(currentBlockText == '') return document.createElement('br')
+        let dom = document.createElement('p')
+        dom.innerHTML = currentBlockText
+        currentBlockText = ''
+        return dom
       }
-      if(op.attributes) {
-        parent = html
-        Object.keys(op.attributes).forEach(key => {
-          switch(key){
-            case "header":
-              dom = document.createElement(`h${op.attributes[key]}`)
-              dom.innerHTML = currentText
-              break
-            case "link":
-              dom = document.createElement('a')
-              dom.href = op.attributes.link
-              dom.innerHTML = currentText
-              break
-            case "list":
-              let listType = op.attributes.list == 'ordered' ? 'OL' : 'UL'
-              let indent = op.attributes.indent || 0
-              // If we're at the root indentation level, then just attach the child to the last list
-              if(html.lastElementChild.tagName == listType && indent == html.lastElementChild.dataset.indent){
-                parent = html.lastElementChild
-              }
-              else {
-                // Find the parent that we want to attach to
-                let prevIndent = prevNode?.dataset?.indent
-                if(indent == 0){
-                  parent = html
-                }
-                else if(prevIndent >= indent){
-                  console.log(`going shallower: ${prevIndent} ${indent}`)
-                  parent = prevNode.closest(`${listType}[data-indent="${indent}"]`)
-                } 
-                else if(prevIndent < indent){
-                  console.log('going deeper')
-                  parent = prevNode
-                } 
-                else {
-                  parent = prevNode || html
-                  console.log('going same or root')
-                }
-
-                console.log(parent)
-                console.log(html)
-
-                // Once we know our parent, let's indent as much as we need
-                while(parent?.dataset?.indent == undefined || indent > parseInt(parent.dataset.indent)){
-                  let indentContainer = document.createElement(listType)
-                  indentContainer.setAttribute('data-indent', parent?.dataset?.indent == undefined ? 0 : parseInt(parent.dataset.indent) + 1)
-                  console.log(indent)
-                  parent.appendChild(indentContainer)
-                  parent = indentContainer
-                }
-              }
-
-              // Finally, let's create an li and put in our content
-              dom = document.createElement('li')
-              dom.setAttribute('data-indent', indent)
-              dom.innerHTML = currentText
-              break
-            // if none of the above, this is an inline attribute
-            default:
-              dom = document.createElement(this._tagMapping[key] || key)
-              dom.innerHTML = op.insert
-              break
+      ops.forEach(op => {
+        // Check if this is a block element modifier
+        if(op.insert == '\n'){
+          if(op.attributes == undefined){
+            parentContainer.appendChild(newLine())
           }
-        })
-        parent.appendChild(dom)
-        prevNode = dom
-        currentText = ''
-      }
-      else {
-        currentText += op.insert
-      }
-    })
-    this.select('pre').appendChild(html)
+          else if(op.attributes.header){
+            let dom = document.createElement(`h${op.attributes.header}`)
+            dom.innerHTML = currentBlockText
+            parentContainer.appendChild(dom)
+            currentBlockText = ''
+          }
+          else if(op.attributes.list){
+            let listType = op.attributes.list == 'ordered' ? 'OL' : 'UL'
+            let indent = op.attributes.indent || 0
+            let parent = parentContainer
+            // If we're at the root indentation level, then just attach the child to the last list
+            if(parentContainer?.lastElementChild?.tagName == listType && indent == parentContainer.lastElementChild?.dataset?.indent){
+              parent = parentContainer.lastElementChild
+            }
+            else {
+              // Find the parent that we want to attach to
+              let prevIndent = prevLi?.dataset?.indent
+              if(indent == 0){
+                parent = parentContainer
+              }
+              else if(prevIndent >= indent){
+                console.log(`going shallower: ${prevIndent} ${indent}`)
+                parent = prevLi.closest(`${listType}[data-indent="${indent}"]`)
+              } 
+              else if(prevIndent < indent){
+                console.log('going deeper')
+                parent = prevLi
+              } 
+              else {
+                parent = prevLi || parentContainer
+                console.log('going same or root')
+              }
+
+              // Once we know our parent, let's indent as much as we need
+              while(parent?.dataset?.indent == undefined || indent > parseInt(parent.dataset.indent)){
+                let indentContainer = document.createElement(listType)
+                indentContainer.setAttribute('data-indent', parent?.dataset?.indent == undefined ? 0 : parseInt(parent.dataset.indent) + 1)
+                parent.appendChild(indentContainer)
+                parent = indentContainer
+              }
+            }
+
+            // Finally, let's create an li and put in our content
+            let dom = document.createElement('li')
+            dom.setAttribute('data-indent', indent)
+            dom.innerHTML = currentBlockText
+            parent.appendChild(dom)
+            prevLi = dom
+            currentBlockText = ''
+          }
+        }
+
+        // Otherwise treat it as inline
+        else {
+          let inserts = op.insert
+          while(inserts.length) {
+            let newLinePos = inserts.indexOf('\n')
+            if(newLinePos >= 0){
+              currentBlockText += inserts.slice(0, newLinePos)
+              inserts = inserts.slice(newLinePos + 1)
+              parentContainer.appendChild(newLine())
+            }
+            else {
+              if(op.attributes) Object.keys(op.attributes).forEach(key => {
+                if(key == 'link'){
+                  inserts = `<a href=${op.attributes.link}>${inserts}</a>`
+                }
+                else {
+                  let tag = this._tagMapping[key]
+                  inserts = `<${tag}>${inserts}</${tag}>`
+                }
+              })
+              currentBlockText += inserts
+              inserts = ''
+            }
+          }
+        }
+      })
+
+    }
+    catch(e) {
+      console.error(e)
+      console.log(ops)
+      this.innerHTML = "<error style='color: var(--r3);'>Error: Malformed content</error>"
+    }
   }
 }

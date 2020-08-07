@@ -342,7 +342,7 @@ export default class SociComment extends SociComponent {
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
 
-    this.innerHTML = '<div slot="content"></div><div slot="replies"></div>'
+    this.innerHTML = '<soci-quill-view slot="content"></soci-quill-view><div slot="replies"></div>'
     this._renderContent()
 
     let user = this.select('soci-user')
@@ -377,11 +377,8 @@ export default class SociComment extends SociComponent {
   }
 
   _renderContent(){
-    let contentContainer = this.querySelector('div[slot="content"]')
-    if(contentContainer) {
-      let renderer = document.getElementById('comment-renderer')
-      contentContainer.innerHTML = renderer.renderOpsToHTML(this._content)
-    }
+    let contentContainer = this.querySelector('soci-quill-view[slot="content"]')
+    contentContainer?.render(this._content)
   }
 
   _reply(){
