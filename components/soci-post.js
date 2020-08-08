@@ -7,7 +7,7 @@ export default class SociPost extends SociComponent {
   }
 
   css(){
-    let FOOTER_HEIGHT = 300
+    let CONTENT_HEIGHT = 300
     return `
        :host {
         background: var(--n0);
@@ -22,16 +22,16 @@ export default class SociPost extends SociComponent {
         min-width: 420px;
       }
 
-       content img {
+      #media img {
         width: 100%;
-        max-height: calc(100vh - ${FOOTER_HEIGHT}px);
+        max-height: calc(100vh - ${CONTENT_HEIGHT}px);
         object-fit: contain;
         position: relative;
         z-index: 10;
         margin-bottom: -200%;
       }
 
-       content img#bg {
+      #media img#bg {
         position: inherit;
         z-index: 9;
         left: 0;
@@ -41,24 +41,26 @@ export default class SociPost extends SociComponent {
         margin-bottom: 0;
       }
 
-       content {
+      #media {
         display: block;
       }
 
-       footer {
+      content {
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
-        display: flex;
+        display: block;
         position: relative;
         background: #fff;
         z-index: 10;
       }
 
-       #details-container {
-        min-width: 500px;
+      #details-container {
         width: 100%;
+        min-width: 500px;
+        max-width: 840px;
+        margin: 0 auto;
       }
 
-       #details {
+      #details {
         margin: 0 auto;
         box-sizing: border-box;
         padding: 12px 18px 24px;
@@ -132,17 +134,29 @@ export default class SociPost extends SociComponent {
         --border-color: var(--l1);
       }
 
-      @media (max-width: 1280px) { 
-         footer {
-          display: block;
-        }
+      :host([type="blog"]) slot[name="description"] {
+        padding: 32px 0 64px;
+        border: 0;
+      }
 
+      :host([type="blog"]) #media {
+        display: none;
+      }
+
+      :host([type="blog"]) content {
+        padding-top: 60px;
+      }
+
+      :host([type="blog"]) title-container h1 {
+        font-size: 32px;
+        line-height: 40px;
+        margin-bottom: 6px;
       }
     `
   }
 
   html(){ return `
-    <content>
+    <div id="media">
       <picture>
         <source>
         <source>
@@ -153,8 +167,8 @@ export default class SociPost extends SociComponent {
         <source>
         <img id="bg" src="/example-data/cat.jpg"/>
       </picture>
-    </content>
-    <footer>
+    </div>
+    <content>
       <div id="details-container">
         <div id="details">
           <soci-user name="pwnies" avatar-only></soci-user>
@@ -169,7 +183,7 @@ export default class SociPost extends SociComponent {
         </div>
       </div>
       <slot name="comments"></slot>
-    </footer>
+    </content>
   `}
 
   static get observedAttributes() {
@@ -177,7 +191,7 @@ export default class SociPost extends SociComponent {
   }
 
   connectedCallback(){
-    this.select('content').addEventListener('click', this._click)
+    this.select('#media').addEventListener('click', this._click)
   }
 
   attributeChangedCallback(name, oldValue, newValue){

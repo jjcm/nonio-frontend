@@ -671,10 +671,8 @@ export default class SociInput extends SociComponent {
     this.editor.setContents(JSON.parse(val))
     this._internals.setFormValue(val)
   }
+
+  clear(){
+    this.value = '{"ops":[{"insert":"\\n"}]}'
+  }
 }
-
-
-let renderer = document.createElement('soci-input')
-renderer.style.display = 'none'
-renderer.id = "comment-renderer"
-document.body.appendChild(renderer)

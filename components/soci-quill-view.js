@@ -20,6 +20,7 @@ export default class SociQuillView extends HTMLElement {
   }
 
   render(ops){
+    this.innerHTML = ''
     try {
       if(typeof ops == 'string') ops = JSON.parse(ops)
       ops = ops.ops

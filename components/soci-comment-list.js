@@ -7,9 +7,15 @@ export default class SociCommentList extends SociComponent {
 
   css(){
     return `
+      :host {
+        display: block;
+        background: linear-gradient(var(--n1), #fff 30px);
+      }
       controls {
         display: flex;
         width: 100%;
+        max-width: 840px;
+        margin: 0 auto;
         justify-content: space-between;
         color: var(--n3);
         font-weight: 500;
@@ -17,15 +23,13 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 14px 0 22px;
-        background: linear-gradient(var(--n1), #fff);
+        padding: 0 22px 0 14px;
       }
       filtering {
         display: flex;
-        width: 100%;
       }
       filter {
-        margin-right: 32px;
+        margin-left: 32px;
         position: relative;
         cursor: pointer;
       }
@@ -51,16 +55,21 @@ export default class SociCommentList extends SociComponent {
       content {
         display: block;
         padding: 0 8px 24px;
+        max-width: 840px;
+        margin: 0 auto;
       }
       soci-input {
         min-height: 82px;
         border: 1px solid #eee;
         border-radius: 4px;
         margin: 8px 18px;
+        max-width: 840px;
+        margin: 2px auto 20px;
       }
-      soci-input:focus-within {
+      comment-input[active] soci-input {
         min-height: 200px;
         padding-bottom: 40px;
+        margin-bottom: 8px;
       }
       button-container {
         display: block;
@@ -69,43 +78,30 @@ export default class SociCommentList extends SociComponent {
         position: relative;
         padding-left: 12px;
         transition: all 0.1s var(--soci-ease);
+        max-width: 840px;
+        margin: 0 auto;
       }
-      button-container[active] {
+      comment-input[active] button-container {
         height: 20px;
-        margin-bottom: 16px;
-      }
-      button {
-        border: 0;
-        border-radius: 10px;
-        background: var(--b2);
-        height: 20px;
-        color: #fff;
-        padding: 0 8px;
-        font-size: 12px;
-      }
-      button:focus {
-        outline: 0;
-        box-shadow: 0 0 0 2px var(--b1);
-      }
-      button:active {
-        box-shadow: none;
-        background: var(--b3);
       }
     `
   }
 
   html(){ return `
       <controls>
+        <comment-count>0 comments</comment-count>
         <filtering @click=_filter>
           <filter active>Top</filter>
           <filter>New</filter>
         </filtering>
-        <comment-count>0 comments</comment-count>
       </controls>
-      <soci-input @focus=_onFocus @blur=_onBlur></soci-input>
-      <button-container>
-        <button @click=addComment>submit</button>
-      </button-container>
+      <comment-input>
+        <soci-input @focus=_onFocus ></soci-input>
+        <button-container>
+          <soci-button @click=cancelComment subtle>cancel</soci-button>
+          <soci-button id="submit" @click=addComment async>submit</soci-button>
+        </button-container>
+      </comment-input>
       <content>
         <slot></slot>
       </content>
@@ -125,12 +121,12 @@ export default class SociCommentList extends SociComponent {
   }
 
   _onFocus(){
-    this.select('button-container').setAttribute('active', '')
+    this.select('comment-input').toggleAttribute('active', true)
   }
 
-  _onBlur(){
-    if(this.select('soci-input').value == '{"ops":[{"insert":"\\n"}]}')
-      this.select('button-container').removeAttribute('active')
+  cancelComment(){
+    this.select('soci-input').clear()
+    this.select('comment-input').toggleAttribute('active', false)
   }
 
   _filter(e){
@@ -169,6 +165,14 @@ export default class SociCommentList extends SociComponent {
     this.postData('/comment/create', {
       post: this.url,
       content: this.select('soci-input').value
+    }).then(res=>{
+      if(res.id){
+        this.select('#submit').success()
+        this.cancelComment()
+      }
+      else {
+        this.select('#submit').error()
+      }
     })
   }
 
