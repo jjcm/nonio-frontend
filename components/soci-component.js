@@ -3,11 +3,17 @@ import config from '../config.js'
 export default class SociComponent extends HTMLElement {
   constructor() {
     super()
-    this.attachShadow({'mode':'open'})
-    this.shadowRoot.innerHTML = `
-      ${this.css ? `<style>${this.css()}</style>` : ''}
-      ${this.html ? this.html() : '<slot></slot>'}
-    `
+    let css, html
+    if(this.css) css = this.css()
+    if(this.html) html = this.html()
+    if(html || css){
+      this.attachShadow({'mode':'open'})
+      this.shadowRoot.innerHTML = `
+        ${css ? `<style>${css}</style>` : ''}
+        ${html ? html : '<slot></slot>'}
+      `
+    }
+
 
     this.shadowRoot.querySelectorAll('*').forEach(el=> {
       Array.from(el.attributes).forEach(attr => {

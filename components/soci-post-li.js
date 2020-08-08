@@ -33,10 +33,18 @@ export default class SociPostLi extends SociComponent {
       img[src] {
         display: block;
       }
+
+      #preview img {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
       content {
         display: flex;
         flex-direction: column;
-        width: 100%;
         overflow: hidden;
       }
       #top {
@@ -185,10 +193,15 @@ export default class SociPostLi extends SociComponent {
   }
 
   html(){ return `
-    <picture>
-      <source id="heic">
-      <source id="webp">
-      <img id="thumbnail" @click=expand />
+    <picture id="thumbnail">
+      <source class="heic">
+      <source class="webp">
+      <img @click=expand />
+    </picture>
+    <picture id="preview">
+      <source class="heic">
+      <source class="webp">
+      <img @click=expand />
     </picture>
     <content>
       <div id="top">
@@ -271,24 +284,30 @@ export default class SociPostLi extends SociComponent {
 
   expand(){
     this.toggleAttribute('expanded')
-    let thumbnail = this.select('#thumbnail')
+    let thumbnail = this.select('#thumbnail img')
+    let preview = this.select('#preview img')
     if(this.hasAttribute('expanded')){
-      thumbnail.style.height = '376px'
-      thumbnail.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
+      thumbnail.style.height = preview.style.height = '376px'
+      thumbnail.style.width = preview.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
       let description = document.createElement('soci-quill-view')
-      this._setThumbnailSource(config.IMAGE_HOST)
+      this._setImageSource(this.select('#preview'), config.IMAGE_HOST)
       description.setAttribute('slot', 'description')
+      setTimeout(()=>{
+        if(this.hasAttribute('expanded'))
+          preview.style.opacity = 1
+      }, 100)
       this.getData(`/posts/${this.url}`).then(e=>{
-        if(e.content.length){
+        if(e.content.length && this.hasAttribute('expanded')){
           description.render(e.content)
           this.appendChild(description)
         }
       })
     }
     else {
-      thumbnail.style.height = ''
-      thumbnail.style.width = ''
+      thumbnail.style.height = preview.style.height = ''
+      thumbnail.style.width = preview.style.width = ''
       this.querySelector('soci-quill-view')?.remove()
+      preview.style.opacity = ''
     }
 
   }
@@ -297,17 +316,17 @@ export default class SociPostLi extends SociComponent {
     this.score = e.detail.score
   }
 
-  _setThumbnailSource(host){
-    this.select('#thumbnail').src = `${host}/${this.url}.webp`
-    this.select('#heic').src = `${host}/${this.url}.heic`
-    this.select('#webp').src = `${host}/${this.url}.webp`
+  _setImageSource(container, host){
+    container.querySelector('img').src = `${host}/${this.url}.webp`
+    container.querySelector('.heic').src = `${host}/${this.url}.heic`
+    container.querySelector('.webp').src = `${host}/${this.url}.webp`
   }
 
   loadContent(type) {
     let host = ''
     switch(type){
       case 'image':
-        this._setThumbnailSource(config.THUMBNAIL_HOST)
+        this._setImageSource(this.select('#thumbnail'), config.THUMBNAIL_HOST)
         break
     }
   }

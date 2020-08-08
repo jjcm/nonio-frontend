@@ -177,7 +177,7 @@ export default class SociColumn extends SociComponent {
               <filter>blogs</filter>
             </filters>
           </header>
-          <slot name="posts"></slot><soci-post-list data='/posts'></soci-post-list>
+          <slot name="posts"></slot>
         </content>
       </scroll-container>
       <separator></separator>
