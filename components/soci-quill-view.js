@@ -37,16 +37,13 @@ export default class SociQuillView extends HTMLElement {
       ops.forEach(op => {
         // Check if this is a block element modifier
         if(op.insert == '\n'){
-          if(op.attributes == undefined){
-            parentContainer.appendChild(newLine())
-          }
-          else if(op.attributes.header){
+          if(op.attributes?.header){
             let dom = document.createElement(`h${op.attributes.header}`)
             dom.innerHTML = currentBlockText
             parentContainer.appendChild(dom)
             currentBlockText = ''
           }
-          else if(op.attributes.list){
+          else if(op.attributes?.list){
             let listType = op.attributes.list == 'ordered' ? 'OL' : 'UL'
             let indent = op.attributes.indent || 0
             let parent = parentContainer
@@ -90,6 +87,9 @@ export default class SociQuillView extends HTMLElement {
             prevLi = dom
             currentBlockText = ''
           }
+          else {
+            parentContainer.appendChild(newLine())
+          }
         }
 
         // Otherwise treat it as inline
@@ -109,7 +109,7 @@ export default class SociQuillView extends HTMLElement {
                 }
                 else {
                   let tag = this._tagMapping[key]
-                  inserts = `<${tag}>${inserts}</${tag}>`
+                  if(tag) inserts = `<${tag}>${inserts}</${tag}>`
                 }
               })
               currentBlockText += inserts

@@ -107,6 +107,7 @@ export default class SociPost extends SociComponent {
         --avatar-size: 48px;
         position: absolute;
         left: 18px;
+        top: 16px;
       }
 
        slot[name="description"] {
