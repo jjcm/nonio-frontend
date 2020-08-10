@@ -9,6 +9,7 @@ export default class SociTab extends SociComponent {
     return `
       :host {
         display: none;
+        padding-top: 16px;
       }
       :host([activating]),
       :host([active]) {

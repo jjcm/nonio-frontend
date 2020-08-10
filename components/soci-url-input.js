@@ -75,7 +75,7 @@ export default class SociUrlInput extends SociComponent {
   `}
 
   html() { return `
-    <label for="path">https:${config.HOST}/</label>
+    <label for="path">${config.HOST}/</label>
     <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>

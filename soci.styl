@@ -20,6 +20,8 @@ h1
 
 h2 
   font-size: 1.5em
+  font-weight: 400
+  margin-bottom: 0.5em
 
 h3 
   font-size: 1.17em
@@ -53,6 +55,15 @@ button
   width: calc(100vw - 280px)
   position: relative
   margin-left: 280px
+  &:before
+    content: ''
+    position: fixed
+    top: 0
+    left: 280px
+    height: 100vh
+    width: 30px
+    background: linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.05) 1px, transparent 4px)
+    z-index: 11
 
 #home
   svg
@@ -220,7 +231,7 @@ button
         margin-left: -416px
 
 #submit-container
-  max-width: 1200px
+  max-width: 920px
   padding: 24px 40px
   margin: 0 auto
   box-sizing: border-box
@@ -283,9 +294,7 @@ button
     &[name="title"]
       &::placeholder 
         font-size: 32px
-        font-weight: 700px
       font-size: 32px
-      font-weight: 700px
       margin-bottom: 24px
       padding-left: 2px
   soci-icon

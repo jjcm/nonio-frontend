@@ -9,7 +9,7 @@ export default class SociCommentList extends SociComponent {
     return `
       :host {
         display: block;
-        background: linear-gradient(var(--n1), #fff 30px);
+        background: linear-gradient(var(--n2) 0px, var(--n1) 1px, #fff 30px);
       }
       controls {
         display: flex;
