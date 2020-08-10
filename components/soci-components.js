@@ -69,9 +69,6 @@ window.customElements.define('soci-tag', SociTag)
 import SociTagGroup from "./soci-tag-group.js"
 window.customElements.define('soci-tag-group', SociTagGroup)
 
-import SociTagInput from "./soci-tag-input.js"
-window.customElements.define('soci-tag-input', SociTagInput)
-
 import SociTagLi from "./soci-tag-li.js"
 window.customElements.define('soci-tag-li', SociTagLi)
 

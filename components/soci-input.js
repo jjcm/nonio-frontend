@@ -88,8 +88,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-container {
         box-sizing: border-box;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 13px;
+        font-size: 16px;
         height: 100%;
         margin: 0px;
         position: relative;
