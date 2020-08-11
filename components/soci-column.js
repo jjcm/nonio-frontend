@@ -261,7 +261,7 @@ export default class SociColumn extends SociComponent {
       case 'tag':
         this.select('#tag-title').innerHTML = newValue
         document.querySelector('soci-sidebar').activateTag(newValue)
-        this.querySelector('soci-post-list').setAttribute('data', `/posts?tag=${newValue}`)
+        this.querySelector('soci-post-list')?.setAttribute('data', `/posts?tag=${newValue}`)
         break
       case 'subscribers':
         let subs = newValue || 0

@@ -161,12 +161,12 @@ export default class SociPost extends SociComponent {
       <picture>
         <source>
         <source>
-        <img @load=_pictureLoaded src="/example-data/cat.jpg"/>
+        <img @load=_pictureLoaded />
       </picture>
       <picture>
         <source>
         <source>
-        <img id="bg" src="/example-data/cat.jpg"/>
+        <img id="bg" />
       </picture>
     </div>
     <content>

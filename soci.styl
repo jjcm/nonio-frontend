@@ -196,6 +196,7 @@ button
       padding: 0
     soci-tab-group
       width: 100%
+      margin-top: 12px
 
 @media screen and (max-width: 968px) 
   #user .stats
@@ -238,42 +239,12 @@ button
   height: 100vh
   h1, h2
     padding-left: 2px
-  .url
-    display: flex
-    align-items: center
-    position: relative
-    height: 32px
-    min-width: 540px
-    line-height: 28px
-    border: 2px solid var(--n2)
-    box-sizing: border-box
-    width: 100%
-    font-size: 14px
-    padding: 0 8px
-    border-radius: 16px
-    transition: none
-    &[available="true"]
-      background: var(--g1)
-      border: 2px solid var(--g1);
-      color: #fff
-      cursor: pointer
-      transition: all 0.1s ease-in-out, color 0s ease-in-out
-      input
-        cursor: pointer
-    &[available="false"]
-      border: 2px solid var(--r3);
-      soci-icon
-        color: var(--r3)
-    .error
-      position: absolute
-      left: 2px
-      bottom: -20px
-      color: var(--r3)
-      height: 20px
-      font-size: 12px
-
+  soci-url-input
+    margin-bottom: 12px
   soci-button
     margin-top: 8px
+  soci-tab
+    padding-top: 32px
   label
     cursor: inherit
   input

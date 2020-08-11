@@ -83,6 +83,9 @@ export default class SociRouter extends SociComponent {
     if(this.hasAttribute('active')){
       this.removeAttribute('active')
       this._detachChildren()
+
+      let e = new CustomEvent('routedeactivate', {bubbles: false})
+      this.dispatchEvent(e)
     }
   }
 

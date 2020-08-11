@@ -17,6 +17,7 @@ let tags = {
     }
   },
   onDeactivate: () => {
+    document.querySelector('soci-sidebar').activateTag('')
   }
 }
 
