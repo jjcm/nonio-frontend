@@ -14,12 +14,17 @@ export default class SociPost extends SociComponent {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        transition: all 0.3s, box-shadow 0.2s;
         z-index: 10;
+        transition: opacity 0.1s var(--soci-ease);
         width: 100%;
         height: 100%;
         overflow-x: hidden;
         min-width: 420px;
+        opacity: 0;
+      }
+
+      :host([loaded]) {
+        opacity: 1;
       }
 
       #media img {
@@ -43,6 +48,12 @@ export default class SociPost extends SociComponent {
 
       #media {
         display: block;
+        opacity: 0;
+      }
+
+      :host([loaded]) #media {
+        opacity: 1;
+        transition: opacity 0.3s var(--soci-ease);
       }
 
       content {
@@ -72,6 +83,7 @@ export default class SociPost extends SociComponent {
         display: block;
         padding-left: 60px;
         margin-bottom: 12px;
+        transform: translateY(20px);
       }
 
       h1 {
@@ -106,8 +118,8 @@ export default class SociPost extends SociComponent {
        soci-user[avatar-only] {
         --avatar-size: 48px;
         position: absolute;
-        left: 18px;
-        top: 16px;
+        left: 0px;
+        top: 2px;
       }
 
        slot[name="description"] {
@@ -117,6 +129,12 @@ export default class SociPost extends SociComponent {
         padding: 8px;
         border: 1px solid #eee;
         border-radius: 4px;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      :host([type="blog"]) slot[name="description"] {
+        transform: translateY(25px);
       }
 
       soci-comment soci-comment {
@@ -148,10 +166,67 @@ export default class SociPost extends SociComponent {
         padding-top: 60px;
       }
 
+      :host([type="blog"]) title-container {
+        padding-left: 0;
+        margin-bottom: 8px;
+        opacity: 0;
+      }
+
       :host([type="blog"]) title-container h1 {
         font-size: 32px;
         line-height: 40px;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
+      }
+
+      :host([type="blog"]) soci-user[avatar-only] {
+        float: left;
+        position: static;
+        transform: translateY(2px);
+      }
+
+      :host([type="blog"]) meta-data {
+        padding-left: 60px;
+        margin-top: 8px;
+      }
+
+      :host([type="blog"]) slot[name="tags"] {
+        padding-left: 60px;
+        display: block;
+      }
+
+      slot[name="tags"] {
+        opacity: 0;
+        transform: translateY(20px);
+        display: block;
+      }
+
+      :host([loaded]) title-container,
+      :host([loaded]) slot[name="tags"] {
+        opacity: 1;
+        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease);
+        transform: translateY(0);
+      }
+
+      :host([loaded]) slot[name="description"] {
+        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      :host([type="blog"][loaded]) slot[name="description"] {
+        transition: all 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease);
+      }
+
+      slot[name="comments"] {
+        display: block;
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      :host([loaded]) slot[name="comments"] {
+        opacity: 1;
+        transform: translateY(0px);
+        transition: all 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease);
       }
     `
   }
@@ -172,9 +247,9 @@ export default class SociPost extends SociComponent {
     <content>
       <div id="details-container">
         <div id="details">
-          <soci-user name="pwnies" avatar-only></soci-user>
           <title-container>
             <h1></h1>
+            <soci-user name="pwnies" avatar-only></soci-user>
             <meta-data>
               by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
             </meta-data>
@@ -228,6 +303,7 @@ export default class SociPost extends SociComponent {
   }
 
   loadPost(url) {
+    this.toggleAttribute('loaded', false)
     this.getData('/posts/' + url).then(post => {
       for(let key in post) {
         switch(key){
@@ -245,14 +321,22 @@ export default class SociPost extends SociComponent {
             break
         }
       }
+      setTimeout(()=>{
+      this.toggleAttribute('loaded', true)
+      }, 100)
+      console.log('lmao')
     })
+    console.log('ayy')
 
     this.loadContent('image')
   }
 
   loadContent(type) {
+    this.querySelector('soci-tag-group')?.setAttribute('format', type)
+    console.log(type)
     switch(type){
       case 'image':
+        console.log('loading the image')
         this.select('img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{

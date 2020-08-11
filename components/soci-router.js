@@ -22,6 +22,7 @@ export default class SociRouter {
   route(path, fresh){
     document.querySelectorAll('soci-route').forEach(route=>{
       if(route.test()){
+        console.log(`route activating: ${fresh}`)
         route.activate(fresh)
       } else route.deactivate()
     })
@@ -38,23 +39,3 @@ export default class SociRouter {
     })
   }
 }
-
-/*
-  connectedCallback(){
-    let details = this.getDetailsFromUrl()
-    history.replaceState(details, '', document.location.pathname + document.location.hash)
-    window.addEventListener('popstate', this.onPopState.bind(this))
-    window.addEventListener('hashchange', this.onHashChange.bind(this))
-    window.addEventListener('link', this.onHashChange.bind(this))
-    this.onHashChange()
-  }
-
-  getDetailsFromUrl(){
-    let tags = window.location.hash.replace('#','').split('+')
-    tags = tags.filter(Boolean)
-
-    let postUrl = window.location.pathname.replace(config.BASE_URL, '')
-    if(postUrl.charAt(postUrl.length - 1) == '/') postUrl = postUrl.slice(0,-1)
-    return {tags: tags, post: postUrl}
-  }
-  */

@@ -2,7 +2,6 @@ let post = {
   init() {
   },
   onActivate() {
-    console.log('activating')
     let post = document.querySelector('#post soci-post')
     post.setAttribute('url', document.location.pathname.substr(1))
   },

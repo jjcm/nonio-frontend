@@ -30,10 +30,13 @@ export default class SociRouter extends SociComponent {
     let path = this.getAttribute('path') || ''
     this.path = new RegExp(path)
 
-    let parentRoute = this.parentElement.closest('capacitor-route')
+    let parentRoute = this.parentElement.closest('soci-route')
     if(parentRoute) {
       parentRoute.addEventListener('routeactivate', ()=>{
-        if(this.test()) this.activate()
+        if(this.test()) {
+          console.log(this)
+          this.activate()
+        }
       })
     }
   }
@@ -65,7 +68,7 @@ export default class SociRouter extends SociComponent {
     if(this.hasAttribute('active')) return 0
     // If fresh is true, we load a fresh copy of the route. Otherwise we load
     // the previous state.
-    if(fresh) this.innerHTML = this.domCopy
+    if(fresh || this.hasAttribute('fresh')) this.innerHTML = this.domCopy
     else this._attachChildren()
 
     // Very briefly add the activating class, followed immediately by the active

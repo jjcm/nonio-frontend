@@ -6,8 +6,6 @@ export default class SociTag extends SociComponent {
   }
 
   css(){
-    let bgColor = this.getAttribute('color') || 'n2'
-    let color = bgColor == 'n2' ? 'n3' : 'n0'
     return `
       :host {
         display: inline-block;
@@ -29,8 +27,9 @@ export default class SociTag extends SociComponent {
         filter: brightness(0.9) contrast(1.2);
       }
       :host([upvoted]) {
-        background: var(--${bgColor});
-        color: var(--${color});
+        background: var(--b2);
+        color: #fff;
+        font-weight: 500;
       }
       a,
       a:visited {
@@ -39,12 +38,10 @@ export default class SociTag extends SociComponent {
       }
       slot {
         display: inline-block;
+        letter-spacing: 0.5px;
       }
       slot:before {
         content: '#';
-      }
-      :host([upvoted]) slot:before {
-        content: '▲';
       }
     `
   }
@@ -98,8 +95,6 @@ export default class SociTag extends SociComponent {
       this.postData(`/posttag/${upvoted ? 'add' : 'remove'}-vote`, {
         post: url.getAttribute('url'),
         tag: this.innerHTML
-      }).then(val => {
-        console.log(val)
       })
     }
     else {

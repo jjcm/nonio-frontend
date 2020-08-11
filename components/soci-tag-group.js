@@ -115,6 +115,15 @@ export default class SociTagGroup extends SociComponent {
       font-weight: bold;
     }
 
+    :host([format="blog"]) #score {
+      font-weight: 600;
+      min-width: 0;
+      padding-right: 4px;
+      transform: trnaslateY(-1px);
+      color: var(--b3);
+      font-size: 20px;
+    }
+
   `}
 
   html(){ return `
