@@ -8,7 +8,6 @@ export default class SociSidebar extends SociComponent {
   css(){
     return `
       :host {
-        box-shadow: 2px 0 0 0 rgba(0,0,0,0.08);
         width: 280px;
         min-width: 280px;
         display: block;
@@ -452,10 +451,16 @@ export default class SociSidebar extends SociComponent {
   _createTags(data, dom, subscribed=false){
     let tags = ` 
       ${data.map((tag) => `
-        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''}></soci-tag-li>
+        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''} ${this._activeTag == tag ? 'active' : ''}></soci-tag-li>
       `).join('')}
     `
     dom.innerHTML = tags
+  }
+
+  activateTag(tag){
+    this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
+    this.select(`soci-tag-li[tag="${tag}"]`)?.toggleAttribute('active', true)
+    this._activeTag = tag
   }
 
   _createSubscribedTag(e){

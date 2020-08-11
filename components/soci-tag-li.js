@@ -18,6 +18,16 @@ export default class SociTagLi extends SociComponent {
       :host([subscribed]) {
         --hash-color: var(--b3);
       }
+
+      :host([active]) a {
+        color: var(--b3);
+        font-weight: 600;
+        background: #1357a020;
+      }
+
+      :host([active]) a:hover {
+        background: #1357a030;
+      }
       
       a {
         display: block;
@@ -59,6 +69,10 @@ export default class SociTagLi extends SociComponent {
 
       #toggleSubscribe:hover {
         background: var(--n1);
+      }
+
+      :host([active]) #toggleSubscribe:hover {
+        background: #1357a018;
       }
 
       :host([subscribed]) #toggleSubscribe svg {
@@ -183,27 +197,9 @@ export default class SociTagLi extends SociComponent {
 
   _tagClick(e){
     e.preventDefault()
-    let href = '#' + this.tag
-    if(document.getElementById('tags').active){
-      href = `${window.location.hash}+${href}`
-    }
-    else {
-      href = '/' + href
-    }
-    let column = document.createElement('soci-column')
-    column.filter = 'all'
-    column.tag = this.tag
-    //column.color = e.currentTarget.getAttribute('color')
-    column.color = 'purple'
-    column.classList.add('inserting')
-    let tags = document.getElementById('tags')
-    tags.insertBefore(column, tags.children[0])
-
-    setTimeout(()=>{
-      column.classList.remove('inserting')
-    },20)
-
+    let href = '/#' + this.tag
     window.history.pushState(null, null, href)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
+    document.querySelector('#tags soci-column')?.setAttribute('tag', this.tag)
   }
 }

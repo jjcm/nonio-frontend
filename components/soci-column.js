@@ -7,7 +7,6 @@ export default class SociColumn extends SociComponent {
 
   css(){
     return `
-      ${this.getColorSchemes()}
       :host {
         scroll-snap-align: start;
         position: relative;
@@ -16,6 +15,7 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
+        background: var(--n2);
         /* heh */
         min-width: 420px; 
       }
@@ -46,7 +46,6 @@ export default class SociColumn extends SociComponent {
       }
 
       header {
-        color: #fff;
         background-color: inherit;
         position: sticky;
         top: 0;
@@ -59,11 +58,8 @@ export default class SociColumn extends SociComponent {
         display: flex;
         justify-content: space-between;
         align-items: center;
-      }
-
-      sorts,
-      filters {
-        display: flex;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
       }
 
       sort,
@@ -81,9 +77,16 @@ export default class SociColumn extends SociComponent {
       }
 
       soci-select {
-        position: relative;
+        position: absolute;
         z-index: 2;
+        left: 6px;
         --height: 24px;
+        --color: var(--n3);
+      }
+
+      soci-select#filter-select {
+        right: 6px;
+        left: auto;
       }
 
       sort:hover,
@@ -94,6 +97,7 @@ export default class SociColumn extends SociComponent {
       sort[selected],
       filter[selected] {
         opacity: 1;
+        color: var(--b3);
       }
 
       sort[selected]::after,
@@ -101,27 +105,32 @@ export default class SociColumn extends SociComponent {
         content:'';
         display: block;
         position: absolute;
-        top: 32px;
+        top: 34px;
         left: calc(50% - 8px);
         width: 16px;
-        height: 4px;
-        border-radius: 2px;
-        background: #dcdef0;
+        height: 3px;
+        border-radius: 0 0 2px 2px;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+      }
+
+      #tag-container {
+        display: inline-flex;
+        margin: 0 auto;
+        align-items: center;
+        opacity: 0;
+        animation: load-in 0.3s var(--soci-ease) forwards;
+      }
+      svg {
+        background: var(--b3);
+        border-radius: 3px;
+        margin-right: 4px;
       }
 
       #tag-title {
-        font-weight: 600;
-        font-size: 20px;
-        line-height: 20px;
-        letter-spacing: 0.7px;
-        width: calc(100% - 32px);
-        text-align: center;
-        position: absolute;
-        z-index: 1;
-      }
-
-      soci-post-list {
-        min-height: calc(100% - 137px);
+        font-size: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
 
       sorts,
@@ -136,6 +145,32 @@ export default class SociColumn extends SociComponent {
 
       :host([large]) soci-select {
         display: none;
+      }
+
+      sorts,
+      filters,
+      soci-select {
+        position: absolute;
+      }
+
+      sorts {
+        left: 8px;
+      }
+
+      filters {
+        right: 8px;
+      }
+
+      @keyframes load-in {
+        from {
+          transform: translateY(4px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
     `
   }
@@ -161,7 +196,14 @@ export default class SociColumn extends SociComponent {
               <sort>year</sort>
               <sort>all</sort>
             </sorts>
-            <div id="tag-title">#funny</div>
+            <div id="tag-container">
+              <svg id="hash" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(1,1.5)">
+                <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="white"></path>
+                </g>
+              </svg>
+              <div id="tag-title">funny</div>
+            </div>
             <soci-select id="filter-select" dropdown-position="right">
               <soci-option slot="selected">All</soci-option>
               <soci-option value="images">Images</soci-option>
@@ -196,11 +238,11 @@ export default class SociColumn extends SociComponent {
     let posts = document.createElement('soci-post-list')
     posts.setAttribute('data', '/posts')
     posts.setAttribute('slot', 'posts')
+    posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
   }
 
   disconnectedCallback(){
-    console.log('removing resize listener')
     this._ro.unobserve(this)
   }
 
@@ -217,7 +259,9 @@ export default class SociColumn extends SociComponent {
         this.filterPosts(newValue)
         break
       case 'tag':
-        this.select('#tag-title').innerHTML = '#' + newValue
+        this.select('#tag-title').innerHTML = newValue
+        document.querySelector('soci-sidebar').activateTag(newValue)
+        this.querySelector('soci-post-list').setAttribute('data', `/posts?tag=${newValue}`)
         break
       case 'subscribers':
         let subs = newValue || 0
@@ -231,13 +275,6 @@ export default class SociColumn extends SociComponent {
   }
   set tag(val){
     return this.setAttribute('tag', val)
-  }
-
-  get color(){
-    return this.getAttribute('color')
-  }
-  set color(val){
-    return this.setAttribute('color', val)
   }
 
   get filter(){
@@ -273,12 +310,12 @@ export default class SociColumn extends SociComponent {
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
     this._updateBar(this.select('sorts'), filter)
-    this.select('soci-post-list').setAttribute('data', '/posts' + paramString)
+    this.querySelector('soci-post-list').setAttribute('data', '/posts' + paramString)
   }
 
   filterPosts(filter){
     filter = filter || 'all'
-    this.select('soci-post-list').setAttribute('filter', filter)
+    this.querySelector('soci-post-list')?.setAttribute('filter', filter)
     this._updateBar(this.select('filters'), filter)
   }
 
@@ -297,23 +334,6 @@ export default class SociColumn extends SociComponent {
       if(child.innerHTML == value) child.setAttribute('selected', '')
       else child.removeAttribute('selected')
     })
-  }
-
-  getColorSchemes(){
-    let schemes = ''
-    let colors = {
-      'red': 'r1',
-      'teal': 't2',
-      'orange': 'o1',
-      'purple': 'p2'
-    }
-
-    for(let color in colors){
-      schemes += `:host([color="${color}"]) content{
-        background: var(--${colors[color]})
-      }`
-    }
-    return schemes
   }
 
   _sortChanged(){

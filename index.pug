@@ -1,5 +1,6 @@
 html(lang="en")
   title nonio
+  meta(http-equiv="content-type" content="text/html; charset=utf-8")
   script(src="/soci.js")
   script(src="/components/soci-components.js" type="module")
   link(rel="stylesheet" href="/soci-tokens.styl")
@@ -15,7 +16,7 @@ html(lang="en")
   #pages
     soci-route#tags(test="both" path="^/#")
       include pages/tags.pug
-    soci-route#home(path="^/$")
+    soci-route#home(test="both" path="^/$")
       include pages/home.pug
     soci-route#new-user(path="^/user/create")
       include pages/new-user.pug

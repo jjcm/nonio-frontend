@@ -8,11 +8,17 @@ export default class SociPostLi extends SociComponent {
   css(){
     return `
       :host {
-        background: rgba(255,255,255,0.8);
         display: block;
         width: 100%;
         padding: 2px 8px 28px;
         box-sizing: border-box;
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      :host([loaded]) {
+        transform: translateY(0);
+        opacity: 1;
+        transition: all 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
       ::slotted(soci-post-li){
         margin-top: 8px;
@@ -51,8 +57,10 @@ export default class SociPostLi extends SociComponent {
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'data':
+        this.toggleAttribute('loaded', false)
         let data = await this.getData(newValue, this.authToken)
         if(data.posts) this.createPosts(data.posts)
+        this.toggleAttribute('loaded', true)
         break
       case 'filter':
         // should put an infinite scroll here
