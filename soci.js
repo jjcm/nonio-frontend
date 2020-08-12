@@ -5,7 +5,6 @@ let soci = {
     soci.checkTokenExpired()
   },
   get token() {
-    soci.checkTokenExpired()
     return localStorage.getItem('jwt')
   },
   set token(val) {
@@ -122,6 +121,8 @@ let soci = {
   }
 }
 
-if(soci.token) soci.loadVotes()
+if(!soci.checkTokenExpired()) {
+  soci.loadVotes()
+}
 
 document.addEventListener('DOMContentLoaded', soci.init)
