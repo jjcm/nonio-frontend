@@ -525,14 +525,16 @@ export default class SociSidebar extends SociComponent {
       setTimeout(()=>{
         this.toggleAttribute('noauth')
       }, 400)
+      this._loadSubscribedTags()
+      this._loadCommonTags()
+      this._populateTags()
+      soci.loadVotes()
+
     }
     else {
       console.log('invalid token')
       this.querySelector('soci-button').error()
     }
-    this._loadSubscribedTags()
-    this._loadCommonTags()
-    this._populateTags()
   }
 
   logout(){

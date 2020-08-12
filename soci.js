@@ -2,8 +2,10 @@ const API_URL = 'https://api.non.io/'
 
 let soci = {
   init: () => {
+    soci.checkTokenExpired()
   },
   get token() {
+    soci.checkTokenExpired()
     return localStorage.getItem('jwt')
   },
   set token(val) {
@@ -23,6 +25,7 @@ let soci = {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
       console.log(expiry)
       if(expiry < Date.now()) return false
+      soci.clearToken()
       return true
     }
     catch {
