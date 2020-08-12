@@ -17,6 +17,8 @@ export default class SociSidebar extends SociComponent {
         position: fixed;
         padding-bottom: 90px;
         box-sizing: border-box;
+        transition: opacity 0.2s var(--soci-ease);
+        opacity: 1;
       }
 
       :host([noauth]) #noauth {
@@ -408,6 +410,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   async connectedCallback(){
+    this.toggleAttribute('loading', false)
     if(!this.authToken) this.setAttribute('noauth', '')
     else {
       this._loadSubscribedTags()
