@@ -22,7 +22,6 @@ export default class SociRouter {
   route(path, fresh){
     document.querySelectorAll('soci-route').forEach(route=>{
       if(route.test()){
-        console.log(`route activating: ${fresh}`)
         route.activate(fresh)
       } else route.deactivate()
     })

@@ -22,7 +22,6 @@ let soci = {
   checkTokenExpired: () => {
     try {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
-      console.log(expiry)
       if(expiry < Date.now()) return false
       soci.clearToken()
       return true

@@ -34,7 +34,6 @@ export default class SociRouter extends SociComponent {
     if(parentRoute) {
       parentRoute.addEventListener('routeactivate', ()=>{
         if(this.test()) {
-          console.log(this)
           this.activate()
         }
       })

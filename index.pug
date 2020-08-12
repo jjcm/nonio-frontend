@@ -6,13 +6,13 @@ html(lang="en")
   link(rel="stylesheet" href="/soci-tokens.styl")
   link(rel="stylesheet" href="/soci.styl")
 
-  //include components.pug
-  //include home.pug
-  //include user.pug
-  //-include colors.pug
-  //
-
-  include sidebar.pug
+  soci-sidebar(loading)
+    div(slot="login")
+      form
+        input(type="email" placeholder="Email address" autocomplete="email")
+        soci-password
+        soci-button(async onclick="this.closest('soci-sidebar').login()") login
+    tags(slot="tags")
   #pages
     soci-route#tags(test="both" path="^/#")
       include pages/tags.pug
