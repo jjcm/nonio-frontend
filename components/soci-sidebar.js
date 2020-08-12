@@ -366,17 +366,6 @@ export default class SociSidebar extends SociComponent {
         <h2>Login to your account</h2>
         <slot name="login">
         </slot>
-        <!--
-        <div>OR</div>
-        <button id="google">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#4285f4" d="M386 400c45-42 65-112 53-179H260v74h102c-4 24-18 44-38 57z"/><path fill="#34a853" d="M90 341a192 192 0 0 0 296 59l-62-48c-53 35-141 22-171-60z"/><path fill="#fbbc02" d="M153 292c-8-25-8-48 0-73l-63-49c-23 46-30 111 0 171z"/><path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55z"/></svg>
-          Login with Google
-        </button>
-        <button id="facebook">
-          Login with Facebook
-          <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 512 512"><path d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z" fill="#fff"/></svg>
-        </button>
-        -->
         <soci-link #create href="/user/create" @click=_createAccount>create account</soci-link>
       </panel>
       <panel id="create">
@@ -535,8 +524,8 @@ export default class SociSidebar extends SociComponent {
 
     }
     else {
-      console.log('invalid token')
-      this.querySelector('soci-button').error()
+      soci.log('Invalid login', response, 'error')
+      this.querySelector('soci-button')?.error()
     }
   }
 
@@ -572,7 +561,8 @@ export default class SociSidebar extends SociComponent {
 
   _loginOnEnter(e){
     if(e.key == "Enter"){
-      window.focus()
+      window.blur()
+      this.querySelector('soci-button')?.wait()
       this.login()
     }
   }
