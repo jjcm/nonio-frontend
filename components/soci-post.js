@@ -349,7 +349,6 @@ export default class SociPost extends SociComponent {
 
   createTags(tags){
     let tagContainer = this.querySelector('soci-tag-group')
-    tagContainer.innerHTML = ''
     tags.forEach(tag=>{
       let newTag = document.createElement('soci-tag')
       newTag.innerHTML = tag.tag

@@ -12,7 +12,7 @@ export default class SociTag extends SociComponent {
         height: 20px;
         border-radius: 3px;
         background: var(--n1);
-        font-size: 10px;
+        font-size: 0.625em;
         line-height: 20px;
         padding: 0 8px;
         color: var(--n3);

@@ -85,15 +85,18 @@ export default class SociTagGroup extends SociComponent {
     }
 
     :host([size="large"]) #score {
-      font-size: 24px;
+      font-size: 16px;
       color: var(--n3);
-      min-width: 48px;
+      min-width: 36px;
+      padding: 0 6px;
       text-align: center;
-      transform: translateY(-2px);
+      border: 1px solid var(--n1);
+      border-radius: 3px;
+      font-weight: 600;
     }
 
     :host([size="large"]) #tags {
-      margin-left: 10px;
+      margin-left: 4px;
     }
 
     :host([size="large"]) #arrow {
@@ -111,23 +114,28 @@ export default class SociTagGroup extends SociComponent {
       margin-right: 4px;
     }
 
+    ::slotted(div) {
+      font-size: 16px;
+      height: calc(var(--height) - 2px);
+      line-height: calc(var(--height) - 2px);
+      color: var(--n3);
+      min-width: 36px;
+      padding: 0 6px;
+      text-align: center;
+      border: 1px solid var(--n1);
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
     :host([upvoted]) #score {
       font-weight: bold;
     }
 
-    :host([format="blog"]) #score {
-      font-weight: 600;
-      min-width: 0;
-      padding-right: 4px;
-      transform: trnaslateY(-1px);
-      color: var(--b3);
-      font-size: 20px;
-    }
 
   `}
 
   html(){ return `
-    <div id="score"></div>
+    <slot name="score"></slot>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -155,11 +163,16 @@ export default class SociTagGroup extends SociComponent {
     this._inputKeyListener = this._inputKeyListener.bind(this)
     this.addEventListener('vote', this._tagVoted)
     this.toggleAttribute('upvoted', this.querySelectorAll('soci-tag[upvoted]').length)
+
+    let score = document.createElement('div')
+    score.setAttribute('slot', 'score')
+    score.innerHTML = this.score
+    this.appendChild(score)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score')
-      this.select('#score').innerHTML = `${newValue}`
+      this.querySelector('[slot="score"]').innerHTML = `${newValue}`
   }
 
   get url(){
