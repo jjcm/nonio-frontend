@@ -71,7 +71,7 @@ export default class SociPassword extends SociComponent {
     this.innerHTML = ''
     this.field = document.createElement('input')
     this.field.setAttribute('type','password')
-    this.field.setAttribute('placeholder', this.getAttribute('placeholder'))
+    this.field.setAttribute('placeholder', this.getAttribute('placeholder') || 'Password')
     this.field.addEventListener('keydown', this._onKeyDown.bind(this))
     this.field.addEventListener('focus', this._onFocus.bind(this))
     this.field.addEventListener('blur', this._onBlur.bind(this))

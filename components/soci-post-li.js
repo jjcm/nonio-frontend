@@ -62,7 +62,7 @@ export default class SociPostLi extends SociComponent {
         right: 12px;
       }
       #title {
-        font-size: 14px;
+        font-size: 16px;
         color: var(--n4);
         letter-spacing: -0.08px;
         line-height: 20px;
@@ -128,7 +128,7 @@ export default class SociPostLi extends SociComponent {
 
       :host([expanded]) img {
         transition: all 0.1s var(--soci-ease);
-        max-width: calc(100% - 400px);
+        max-width: calc(100% - 280px);
         margin-right: 12px;
       }
 
