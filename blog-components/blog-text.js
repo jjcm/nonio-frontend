@@ -12,10 +12,11 @@ export default class BlogText extends SociComponent {
       :host {
         display: block;
         width: 100%;
+        margin: 2em 0;
       }
       soci-quill-view {
         max-width: 920px;
-        padding: 1em 32px;
+        padding: 0 32px;
         margin: 0 auto;
         display: block;
         line-height: 1.5;

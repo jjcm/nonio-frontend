@@ -18,3 +18,9 @@ window.customElements.define('blog-image', BlogImage)
 
 import BlogImageFull from "./blog-image-full.js"
 window.customElements.define('blog-image-full', BlogImageFull)
+
+import BlogQuote1 from "./blog-quote-1.js"
+window.customElements.define('blog-quote-1', BlogQuote1)
+
+import BlogQuote2 from "./blog-quote-2.js"
+window.customElements.define('blog-quote-2', BlogQuote2)

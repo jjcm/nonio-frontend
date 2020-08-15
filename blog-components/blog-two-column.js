@@ -13,7 +13,7 @@ export default class BlogTwoColumn extends SociComponent {
         width: 100%;
         display: grid;
         grid-template-columns: 1fr 476px 32px 476px 1fr;
-        padding: 1em 0;
+        margin: 2em 0;
       }
       #column1 {
         grid-column-start: 2;

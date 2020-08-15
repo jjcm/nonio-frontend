@@ -11,7 +11,6 @@ export default class BlogImageFull extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 1em 0;
       }
       img {
         width: 100%;

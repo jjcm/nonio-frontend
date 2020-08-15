@@ -15,7 +15,7 @@ export default class BlogImage extends SociComponent {
       picture {
         display: block;
         max-width: 920px;
-        padding: 1em 32px;
+        padding: 0 32px;
         margin: 0 auto;
       }
       img {
