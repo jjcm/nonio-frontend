@@ -12,16 +12,15 @@ export default class BlogTwoColumn extends SociComponent {
       :host {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 476px 32px 476px 1fr;
+        grid-template-columns: var(--soci-blog-padding) 1fr var(--soci-blog-padding) 1fr var(--soci-blog-padding);
         margin: 2em 0;
+        line-height: 1.5;
       }
       #column1 {
         grid-column-start: 2;
-        padding-left: 32px;
       }
       #column2 {
         grid-column-start: 4;
-        padding-right: 32px;
       }
       p:last-child {
         margin-bottom: 0;
