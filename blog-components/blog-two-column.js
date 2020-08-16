@@ -11,16 +11,22 @@ export default class BlogTwoColumn extends SociComponent {
     return `
       :host {
         width: 100%;
-        display: grid;
-        grid-template-columns: var(--soci-blog-padding) 1fr var(--soci-blog-padding) 1fr var(--soci-blog-padding);
-        margin: 2em 0;
+        margin: 2em auto;
+        max-width: var(--soci-blog-width);
         line-height: 1.5;
+        padding: 0 var(--soci-blog-padding);
+      }
+      #container {
+        grid-template-columns: 1fr var(--soci-blog-padding) 1fr;
+        display: grid;
+        max-width: 920px;
+        margin: 0 auto;
       }
       #column1 {
-        grid-column-start: 2;
+        grid-column-start: 1;
       }
       #column2 {
-        grid-column-start: 4;
+        grid-column-start: 3;
       }
       p:last-child {
         margin-bottom: 0;
@@ -33,8 +39,10 @@ export default class BlogTwoColumn extends SociComponent {
 
   html(){
     return `
-      <soci-quill-view id="column1"></soci-quill-view>
-      <soci-quill-view id="column2"></soci-quill-view>
+      <div id="container">
+        <soci-quill-view id="column1"></soci-quill-view>
+        <soci-quill-view id="column2"></soci-quill-view>
+      </div>
     `
   }
 

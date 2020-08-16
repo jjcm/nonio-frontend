@@ -29,7 +29,7 @@ export default class BlogQuote2 extends SociComponent {
       }
       #container {
         padding: 0 var(--soci-blog-padding);
-        max-width: calc(var(--soci-blog-width) + var(--soci-blog-padding) * 2);
+        max-width: var(--soci-blog-width);
       }
       #title {
         ${DS.header2}
