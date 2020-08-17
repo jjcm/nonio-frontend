@@ -21,6 +21,7 @@ export default class BlogHero1 extends SociComponent {
       #subtitle {
         ${DS.paragraph}
         margin-bottom: 0.5em;
+        line-height: 1.5;
       }
       #container {
         padding-left: 32px;

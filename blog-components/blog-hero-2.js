@@ -26,6 +26,7 @@ export default class BlogHero2 extends SociComponent {
       #subtitle {
         ${DS.paragraph}
         margin-bottom: 0.5em;
+        line-height: 1.5;
       }
       #container {
         grid-column-start: 2;

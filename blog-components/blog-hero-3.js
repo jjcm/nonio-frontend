@@ -29,6 +29,7 @@ export default class BlogHero3 extends SociComponent {
         margin-bottom: 0.5em;
         opacity: 0.7;
         font-weight: 300;
+        line-height: 1.5;
       }
       #image-container {
         grid-column-start: span 2;
