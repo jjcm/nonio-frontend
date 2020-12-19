@@ -1,5 +1,7 @@
 let tags = {
+  dom: document.currentScript.closest('soci-route'),
   init: () => {
+    soci.registerPage(tags)
   },
   onActivate: () => {
     tags.dom.innerHTML = ''
@@ -21,4 +23,4 @@ let tags = {
   }
 }
 
-soci.registerPage(tags, document.currentScript.closest('soci-route'))
+document.addEventListener('DOMContentLoaded', tags.init)

@@ -1,4 +1,6 @@
 const PORT = 4200
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
 
 var http = require('http')
 var fs = require('fs')
@@ -6,6 +8,10 @@ var path = require('path')
 var pug = require('pug')
 var mime = require('mime-types')
 var stylus = require('stylus')
+
+import config from './config.js'
+console.log(config.HOST)
+
 
 var server = http.createServer(function (req, res) {
   var ext = path.extname(req.url)

@@ -1,11 +1,8 @@
 let user = {
+  dom: document.currentScript.closest('soci-route'),
+  postTab: document.querySelector("#user soci-tab[name='Posts']"),
   init: () => {
-    let tab = document.querySelector("#user soci-tab[name='Posts']")
-    tab.addEventListener('tabactivate', e=>{
-      let myPosts = document.querySelector('#user soci-post-list.my-posts')
-      myPosts.setAttribute('data', `/posts?user=${soci.username}`)
-    })
-
+    soci.registerPage(user)
   },
   onActivate: () => {
     document.querySelector('#user .password soci-button').addEventListener('click', user.changePassword)
@@ -37,4 +34,9 @@ let user = {
 
 }
 
-soci.registerPage(user, document.currentScript.closest('soci-route'))
+user.postTab.addEventListener('tabactivate', e=>{
+  let myPosts = document.querySelector('#user soci-post-list.my-posts')
+  myPosts.setAttribute('data', `/posts?user=${soci.username}`)
+})
+
+document.addEventListener('DOMContentLoaded', user.init)

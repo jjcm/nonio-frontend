@@ -1,5 +1,7 @@
 let submit = {
+  dom: document.currentScript.closest('soci-route'),
   init() {
+    soci.registerPage(submit)
   },
   form: null, 
   onActivate() {
@@ -44,4 +46,4 @@ let submit = {
   }
 }
 
-soci.registerPage(submit, document.currentScript.closest('soci-route'))
+document.addEventListener('DOMContentLoaded', submit.init)

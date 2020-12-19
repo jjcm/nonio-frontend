@@ -1,5 +1,7 @@
 let post = {
+  dom: document.currentScript.closest('soci-route'),
   init() {
+    soci.registerPage(post)
   },
   onActivate() {
     let post = document.querySelector('#post soci-post')
@@ -22,7 +24,7 @@ let post = {
         }
       })
     }
-  }
+  },
 }
 
-soci.registerPage(post, document.currentScript.closest('soci-route'))
+document.addEventListener('DOMContentLoaded', post.init)

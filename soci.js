@@ -38,12 +38,10 @@ let soci = {
     let e = new CustomEvent('username-updated', {detail: {username: val}})
     document.dispatchEvent(e)
   },
-  registerPage: (page, dom) => {
-    page.dom = dom
-    page.init()
+  registerPage: page => {
     if(page.onActivate) page.dom.addEventListener('routeactivate', page.onActivate)
     if(page.onDeactivate) page.dom.addEventListener('routedeactivate', page.onDeactivate)
-    if(dom.active) page.onActivate()
+    if(page.dom.active) page.onActivate()
   },
   getJSONFromForm: form => {
     let data = new FormData(form)
@@ -124,4 +122,5 @@ if(!soci.checkTokenExpired()) {
   soci.loadVotes()
 }
 
+window.soci = soci
 document.addEventListener('DOMContentLoaded', soci.init)

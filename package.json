@@ -2,9 +2,10 @@
   "name": "soci-frontend-server",
   "version": "1.0.0",
   "description": "Dynamically compiles soci's frontend",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node first-launch-setup.js && node index.js"
   },
   "repository": {
     "type": "git",
