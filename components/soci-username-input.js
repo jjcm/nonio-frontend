@@ -88,9 +88,10 @@ export default class SociUsernameInput extends SociComponent {
 
     this._input.addEventListener('keydown', this._onKeyDown.bind(this))
     this._input.addEventListener('change', this._onChange.bind(this))
-    this.addEventListener('focus', this._onFocus.bind(this))
+    this.addEventListener('focus', this._onFocus)
+    this.addEventListener('blur', this._onBlur)
 
-    this._internals.setValidity({customError: true}, 'Submissions require a url')
+    this._internals.setValidity({customError: true}, 'Username is required, Captain Nemo.')
   }
 
   checkValidity() {
@@ -107,7 +108,12 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   _onFocus(e) {
-    this._input.focus()
+    if(e.currentTarget == this) this._input.focus()
+    this.setAttribute('tabindex', -1)
+  }
+
+  _onBlur(e) {
+    this.setAttribute('tabindex', 0)
   }
 
   _onChange(e) {
@@ -176,4 +182,15 @@ export default class SociUsernameInput extends SociComponent {
       this.setUsernameError('Username is not available. ' + message)
     }
   }
+
+  // required for form elements
+  get form() { return this._internals.form }
+  get name() { return this.getAttribute('name') }
+  get type() { return this.localName }
+  get validity() {return this._internals.validity }
+  get validationMessage() {return this._internals.validationMessage }
+  get willValidate() {return this._internals.willValidate }
+
+  checkValidity() { return this._internals.checkValidity() }
+  reportValidity() {return this._internals.reportValidity() }
 }

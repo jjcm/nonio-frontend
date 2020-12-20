@@ -1,4 +1,3 @@
-
 import SociRoute from "./soci-route.js"
 window.customElements.define('soci-route', SociRoute)
 

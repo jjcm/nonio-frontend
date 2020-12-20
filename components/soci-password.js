@@ -12,6 +12,7 @@ export default class SociPassword extends SociComponent {
     :host {
       --entropy-percent: 0;
       position: relative;
+      display: block;
     }
 
     svg {
@@ -19,13 +20,13 @@ export default class SociPassword extends SociComponent {
       fill: none;
       stroke: var(--n2);
       stroke-width: 2px;
-      stroke-dasharray: 56.55;
-      stroke-dashoffset: calc(56.55 * (1 - var(--entropy-percent)));
+      stroke-dasharray: 69.1;
+      stroke-dashoffset: calc(69.1 * (1 - var(--entropy-percent)));
       transition: stroke-dashoffset 0.3s ease;
-      height: 20px;
-      width: 20px;
+      height: 24px;
+      width: 24px;
       position: absolute;
-      top: 2px;
+      top: 4px;
       right: 0px;
     }
 
@@ -46,22 +47,24 @@ export default class SociPassword extends SociComponent {
     }
 
     path { 
-      stroke: #fff;
-      stroke-width: 2px;
+      display: none;
     }
 
     :host([valid]) svg {
-      stroke: none;
-      fill: var(--t2);
       transition: none;
+      stroke: var(--g1);
     }
 
+    :host([valid]) path {
+      display: block;
+    }
   `}
 
   html() { return `
+
     <svg>
-      <circle cx="10" cy="10" r="9"></circle>
-      <path d="M5 9.5 L8.5 13 L14.5 7"/>
+      <circle cx="12" cy="12" r="11"></circle>
+      <path d="M17.33 8.66998L11 15L7.5 11.5" stroke="#29E08E" stroke-width="2"/>
     </svg>
     <slot></slot>
   `}
@@ -91,14 +94,7 @@ export default class SociPassword extends SociComponent {
       case 'placeholder':
         this.field?.setAttribute('placeholder', newValue)
         break
-      case 'match':
-
-
     }
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity()
   }
 
   get value() {
@@ -142,15 +138,15 @@ export default class SociPassword extends SociComponent {
     if(!message){
       this._internals.setValidity({})
     }
-    else if(this._message != message){
-      this._message = message
+    else {
       this._internals.setValidity({customError: true}, message)
     }
   }
 
   checkMatch(){
     if(this.hasAttribute('match')){
-      let matchedField = this.closest('form').querySelector(`soci-password[name=${this.getAttribute('match')}]`)
+      let matchedField = this.getRootNode().querySelector(`soci-password[name=${this.getAttribute('match')}]`)
+      console.log(matchedField.value == this.value)
       return matchedField.value == this.value
     }
     return true
@@ -187,4 +183,15 @@ export default class SociPassword extends SociComponent {
     this.style.setProperty('--entropy-percent', entropyPercent)
     return entropyPercent == 1
   }
+
+  // required for form elements
+  get form() { return this._internals.form }
+  get name() { return this.getAttribute('name') }
+  get type() { return this.localName }
+  get validity() {return this._internals.validity }
+  get validationMessage() {return this._internals.validationMessage }
+  get willValidate() {return this._internals.willValidate }
+
+  checkValidity() { return this._internals.checkValidity() }
+  reportValidity() {return this._internals.reportValidity() }
 }
