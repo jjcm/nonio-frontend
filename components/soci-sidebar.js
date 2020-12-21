@@ -45,7 +45,7 @@ export default class SociSidebar extends SociComponent {
       #auth input::placeholder, h2 {
         font-size: 14px;
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 1.4px;
         font-weight: normal;
         color: var(--n3);
       }
@@ -371,23 +371,21 @@ export default class SociSidebar extends SociComponent {
       <panel id="create">
         <h2>Essentials</h2>
         <form action="#">
-        <soci-password tabindex="0" name="password"></soci-password>
-        <soci-password tabindex="0" name="confirm-password" placeholder="Confirm Password" match="password"></soci-password>
-        <soci-username-input name="username" tabindex="0"></soci-username-input>
+          <soci-username-input name="username" tabindex="0"></soci-username-input>
+          <input type="email" placeholder="Email address"/>
+          <soci-password tabindex="0" name="password"></soci-password>
+          <soci-password tabindex="0" name="confirm-password" placeholder="Confirm Password" match="password"></soci-password>
+          <h2>Contribution</h2>
+          <soci-contribution-slider></soci-contribution-slider>
+          <h2>Billing</h2>
+          <input type="text" placeholder="Credit Card Name"/>
+          <input type="text" placeholder="Credit Card Number"/>
+          <cc-details>
+            <input type="text" placeholder="Exp. Date"/>
+            <input type="text" placeholder="CCV"/>
+          </cc-details>
+          <button type="submit" @click=register>Create Account</button>
         </form>
-        <input type="email" placeholder="Email address"/>
-        <input type="password" placeholder="Password"/>
-        <input type="password" placeholder="Confirm Password"/>
-        <h2>Contribution</h2>
-        <soci-contribution-slider></soci-contribution-slider>
-        <h2>Billing</h2>
-        <input type="text" placeholder="Credit Card Name"/>
-        <input type="text" placeholder="Credit Card Number"/>
-        <cc-details>
-          <input type="text" placeholder="Exp. Date"/>
-          <input type="text" placeholder="CCV"/>
-        </cc-details>
-        <button type="submit" @click=register>Create Account</button>
       </panel>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">

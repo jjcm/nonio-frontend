@@ -58,10 +58,13 @@ export default class SociPassword extends SociComponent {
     :host([valid]) path {
       display: block;
     }
+
+    :host([valid]) ::slotted(input:focus) {
+      border-bottom: 2px solid var(--g1) !important;
+    }
   `}
 
   html() { return `
-
     <svg>
       <circle cx="12" cy="12" r="11"></circle>
       <path d="M17.33 8.66998L11 15L7.5 11.5" stroke="#29E08E" stroke-width="2"/>
