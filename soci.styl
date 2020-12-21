@@ -3,6 +3,7 @@ body
   display: flex
   color: var(--n6)
   scrollbar-width: none
+  font-size: 14px
   &[dragging]
     user-select: none
 input
@@ -14,6 +15,7 @@ h1:first-child
 
 h1, h2, h3 
   margin: 0
+  margin-bottom: 0.5em
 
 h1 
   font-size: 2em;
@@ -21,7 +23,6 @@ h1
 h2 
   font-size: 1.5em
   font-weight: 400
-  margin-bottom: 0.5em
 
 h3 
   font-size: 1.17em
@@ -243,6 +244,7 @@ button
   box-sizing: border-box
   height: 100vh
   h1, h2
+    margin: 0
     padding-left: 2px
   soci-url-input
     margin-bottom: 12px
@@ -422,3 +424,12 @@ soci-route[active]
 #blog
   display: block
   overflow-x: hidden
+
+#user-create
+  display: block
+  padding: 28px 40px
+  max-width: 800px
+  margin: 0 auto
+  .loading-block:not(:first-child)
+    margin-top: 40px
+  
