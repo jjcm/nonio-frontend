@@ -349,10 +349,33 @@ export default class SociSidebar extends SociComponent {
         </section>
         <content>
           <section id="all-tags">
-            <soci-tag-li href="/">All posts</soci-tag-li>
-            <soci-tag-li tag="Images" href="/"></soci-tag-li>
-            <soci-tag-li tag="Videos" href="/"></soci-tag-li>
-            <soci-tag-li tag="Blogs" href="/"></soci-tag-li>
+            <soci-tag-li href="/#All" icon="home">
+              All posts
+              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="16" height="16" rx="3" fill="#1E72D2"/>
+                <path d="M3.625 11.875V6.08615L8 3.71115L12.375 6.08615V11.875H3.625Z" stroke="white" stroke-width="1.25"/>
+                <rect x="7" y="8" width="2" height="4" fill="white"/>
+              </svg>
+
+            </soci-tag-li>
+            <soci-tag-li href="/#Images">
+              Images
+              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="16" height="16" rx="3" fill="#1E72D2"/>
+                <path d="M12.375 10.875H3.625V5.125H12.375V10.875Z" stroke="white" stroke-width="1.25"/>
+                <path d="M6 5.5V3.5H10V5.5H6Z" fill="white"/>
+                <circle cx="8" cy="8" r="1.375" stroke="white" stroke-width="1.25"/>
+              </svg>
+            </soci-tag-li>
+            <soci-tag-li href="/#Videos">
+              Videos
+              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="16" height="16" rx="3" fill="#1E72D2"/>
+                <path d="M7 8L3 5V11L7 8Z" fill="white"/>
+                <path d="M12.375 10.375H7.625V5.625H12.375V10.375Z" stroke="white" stroke-width="1.25"/>
+              </svg>
+            </soci-tag-li>
+            <soci-tag-li tag="Blogs" href="/#Blogs"></soci-tag-li>
           </section>
           <section id="subscribed-tags">
             <h2>Subscribed Tags</h2>
@@ -454,6 +477,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   activateTag(tag){
+    console.log('activating')
     this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
     this.select(`soci-tag-li[tag="${tag}"]`)?.toggleAttribute('active', true)
     this._activeTag = tag
