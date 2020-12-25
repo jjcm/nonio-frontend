@@ -43,10 +43,6 @@ export default class SociTagLi extends SociComponent {
         background: var(--n1);
       }
 
-      :host(:last-child) {
-        margin-bottom: 20px;
-      }
-
       #hash {
         position: absolute;
         left: 20px;

@@ -66,20 +66,15 @@ export default class SociSidebar extends SociComponent {
       }
 
       section {
-        border-bottom: 2px solid var(--n1);
         position: relative;
       }
 
-      section:last-child {
-        border-bottom: none;
-      }
-
       content section {
-        overflow: auto;
+        border: none;
       }
 
-      #tags {
-        flex: 1;
+      #all-tags {
+        padding-top: 16px;
       }
 
       soci-icon {
@@ -98,6 +93,7 @@ export default class SociSidebar extends SociComponent {
         background: #fff;
         z-index: 10;
         height: 40px;
+        border-bottom: 2px solid var(--n1);
       }
 
       #user soci-link:first-child {
@@ -292,7 +288,9 @@ export default class SociSidebar extends SociComponent {
       }
 
       #auth h2 {
-        padding-left: 54px;
+        padding-left: 24px;
+        margin-top: 12px;
+        line-height: 32px;
       }
 
       #create h2:not(:first-child) {
@@ -350,13 +348,17 @@ export default class SociSidebar extends SociComponent {
           </soci-link>
         </section>
         <content>
+          <section id="all-tags">
+            <soci-tag-li href="/">All posts</soci-tag-li>
+            <soci-tag-li tag="Images" href="/"></soci-tag-li>
+            <soci-tag-li tag="Videos" href="/"></soci-tag-li>
+            <soci-tag-li tag="Blogs" href="/"></soci-tag-li>
+          </section>
           <section id="subscribed-tags">
-            <soci-icon glyph="tags"></soci-icon>
             <h2>Subscribed Tags</h2>
             <tags></tags>
           </section>
           <section id="tags">
-            <soci-icon glyph="tags"></soci-icon>
             <h2>Tags</h2>
             <tags></tags>
           </section>
