@@ -171,8 +171,11 @@ export default class SociTagGroup extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'score')
-      this.querySelector('[slot="score"]').innerHTML = `${newValue}`
+    if(name == 'score'){
+      let score = this.querySelector('[slot="score"]')
+      if(score) score.innerHTML = `${newValue}`
+
+    }
   }
 
   get url(){

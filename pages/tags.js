@@ -23,4 +23,4 @@ let tags = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', tags.init)
+tags.init()
