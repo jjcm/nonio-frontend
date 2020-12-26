@@ -45,12 +45,15 @@ export default class SociTagLi extends SociComponent {
 
       ::slotted(svg),
       #hash {
-        background: var(--hash-color);
         position: absolute;
         left: 24px;
         top: 8px;
         width: 16px;
         height: 16px;
+      }
+
+      #hash {
+        background: var(--hash-color);
         border-radius: 3px;
       }
 

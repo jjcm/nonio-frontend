@@ -352,20 +352,51 @@ export default class SociSidebar extends SociComponent {
             <soci-tag-li href="/#All" icon="home">
               All posts
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="16" height="16" rx="3" fill="#1E72D2"/>
-                <path d="M3.625 11.875V6.08615L8 3.71115L12.375 6.08615V11.875H3.625Z" stroke="white" stroke-width="1.25"/>
-                <rect x="7" y="8" width="2" height="4" fill="white"/>
+                <path d="M0.75 14.5C0.75 14.9142 1.08579 15.25 1.5 15.25H14.5C14.9142 15.25 15.25 14.9142 15.25 14.5V5C15.25 4.72409 15.0985 4.47046 14.8556 4.33965L8.35558 0.839647C8.13359 0.720118 7.86641 0.720118 7.64442 0.839647L1.14443 4.33965C0.901493 4.47046 0.75 4.72409 0.75 5V14.5Z" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="5.25" y="8.25" width="5.5" height="7" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
 
             </soci-tag-li>
             <soci-tag-li href="/#Images">
               Images
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="16" height="16" rx="3" fill="#1E72D2"/>
-                <path d="M12.375 10.875H3.625V5.125H12.375V10.875Z" stroke="white" stroke-width="1.25"/>
-                <path d="M6 5.5V3.5H10V5.5H6Z" fill="white"/>
-                <circle cx="8" cy="8" r="1.375" stroke="white" stroke-width="1.25"/>
+                <rect x="5.25" y="2.25" width="5.5" height="3" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="5.25" width="14.5" height="8.5" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9.5" r="2.25" stroke="#1E72D2" stroke-width="1.5"/>
               </svg>
+            </soci-tag-li>
+            <soci-tag-li href="/#Images">
+              Images
+              <svg slot="icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 5.25C10.4142 5.25 10.75 4.91421 10.75 4.5V4C10.75 3.0335 9.9665 2.25 9 2.25H7C6.0335 2.25 5.25 3.0335 5.25 4V4.5C5.25 4.91421 5.58579 5.25 6 5.25H10Z" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="5.25" width="14.5" height="8.5" rx="1.75" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9.5" r="2.25" stroke="#1E72D2" stroke-width="1.5"/>
+              </svg>
+            </soci-tag-li>
+            <soci-tag-li href="/#Images">
+              Images
+              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5.25" y="2.25" width="5.5" height="3" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="5.25" width="14.5" height="8.5" rx="1.75" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9.5" r="2.25" stroke="#1E72D2" stroke-width="1.5"/>
+              </svg>
+            </soci-tag-li>
+            <soci-tag-li href="/#Images">
+              Images
+              <svg slot="icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5.25" y="1.75" width="5.5" height="3" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="4.75" width="14.5" height="9.5" rx="1.75" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9.5" r="2.25" stroke="#1E72D2" stroke-width="1.5"/>
+              </svg>
+            </soci-tag-li>
+            <soci-tag-li href="/#Images">
+              Images
+              <svg slot="icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 4.75C10.4142 4.75 10.75 4.41421 10.75 4V3.5C10.75 2.5335 9.9665 1.75 9 1.75H7C6.0335 1.75 5.25 2.5335 5.25 3.5V4C5.25 4.41421 5.58579 4.75 6 4.75H10Z" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="4.75" width="14.5" height="9.5" rx="1.75" stroke="#1E72D2" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9.5" r="2.25" stroke="#1E72D2" stroke-width="1.5"/>
+              </svg>
+
             </soci-tag-li>
             <soci-tag-li href="/#Videos">
               Videos
