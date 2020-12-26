@@ -216,6 +216,11 @@ export default class SociTagLi extends SociComponent {
     let href = this.select('a').href
     window.history.pushState(null, null, href)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
-    document.querySelector('#tags soci-column')?.setAttribute('tag', this.tag)
+    let special = href.match(/#All|#Images|#Videos|#Blogs/)
+    let column = document.querySelector('#tags soci-column')
+    if(special)
+      column?.setAttribute('tag', special[0].slice(1))
+    else 
+      column?.setAttribute('tag', this.tag)
   }
 }
