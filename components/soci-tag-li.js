@@ -68,7 +68,7 @@ export default class SociTagLi extends SociComponent {
         display: none;
       }
 
-      :host(:hover) #toggleSubscribe {
+      :host(:hover:not([href])) #toggleSubscribe {
         display: block;
       }
 
