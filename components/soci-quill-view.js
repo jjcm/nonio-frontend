@@ -58,16 +58,13 @@ export default class SociQuillView extends HTMLElement {
                 parent = parentContainer
               }
               else if(prevIndent >= indent){
-                console.log(`going shallower: ${prevIndent} ${indent}`)
                 parent = prevLi.closest(`${listType}[data-indent="${indent}"]`)
               } 
               else if(prevIndent < indent){
-                console.log('going deeper')
                 parent = prevLi
               } 
               else {
                 parent = prevLi || parentContainer
-                console.log('going same or root')
               }
 
               // Once we know our parent, let's indent as much as we need

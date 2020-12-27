@@ -23,7 +23,7 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 22px 0 14px;
+        padding: 0 22px;
       }
       filtering {
         display: flex;
@@ -57,14 +57,20 @@ export default class SociCommentList extends SociComponent {
         padding: 0 8px 24px;
         max-width: 840px;
         margin: 0 auto;
+        box-sizing: border-box;
       }
       soci-input {
         min-height: 82px;
         border: 1px solid #eee;
         border-radius: 4px;
-        margin: 8px 18px;
-        max-width: 840px;
         margin: 2px auto 20px;
+      }
+      comment-input {
+        display: block;
+        padding: 0 18px;
+        max-width: 840px;
+        box-sizing: border-box;
+        margin: 0 auto;
       }
       comment-input[active] soci-input {
         min-height: 200px;

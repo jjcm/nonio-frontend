@@ -324,19 +324,15 @@ export default class SociPost extends SociComponent {
       setTimeout(()=>{
       this.toggleAttribute('loaded', true)
       }, 100)
-      console.log('lmao')
     })
-    console.log('ayy')
 
     this.loadContent('image')
   }
 
   loadContent(type) {
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
-    console.log(type)
     switch(type){
       case 'image':
-        console.log('loading the image')
         this.select('img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{
@@ -378,7 +374,7 @@ export default class SociPost extends SociComponent {
     let height = image.naturalHeight
     let sidebarWidth = document.querySelector('soci-sidebar').offsetWidth
     if(width > window.innerWidth - sidebarWidth){
-      console.log('wide boi')
+      //console.log('wide boi')
     }
     else if(height > window.innerHeight){
       //console.log('tall boi')
