@@ -349,14 +349,14 @@ export default class SociSidebar extends SociComponent {
         </section>
         <content>
           <section id="all-tags">
-            <soci-tag-li href="/#All" icon="home">
+            <soci-tag-li href="/#all" icon="home">
               All posts
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--b2)" stroke-width="1.5"/>
                 <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#Images">
+            <soci-tag-li href="/#images">
               Images
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
@@ -364,14 +364,14 @@ export default class SociSidebar extends SociComponent {
                 <circle cx="8" cy="9" r="2.25" stroke="var(--b2)" stroke-width="1.5"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#Videos">
+            <soci-tag-li href="/#videos">
               Videos
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
                 <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#Blogs">
+            <soci-tag-li href="/#blogs">
               Blogs
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--b2)" stroke-width="1.5" stroke-linejoin="round"/>
@@ -482,7 +482,7 @@ export default class SociSidebar extends SociComponent {
 
   activateTag(tag){
     this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
-    if(tag.match(/All|Images|Videos|Blogs/)){
+    if(tag.match(/all|images|videos|blogs/)){
       this.select(`soci-tag-li[href="/#${tag}"]`)?.toggleAttribute('active', true)
     }
     else 
@@ -508,7 +508,6 @@ export default class SociSidebar extends SociComponent {
   }
 
   _removeSubscribedTag(e){
-    console.log('remove')
     if(this._commonTags.indexOf(e.detail.tag) == -1){
       let tag = document.createElement('soci-tag-li')
       tag.setAttribute('tag', e.detail.tag)

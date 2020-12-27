@@ -208,14 +208,12 @@ export default class SociColumn extends SociComponent {
               <soci-option slot="selected">All</soci-option>
               <soci-option value="images">Images</soci-option>
               <soci-option value="videos">Videos</soci-option>
-              <soci-option value="audio">Audio</soci-option>
               <soci-option value="blogs">Blogs</soci-option>
             </soci-select>
             <filters @click=_filterBarClick>
               <filter selected>all</filter>
               <filter>images</filter>
               <filter>videos</filter>
-              <filter>audio</filter>
               <filter>blogs</filter>
             </filters>
           </header>
@@ -261,10 +259,10 @@ export default class SociColumn extends SociComponent {
       case 'tag':
         this.select('#tag-title').innerHTML = newValue
         document.querySelector('soci-sidebar').activateTag(newValue)
-        let special = newValue.match(/All|Images|Videos|Blogs/)
+        let special = newValue.match(/all|images|videos|blogs/)
         if(special){
           this.querySelector('soci-post-list')?.setAttribute('data', `/posts`)
-          this.setAttribute('filter', newValue.toLowerCase())
+          this.setAttribute('filter', newValue)
         }
         else 
           this.querySelector('soci-post-list')?.setAttribute('data', `/posts?tag=${newValue}`)
@@ -326,13 +324,20 @@ export default class SociColumn extends SociComponent {
   }
 
   _sortBarClick(e){
-    this.setAttribute('sort', e.target.innerHTML)
-    this._updateBar(e.currentTarget, e.target.innerHTML)
+    let sort = e.target.innerHTML
+    this.setAttribute('sort', sort)
+    this._updateBar(e.currentTarget, sort)
   }
 
   _filterBarClick(e){
-    this.setAttribute('filter', e.target.innerHTML)
-    this._updateBar(e.currentTarget, e.target.innerHTML)
+    let filter = e.target.innerHTML
+    let special = this.getAttribute('tag')?.match(/all|images|videos|blogs/)
+    if(special) {
+      this.select('#tag-title').innerHTML = filter
+      document.querySelector('soci-sidebar').activateTag(filter)
+    }
+    this.setAttribute('filter', filter)
+    this._updateBar(e.currentTarget, filter)
   }
 
   _updateBar(bar, value) {

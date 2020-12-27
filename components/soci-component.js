@@ -118,7 +118,7 @@ export default class SociComponent extends HTMLElement {
       ['h', 3600],
       ['d', 86400],
       ['w', 604800],
-      ['m', 2629746],
+      ['mo', 2629746],
       ['y', 31556952]
     ]
 
