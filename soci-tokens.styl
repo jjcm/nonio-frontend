@@ -5,6 +5,17 @@
   --n3: hsl(160, 5%, 52%)
   --n4: hsl(195, 19%, 17%)
 
+  --z0: #FFFFFF
+  --z1: #EAEBEB
+  --z2: #D6D7D8
+  --z3: #C2C3C4
+  --z4: #AEB0B1
+  --z5: #494D50
+  --z6: #3A3E41
+  --z7: #2B2F33
+  --z8: #1C2024
+  --z9: #0D1216
+
   --r3: hsl(360, 92%, 40%)
   --r2: hsl(360, 99%, 60%)
   --r1: hsl(360, 100%, 70%)
@@ -161,3 +172,46 @@
   --error-text-inverse: var(--error-text)
   --error-text-inverse-hover: var(--error-text-inverse)
   --error-text-inverse-active: var(--error-text-inverse)
+
+@media (prefers-color-scheme: light) 
+  :root
+    --base-background: var(--z0)
+    --base-background-hover: var(--z1)
+    --base-background-subtle: var(--z1)
+    --base-background-subtle-hover: var(--z2)
+    --base-background-inverse: var(--z5)
+    --base-background-bold: var(--z0)
+    --base-text: var(--z8)
+    --base-text-subtle: var(--z5)
+    --base-text-subtle-hover: var(--z8)
+    --base-text-bold: var(--z9)
+    --base-text-inverse: var(--z0)
+
+    --brand-background: var(--b2)
+    --brand-background-bold: var(--b3)
+    --brand-background-subtle: #1357a020
+    --brand-background-subtle-hover: #1357a030
+    --brand-text: var(--b3)
+    --brand-text-bold: var(--b3)
+
+@media (prefers-color-scheme: dark) 
+  :root
+    --base-background: var(--z8)
+    --base-background-hover: var(--z7)
+    --base-background-subtle: var(--z7)
+    --base-background-subtle-hover: var(--z6)
+    --base-background-inverse: var(--z3)
+    --base-background-bold: var(--z9)
+    --base-text: var(--z2)
+    --base-text-subtle: var(--z4)
+    --base-text-subtle-hover: var(--z2)
+    --base-text-bold: var(--z0)
+    --base-text-inverse: var(--z8)
+
+    --brand-background: var(--b1)
+    --brand-background-bold: var(--b0)
+    --brand-background-subtle: #1357a020
+    --brand-background-subtle-hover: #1357a030
+    --brand-text: var(--b1)
+    --brand-text-bold: var(--b0)
+  

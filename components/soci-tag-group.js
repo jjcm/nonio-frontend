@@ -35,7 +35,7 @@ export default class SociTagGroup extends SociComponent {
     }
     #add-tag {
       margin-left: 8px;
-      border: 1px solid var(--n1);
+      border: 1px solid var(--base-background-subtle);
       box-sizing: border-box;
       height: var(--height);
       width: 32px;
@@ -118,17 +118,17 @@ export default class SociTagGroup extends SociComponent {
       font-size: 16px;
       height: calc(var(--height) - 2px);
       line-height: calc(var(--height) - 2px);
-      color: var(--n3);
+      color: var(--base-text-subtle);
       min-width: 36px;
       padding: 0 6px;
       text-align: center;
-      border: 1px solid var(--n1);
+      border: 1px solid var(--base-background-subtle);
       border-radius: 3px;
       font-weight: 600;
     }
 
-    :host([upvoted]) #score {
-      font-weight: bold;
+    :host([upvoted]) ::slotted(div) {
+      color: var(--brand-text);
     }
 
 

@@ -1,7 +1,8 @@
 body
   margin: 0
   display: flex
-  color: var(--n6)
+  color: var(--base-text)
+  background: var(--base-background)
   scrollbar-width: none
   font-size: 14px
   &[dragging]
@@ -38,7 +39,7 @@ p + h3
 button
   border: 0
   border-radius: 3px
-  background: var(--b2)
+  background: var(--brand-background)
   height: 20px
   color: #fff
   padding: 0 8px
@@ -365,7 +366,7 @@ soci-sidebar
     text-align: center
     font-weight: 600
     border: 1px solid var(--n2)
-    background: #fff
+    background: var(--base-background)
     cursor: pointer
     position: relative
     svg
@@ -433,3 +434,16 @@ soci-route[active]
   .loading-block:not(:first-child)
     margin-top: 40px
   
+::-webkit-scrollbar 
+  width: 14px
+
+::-webkit-scrollbar-track 
+  background: var(--base-background-bold)
+
+::-webkit-scrollbar-thumb 
+  background: var(--base-background-subtle)
+  border-radius: 7px
+  border: 3px solid var(--base-background-bold)
+
+::-webkit-scrollbar-thumb:hover
+  background: var(--base-background-subtle-hover)

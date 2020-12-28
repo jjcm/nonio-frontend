@@ -47,7 +47,7 @@ export default class SociSidebar extends SociComponent {
         text-transform: uppercase;
         letter-spacing: 1.4px;
         font-weight: normal;
-        color: var(--n3);
+        color: var(--base-text-subtle);
       }
 
       #auth input {
@@ -90,10 +90,10 @@ export default class SociSidebar extends SociComponent {
       #user {
         position: sticky;
         top: 0;
-        background: #fff;
+        background: var(--base-background);
         z-index: 10;
         height: 40px;
-        border-bottom: 2px solid var(--n1);
+        border-bottom: 2px solid var(--base-background-subtle);
       }
 
       #user soci-link:first-child {
@@ -176,7 +176,7 @@ export default class SociSidebar extends SociComponent {
         box-sizing: border-box;
         width: 280px;
         color: var(--n3);
-        background: #fff;
+        background: var(--base-background);
         border-top: 2px solid transparent;
         transition: border-top 0.3s var(--soci-ease);
       }
@@ -258,16 +258,6 @@ export default class SociSidebar extends SociComponent {
         background: var(--n1);
       }
 
-      #facebook {
-        border: 0;
-        background: var(--b3);
-        color: #fff;
-      }
-
-      #facebook:hover {
-        opacity: 0.94;
-      }
-
       #noauth soci-link {
         display: block;
         margin-top: 28px;
@@ -283,7 +273,7 @@ export default class SociSidebar extends SociComponent {
       #auth content {
         display: flex;
         flex-direction: column;
-        height: calc(100% - 66px);
+        height: calc(100% - 42px);
         overflow-x: hidden;
       }
 
@@ -330,8 +320,26 @@ export default class SociSidebar extends SociComponent {
 
       @media(max-height: 780px){
         #footer {
-          border-top: 2px solid var(--n1);
+          border-top: 2px solid var(--base-background-subtle);
         }
+      }
+
+      ::-webkit-scrollbar {
+        width: 14px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--base-background-bold);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--base-background-subtle);
+        border-radius: 7px;
+        border: 3px solid var(--base-background-bold);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--base-background-subtle-hover);
       }
     `
   }

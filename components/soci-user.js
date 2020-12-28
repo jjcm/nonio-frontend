@@ -10,7 +10,7 @@ export default class SociUser extends SociComponent {
     return `
       :host {
         display: inline-flex;
-        color: var(--n4);
+        color: var(--base-text);
         cursor: pointer;
         --font-size: 12px;
         --font-weight: 300;

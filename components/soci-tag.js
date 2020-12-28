@@ -11,11 +11,11 @@ export default class SociTag extends SociComponent {
         display: inline-block;
         height: 20px;
         border-radius: 3px;
-        background: var(--n1);
+        background: var(--base-background-subtle);
         font-size: 0.625em;
         line-height: 20px;
         padding: 0 8px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         cursor: pointer;
         font-weight: 600;
         user-select: none;
@@ -27,8 +27,8 @@ export default class SociTag extends SociComponent {
         filter: brightness(0.9) contrast(1.2);
       }
       :host([upvoted]) {
-        background: var(--b2);
-        color: #fff;
+        background: var(--brand-background);
+        color: var(--base-text-inverse);
         font-weight: 500;
       }
       a,
