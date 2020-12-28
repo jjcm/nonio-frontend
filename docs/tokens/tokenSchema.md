@@ -23,8 +23,11 @@
 
     
 # Schema
+
     type | object | level | variant
+
 i.e.
+
     global-text-bold-hover
 
 ## Rules
