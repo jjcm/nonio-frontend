@@ -1,24 +1,24 @@
 # Color Token Levels
   1. type
-    * global
-    * brand
-    * success
-    * error
+    1. global
+    1. brand
+    1. success
+    1. error
 
   1. objects
-    * background
-    * shadow
-    * text
+    1. background
+    1. shadow
+    1. text
 
   1. level
-    * default
-    * subtle
-    * bold
+    1. default
+    1. subtle
+    1. bold
 
   1. variants
-    * default
-    * hover
-    * active
+    1. default
+    1. hover
+    1. active
 
     
 # Schema
