@@ -33,13 +33,14 @@ i.e.
 ## Rules
 ### Defaults
 Defaults are implicit and aren't needed in the token name:
+
 YES: 
 
     brand-background-subtle
 
 NO:  
 
-    brand-background-default-subtle
+    brand-background-subtle-default
 
 ### Undefined tokens
 If a token is undefined, it falls back to the nearest default value
