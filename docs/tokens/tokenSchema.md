@@ -14,6 +14,7 @@
    1. default
    1. subtle
    1. bold
+   1. inverse
 
 1. variants
    1. default
@@ -26,8 +27,18 @@
 i.e.
     global-text-bold-hover
 
+## Rules
+### Defaults
 Defaults are implicit and aren't needed in the token name:
 YES: 
     brand-background-subtle
 NO:  
     brand-background-default-subtle
+
+### Undefined tokens
+If a token is undefined, it falls back to the nearest default value
+i.e.
+    error-text-bold-hover --> error-text-bold
+
+# Example
+![Token Example](/docs/tokens/tokens.png)
