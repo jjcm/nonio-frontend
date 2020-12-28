@@ -1,6 +1,6 @@
 # Color Token Levels
 1. type
-   1. global
+   1. base
    1. brand
    1. success
    1. error
@@ -28,7 +28,7 @@
 
 i.e.
 
-    global-text-bold-hover
+    base-text-bold-hover
 
 ## Rules
 ### Defaults
