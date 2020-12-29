@@ -295,6 +295,7 @@ export default class SociSidebar extends SociComponent {
         margin: 0 0 8px;
         border: 0;
         border-bottom: 2px solid var(--n2);
+        background: var(--base-background-subtle);
         height: 38px;
         font-size: 14px;
         width: 100%;
