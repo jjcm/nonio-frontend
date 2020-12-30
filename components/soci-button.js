@@ -21,7 +21,6 @@ export default class SociButton extends SociComponent {
         margin-right: 4px;
         cursor: pointer;
         position: relative;
-        transition: background 0.1s var(--soci-ease);
         float: right;
       }
 
@@ -38,9 +37,27 @@ export default class SociButton extends SociComponent {
         transform: none;
       }
 
+      :host(:hover) {
+        background: var(--brand-background-hover);
+      }
+
+      :host(:active) {
+        background: var(--brand-background-active);
+      }
+
       :host([subtle]) {
         background: var(--base-background-subtle);
         color: var(--base-text-subtle);
+      }
+
+      :host([subtle]:hover) {
+        background: var(--base-background-subtle-hover);
+        color: var(--base-text-subtle-hover);
+      }
+
+      :host([subtle]:active) {
+        background: var(--base-background-subtle-active);
+        color: var(--base-text-subtle-active);
       }
       
       :host([subtle]):before,
@@ -48,16 +65,18 @@ export default class SociButton extends SociComponent {
         background: var(--base-text-subtle);
       }
 
+      :host([subtle]:hover):before, 
+      :host([subtle]:hover):after {
+        background: var(--base-text-subtle-hover);
+      }
+
+      :host([subtle]:active):before, 
+      :host([subtle]:active):after {
+        background: var(--base-text-subtle-active);
+      }
+
       :host(:focus) {
         outline: var(--brand-background-bold) auto 2px;
-      }
-
-      :host(:hover) {
-        filter: brightness(0.95);
-      }
-
-      :host(:active) {
-        filter: brightness(0.9) contrast(1.1);
       }
 
       :host([state="error"]) {

@@ -99,7 +99,7 @@ export default class SociPostLi extends SociComponent {
         right: 12px;
       }
       :host([score="0"]) #score {
-        color: var(--n2);
+        color: var(--base-background-subtle);
       }
 
       :host([expanded]) img {

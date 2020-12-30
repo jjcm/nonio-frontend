@@ -15,16 +15,6 @@ export default class SociContributionSlider extends SociComponent {
         display: block;
       }
 
-      h2 {
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-weight: normal;
-        color: var(--n3);
-        line-height: 40px;
-        margin-bottom: 4px;
-      }
-
       slider {
         position: relative;
         display: block;
@@ -34,9 +24,8 @@ export default class SociContributionSlider extends SociComponent {
       slider-track {
         height: 4px;
         width: 100%;
-        background: var(--b1);
+        background: var(--brand-background-subtle);
         display: block;
-        opacity: 0.4;
         position: relative;
       }
 
@@ -44,22 +33,21 @@ export default class SociContributionSlider extends SociComponent {
         content: '';
         width: 30px;
         height: 4px;
-        background: var(--n3);
-        border-right: 2px solid #fff;
+        background: var(--base-background-subtle);
+        border-right: 2px solid var(--base-background);
         display: block;
       }
 
       slider-handle {
         width: 16px;
         height: 16px;
-        background: var(--b1);
+        background: var(--brand-background);
         display: block;
         position: absolute;
         top: -6px;
         left: 110px;
         border-radius: 8px;
         cursor: pointer;
-        box-shadow: 0 0 0 8px var(--b2) inset;
         transition: box-shadow 0.1s var(--soci-ease-out);
       }
 

@@ -301,20 +301,21 @@ button
   button
     border-radius: 14px
     height: 28px
-    color: var(--n0)
+    color: var(--base-text-inverse)
     cursor: pointer
-    background: var(--b3)
+    background: var(--brand-background)
     border: none
     padding: 0 8px
     outline: none
     min-width: 100px
+    &:hover
+      background: var(--brand-background-hover)
     &:active
-      background: var(--b2)
+      filter: brightness(0.9)
   
   soci-input
-    border: 2px solid var(--n2)
+    border: 2px solid var(--base-background-subtle)
     border-radius: 8px
-
 
   h2
     font-weight: 500
@@ -362,7 +363,7 @@ soci-sidebar
     width: 100%
     text-align: center
     font-weight: 600
-    border: 1px solid var(--n2)
+    border: 1px solid var(--base-background-subtle)
     background: var(--base-background)
     cursor: pointer
     position: relative
@@ -375,7 +376,8 @@ soci-sidebar
       display: none
 
     &:hover
-      background: var(--n1)
+      border: 1px solid var(--base-background-subtle-hover)
+      background: var(--base-background-hover)
 
     &[waiting] 
       svg 

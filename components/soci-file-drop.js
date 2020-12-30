@@ -26,7 +26,7 @@ export default class SociFileDrop extends SociComponent {
       }
 
       :host([dragover]) {
-        border: 2px dashed var(--g1);
+        border: 2px dashed var(--success-background);
         transition: border 0.1s ease-out;
       }
 
@@ -38,7 +38,7 @@ export default class SociFileDrop extends SociComponent {
         left: 0;
         width: 100%;
         height: 100%;
-        background: var(--g1);
+        background: var(--success-background);
         opacity: 0;
         transition: opacity 0.2s ease;
         pointer-events: none;
@@ -52,7 +52,7 @@ export default class SociFileDrop extends SociComponent {
 
       div {
         font-weight: 500;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         margin-bottom: 12px;
         mix-blend-mode: multiply;
       }
@@ -60,10 +60,10 @@ export default class SociFileDrop extends SociComponent {
       label {
         border-radius: 14px;
         height: 24px;
-        color: var(--n0);
+        color: var(--base-text-inverse);
         cursor: pointer;
-        background: var(--b3);
-        border: 2px solid var(--b3);
+        background: var(--brand-background);
+        border: 2px solid var(--brand-background);
         padding: 0 6px;
         line-height: 22px;
         text-align: center;
@@ -73,9 +73,13 @@ export default class SociFileDrop extends SociComponent {
         user-select: none;
         position: relative;
       }
+      label:hover {
+        background: var(--brand-background-hover);
+        border-color: var(--brand-background-hover);
+      }
       label:active {
-        background: var(--b2);
-        border-color: var(--b2);
+        background: var(--brand-background-active);
+        border-color: var(--brand-background-active);
       }
       label.uploading {
         height: 8px;

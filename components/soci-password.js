@@ -18,7 +18,7 @@ export default class SociPassword extends SociComponent {
     svg {
       display: none;
       fill: none;
-      stroke: var(--n2);
+      stroke: var(--base-background-subtle);
       stroke-width: 2px;
       stroke-dasharray: 69.1;
       stroke-dashoffset: calc(69.1 * (1 - var(--entropy-percent)));
