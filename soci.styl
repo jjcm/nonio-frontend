@@ -53,15 +53,18 @@ button
   margin-right: 4px
   cursor: pointer
   &.cancel
-    background: var(--n1)
-    color: var(--n4)
+    background: var(--base-background-subtle)
+    color: var(--base-text-subtle)
+    &:hover
+      background: var(--base-background-subtle-hover)
+      color: var(--base-text-subtle-hover)
   &:hover
-    filter: brightness(0.95)
+    background: var(--brand-background-hover)
   &:active
     filter: brightness(0.9)
     outline: 0
   &:focus
-    outline: var(--b1) auto 2px
+    outline: var(--brand-background-bold) auto 2px
 
 #pages
   height: 100vh
@@ -75,7 +78,7 @@ button
     left: 280px
     height: 100vh
     width: 30px
-    background: linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.05) 1px, transparent 4px)
+    background: linear-gradient(90deg, var(--shadow) 0px, var(--shadow-light) 1px, transparent 4px)
     z-index: 11
 
 #home
@@ -111,7 +114,7 @@ button
       width: 100%
       height: 200px
       border-radius: 3px
-      background: var(--n2)
+      background: var(--base-background-subtle)
     .column
       width: 100%
       margin-left: 20px
@@ -137,7 +140,7 @@ button
   soci-user[username-only]
     margin-bottom: 8px
   soci-input
-    border: 1px solid var(--n2)
+    border: 1px solid var(--base-background-subtle)
     border-radius: 3px
     min-height: 240px
   .stats
@@ -288,20 +291,6 @@ button
     position: absolute
     right: 2px
 
-  .drop-area
-    width: 100%
-    height: 240px
-    display: flex
-    align-items: center
-    justify-content: center
-    flex-direction: column
-    border 2px dashed var(--n2)
-    box-sizing: border-box
-    border-radius: 8px
-    .label
-      font-weight: 500
-      color: var(--n3)
-      margin-bottom: 12px
   soci-tab
     soci-input
       width: 100%
@@ -448,10 +437,11 @@ soci-route[active]
 ::-webkit-scrollbar-track 
   background: var(--base-background-bold)
 
+// this is a hack to get alpha transparency into variables. It's shitty, but scrollbars shouldn't have as much contrast
 ::-webkit-scrollbar-thumb 
-  background: var(--base-background-subtle)
+  background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px)
   border-radius: 7px
   border: 3px solid var(--base-background-bold)
 
 ::-webkit-scrollbar-thumb:hover
-  background: var(--base-background-subtle-hover)
+  background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px)

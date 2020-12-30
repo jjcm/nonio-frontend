@@ -15,7 +15,7 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
-        background: var(--base-background-subtle);
+        background: var(--base-background-bold);
         /* heh */
         min-width: 420px; 
       }
@@ -58,7 +58,7 @@ export default class SociColumn extends SociComponent {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+        box-shadow: 0 1px 2px var(--shadow);
       }
 
       sort,
@@ -80,7 +80,7 @@ export default class SociColumn extends SociComponent {
         z-index: 2;
         left: 6px;
         --height: 24px;
-        --color: var(--n3);
+        --color: var(--base-text-subtle);
       }
 
       soci-select#filter-select {
@@ -110,7 +110,7 @@ export default class SociColumn extends SociComponent {
         height: 3px;
         border-radius: 0 0 2px 2px;
         background: var(--base-background);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+        box-shadow: 0 1px 1px var(--shadow);
       }
 
       #tag-container {

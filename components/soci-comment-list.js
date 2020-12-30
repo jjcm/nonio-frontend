@@ -9,7 +9,7 @@ export default class SociCommentList extends SociComponent {
     return `
       :host {
         display: block;
-        background: linear-gradient(rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.2) 1px, var(--base-background) 30px);
+        background: linear-gradient(var(--shadow-dark) 0px, var(--shadow-light) 1px, var(--base-background) 30px);
       }
       controls {
         display: flex;
@@ -47,7 +47,7 @@ export default class SociCommentList extends SociComponent {
         height: 4px;
         border-radius: 2px;
         background: var(--base-background);
-        box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+        box-shadow: 0 1px 1px var(--shadow-light);
       }
       comment-count {
         white-space: nowrap;

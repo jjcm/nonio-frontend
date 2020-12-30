@@ -15,7 +15,7 @@ export default class SociFileDrop extends SociComponent {
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        border: 2px dashed var(--n2);
+        border: 2px dashed var(--base-background-subtle);
         box-sizing: border-box;
         border-radius: 8px;
         margin-bottom: 12px;

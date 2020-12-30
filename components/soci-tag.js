@@ -22,14 +22,18 @@ export default class SociTag extends SociComponent {
         transition: background 0.1s var(--soci-ease-out);
         margin-right: 4px;
       }
-
       :host(:hover) {
-        filter: brightness(0.9) contrast(1.2);
+        background: var(--base-background-subtle-hover);
+        color: var(--base-text-subtle-hover);
       }
       :host([upvoted]) {
         background: var(--brand-background);
         color: var(--base-text-inverse);
         font-weight: 500;
+      }
+      :host([upvoted]:hover) {
+        background: var(--brand-background-hover);
+        color: var(--base-text-inverse-hover);
       }
       a,
       a:visited {

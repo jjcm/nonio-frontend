@@ -10,11 +10,11 @@ export default class SociTabGroup extends SociComponent {
       tabs {
         --tab-padding: 40px;
         display: flex;
-        color: var(--n4);
+        color: var(--base-text);
         padding-top: 8px;
         margin-bottom: 10px;
         user-select: none;
-        background: linear-gradient(0deg, var(--n2) 0px, var(--n1) 1px, hsl(120, 17%, 98%) 4px, #fff 30px);
+        background: linear-gradient(0deg, var(--shadow-dark) 0px, var(--shadow-light) 1px, transparent 30px);
         padding-left: var(--tab-padding);
         padding-right: var(--tab-padding);
         margin: 0 calc(-1 * var(--tab-padding));
@@ -26,7 +26,7 @@ export default class SociTabGroup extends SociComponent {
         position: absolute;
         bottom: 0px;
         left: 0px;
-        background: linear-gradient(90deg, #fff, transparent);
+        background: linear-gradient(90deg, var(--base-background), transparent);
         display: block;
         width: var(--tab-padding);
         height: 30px;
@@ -34,7 +34,7 @@ export default class SociTabGroup extends SociComponent {
       tabs:after {
         left: auto;
         right: 0px;
-        background: linear-gradient(270deg, #fff, transparent);
+        background: linear-gradient(270deg, var(--base-background), transparent);
       }
       tab {
         display: block;
@@ -48,16 +48,19 @@ export default class SociTabGroup extends SociComponent {
         padding-left: 0;
       }
       tab:hover {
-        filter: brightness(1.1)
+        color: var(--base-text-hover);
       }
-      tab[active]{
-        color: var(--b3);
+      tab[active] {
+        color: var(--brand-text);
+      }
+      tab[active]:hover {
+        color: var(--brand-text-hover);
       }
       tab[active]:after{
         content: '';
         height: 3px;
         width: 16px;
-        background-color: #fff;
+        background-color: var(--base-background);
         display: block;
         position: absolute;
         bottom: 0;
