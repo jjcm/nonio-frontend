@@ -1,7 +1,6 @@
 body
   margin: 0
   display: flex
-  color: var(--base-text)
   background: var(--base-background)
   scrollbar-width: none
   font-size: 14px
@@ -10,6 +9,7 @@ body
 input
 body
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
+  color: var(--base-text)
 
 h1:first-child
   margin-top: 0
@@ -36,12 +36,18 @@ p + h2,
 p + h3
   margin-top: 1em
 
+a
+  color: var(--brand-text)
+  text-decoration: none
+  &:hover
+    color: var(--brand-text-hover)
+
 button
   border: 0
   border-radius: 3px
   background: var(--brand-background)
   height: 20px
-  color: #fff
+  color: var(--base-text-inverse)
   padding: 0 8px
   font-size: 12px
   margin-right: 4px
@@ -79,7 +85,7 @@ button
     width: 100%
     height: 300px
     border-radius: 3px
-    background: var(--n2)
+    background: var(--base-background-subtle)
   #home-container
     max-width: 1200px
     margin: 0 auto
@@ -90,7 +96,7 @@ button
     .dash
       width: 100%
       height: 2px
-      background: var(--n2)
+      background: var(--base-text-subtle)
       margin-left: 20px
     h1
       margin: 0
@@ -356,7 +362,7 @@ soci-sidebar
   input:active
     box-shadow: none
     outline: none
-    border-bottom: 2px solid var(--b1)
+    border-bottom: 2px solid var(--brand-background)
 
   button
     margin-top: 8px

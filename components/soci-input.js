@@ -992,9 +992,7 @@ export default class SociInput extends SociComponent {
   }
 
   html(){
-    let user = this.hasAttribute('show-user') ? `<soci-user self size="small" avatar-only></soci-user>` : ''
     return `
-      ${user}
       <div id="editor"></div>
     `
   }

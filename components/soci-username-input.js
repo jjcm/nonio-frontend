@@ -18,7 +18,9 @@ export default class SociUsernameInput extends SociComponent {
     input {
       margin: 0 0 8px;
       border: 0;
-      border-bottom: 2px solid var(--n2);
+      color: var(--base-text);
+      background: var(--base-background);
+      border-bottom: 2px solid var(--base-background-subtle);
       height: 38px;
       font-size: 14px;
       width: 100%;
@@ -26,7 +28,7 @@ export default class SociUsernameInput extends SociComponent {
 
     :host input:focus {
       outline: 0;
-      border-bottom: 2px solid var(--b1);
+      border-bottom: 2px solid var(--brand-background);
     }
 
     :host(:focus-within) soci-icon {

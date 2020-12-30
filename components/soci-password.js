@@ -52,7 +52,7 @@ export default class SociPassword extends SociComponent {
 
     :host([valid]) svg {
       transition: none;
-      stroke: var(--g1);
+      stroke: var(--success-text);
     }
 
     :host([valid]) path {
@@ -60,7 +60,7 @@ export default class SociPassword extends SociComponent {
     }
 
     :host([valid]) ::slotted(input:focus) {
-      border-bottom: 2px solid var(--g1) !important;
+      border-bottom: 2px solid var(--success-text) !important;
     }
   `}
 

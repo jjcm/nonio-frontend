@@ -10,7 +10,7 @@ export default class SociPost extends SociComponent {
     let CONTENT_HEIGHT = 300
     return `
        :host {
-        background: var(--n0);
+        background: var(--base-background);
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -60,7 +60,7 @@ export default class SociPost extends SociComponent {
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: block;
         position: relative;
-        background: #fff;
+        background: var(--base-background);
         z-index: 10;
       }
 
@@ -98,13 +98,17 @@ export default class SociPost extends SociComponent {
       meta-data {
         display: block;
         margin-top: 4px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
       }
 
       soci-user[username-only] {
-        --font-size: 16px;
-        --font-weight: 700;
-        color: var(--n4);
+        --font-size: 14px;
+        --font-weight: 500;
+        color: var(--brand-text);
+      }
+
+      soci-user[username-only]:hover {
+        color: var(--brand-text-hover);
       }
 
        soci-comment-list {
@@ -127,7 +131,7 @@ export default class SociPost extends SociComponent {
         line-height: 1.5;
         display: block;
         padding: 8px;
-        border: 1px solid #eee;
+        border: 1px solid var(--base-background-subtle);
         border-radius: 4px;
         opacity: 0;
         transform: translateY(20px);
@@ -135,22 +139,6 @@ export default class SociPost extends SociComponent {
 
       :host([type="blog"]) slot[name="description"] {
         transform: translateY(25px);
-      }
-
-      soci-comment soci-comment {
-        --border-color: var(--r1);
-      }
-
-      soci-comment soci-comment soci-comment {
-        --border-color: var(--o1);
-      }
-
-      soci-comment soci-comment soci-comment soci-comment {
-        --border-color: var(--y1);
-      }
-
-      soci-comment soci-comment soci-comment soci-comment soci-comment {
-        --border-color: var(--l1);
       }
 
       :host([type="blog"]) slot[name="description"] {

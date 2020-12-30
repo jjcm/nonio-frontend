@@ -175,7 +175,7 @@ export default class SociSidebar extends SociComponent {
         bottom: 0;
         box-sizing: border-box;
         width: 280px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         background: var(--base-background);
         border-top: 2px solid transparent;
         transition: border-top 0.3s var(--soci-ease);
@@ -262,7 +262,7 @@ export default class SociSidebar extends SociComponent {
         display: block;
         margin-top: 28px;
         font-size: 13px;
-        color: var(--b2);
+        color: var(--brand-text);
         font-weight: 700;
         letter-spacing: 0.5px;
         opacity: 0.7;
@@ -294,8 +294,9 @@ export default class SociSidebar extends SociComponent {
       input {
         margin: 0 0 8px;
         border: 0;
-        border-bottom: 2px solid var(--n2);
-        background: var(--base-background-subtle);
+        color: var(--base-text);
+        border-bottom: 2px solid var(--base-background-subtle);
+        background: var(--base-background);
         height: 38px;
         font-size: 14px;
         width: 100%;
@@ -303,7 +304,7 @@ export default class SociSidebar extends SociComponent {
 
       input:focus {
         outline: 0;
-        border-bottom: 2px solid var(--b1);
+        border-bottom: 2px solid var(--brand-background);
       }
 
       input[type="email"] {

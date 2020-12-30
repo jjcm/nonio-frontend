@@ -11,11 +11,11 @@ export default class SociButton extends SociComponent {
         display: inline-block;
         border: 0;
         border-radius: 3px;
-        background: var(--b2);
+        background: var(--brand-background);
         height: 20px;
         min-height: 20px;
         line-height: 18px;
-        color: #fff;
+        color: var(--base-text-inverse);
         padding: 0 8px;
         font-size: 12px;
         margin-right: 4px;
@@ -30,7 +30,7 @@ export default class SociButton extends SociComponent {
         content: '';
         display: block;
         position: absolute;
-        background: #fff;
+        background: var(--base-text-inverse);
         width: 0;
         height: 0;
         left: 50%;
@@ -39,17 +39,17 @@ export default class SociButton extends SociComponent {
       }
 
       :host([subtle]) {
-        background: var(--n1);
-        color: var(--n4);
+        background: var(--base-background-subtle);
+        color: var(--base-text-subtle);
       }
       
       :host([subtle]):before,
       :host([subtle]):after {
-        background: var(--n3);
+        background: var(--base-text-subtle);
       }
 
       :host(:focus) {
-        outline: var(--b1) auto 2px;
+        outline: var(--brand-background-bold) auto 2px;
       }
 
       :host(:hover) {
@@ -61,7 +61,7 @@ export default class SociButton extends SociComponent {
       }
 
       :host([state="error"]) {
-        background: var(--r3);
+        background: var(--error-background);
         color: transparent;
         animation: error 0.3s var(--soci-ease);
       }
@@ -75,7 +75,7 @@ export default class SociButton extends SociComponent {
         left: calc(50% - 4px);
         top: calc(50% - 1px);
         animation: inner-error-after 0.3s linear;
-        background: #fff;
+        background: var(--base-text-inverse);
       }
 
       :host([state="error"]):before {
