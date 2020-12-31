@@ -43,20 +43,20 @@ export default class SociUsernameInput extends SociComponent {
     }
 
     :host([available="false"]) input:focus {
-      border-bottom: 2px solid var(--r3);
+      border-bottom: 2px solid var(--error-background);
     }
 
     :host([available="false"]) soci-icon {
       display: block;
-      color: var(--r3);
+      color: var(--error-background);
     }
 
     :host([available="true"]) input:focus {
-      border-bottom: 2px solid var(--g1);
+      border-bottom: 2px solid var(--success-background);
     }
 
     :host([available="true"]) soci-icon {
-      color: var(--g1);
+      color: var(--success-background);
     }
 
     error {
@@ -65,7 +65,7 @@ export default class SociUsernameInput extends SociComponent {
       transition: all 0.2s ease-out;
       line-height: 20px;
       font-size: 11px;
-      color: var(--r3);
+      color: var(--error-text);
       position: relative;
       overflow: hidden;
     }

@@ -170,7 +170,7 @@ export default class SociButton extends SociComponent {
       }
 
       :host([state="success"]) {
-        background: var(--g2);
+        background: var(--brand-background);
         color: transparent;
         animation: success 0.2s var(--soci-ease);
       }

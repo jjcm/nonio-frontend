@@ -85,7 +85,7 @@ export default class SociFileDrop extends SociComponent {
         height: 8px;
         transition: all 0.1s ease-in-out;
         background: var(--base-background);
-        border-color: var(--g1);
+        border-color: var(--success-background);
       }
       label.uploading:after {
         content: '';
@@ -96,7 +96,7 @@ export default class SociFileDrop extends SociComponent {
         height: 8px;
         width: var(--upload-progress);
         transition: width 0.3s ease;
-        background: var(--g1);
+        background: var(--success-background);
       }
       :host([preview]) {
         min-height: 0;

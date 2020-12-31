@@ -45,7 +45,7 @@ export default class SociUser extends SociComponent {
       }
 
       :host([admin]) username {
-        color: var(--r1);
+        color: var(--error-text);
         font-weight: 900;
       }
 
