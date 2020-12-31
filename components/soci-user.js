@@ -23,7 +23,7 @@ export default class SociUser extends SociComponent {
         width: var(--avatar-size);
         height: var(--avatar-size);
         border-radius: 50%;
-        background: var(--n2);
+        background: var(--base-background-subtle);
         object-fit: cover;
       }
 
@@ -78,9 +78,9 @@ export default class SociUser extends SociComponent {
       }
 
       :host([size="small"][self]) username {
-        background: var(--b3);
+        background: var(--brand-background);
         padding: 0 6px;
-        color: #fff;
+        color: var(--base-text-inverse);
         margin-right: -4px;
       }
     `

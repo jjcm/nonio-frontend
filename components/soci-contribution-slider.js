@@ -56,7 +56,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       slider-handle:focus:not(:active) {
-        box-shadow: 0 0 0 2px var(--b2) inset;
+        box-shadow: 0 0 0 2px var(--brand-background-bold) inset;
       }
 
       info {
@@ -71,7 +71,7 @@ export default class SociContributionSlider extends SociComponent {
 
       label {
         font-size: 11px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
       }
 
       server {
@@ -79,7 +79,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       server amount {
-        color: var(--n3);
+        color: var(--base-text-subtle);
       }
 
       contribution {
@@ -89,7 +89,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       contribution amount {
-        color: var(--b2);
+        color: var(--brand-text);
       }
 
       total {
@@ -99,7 +99,7 @@ export default class SociContributionSlider extends SociComponent {
 
       total span {
         font-weight: 100;
-        color: var(--n3);
+        color: var(--base-text-subtle);
       }
 
     `

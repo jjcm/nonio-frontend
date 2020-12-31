@@ -26,13 +26,6 @@ export default class SociTagGroup extends SociComponent {
     :host::-webkit-scrollbar {
       display: none;
     }
-    #score {
-      white-space: nowrap;
-      display: block;
-    }
-    #score span {
-      margin-left: 4px;
-    }
     #add-tag {
       margin-left: 8px;
       border: 1px solid var(--base-background-subtle);
@@ -44,13 +37,12 @@ export default class SociTagGroup extends SociComponent {
       text-align: center;
       display: inline-flex;
       align-items: center;
-      color: var(--n4);
       cursor: pointer;
       overflow: hidden;
       position: relative;
     }
     #add-tag:not([active]):hover {
-      background: var(--n1);
+      background: var(--base-background-hover);
     }
     #add-tag input {
       position: absolute;
@@ -61,6 +53,8 @@ export default class SociTagGroup extends SociComponent {
       height: 18px;
       padding-left: 28px;
       line-height: 18px;
+      background: var(--base-background);
+      color: var(--base-text-subtle);
     }
     #add-tag svg {
       position: absolute;
@@ -76,23 +70,11 @@ export default class SociTagGroup extends SociComponent {
     #add-tag[active] input:focus,
     #add-tag[active] input:active {
       outline: 0;
-      box-shadow: 1px solid var(--b3);
     }
 
     :host([size="large"]) {
       --height: 20px;
       --tag-font-size: 14px;
-    }
-
-    :host([size="large"]) #score {
-      font-size: 16px;
-      color: var(--n3);
-      min-width: 36px;
-      padding: 0 6px;
-      text-align: center;
-      border: 1px solid var(--n1);
-      border-radius: 3px;
-      font-weight: 600;
     }
 
     :host([size="large"]) #tags {

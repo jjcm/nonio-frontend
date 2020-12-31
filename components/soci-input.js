@@ -578,11 +578,11 @@ export default class SociInput extends SociComponent {
         position: absolute;
       }
       .ql-bubble .ql-tooltip:not(.ql-flip) .ql-tooltip-arrow {
-        border-bottom: 6px solid var(--base-text-subtle);
+        border-bottom: 6px solid var(--base-background-subtle);
         top: -6px;
       }
       .ql-bubble .ql-tooltip.ql-flip .ql-tooltip-arrow {
-        border-top: 6px solid var(--base-text-subtle);
+        border-top: 6px solid var(--base-background-subtle);
         bottom: -6px;
       }
       .ql-bubble .ql-tooltip.ql-editing .ql-tooltip-editor {
@@ -621,11 +621,11 @@ export default class SociInput extends SociComponent {
         white-space: nowrap;
       }
       .ql-container.ql-bubble:not(.ql-disabled) a::before {
-        background-color: #444;
+        background-color: var(--base-background);
         border-radius: 15px;
         top: -5px;
         font-size: 12px;
-        color: #fff;
+        color: var(--base-text-inverse);
         content: attr(href);
         font-weight: normal;
         overflow: hidden;
@@ -634,7 +634,7 @@ export default class SociInput extends SociComponent {
         z-index: 1;
       }
       .ql-container.ql-bubble:not(.ql-disabled) a::after {
-        border-top: 6px solid #444;
+        border-top: 6px solid var(--base-background);
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
         top: 0;

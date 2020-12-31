@@ -179,7 +179,7 @@ export default class SociButton extends SociComponent {
       :host([state="success"]):after {
         width: 2px;
         transition: all 0.1s var(--soci-ease);
-        background: #fff;
+        background: var(--base-text-inverse);
         height: 5px;
         top: calc(50% - 2px);
         left: calc(50% - 2px);

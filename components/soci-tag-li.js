@@ -54,9 +54,8 @@ export default class SociTagLi extends SociComponent {
       }
 
       :host([subscribed]) #hash {
-        background: var(--brand-background-bold);
+        background: var(--brand-background);
       }
-
 
       #toggleSubscribe {
         width: 24px;
@@ -74,7 +73,7 @@ export default class SociTagLi extends SociComponent {
       }
 
       #toggleSubscribe:hover {
-        background: var(--n1);
+        background: var(--base-background-hover);
       }
 
       :host([active]) #toggleSubscribe:hover {

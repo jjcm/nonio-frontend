@@ -84,7 +84,7 @@ export default class SociFileDrop extends SociComponent {
       label.uploading {
         height: 8px;
         transition: all 0.1s ease-in-out;
-        background: #fff;
+        background: var(--base-background);
         border-color: var(--g1);
       }
       label.uploading:after {
