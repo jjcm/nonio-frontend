@@ -17,7 +17,7 @@ export default class SociUrlInput extends SociComponent {
       height: 32px;
       min-width: 540px;
       line-height: 28px;
-      border: 2px solid var(--n2);
+      border: 2px solid var(--base-background-subtle);
       box-sizing: border-box;
       width: 100%;
       font-size: 14px;
@@ -26,9 +26,9 @@ export default class SociUrlInput extends SociComponent {
       transition: none;
     }
     :host([available="true"]) {
-      background: var(--g1);
-      border: 2px solid var(--g1);
-      color: #fff;
+      background: var(--success-background);
+      border: 2px solid var(--success-background);
+      color: var(--base-text-inverse);
       cursor: pointer;
       transition: all 0.1s ease-in-out, color 0s ease-in-out;
     }
@@ -51,7 +51,7 @@ export default class SociUrlInput extends SociComponent {
       font-size: 14px;
     }
     :host([available="false"]) {
-      border: 2px solid var(--r3);
+      border: 2px solid var(--error-background);
     }
     soci-icon {
       pointer-events: none;
@@ -59,13 +59,13 @@ export default class SociUrlInput extends SociComponent {
       right: 2px;
     }
     :host([available="false"]) soci-icon {
-      color: var(--r3);
+      color: var(--error-background);
     }
     error {
       position: absolute;
       left: 2px;
       bottom: -20px;
-      color: var(--r3);
+      color: var(--error-text);
       height: 20px;
       font-size: 12px;
     }

@@ -15,7 +15,7 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
-        background: var(--n2);
+        background: var(--base-background-bold);
         /* heh */
         min-width: 420px; 
       }
@@ -46,7 +46,7 @@ export default class SociColumn extends SociComponent {
       }
 
       header {
-        background-color: inherit;
+        background-color: var(--base-background);
         position: sticky;
         top: 0;
         height: 41px;
@@ -58,13 +58,11 @@ export default class SociColumn extends SociComponent {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: #fff;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+        box-shadow: 0 1px 2px var(--shadow);
       }
 
       sort,
       filter {
-        opacity: 0.5;
         text-transform: capitalize;
         position: relative;
         padding: 6px 12px;
@@ -74,6 +72,7 @@ export default class SociColumn extends SociComponent {
         line-height: 18px;
         position: relative;
         z-index: 2;
+        color: var(--base-text-subtle);
       }
 
       soci-select {
@@ -81,7 +80,7 @@ export default class SociColumn extends SociComponent {
         z-index: 2;
         left: 6px;
         --height: 24px;
-        --color: var(--n3);
+        --color: var(--base-text-subtle);
       }
 
       soci-select#filter-select {
@@ -91,13 +90,13 @@ export default class SociColumn extends SociComponent {
 
       sort:hover,
       filter:hover {
-        opacity: 0.7;
+        color: var(--base-text-subtle-hover);
       }
 
       sort[selected],
       filter[selected] {
         opacity: 1;
-        color: var(--b3);
+        color: var(--brand-text-bold);
       }
 
       sort[selected]::after,
@@ -110,8 +109,8 @@ export default class SociColumn extends SociComponent {
         width: 16px;
         height: 3px;
         border-radius: 0 0 2px 2px;
-        background: #fff;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+        background: var(--base-background);
+        box-shadow: 0 1px 1px var(--shadow);
       }
 
       #tag-container {
@@ -122,7 +121,8 @@ export default class SociColumn extends SociComponent {
         animation: load-in 0.3s var(--soci-ease) forwards;
       }
       svg {
-        background: var(--b3);
+        background: var(--brand-background);
+        color: var(--base-text-inverse);
         border-radius: 3px;
         margin-right: 4px;
       }
@@ -199,7 +199,7 @@ export default class SociColumn extends SociComponent {
             <div id="tag-container">
               <svg id="hash" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(1,1.5)">
-                <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="white"></path>
+                <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="currentColor"></path>
                 </g>
               </svg>
               <div id="tag-title">funny</div>

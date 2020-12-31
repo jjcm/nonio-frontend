@@ -21,7 +21,7 @@ export default class SociVideo extends SociComponent {
       width: 100%;
       display: block;
       height: 4px;
-      background: var(--n1);
+      background: var(--base-background-subtle);
       margin: 0 10px;
       border-radius: 2px;
     }

@@ -9,7 +9,7 @@ export default class SociCommentList extends SociComponent {
     return `
       :host {
         display: block;
-        background: linear-gradient(var(--n2) 0px, var(--n1) 1px, #fff 30px);
+        background: linear-gradient(var(--shadow-dark) 0px, var(--shadow-light) 1px, var(--base-background) 30px);
       }
       controls {
         display: flex;
@@ -17,7 +17,7 @@ export default class SociCommentList extends SociComponent {
         max-width: 840px;
         margin: 0 auto;
         justify-content: space-between;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         font-weight: 500;
         font-size: 12px;
         box-sizing: border-box;
@@ -35,7 +35,7 @@ export default class SociCommentList extends SociComponent {
       }
       filter:hover,
       filter[active] {
-        color: var(--n4);
+        color: var(--base-text);
       }
       filter[active]:after {
         content: '';
@@ -46,7 +46,8 @@ export default class SociCommentList extends SociComponent {
         width: 16px;
         height: 4px;
         border-radius: 2px;
-        background: var(--n4);
+        background: var(--base-background);
+        box-shadow: 0 1px 1px var(--shadow-light);
       }
       comment-count {
         white-space: nowrap;
@@ -61,7 +62,7 @@ export default class SociCommentList extends SociComponent {
       }
       soci-input {
         min-height: 82px;
-        border: 1px solid #eee;
+        border: 1px solid var(--base-background-subtle);
         border-radius: 4px;
         margin: 2px auto 20px;
       }

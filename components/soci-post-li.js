@@ -9,12 +9,12 @@ export default class SociPostLi extends SociComponent {
   css(){
     return `
       :host {
-        background: var(--n0);
+        background: var(--base-background);
         margin-bottom: 8px;
         display: flex;
         padding: 12px;
         border-radius: 8px;
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 1px 3px var(--shadow);
         overflow: hidden;
         box-sizing: border-box;
         opacity: 1;
@@ -53,7 +53,7 @@ export default class SociPostLi extends SociComponent {
       }
       #time {
         font-size: 12px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         letter-spacing: -0.16px;
         text-align: right;
         line-height: 16px;
@@ -63,7 +63,7 @@ export default class SociPostLi extends SociComponent {
       }
       #title {
         font-size: 16px;
-        color: var(--n4);
+        color: var(--base-text-bold);
         letter-spacing: -0.08px;
         line-height: 20px;
         width: 100%;
@@ -87,33 +87,9 @@ export default class SociPostLi extends SociComponent {
       #tags::-webkit-scrollbar {
         display: none;
       }
-      #score {
-        white-space: nowrap;
-        display: block;
-      }
-      #score span {
-        margin-left: 4px;
-      }
-      #add-tag {
-        background: var(--n1);
-        height: 20px;
-        width: 32px;
-        min-width: 32px;
-        border-radius: 10px;
-        text-align: center;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--n4);
-        margin-left: 4px;
-        cursor: pointer;
-      }
-      #add-tag:hover {
-        background: var(--n2);
-      }
       #comments {
         font-size: 12px;
-        color: var(--n3);
+        color: var(--base-text-subtle);
         letter-spacing: -0.16px;
         text-align: right;
         line-height: 16px;
@@ -123,7 +99,7 @@ export default class SociPostLi extends SociComponent {
         right: 12px;
       }
       :host([score="0"]) #score {
-        color: var(--n2);
+        color: var(--base-background-subtle);
       }
 
       :host([expanded]) img {

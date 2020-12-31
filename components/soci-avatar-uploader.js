@@ -17,7 +17,7 @@ export default class SociFileDrop extends SociComponent {
         cursor: pointer;
       }
       :host([dragover]) #container {
-        border: 2px dashed var(--g1);
+        border: 2px dashed var(--success-background);
         transition: border 0.1s ease-out;
       }
       #container {
@@ -41,7 +41,7 @@ export default class SociFileDrop extends SociComponent {
         pointer-events: none;
       }
       #drag {
-        border: 2px dashed #fff;
+        border: 2px dashed var(--base-background);
         cursor: move;
         position: absolute;
         width: 100%;
@@ -62,7 +62,7 @@ export default class SociFileDrop extends SociComponent {
         position: absolute;
         width: 1px;
         height: 1px;
-        background: #fff;
+        background: var(--base-background);
         display: block;
         opacity: 0.2;
       }

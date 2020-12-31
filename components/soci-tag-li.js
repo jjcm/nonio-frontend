@@ -9,38 +9,33 @@ export default class SociTagLi extends SociComponent {
     return `
       :host {
         line-height: 32px;
-        --hash-color: var(--n3);
         position: relative;
         display: block;
         overflow: hidden;
       }
 
-      :host([subscribed]) {
-        --hash-color: var(--b3);
-      }
-
       :host([active]) a {
-        color: var(--b3);
+        color: var(--brand-text-bold);
         font-weight: 600;
-        background: #1357a020;
+        background: var(--brand-background-subtle);
       }
 
       :host([active]) a:hover {
-        background: #1357a030;
+        background: var(--brand-backgrond-subtle-hover);
       }
       
       a {
         display: block;
         padding-left: 54px;
         text-decoration: none;
-        color: var(--n4);
+        color: var(--base-text);
         position: relative;
         cursor: pointer;
         box-sizing: border-box;
       }
 
       a:hover {
-        background: var(--n1);
+        background: var(--base-background-hover);
       }
 
       ::slotted(svg),
@@ -53,8 +48,13 @@ export default class SociTagLi extends SociComponent {
       }
 
       #hash {
-        background: var(--hash-color);
         border-radius: 3px;
+        background: var(--base-background-inverse);
+        color: var(--base-text-inverse);
+      }
+
+      :host([subscribed]) #hash {
+        background: var(--brand-background);
       }
 
       #toggleSubscribe {
@@ -73,7 +73,7 @@ export default class SociTagLi extends SociComponent {
       }
 
       #toggleSubscribe:hover {
-        background: var(--n1);
+        background: var(--base-background-hover);
       }
 
       :host([active]) #toggleSubscribe:hover {
@@ -157,10 +157,10 @@ export default class SociTagLi extends SociComponent {
       <slot name="icon">
         <svg id="hash" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0)">
-          <path d="M7 1.62366L5.5 13.3395" stroke="white" stroke-width="1.25"/>
-          <path d="M10.5 1.62366L9 13.3395" stroke="white" stroke-width="1.25"/>
-          <path d="M3 10H12.5" stroke="white" stroke-width="1.25"/>
-          <path d="M3.5 6H13" stroke="white" stroke-width="1.25"/>
+          <path d="M7 1.62366L5.5 13.3395" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M10.5 1.62366L9 13.3395" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M3 10H12.5" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M3.5 6H13" stroke="currentColor" stroke-width="1.25"/>
           </g>
           <defs>
           <clipPath id="clip0">

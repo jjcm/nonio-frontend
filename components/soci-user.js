@@ -10,7 +10,7 @@ export default class SociUser extends SociComponent {
     return `
       :host {
         display: inline-flex;
-        color: var(--n4);
+        color: var(--base-text);
         cursor: pointer;
         --font-size: 12px;
         --font-weight: 300;
@@ -23,7 +23,7 @@ export default class SociUser extends SociComponent {
         width: var(--avatar-size);
         height: var(--avatar-size);
         border-radius: 50%;
-        background: var(--n2);
+        background: var(--base-background-subtle);
         object-fit: cover;
       }
 
@@ -45,7 +45,7 @@ export default class SociUser extends SociComponent {
       }
 
       :host([admin]) username {
-        color: var(--r1);
+        color: var(--error-text);
         font-weight: 900;
       }
 
@@ -78,9 +78,9 @@ export default class SociUser extends SociComponent {
       }
 
       :host([size="small"][self]) username {
-        background: var(--b3);
+        background: var(--brand-background);
         padding: 0 6px;
-        color: #fff;
+        color: var(--base-text-inverse);
         margin-right: -4px;
       }
     `

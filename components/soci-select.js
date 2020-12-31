@@ -11,7 +11,7 @@ export class SociSelect extends SociComponent {
       --text-transform: capitalize;
       --font-weight: 500;
       --font-size: 12px;
-      --color: #fff;
+      --color: var(--base-background);
 
       position: relative;
       line-height: var(--height);
@@ -63,12 +63,12 @@ export class SociSelect extends SociComponent {
       position: absolute;
       top: calc(var(--height) + 4px);
       cursor: pointer;
-      background: var(--n0);
+      background: var(--base-background-subtle);
       border-radius: 3px;
-      color: var(--n6);
+      color: var(--base-text);
       overflow: hidden;
       padding: 4px 0;
-      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 1px 1px var(--shadow), 0px 2px 10px var(--shadow);
       min-width: 100px;
       z-index: 1;
     }
@@ -131,13 +131,13 @@ export class SociOption extends SociComponent {
       position: relative;
       user-select: none;
       cursor: pointer;
-      color: var(--n4);
+      color: var(--base-text);
       padding: 0 8px;
       width: 100%;
       display: block;
     }
     :host(:not([slot="selected"]):hover) {
-      background: var(--n1);
+      background: var(--base-background-subtle-hover);
     }
   `}
 
