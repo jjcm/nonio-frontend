@@ -186,18 +186,21 @@ export default class SociFileDrop extends SociComponent {
 
   upload(){
     console.log('upload time')
+    console.log(this.type)
     let data = new FormData()
     let request = new XMLHttpRequest()
+    let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
+    console.log(UPLOAD_HOST)
 
     data.append('files', this.select('input').files[0])
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
 
-    request.open('post', config.IMAGE_HOST + '/upload') 
+    request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
       this.select('picture').innerHTML = `
-        <source srcset="${config.IMAGE_HOST + '/' + request.response}.webp">
-        <img src="${config.IMAGE_HOST + '/' + request.response}.webp">
+        <source srcset="${UPLOAD_HOST + '/' + request.response}.webp">
+        <img src="${UPLOAD_HOST + '/' + request.response}.webp">
       `
       this.setAttribute('preview', '')
       this.fileUrl = request.response
@@ -208,12 +211,13 @@ export default class SociFileDrop extends SociComponent {
       this.style.setProperty('--upload-progress', `${percent_complete}%`)
     })
 
-    request.open('post', config.IMAGE_HOST + '/upload') 
+    request.open('post', UPLOAD_HOST + '/upload') 
     request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
     request.send(data)
   }
 
   async move(url){
+    let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
     return new Promise((resolve, reject) => {
       if(this.fileUrl == url) resolve(url)
 
@@ -243,9 +247,13 @@ export default class SociFileDrop extends SociComponent {
         })
       })
 
-      request.open('post', config.IMAGE_HOST + '/move')
+      request.open('post', UPLOAD_HOST + '/move')
       request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
       request.send(data)
     })
+  }
+
+  get type(){
+    return this.getAttribute('type')
   }
 }
