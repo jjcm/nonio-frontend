@@ -112,7 +112,11 @@ export default class SociFileDrop extends SociComponent {
       :host([preview]) div {
         display: none;
       }
-      picture img {
+      #preview {
+        max-width: 100%;
+      }
+      #preview img,
+      #preview video {
         max-width: 100%;
       }
       input {
@@ -125,7 +129,6 @@ export default class SociFileDrop extends SociComponent {
     <div>drag file here</div>
     <label for="file">select file</label>
     <input id="file" type="file" accept="*"/>
-    <picture></picture>
   `}
 
   connectedCallback(){
@@ -153,6 +156,22 @@ export default class SociFileDrop extends SociComponent {
       this.select('div').innerHTML = `drag ${newValue} here`
       this.select('label').innerHTML = `select ${newValue}`
       this.select('input').setAttribute('accept', TYPES[newValue])
+      this.select('#preview')?.remove()
+      switch (newValue) {
+        case 'image':
+          let picture = document.createElement('picture')
+          picture.id = 'preview'
+          this.shadowRoot.appendChild(picture)
+          break
+        case 'video':
+          let video = document.createElement('video')
+          video.toggleAttribute('muted', true)
+          video.toggleAttribute('autoplay', true)
+          video.toggleAttribute('controls', true)
+          video.toggleAttribute('loop', true)
+          video.id = 'preview'
+          this.shadowRoot.appendChild(video)
+      }
     }
   }
 
@@ -185,12 +204,9 @@ export default class SociFileDrop extends SociComponent {
   }
 
   upload(){
-    console.log('upload time')
-    console.log(this.type)
     let data = new FormData()
     let request = new XMLHttpRequest()
     let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
-    console.log(UPLOAD_HOST)
 
     data.append('files', this.select('input').files[0])
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
@@ -198,10 +214,17 @@ export default class SociFileDrop extends SociComponent {
     request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
-      this.select('picture').innerHTML = `
-        <source srcset="${UPLOAD_HOST + '/' + request.response}.webp">
-        <img src="${UPLOAD_HOST + '/' + request.response}.webp">
-      `
+      if(this.type == 'image'){
+        this.select('#preview').innerHTML = `
+          <source srcset="${UPLOAD_HOST + '/' + request.response}.webp">
+          <img src="${UPLOAD_HOST + '/' + request.response}.webp">
+        `
+      }
+      else {
+        this.select('#preview').innerHTML = `
+          <source type="video/webm" src="${UPLOAD_HOST + '/' + request.response}.webm">
+        `
+      }
       this.setAttribute('preview', '')
       this.fileUrl = request.response
     })
