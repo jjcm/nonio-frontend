@@ -126,6 +126,7 @@ export default class SociFileDrop extends SociComponent {
   }
 
   html(){ return `
+    <button @click=_websocket>asdf</button>
     <div>drag file here</div>
     <label for="file">select file</label>
     <input id="file" type="file" accept="*"/>
@@ -139,6 +140,17 @@ export default class SociFileDrop extends SociComponent {
     this.select("#file").addEventListener('change', this.upload.bind(this))
     this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
     this.select("#file").addEventListener('input', ()=>{console.log('file input')})
+  }
+
+  _websocket() {
+    var conn = new WebSocket("ws://localhost:4204/encode");
+    conn.onclose = function(evt) {
+      console.log('connection closed')
+    }
+    conn.onmessage = function(evt) {
+      console.log('message received')
+      console.log(evt.data)
+    }
   }
 
   static get observedAttributes() {
