@@ -126,7 +126,7 @@ export default class SociFileDrop extends SociComponent {
   }
 
   html(){ return `
-    <button @click=_websocket>asdf</button>
+    <button @click=encode>asdf</button>
     <div>drag file here</div>
     <label for="file">select file</label>
     <input id="file" type="file" accept="*"/>
@@ -140,17 +140,6 @@ export default class SociFileDrop extends SociComponent {
     this.select("#file").addEventListener('change', this.upload.bind(this))
     this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
     this.select("#file").addEventListener('input', ()=>{console.log('file input')})
-  }
-
-  _websocket() {
-    var conn = new WebSocket("ws://localhost:4204/encode");
-    conn.onclose = function(evt) {
-      console.log('connection closed')
-    }
-    conn.onmessage = function(evt) {
-      console.log('message received')
-      console.log(evt.data)
-    }
   }
 
   static get observedAttributes() {
@@ -226,19 +215,7 @@ export default class SociFileDrop extends SociComponent {
     request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
-      if(this.type == 'image'){
-        this.select('#preview').innerHTML = `
-          <source srcset="${UPLOAD_HOST + '/' + request.response}.webp">
-          <img src="${UPLOAD_HOST + '/' + request.response}.webp">
-        `
-      }
-      else {
-        this.select('#preview').innerHTML = `
-          <source type="video/webm" src="${UPLOAD_HOST + '/' + request.response}.webm">
-        `
-      }
-      this.setAttribute('preview', '')
-      this.fileUrl = request.response
+      this.encode(request.response)
     })
 
     request.upload.addEventListener('progress', e => {
@@ -249,6 +226,17 @@ export default class SociFileDrop extends SociComponent {
     request.open('post', UPLOAD_HOST + '/upload') 
     request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
     request.send(data)
+  }
+
+  async encode(filename){
+    var conn = new WebSocket(`ws://localhost:4204/encode?file=${filename}`);
+    conn.onclose = function(evt) {
+      console.log('connection closed')
+    }
+    conn.onmessage = function(evt) {
+      console.log('message received')
+      console.log(evt.data)
+    }
   }
 
   async move(url){
@@ -290,5 +278,21 @@ export default class SociFileDrop extends SociComponent {
 
   get type(){
     return this.getAttribute('type')
+  }
+
+  preview(filename){
+    if(this.type == 'image'){
+      this.select('#preview').innerHTML = `
+        <source srcset="${UPLOAD_HOST + '/' + filename}.webp">
+        <img src="${UPLOAD_HOST + '/' + filename}.webp">
+      `
+    }
+    else {
+      this.select('#preview').innerHTML = `
+        <source type="video/webm" src="${UPLOAD_HOST + '/' + filename}.webm">
+      `
+    }
+    this.toggleAttribute('preview', true)
+    this.fileUrl = filename
   }
 }
