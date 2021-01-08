@@ -82,3 +82,6 @@ window.customElements.define('soci-user', SociUser)
 
 import SociVideo from "./soci-video.js"
 window.customElements.define('soci-video', SociVideo)
+
+import SociVideoUploader from "./soci-video-uploader.js"
+window.customElements.define('soci-video-uploader', SociVideoUploader)
