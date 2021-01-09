@@ -53,6 +53,9 @@ import {SociSelect, SociOption} from "./soci-select.js"
 window.customElements.define('soci-select', SociSelect)
 window.customElements.define('soci-option', SociOption)
 
+import SociRadialProgress from "./soci-radial-progress.js"
+window.customElements.define('soci-radial-progress', SociRadialProgress)
+
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
 

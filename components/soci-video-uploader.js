@@ -50,11 +50,23 @@ export default class SociVideoUploader extends SociComponent {
         z-index: -1;
       }
 
-      div {
+      :host([state="uploading"]),
+      :host([state="encoding"]) {
+        border: 2px dashed var(--brand-background);
+      }
+
+      #uploading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .info {
         font-weight: 500;
         color: var(--base-text-subtle);
         margin-bottom: 12px;
         mix-blend-mode: multiply;
+        text-align: center;
       }
 
       label {
@@ -85,7 +97,7 @@ export default class SociVideoUploader extends SociComponent {
         height: 8px;
         transition: all 0.1s ease-in-out;
         background: var(--base-background);
-        border-color: var(--success-background);
+        border-color: var(--brand-background);
       }
       label.uploading:after {
         content: '';
@@ -96,7 +108,7 @@ export default class SociVideoUploader extends SociComponent {
         height: 8px;
         width: var(--upload-progress);
         transition: width 0.3s ease;
-        background: var(--success-background);
+        background: var(--brand-background);
       }
       :host([preview]) {
         min-height: 0;
@@ -122,19 +134,76 @@ export default class SociVideoUploader extends SociComponent {
       input {
         display: none;
       }
+      #encoding {
+        width: 240px;
+        display: none;
+      }
+      :host([state="encoding"]) #encoding {
+        display: block;
+      }
+      :host([state="encoding"]) #uploading {
+        display: none;
+      }
+      columns {
+        display: flex;
+      }
+      column {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .fidelity {
+        line-height: 24px;
+        width: 100px;
+        display: flex;
+        margin-bottom: 8px;
+      }
+      soci-radial-progress {
+        margin-right: 10px;
+      }
+
     `
   }
 
   html(){ return `
-    <div>drag video here</div>
+    <div id="uploading">
+    <div class="info">drag video here</div>
     <label for="file">select file</label>
     <input id="file" type="file" accept="video/*"/>
     <video id="preview" muted autoplay controls loop></video>
+    </div>
     <div id="encoding">
+      <div class="info">encoding video...</div>
       <columns>
         <column>
-          <div class="fidelity">
+          <div class="fidelity" resolution="source">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">Source</div>
           </div>
+          <div class="fidelity" resolution="2160p">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">2160p</div>
+          </div>
+          <div class="fidelity" resolution="1440p">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">1440p</div>
+          </div>
+        </column>
+        <column>
+          <div class="fidelity" resolution="1080p">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">1080p</div>
+          </div>
+          <div class="fidelity" resolution="720p">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">720p</div>
+          </div>
+          <div class="fidelity" resolution="480p">
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">480p</div>
+          </div>
+        </column>
       </columns>
     </div>
   `}
@@ -147,40 +216,8 @@ export default class SociVideoUploader extends SociComponent {
     this.select("#file").addEventListener('change', this.upload.bind(this))
     this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
     this.select("#file").addEventListener('input', ()=>{console.log('file input')})
-  }
 
-  static get observedAttributes() {
-    return ['type']
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'type') {
-      const TYPES = {
-        image: 'image/*',
-        video: 'video/*',
-        audio: 'audio/*',
-        html: 'zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed'
-      }
-      this.select('div').innerHTML = `drag ${newValue} here`
-      this.select('label').innerHTML = `select ${newValue}`
-      this.select('input').setAttribute('accept', TYPES[newValue])
-      this.select('#preview')?.remove()
-      switch (newValue) {
-        case 'image':
-          let picture = document.createElement('picture')
-          picture.id = 'preview'
-          this.shadowRoot.appendChild(picture)
-          break
-        case 'video':
-          let video = document.createElement('video')
-          video.toggleAttribute('muted', true)
-          video.toggleAttribute('autoplay', true)
-          video.toggleAttribute('controls', true)
-          video.toggleAttribute('loop', true)
-          video.id = 'preview'
-          this.shadowRoot.appendChild(video)
-      }
-    }
+    this.encode = this.encode.bind(this)
   }
 
   _dragenter(e){
@@ -197,21 +234,25 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   _drop(e){
+    this.removeAttribute('dragover', '')
     e.preventDefault()
     e.stopPropagation()
-    this.select('div').innerHTML = `Uploading ${e.dataTransfer.files[0].name}...`
-    this.select('label').innerHTML = ''
-    this.select('label').classList.add('uploading')
 
     let input = this.select('#file')
     input.files = e.dataTransfer.files
+    this.filename = e.dataTransfer.files[0].name
     let event = new Event('change')
     input.dispatchEvent(event)
-
-    //this.upload(e.dataTransfer.files[0])
   }
 
-  upload(){
+  upload(e){
+    if(this.filename == "") {
+      this.filename = this.select('input')?.files[0]?.name
+    }
+    this.setAttribute('state', 'uploading')
+    this.select('#uploading .info').innerHTML = `Uploading ${this.filename}...`
+    this.select('label').innerHTML = ''
+    this.select('label').classList.add('uploading')
     let data = new FormData()
     let request = new XMLHttpRequest()
     let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
@@ -222,6 +263,7 @@ export default class SociVideoUploader extends SociComponent {
     request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
+      this.setAttribute('state', 'encoding')
       this.encode(request.response)
     })
 
@@ -236,20 +278,29 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   async encode(filename){
+    this.time = Date.now()
     var conn = new WebSocket(`ws://localhost:4204/encode?file=${filename}`);
     conn.onclose = function(evt) {
       console.log('connection closed')
     }
-    conn.onmessage = function(evt) {
+    conn.addEventListener('message', evt => {
       let message = evt.data.split(':')
       if(message[0] == 'resolution'){
         console.log("resolution is: " + message[1])
       }
       else if(message[0].match(/480p|720p|1080p|1440p|4k/)){
+        let progress = this.select(`[resolution="${message[0]}"] soci-radial-progress`)
+        if(progress) {
+          progress.percent = message[1]
+        }
+        console.log(Date.now() - this.time)
+        this.time = Date.now()
         console.log(message[1])
       }
-    }
+    })
   }
+
+  time = 0
 
   async move(url){
     let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
