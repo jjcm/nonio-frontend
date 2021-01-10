@@ -178,29 +178,29 @@ export default class SociVideoUploader extends SociComponent {
       <columns>
         <column>
           <div class="fidelity" resolution="source">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">Source</div>
           </div>
           <div class="fidelity" resolution="2160p">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">2160p</div>
           </div>
           <div class="fidelity" resolution="1440p">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">1440p</div>
           </div>
         </column>
         <column>
           <div class="fidelity" resolution="1080p">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" waiting></soci-radial-progress>
             <div class="resolution">1080p</div>
           </div>
           <div class="fidelity" resolution="720p">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">720p</div>
           </div>
           <div class="fidelity" resolution="480p">
-            <soci-radial-progress percent="0"></soci-radial-progress>
+            <soci-radial-progress percent="0" waiting></soci-radial-progress>
             <div class="resolution">480p</div>
           </div>
         </column>
@@ -290,6 +290,7 @@ export default class SociVideoUploader extends SociComponent {
       }
       else if(message[0].match(/480p|720p|1080p|1440p|4k/)){
         let progress = this.select(`[resolution="${message[0]}"] soci-radial-progress`)
+        progress.toggleAttribute('waiting', false)
         if(progress) {
           progress.percent = message[1]
         }
