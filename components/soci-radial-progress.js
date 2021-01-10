@@ -12,6 +12,8 @@ export default class SociRadialProgress extends SociComponent {
       --transition-speed: 0.5s;
       position: relative;
       display: block;
+      width: 24px;
+      height: 24px;
     }
 
     svg {
@@ -39,6 +41,19 @@ export default class SociRadialProgress extends SociComponent {
     :host([percent="100"]) path {
       stroke-dashoffset: 50;
       transition: stroke-dashoffset 0.3s var(--soci-ease-out) calc(var(--transition-speed) - 0.1s);
+    }
+
+    :host([waiting]) {
+      animation: waiting 0.9s cubic-bezier(.41,.25,.64,.85) infinite;
+    }
+
+    @keyframes waiting {
+      from {
+        transform: rotate(215deg);
+      }
+      to {
+        transform: rotate(575deg);
+      }
     }
   `}
 
