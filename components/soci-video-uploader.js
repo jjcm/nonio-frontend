@@ -107,35 +107,36 @@ export default class SociVideoUploader extends SociComponent {
         left: 0;
         height: 8px;
         width: var(--upload-progress);
-        transition: width 0.3s ease;
+        transition: width 0.3s linear;
         background: var(--brand-background);
       }
-      :host([preview]) {
+      :host([state="preview"]) {
         min-height: 0;
         border-color: transparent;
         transition: all 0.2s ease-in-out;
         overflow: hidden;
       }
-      :host([preview]):before {
+      :host([state="preview"]):before {
         opacity: 0;
         transition: all 0.2s ease-in-out;
       }
-      :host([preview]) label,
-      :host([preview]) div {
+      :host([state="preview"]) label,
+      :host([state="preview"]) div {
         display: none;
       }
       #preview {
         max-width: 100%;
         display: none;
       }
-      :host([preview]) #preview {
+      :host([state="preview"]) #preview {
         display: block;
       }
       input {
         display: none;
       }
       #encoding {
-        width: 240px;
+        /* heh */
+        width: 420px;
         display: none;
       }
       :host([state="encoding"]) #encoding {
@@ -151,13 +152,24 @@ export default class SociVideoUploader extends SociComponent {
         width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-end;
       }
       .fidelity {
         line-height: 24px;
-        width: 100px;
+        width: 152px;
         display: flex;
         margin-bottom: 8px;
+        transition: opacity 0.3s var(--soci-ease);
+      }
+      .fidelity[disabled] {
+        opacity: 0.3;
+      }
+      .fidelity span {
+        color: var(--brand-text);
+        font-size: 11px;
+        position: relative;
+        top: -4px;
+        left: 6px;
       }
       soci-radial-progress {
         margin-right: 10px;
@@ -177,29 +189,29 @@ export default class SociVideoUploader extends SociComponent {
       <div class="info">encoding video...</div>
       <columns>
         <column>
-          <div class="fidelity" resolution="source">
-            <soci-radial-progress percent="0" ></soci-radial-progress>
-            <div class="resolution">Source</div>
+          <div class="fidelity" resolution="4320p" disabled>
+            <soci-radial-progress percent="0"></soci-radial-progress>
+            <div class="resolution">8k or higher</div>
           </div>
-          <div class="fidelity" resolution="2160p">
+          <div class="fidelity" resolution="2160p" disabled>
             <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">2160p</div>
           </div>
-          <div class="fidelity" resolution="1440p">
+          <div class="fidelity" resolution="1440p" disabled>
             <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">1440p</div>
           </div>
         </column>
         <column>
-          <div class="fidelity" resolution="1080p">
+          <div class="fidelity" resolution="1080p" disabled>
             <soci-radial-progress percent="0" waiting></soci-radial-progress>
             <div class="resolution">1080p</div>
           </div>
-          <div class="fidelity" resolution="720p">
+          <div class="fidelity" resolution="720p" disabled>
             <soci-radial-progress percent="0" ></soci-radial-progress>
             <div class="resolution">720p</div>
           </div>
-          <div class="fidelity" resolution="480p">
+          <div class="fidelity" resolution="480p" disabled>
             <soci-radial-progress percent="0" waiting></soci-radial-progress>
             <div class="resolution">480p</div>
           </div>
@@ -263,8 +275,10 @@ export default class SociVideoUploader extends SociComponent {
     request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
-      this.setAttribute('state', 'encoding')
-      this.encode(request.response)
+      setTimeout(()=>{
+        this.setAttribute('state', 'encoding')
+        this.encode(request.response)
+      }, 400)
     })
 
     request.upload.addEventListener('progress', e => {
@@ -278,25 +292,46 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   async encode(filename){
-    this.time = Date.now()
+    console.log(filename)
     var conn = new WebSocket(`ws://localhost:4204/encode?file=${filename}`);
-    conn.onclose = function(evt) {
+    conn.addEventListener('close', e => {
       console.log('connection closed')
-    }
-    conn.addEventListener('message', evt => {
-      let message = evt.data.split(':')
+      this.select('video').setAttribute('src', `http://localhost:4204/${filename.slice(0, -4)}-720p.mp4`)
+      setTimeout(()=> {
+        this.setAttribute('state', 'preview')
+      }, 500)
+    })
+    conn.addEventListener('message', e => {
+      let message = e.data.split(':')
       if(message[0] == 'resolution'){
-        console.log("resolution is: " + message[1])
+        let resolution = message[1].split('x')
+        resolution = Math.max(parseInt(resolution[0]), parseInt(resolution[1]))
+        this.equivalentResolution = '480p'
+        let resolutionBreakpoints = {
+          "480p": 0,
+          "720p": 1067,
+          "1080p": 1600,
+          "1440p": 2240,
+          "2160p": 3200,
+          "4320p": 5760
+        }
+        for(let res in resolutionBreakpoints) {
+          if(resolution > resolutionBreakpoints[res]) {
+            this.equivalentResolution = res
+            this.select(`[resolution="${res}"]`)?.toggleAttribute('disabled', false)
+          }
+        }
+        console.log(this.equivalentResolution)
+        let fidelity = this.select(`[resolution="${this.equivalentResolution}"] .resolution`)
+        fidelity.innerHTML += '<span>source</span>'
       }
-      else if(message[0].match(/480p|720p|1080p|1440p|4k/)){
-        let progress = this.select(`[resolution="${message[0]}"] soci-radial-progress`)
+      else if(message[0].match(/source|480p|720p|1080p|1440p|4k/)){
+        let resolution = message[0] == 'source' ? this.equivalentResolution : message[0]
+        let progress = this.select(`[resolution="${resolution}"] soci-radial-progress`)
         progress.toggleAttribute('waiting', false)
         if(progress) {
           progress.percent = message[1]
         }
-        console.log(Date.now() - this.time)
-        this.time = Date.now()
-        console.log(message[1])
       }
     })
   }

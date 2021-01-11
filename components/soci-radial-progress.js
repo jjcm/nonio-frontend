@@ -46,20 +46,6 @@ export default class SociRadialProgress extends SociComponent {
       stroke-dashoffset: 50;
       transition: stroke-dashoffset 0.3s var(--soci-ease-out) calc(var(--transition-speed) - 0.1s);
     }
-
-    #waiting {
-      transform-origin: 50%;
-      stroke: var(--base-text-subtle);
-    }
-
-    @keyframes waiting {
-      from {
-        transform: rotate(215deg);
-      }
-      to {
-        transform: rotate(575deg);
-      }
-    }
   `}
 
   html() { return `
@@ -73,7 +59,7 @@ export default class SociRadialProgress extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['percent', 'waiting']
+    return ['percent']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -81,69 +67,6 @@ export default class SociRadialProgress extends SociComponent {
       if(parseFloat(newValue) > 100) this.setAttribute('percent', 100)
       if(parseFloat(newValue) < 0) this.setAttribute('percent', 0)
       this.select('svg').style = `--percent: ${Math.min(Math.max(parseFloat(newValue), 0), 100)}`
-    }
-    if(name == 'waiting'){
-      if(newValue != null){
-        let template = document.createElement('template')
-        template.innerHTML = `<svg id="waiting-container" style="opacity: 0.2">
-          <circle id="waiting" cx="12" cy="12" r="11"></circle>
-          <animate 
-            xlink:href="#waiting"
-            attributeName="stroke-dashoffset"
-            from="69.1"
-            to="50"
-            dur="1s"
-            fill="freeze"
-            id="load-in"
-          />
-          <animate 
-            xlink:href="#waiting"
-            attributeName="opacity"
-            from="0"
-            to="1"
-            dur="0.5s"
-            fill="freeze"
-          />
-          <animateTransform 
-            id="spin"
-            xlink:href="#waiting"
-            attributeName="transform"
-            type="rotate"
-            from="0"
-            to="360"
-            dur="1s"
-            repeatCount="indefinite"
-          />
-          <animate 
-            id="load-out"
-            xlink:href="#waiting"
-            attributeName="stroke-dashoffset"
-            from="50"
-            to="69.1"
-            dur="0.5s"
-            fill="freeze"
-            begin="indefinite"
-          />
-          <animate 
-            id="fade-out"
-            xlink:href="#waiting"
-            attributeName="opacity"
-            from="1"
-            to="0"
-            dur="0.5s"
-            fill="freeze"
-            begin="indefinite"
-          />
-        </svg>`.trim()
-        console.log(template.innerHTML)
-        this.select('svg').appendChild(template.content.firstChild)
-      }
-      else {
-        this.select('#fade-out').beginElement()
-        setTimeout(()=>{
-          this.select('svg svg')?.remove()
-        }, 500)
-      }
     }
   }
 
