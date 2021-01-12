@@ -1,7 +1,7 @@
 import SociComponent from './soci-component.js'
 import config from '../config.js'
 
-export default class SociVideo extends SociComponent {
+export default class SociVideoPlayer extends SociComponent {
   constructor() {
     super()
   }
@@ -49,8 +49,17 @@ export default class SociVideo extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'url':
-        this.select('h1').innerHTML = newValue
+        this.url = newValue
         break
     }
+  }
+
+  get url() {
+    return this.getAttribute('url')
+  }
+
+  set url(val) {
+    let startingRes = '1080p'
+    this.select('video').src = `${config.VIDEO_HOST}/${val}-${startingRes}.mp4`
   }
 }
