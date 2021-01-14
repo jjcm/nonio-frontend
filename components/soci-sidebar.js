@@ -294,7 +294,7 @@ export default class SociSidebar extends SociComponent {
         background: var(--base-background-bold);
       }
 
-      // this is a bad hack to get alpha transparency on the scroll bars
+      /* this is a bad hack to get alpha transparency on the scroll bars */
       ::-webkit-scrollbar-thumb {
         background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
         border-radius: 7px;
