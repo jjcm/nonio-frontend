@@ -26,7 +26,6 @@ export default class SociPostLi extends SociComponent {
         height: 72px;
         border-radius: 3px;
         object-fit: cover;
-        margin-right: 8px;
         cursor: zoom-in;
         float: left;
       }
@@ -34,18 +33,26 @@ export default class SociPostLi extends SociComponent {
         display: block;
       }
 
-      #preview img {
+      #preview {
         position: absolute;
-        top: 12px;
-        left: 12px;
-        opacity: 0;
+        padding: 12px;
+        top: 0;
+        left: 0;
         pointer-events: none;
+        box-sizing: border-box;
+        width: 100%;
+      }
+
+      #preview img {
+        opacity: 0;
       }
 
       content {
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        padding-left: 8px;
+        flex: 1;
       }
       #top {
         display: flex;
@@ -100,6 +107,10 @@ export default class SociPostLi extends SociComponent {
       }
       :host([score="0"]) #score {
         color: var(--base-background-subtle);
+      }
+
+      :host([expanded]) {
+        height: 400px;
       }
 
       :host([expanded]) img {
@@ -174,11 +185,14 @@ export default class SociPostLi extends SociComponent {
       <source class="webp">
       <img @click=expand />
     </picture>
-    <picture id="preview">
-      <source class="heic">
-      <source class="webp">
-      <img @click=expand />
-    </picture>
+    <div id="preview">
+      <picture>
+        <source class="heic">
+        <source class="webp">
+        <img @click=expand />
+      </picture>
+      <content></content>
+    </div>
     <content>
       <div id="top">
         <div id="details">
