@@ -10,3 +10,5 @@ The `config.js` file holds all of the options you need to enable development wit
 ```bash
 npm start
 ```
+
+Submodule test - ignore
