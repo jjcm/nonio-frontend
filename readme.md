@@ -11,4 +11,4 @@ The `config.js` file holds all of the options you need to enable development wit
 npm start
 ```
 
-Submodule test - ignore
+Submodule test - ignore.
