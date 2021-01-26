@@ -14,18 +14,19 @@
         soci-tab(name="Video" default)
           soci-video-uploader
           h2 Description
-          soci-input(placeholder="Enter description")
+          soci-input(placeholder="Enter description" name="description")
             
         soci-tab(name="Audio")
           soci-file-drop(type="audio")
           h2 Description
-          soci-input(placeholder="Enter description")
+          soci-input(placeholder="Enter description" name="description")
 
         soci-tab(name="Blog")
           soci-input(placeholder="Write your best" name="description")
 
         soci-tab(name="HTML")
           soci-file-drop(type="html")
+          soci-input(placeholder="Enter description" name="description")
     
 
     .load-group(load-order="tertiary")

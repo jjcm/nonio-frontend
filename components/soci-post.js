@@ -27,16 +27,24 @@ export default class SociPost extends SociComponent {
         opacity: 1;
       }
 
-      #media img {
+      #media-container {
+        --media-height: calc(100vh - 100px);
+        --media-width: 100%;
+      }
+
+      .media video,
+      .media img {
         width: 100%;
-        max-height: calc(100vh - ${CONTENT_HEIGHT}px);
+        max-width: var(--media-width);
+        max-height: min(calc(100vh - 100px), var(--media-height));
         object-fit: contain;
         position: relative;
         z-index: 10;
-        margin-bottom: -200%;
+        display: block;
+        margin: 0 auto;
       }
 
-      #media img#bg {
+      .media img.bg {
         position: inherit;
         z-index: 9;
         left: 0;
@@ -46,14 +54,25 @@ export default class SociPost extends SociComponent {
         margin-bottom: 0;
       }
 
-      #media {
-        display: block;
+      .media {
         opacity: 0;
       }
 
-      :host([loaded]) #media {
+      :host([loaded]) .media {
         opacity: 1;
         transition: opacity 0.3s var(--soci-ease);
+      }
+
+      :host([type="image"]) #image {
+        display: block;
+      }
+
+      :host([type="video"]) #video {
+        display: block;
+      }
+
+      #video {
+        background: #000;
       }
 
       content {
@@ -146,7 +165,7 @@ export default class SociPost extends SociComponent {
         border: 0;
       }
 
-      :host([type="blog"]) #media {
+      :host([type="blog"]) #image {
         display: none;
       }
 
@@ -220,24 +239,34 @@ export default class SociPost extends SociComponent {
   }
 
   html(){ return `
-    <div id="media">
-      <picture>
-        <source>
-        <source>
-        <img @load=_pictureLoaded />
-      </picture>
-      <picture>
-        <source>
-        <source>
-        <img id="bg" />
-      </picture>
+    <div id="media-container">
+      <div id="video" class="media">
+        <soci-video></soci-video>
+        <picture>
+          <source>
+          <source>
+          <img class="bg" />
+        </picture>
+      </div>
+      <div id="image" class="media">
+        <picture>
+          <source>
+          <source>
+          <img @load=_pictureLoaded />
+        </picture>
+        <picture>
+          <source>
+          <source>
+          <img class="bg" />
+        </picture>
+      </div>
     </div>
     <content>
       <div id="details-container">
         <div id="details">
           <title-container>
             <h1></h1>
-            <soci-user name="pwnies" avatar-only></soci-user>
+            <soci-user avatar-only></soci-user>
             <meta-data>
               by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
             </meta-data>
@@ -252,10 +281,6 @@ export default class SociPost extends SociComponent {
 
   static get observedAttributes() {
     return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
-  }
-
-  connectedCallback(){
-    this.select('#media').addEventListener('click', this._click)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -304,6 +329,16 @@ export default class SociPost extends SociComponent {
             break
           case 'url':
             break
+          case 'width':
+            if(parseInt(post[key]) != 0) 
+              this.select('#media-container').style.setProperty('--media-width', post[key] + 'px')
+            break
+          case 'height':
+            if(parseInt(post[key]) != 0) 
+              this.select('#media-container').style.setProperty('--media-height', post[key] + 'px')
+            break
+          case 'type': 
+            this.loadContent(post[key])
           default:
             this.setAttribute(key, post[key])
             break
@@ -313,8 +348,6 @@ export default class SociPost extends SociComponent {
       this.toggleAttribute('loaded', true)
       }, 100)
     })
-
-    this.loadContent('image')
   }
 
   loadContent(type) {
@@ -327,6 +360,9 @@ export default class SociPost extends SociComponent {
           this.select('img').src = `${config.IMAGE_HOST}/${this.url}.webp`
           this.select('source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
         },1)
+        break
+      case 'video':
+        this.select('soci-video').url = this.url
         break
     }
   }

@@ -292,11 +292,11 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   async encode(filename){
-    console.log(filename)
+    this.fileUrl = filename.slice(0, -4)
     var conn = new WebSocket(`ws://localhost:4204/encode?file=${filename}`);
     conn.addEventListener('close', e => {
-      console.log('connection closed')
-      this.select('video').setAttribute('src', `http://localhost:4204/${filename.slice(0, -4)}-720p.mp4`)
+      let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
+      this.select('video').setAttribute('src', `http://localhost:4204/${filename.slice(0, -4)}${previewResolution}.mp4`)
       setTimeout(()=> {
         this.setAttribute('state', 'preview')
       }, 500)
@@ -305,7 +305,11 @@ export default class SociVideoUploader extends SociComponent {
       let message = e.data.split(':')
       if(message[0] == 'resolution'){
         let resolution = message[1].split('x')
-        resolution = Math.max(parseInt(resolution[0]), parseInt(resolution[1]))
+        this.videoWidth = parseInt(resolution[0])
+        this.videoHeight = parseInt(resolution[1])
+        resolution = Math.max(this.videoWidth, this.videoHeight)
+        console.log(resolution)
+        console.log(this.videoWidth)
         this.equivalentResolution = '480p'
         let resolutionBreakpoints = {
           "480p": 0,
@@ -379,19 +383,11 @@ export default class SociVideoUploader extends SociComponent {
     return this.getAttribute('type')
   }
 
-  preview(filename){
-    if(this.type == 'image'){
-      this.select('#preview').innerHTML = `
-        <source srcset="${UPLOAD_HOST + '/' + filename}.webp">
-        <img src="${UPLOAD_HOST + '/' + filename}.webp">
-      `
-    }
-    else {
-      this.select('#preview').innerHTML = `
-        <source type="video/webm" src="${UPLOAD_HOST + '/' + filename}.webm">
-      `
-    }
-    this.toggleAttribute('preview', true)
-    this.fileUrl = filename
+  get width(){
+    return this.videoWidth
+  }
+
+  get height(){
+    return this.videoHeight
   }
 }

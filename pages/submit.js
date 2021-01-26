@@ -5,6 +5,7 @@ let submit = {
   },
   form: null, 
   onActivate() {
+    console.log('submit page activate')
     submit.form = document.querySelector('#submit form')
 
     let title = document.querySelector('#submit input[name="title"]')
@@ -14,11 +15,13 @@ let submit = {
     submit.submitButton.addEventListener('click', submit.submit)
   },
   async submit(e) {
+    console.log('submit time')
     if(submit.form.reportValidity()){
       let data = new FormData(submit.form)
-      let fileDrop = document.querySelector('#submit soci-file-drop')
-      if(fileDrop){
-        let newPath = await fileDrop.move(data.get('url'))
+      let type = document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
+      let fileUploader = document.querySelector(`#submit soci-${type}-uploader`)
+      if(fileUploader){
+        let newPath = await fileUploader.move(data.get('url'))
         if(newPath == null) {
           console.error("Error moving file to its new url")
           return 0
@@ -28,7 +31,9 @@ let submit = {
         title: data.get('title'),
         url: data.get('url'),
         content: data.get('description'),
-        type: document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
+        type: type,
+        width: fileUploader?.width,
+        height: fileUploader?.height
       }).then(e=>{
         if(e.url){
           submit.submitButton.success()
@@ -46,4 +51,4 @@ let submit = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', submit.init)
+submit.init()
