@@ -11,6 +11,7 @@ export default class SociVideoPlayer extends SociComponent {
       display: block;
       width: 100%;
       position: relative;
+      background: #000;
     }
     video {
       max-width: var(--media-width);
@@ -33,8 +34,15 @@ export default class SociVideoPlayer extends SociComponent {
       color: #fff;
     }
     :host(:hover) controls {
-      opacity: 1;
+      /* visual bug in chrome windows makes opacity 1 do strange things */
+      opacity: 0.99;
       transition: none;
+    }
+    #track-container {
+      width: 100%;
+      position: relative;
+      margin: 0 10px;
+      padding: 8px 0;
     }
     #track {
       position: relative;
@@ -42,9 +50,14 @@ export default class SociVideoPlayer extends SociComponent {
       display: block;
       height: 4px;
       background: #ffffff30;
-      margin: 0 10px;
-      border-radius: 2px;
+      border-radius: 3px;
       overflow: hidden;
+      pointer-events: none;
+      transition: all 0.1s linear;
+    }
+    #track-container:hover #track {
+      height: 6px;
+      border-radius: 3px;
     }
     soci-icon {
       opacity: 0.7;
@@ -61,6 +74,7 @@ export default class SociVideoPlayer extends SociComponent {
       height: calc(100% - 32px);
     }
     #progress,
+    #seek,
     .buffer {
       position: absolute;
       top: 0;
@@ -75,12 +89,50 @@ export default class SociVideoPlayer extends SociComponent {
       background: var(--brand-background);
       width: 0;
     }
+    #seek {
+      transition: none;
+      background: #ffffff60;
+      display: none;
+    }
+    #track-container:hover #seek {
+      display: block;
+    }
     #buffers {
       opacity: 0.3;
       pointer-events: none;
     }
     .buffer {
       background: #fff;
+    }
+    #thumb {
+      width: 12px;
+      height: 12px;
+      transition: all 0.1s linear;
+      background: var(--brand-background);
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      transform-origin: left center;
+      transform: scale(0) translateX(-6px);
+    }
+    #track-container:hover #thumb {
+      transform: scale(1) translateX(-6px);
+    }
+    #track-container[seeking] #progress, 
+    #track-container[seeking] #thumb {
+      transition: none;
+    }
+    :host(:fullscreen) video {
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100%;
+    }
+    soci-icon[glyph="exitfullscreen"],
+    :host(:fullscreen) soci-icon[glyph="fullscreen"] {
+      display: none;
+    }
+    :host(:fullscreen) soci-icon[glyph="exitfullscreen"] {
+      display: block;
     }
   `}
 
@@ -89,25 +141,30 @@ export default class SociVideoPlayer extends SociComponent {
     <controls>
       <soci-icon id="play" glyph="play" @click=_togglePlay></soci-icon>
       <soci-icon glyph="volume"></soci-icon>
-      <div id="track" @click=_seekClick>
-        <div id="buffers"></div>
+      <div id="track-container" @mousedown=_seekDown @mousemove=_seekMove>
+        <div id="track">
+          <div id="buffers"></div>
+          <div id="seek"></div>
+          <div id="progress"></div>
+        </div>
         <div id="thumb"></div>
-        <div id="progress"></div>
       </div>
       <soci-icon glyph="resolution"></soci-icon>
-      <soci-icon glyph="fullscreen"></soci-icon>
+      <soci-icon glyph="fullscreen" @click=_fullscreen></soci-icon>
+      <soci-icon glyph="exitfullscreen" @click=_exitFullscreen></soci-icon>
     </controls>
     <div id="click-overlay" @click=_togglePlay></div>
   `}
 
   static get observedAttributes() {
-    return ['url']
+    return ['url', 'resolution']
   }
 
   connectedCallback(){
     this._bufferInterval = setInterval(this._updateBuffer.bind(this), 1000)
     this._playInterval = setInterval(this._updateTime.bind(this), 100)
     this._video = this.select('video')
+    this._seekUp = this._seekUp.bind(this)
   }
 
   disconnectedCallback(){
@@ -146,11 +203,12 @@ export default class SociVideoPlayer extends SociComponent {
       dom.style.left = `${100 * buffer.start(i) / this._video.duration}%`
       dom.style.width = `${100 * buffer.end(i) / this._video.duration}%`
     }
-    console.log(buffer.length)
   }
 
   _updateTime(){
-    this.select('#progress').style.width = `${100 * this._video.currentTime / this._video.duration}%`
+    let percent = `${100 * this._video.currentTime / this._video.duration}%`
+    this.select('#progress').style.width = percent
+    this.select('#thumb').style.left = percent
   }
 
   _onplay(){
@@ -161,11 +219,45 @@ export default class SociVideoPlayer extends SociComponent {
     this.select('#play').setAttribute('glyph', 'play')
   }
 
-  _seekClick(e){
-    let percent = e.layerX / this.select('#track').offsetWidth
-    console.log(percent)
-    console.log(this._video.duration)
-    this._video.currentTime = percent * this._video.duration
+  _seekDown(e){
+    this._video.pause()
+    this._seeking = true
+    this._seekMove(e)
+    let container = this.select('#track-container')
+    container.toggleAttribute('seeking', true)
+    container.removeEventListener('mousemove', this._seekMove)
+    document.addEventListener('mousemove', this._seekMove)
+    document.addEventListener('mouseup', this._seekUp)
+  }
+
+  _seekUp(e){
+    this._video.play()
+    this._seeking = false
+    let container = this.select('#track-container')
+    container.toggleAttribute('seeking', false)
+    container.addEventListener('mousemove', this._seekMove)
+    document.removeEventListener('mousemove', this._seekMove)
+    document.removeEventListener('mouseup', this._seekUp)
+  }
+
+  _seekMove(e){
+    let container = this.select('#track-container')
+    let offsetX = e.clientX - container.getBoundingClientRect().x
+    let percent = offsetX / container.offsetWidth
+    this.select('#seek').style.width = `${100 * percent}%`
+    if(this._seeking){
+      this._video.currentTime = percent * this._video.duration
+      this.select('#progress').style.width = `${100 * percent}%`
+      this.select('#thumb').style.left = `${100 * percent}%`
+    }
+  }
+
+  _fullscreen(e){
+    this.requestFullscreen()
+  }
+
+  _exitFullscreen(e){
+    document.exitFullscreen()
   }
 
   get playing(){
@@ -177,6 +269,10 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   set url(val) {
+    if(this.getAttribute('url') != val){
+      this.setAttribute('url', val)
+      return
+    }
     let startingRes = '480p'
     this._video.src = `${config.VIDEO_HOST}/${val}.mp4`
   }

@@ -337,8 +337,6 @@ export default class SociPost extends SociComponent {
             if(parseInt(post[key]) != 0) 
               this.select('#media-container').style.setProperty('--media-height', post[key] + 'px')
             break
-          case 'type': 
-            this.loadContent(post[key])
           default:
             this.setAttribute(key, post[key])
             break
@@ -351,6 +349,7 @@ export default class SociPost extends SociComponent {
   }
 
   loadContent(type) {
+    console.log('loading content')
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
     switch(type){
       case 'image':
