@@ -23,7 +23,7 @@ export default class SociVideoPlayer extends SociComponent {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      padding: 60px 16px 4px;
+      padding: 60px 12px 4px;
       position: absolute;
       width: 100%;
       bottom: 0;
@@ -38,13 +38,14 @@ export default class SociVideoPlayer extends SociComponent {
       opacity: 0.99;
       transition: none;
     }
-    #track-container {
+    .track-container {
       width: 100%;
       position: relative;
-      margin: 0 10px;
+      margin: 0 6px;
       padding: 8px 0;
+      cursor: pointer;
     }
-    #track {
+    .track {
       position: relative;
       width: 100%;
       display: block;
@@ -55,12 +56,14 @@ export default class SociVideoPlayer extends SociComponent {
       pointer-events: none;
       transition: all 0.1s linear;
     }
-    #track-container:hover #track {
+    .track-container:hover .track {
       height: 6px;
       border-radius: 3px;
     }
     soci-icon {
       opacity: 0.7;
+      cursor: pointer;
+      width: 32px;
       cursor: pointer;
     }
     soci-icon:hover {
@@ -73,7 +76,7 @@ export default class SociVideoPlayer extends SociComponent {
       width: 100%;
       height: calc(100% - 32px);
     }
-    #progress,
+    .progress,
     #seek,
     .buffer {
       position: absolute;
@@ -84,7 +87,7 @@ export default class SociVideoPlayer extends SociComponent {
       transition: width 0.3s ease;
       background: #ffffff40;
     }
-    #progress {
+    .progress {
       transition: width 0.1s linear;
       background: var(--brand-background);
       width: 0;
@@ -94,7 +97,7 @@ export default class SociVideoPlayer extends SociComponent {
       background: #ffffff60;
       display: none;
     }
-    #track-container:hover #seek {
+    .track-container:hover #seek {
       display: block;
     }
     #buffers {
@@ -104,7 +107,7 @@ export default class SociVideoPlayer extends SociComponent {
     .buffer {
       background: #fff;
     }
-    #thumb {
+    .thumb {
       width: 12px;
       height: 12px;
       transition: all 0.1s linear;
@@ -115,11 +118,11 @@ export default class SociVideoPlayer extends SociComponent {
       transform-origin: left center;
       transform: scale(0) translateX(-6px);
     }
-    #track-container:hover #thumb {
+    .track-container:hover .thumb {
       transform: scale(1) translateX(-6px);
     }
-    #track-container[seeking] #progress, 
-    #track-container[seeking] #thumb {
+    .track-container[seeking] .progress, 
+    .track-container[seeking] .thumb {
       transition: none;
     }
     :host(:fullscreen) video {
@@ -134,20 +137,54 @@ export default class SociVideoPlayer extends SociComponent {
     :host(:fullscreen) soci-icon[glyph="exitfullscreen"] {
       display: block;
     }
+
+    #volume-container {
+      display: flex;
+      align-items: center;
+      width: 36px;
+      transition: all 0.2s var(--soci-ease);
+      padding-right: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #volume-container:hover {
+      width: 140px;
+      padding-right: 6px;
+    }
+
+    #volume-container .track-container:hover .track {
+      height: 4px;
+    }
+
+    #volume-container:hover .thumb {
+      transition: all 0.1s linear 0.06s;
+      transform: scale(1) translateX(-6px);
+      top: 4px;
+    }
+
   `}
 
   html(){ return `
     <video autoplay @play=_onplay @pause=_onpause></video>
     <controls>
       <soci-icon id="play" glyph="play" @click=_togglePlay></soci-icon>
-      <soci-icon glyph="volume"></soci-icon>
-      <div id="track-container" @mousedown=_seekDown @mousemove=_seekMove>
-        <div id="track">
+      <div id="volume-container">
+        <soci-icon glyph="volume"></soci-icon>
+        <div class="track-container" @mousedown=_volumeDown>
+          <div class="track">
+            <div class="progress" style="width: 50%"></div>
+          </div>
+          <div class="thumb" style="left: 50%"></div>
+        </div>
+      </div>
+      <div id="timeline" class="track-container" @mousedown=_seekDown @mousemove=_seekMove>
+        <div class="track">
           <div id="buffers"></div>
           <div id="seek"></div>
-          <div id="progress"></div>
+          <div class="progress"></div>
         </div>
-        <div id="thumb"></div>
+        <div class="thumb"></div>
       </div>
       <soci-icon glyph="resolution"></soci-icon>
       <soci-icon glyph="fullscreen" @click=_fullscreen></soci-icon>
@@ -207,8 +244,8 @@ export default class SociVideoPlayer extends SociComponent {
 
   _updateTime(){
     let percent = `${100 * this._video.currentTime / this._video.duration}%`
-    this.select('#progress').style.width = percent
-    this.select('#thumb').style.left = percent
+    this.select('#timeline .progress').style.width = percent
+    this.select('#timeline .thumb').style.left = percent
   }
 
   _onplay(){
@@ -219,11 +256,17 @@ export default class SociVideoPlayer extends SociComponent {
     this.select('#play').setAttribute('glyph', 'play')
   }
 
+  _volumeDown(e){
+    console.log(e)
+
+  }
+
+
   _seekDown(e){
     this._video.pause()
     this._seeking = true
     this._seekMove(e)
-    let container = this.select('#track-container')
+    let container = this.select('#timeline')
     container.toggleAttribute('seeking', true)
     container.removeEventListener('mousemove', this._seekMove)
     document.addEventListener('mousemove', this._seekMove)
@@ -233,7 +276,7 @@ export default class SociVideoPlayer extends SociComponent {
   _seekUp(e){
     this._video.play()
     this._seeking = false
-    let container = this.select('#track-container')
+    let container = this.select('#timeline')
     container.toggleAttribute('seeking', false)
     container.addEventListener('mousemove', this._seekMove)
     document.removeEventListener('mousemove', this._seekMove)
@@ -241,14 +284,14 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   _seekMove(e){
-    let container = this.select('#track-container')
+    let container = this.select('#timeline')
     let offsetX = e.clientX - container.getBoundingClientRect().x
     let percent = offsetX / container.offsetWidth
     this.select('#seek').style.width = `${100 * percent}%`
     if(this._seeking){
       this._video.currentTime = percent * this._video.duration
-      this.select('#progress').style.width = `${100 * percent}%`
-      this.select('#thumb').style.left = `${100 * percent}%`
+      this.select('#timeline .progress').style.width = `${100 * percent}%`
+      this.select('#timeline .thumb').style.left = `${100 * percent}%`
     }
   }
 
