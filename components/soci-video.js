@@ -33,6 +33,7 @@ export default class SociVideoPlayer extends SociComponent {
       box-sizing: border-box;
       color: #fff;
     }
+    :host([paused]) controls,
     :host(:hover) controls {
       /* visual bug in chrome windows makes opacity 1 do strange things */
       opacity: 0.99;
@@ -117,6 +118,7 @@ export default class SociVideoPlayer extends SociComponent {
       top: 5px;
       transform-origin: left center;
       transform: scale(0) translateX(-6px);
+      pointer-events: none;
     }
     .track-container:hover .thumb {
       transform: scale(1) translateX(-6px);
@@ -148,6 +150,7 @@ export default class SociVideoPlayer extends SociComponent {
       overflow: hidden;
     }
 
+    #volume-container[active],
     #volume-container:hover {
       width: 140px;
       padding-right: 6px;
@@ -157,10 +160,15 @@ export default class SociVideoPlayer extends SociComponent {
       height: 4px;
     }
 
+    #volume-container[active] .thumb,
     #volume-container:hover .thumb {
-      transition: all 0.1s linear 0.06s;
+      transition: scale 0.1s linear 0.06s;
       transform: scale(1) translateX(-6px);
       top: 4px;
+    }
+
+    #volume .progress {
+      transition: none;
     }
 
   `}
@@ -171,11 +179,11 @@ export default class SociVideoPlayer extends SociComponent {
       <soci-icon id="play" glyph="play" @click=_togglePlay></soci-icon>
       <div id="volume-container">
         <soci-icon glyph="volume"></soci-icon>
-        <div class="track-container" @mousedown=_volumeDown>
+        <div id="volume" class="track-container" @mousedown=_volumeDown>
           <div class="track">
-            <div class="progress" style="width: 50%"></div>
+            <div class="progress" style="width: 100%"></div>
           </div>
-          <div class="thumb" style="left: 50%"></div>
+          <div class="thumb" style="left: 100%"></div>
         </div>
       </div>
       <div id="timeline" class="track-container" @mousedown=_seekDown @mousemove=_seekMove>
@@ -202,6 +210,10 @@ export default class SociVideoPlayer extends SociComponent {
     this._playInterval = setInterval(this._updateTime.bind(this), 100)
     this._video = this.select('video')
     this._seekUp = this._seekUp.bind(this)
+    this._volumeMove = this._volumeMove.bind(this)
+    this._volumeUp = this._volumeUp.bind(this)
+    this._closeVolume = this._closeVolume.bind(this)
+    this.toggleAttribute('paused', true)
   }
 
   disconnectedCallback(){
@@ -250,17 +262,42 @@ export default class SociVideoPlayer extends SociComponent {
 
   _onplay(){
     this.select('#play').setAttribute('glyph', 'pause')
+    this.toggleAttribute('paused', false)
   }
 
   _onpause(){
     this.select('#play').setAttribute('glyph', 'play')
+    this.toggleAttribute('paused', true)
   }
 
   _volumeDown(e){
-    console.log(e)
-
+    document.addEventListener('mousemove', this._volumeMove)
+    document.addEventListener('mouseup', this._volumeUp)
+    this.select('#volume-container').toggleAttribute('active', true)
+    this.addEventListener('mouseout', this._closeVolume)
+    this._volumeMove(e)
   }
 
+  _volumeUp(e){
+    document.removeEventListener('mousemove', this._volumeMove)
+    document.removeEventListener('mouseup', this._volumeUp)
+  }
+
+  _volumeMove(e){
+    let container = this.select('#volume')
+    let offsetX = e.clientX - container.getBoundingClientRect().x
+    let percent = Math.min(Math.max(offsetX / container.offsetWidth, 0), 1)
+    this.select('#volume .progress').style.width = `${100 * percent}%`
+    this.select('#volume .thumb').style.left = `${100 * percent}%`
+    this._video.volume = percent * percent
+  }
+
+  _closeVolume(e){
+    if(!this.hasAttribute('paused')){
+      this.removeEventListener('mouseout', this._closeVolume)
+      this.select('#volume-container').toggleAttribute('active', false)
+    }
+  }
 
   _seekDown(e){
     this._video.pause()
