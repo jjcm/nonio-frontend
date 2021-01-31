@@ -204,7 +204,7 @@ export default class SociColumn extends SociComponent {
               </svg>
               <div id="tag-title">funny</div>
             </div>
-            <soci-select id="filter-select" dropdown-position="right">
+            <soci-select id="filter-select" dropdown-horizontal-position="right">
               <soci-option slot="selected">All</soci-option>
               <soci-option value="images">Images</soci-option>
               <soci-option value="videos">Videos</soci-option>

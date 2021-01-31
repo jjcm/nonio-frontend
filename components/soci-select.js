@@ -16,7 +16,7 @@ export class SociSelect extends SociComponent {
       position: relative;
       line-height: var(--height);
       user-select: none;
-      font-weight: 500;
+      font-weight: var(--font-weight, 500);
       font-size: 12px;
       text-transform: capitalize;
     }
@@ -77,14 +77,20 @@ export class SociSelect extends SociComponent {
       display: block;
     }
 
-    :host([dropdown-position="right"]) dropdown {
+    :host([dropdown-horizontal-position="right"]) dropdown {
+      left: auto;
       right: 0;
+    }
+
+    :host([dropdown-vertical-position="top"]) dropdown {
+      top: auto;
+      bottom: calc(var(--height) + 4px);
     }
 
   `}
 
   html(){ return `
-    <selected @click=toggleDropdown>
+    <selected @click=openDropdown>
       <slot name="selected"></slot>
     </selected>
     <dropdown @click=closeDropdown>
@@ -94,6 +100,10 @@ export class SociSelect extends SociComponent {
 
   static get observedAttributes() {
     return ['default']
+  }
+
+  connectedCallback(){
+    this._blurClose = this._blurClose.bind(this)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -107,15 +117,20 @@ export class SociSelect extends SociComponent {
   }
 
   openDropdown() {
-    this.setAttribute('open', '')
+    if(this.hasAttribute('open')) return
+    this.toggleAttribute('open', true)
+    setTimeout(()=>{
+      document.addEventListener('click', this._blurClose)
+    }, 1)
   }
 
   closeDropdown() {
     this.removeAttribute('open')
   }
 
-  toggleDropdown() {
-    this.toggleAttribute('open')
+  _blurClose(e){
+    this.closeDropdown()
+    document.removeEventListener('click', this._blurClose)
   }
 }
 

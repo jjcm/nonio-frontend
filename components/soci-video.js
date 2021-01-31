@@ -23,7 +23,7 @@ export default class SociVideoPlayer extends SociComponent {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      padding: 60px 12px 4px;
+      padding: 60px 12px 0;
       position: absolute;
       width: 100%;
       bottom: 0;
@@ -32,6 +32,7 @@ export default class SociVideoPlayer extends SociComponent {
       background: linear-gradient(#00000000, #00000088);
       box-sizing: border-box;
       color: #fff;
+      z-index: 2;
     }
     :host([paused]) controls,
     :host(:hover) controls {
@@ -66,6 +67,7 @@ export default class SociVideoPlayer extends SociComponent {
       cursor: pointer;
       width: 32px;
       cursor: pointer;
+      padding: 4px 0;
     }
     soci-icon:hover {
       opacity: 1;
@@ -76,6 +78,7 @@ export default class SociVideoPlayer extends SociComponent {
       left: 0;
       width: 100%;
       height: calc(100% - 32px);
+      z-index: 1;
     }
     .progress,
     #seek,
@@ -171,6 +174,25 @@ export default class SociVideoPlayer extends SociComponent {
       transition: none;
     }
 
+    soci-select {
+      height: 32px;
+      margin-left: 4px;
+      --color: transparent;
+      --font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    soci-option[slot="selected"] {
+      margin-right: -16px;
+      --color: transparent;
+    }
+
+    soci-option[slot="selected"] {
+      opacity: 0.5;
+    }
+    soci-select:hover soci-option[slot="selected"] {
+      opacity: 1;
+    }
   `}
 
   html(){ return `
@@ -178,7 +200,7 @@ export default class SociVideoPlayer extends SociComponent {
     <controls>
       <soci-icon id="play" glyph="play" @click=_togglePlay></soci-icon>
       <div id="volume-container">
-        <soci-icon glyph="volume"></soci-icon>
+        <soci-icon glyph="volume" @click=_toggleMute></soci-icon>
         <div id="volume" class="track-container" @mousedown=_volumeDown>
           <div class="track">
             <div class="progress" style="width: 100%"></div>
@@ -194,7 +216,14 @@ export default class SociVideoPlayer extends SociComponent {
         </div>
         <div class="thumb"></div>
       </div>
-      <soci-icon glyph="resolution"></soci-icon>
+      <soci-select id="resolution" dropdown-vertical-position="top" dropdown-horizontal-position="right">
+        <soci-option slot="selected">480p</soci-option>
+        <soci-option value="images">720p</soci-option>
+        <soci-option value="videos">1080p</soci-option>
+        <soci-option value="blogs">1440p</soci-option>
+        <soci-option value="blogs">4k</soci-option>
+        <soci-option value="blogs">8k+</soci-option>
+      </soci-select>
       <soci-icon glyph="fullscreen" @click=_fullscreen></soci-icon>
       <soci-icon glyph="exitfullscreen" @click=_exitFullscreen></soci-icon>
     </controls>
@@ -276,6 +305,10 @@ export default class SociVideoPlayer extends SociComponent {
     this.select('#volume-container').toggleAttribute('active', true)
     this.addEventListener('mouseout', this._closeVolume)
     this._volumeMove(e)
+    if(this.hasAttribute('muted')){
+      this.select('#volume-container soci-icon').setAttribute('glyph', 'volume')
+      this.removeAttribute('muted')
+    }
   }
 
   _volumeUp(e){
@@ -287,9 +320,21 @@ export default class SociVideoPlayer extends SociComponent {
     let container = this.select('#volume')
     let offsetX = e.clientX - container.getBoundingClientRect().x
     let percent = Math.min(Math.max(offsetX / container.offsetWidth, 0), 1)
-    this.select('#volume .progress').style.width = `${100 * percent}%`
-    this.select('#volume .thumb').style.left = `${100 * percent}%`
-    this._video.volume = percent * percent
+    this.volume = percent
+  }
+
+  _toggleMute(e){
+    console.log('toigglemute')
+    this.toggleAttribute('muted')
+    if(this.hasAttribute('muted')){
+      this.select('#volume-container soci-icon').setAttribute('glyph', 'muted')
+      this._unmutedVolume = this.volume
+      this.volume = 0
+    }
+    else {
+      this.select('#volume-container soci-icon').setAttribute('glyph', 'volume')
+      this.volume = Math.sqrt(this._unmutedVolume)
+    }
   }
 
   _closeVolume(e){
@@ -338,6 +383,16 @@ export default class SociVideoPlayer extends SociComponent {
 
   _exitFullscreen(e){
     document.exitFullscreen()
+  }
+
+  get volume(){
+    return this._video.volume
+  }
+
+  set volume(percent){
+    this.select('#volume .progress').style.width = `${100 * percent}%`
+    this.select('#volume .thumb').style.left = `${100 * percent}%`
+    this._video.volume = percent * percent
   }
 
   get playing(){

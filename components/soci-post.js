@@ -280,12 +280,12 @@ export default class SociPost extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
+    return ['post-title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'title':
+      case 'post-title':
         this.select('h1').innerHTML = newValue
         break
       case 'type':
@@ -336,6 +336,9 @@ export default class SociPost extends SociComponent {
           case 'height':
             if(parseInt(post[key]) != 0) 
               this.select('#media-container').style.setProperty('--media-height', post[key] + 'px')
+            break
+          case 'title':
+            this.setAttribute('post-title', post['title'])
             break
           default:
             this.setAttribute(key, post[key])
