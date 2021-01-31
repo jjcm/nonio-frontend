@@ -288,9 +288,6 @@ export default class SociPost extends SociComponent {
       case 'post-title':
         this.select('h1').innerHTML = newValue
         break
-      case 'type':
-        this.loadContent(newValue)
-        break
       case 'time':
         let date = new Date(parseInt(newValue))
         this.select('time').innerHTML = date.toLocaleDateString(undefined, {
@@ -323,6 +320,9 @@ export default class SociPost extends SociComponent {
           case 'content':
             this.renderDescription(post[key])
             break
+          case 'type':
+            this.loadContent(post[key])
+            break
           case 'tags':
             this.setAttribute(key, post[key].map(tag=>tag.tag).join(','))
             this.createTags(post[key])
@@ -346,7 +346,7 @@ export default class SociPost extends SociComponent {
         }
       }
       setTimeout(()=>{
-      this.toggleAttribute('loaded', true)
+        this.toggleAttribute('loaded', true)
       }, 100)
     })
   }

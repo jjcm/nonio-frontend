@@ -14,7 +14,7 @@ export default class SociVideoPlayer extends SociComponent {
       background: #000;
     }
     video {
-      max-width: var(--media-width);
+      max-width: min(var(--media-width), 100%);
       max-height: min(calc(100vh - 100px), var(--media-height));
       margin: 0 auto;
       display: block;
@@ -217,12 +217,6 @@ export default class SociVideoPlayer extends SociComponent {
         <div class="thumb"></div>
       </div>
       <soci-select id="resolution" dropdown-vertical-position="top" dropdown-horizontal-position="right">
-        <soci-option slot="selected">480p</soci-option>
-        <soci-option value="images">720p</soci-option>
-        <soci-option value="videos">1080p</soci-option>
-        <soci-option value="blogs">1440p</soci-option>
-        <soci-option value="blogs">4k</soci-option>
-        <soci-option value="blogs">8k+</soci-option>
       </soci-select>
       <soci-icon glyph="fullscreen" @click=_fullscreen></soci-icon>
       <soci-icon glyph="exitfullscreen" @click=_exitFullscreen></soci-icon>
@@ -408,7 +402,39 @@ export default class SociVideoPlayer extends SociComponent {
       this.setAttribute('url', val)
       return
     }
-    let startingRes = '480p'
-    this._video.src = `${config.VIDEO_HOST}/${val}.mp4`
+    setTimeout(()=>{
+      let width = parseInt(getComputedStyle(this).getPropertyValue('--media-width').slice(0, -2))
+      let height = parseInt(getComputedStyle(this).getPropertyValue('--media-height').slice(0, -2))
+      if(width && height){
+        let resolution = Math.max(width, height)
+        let equivalentResolution = '480p'
+        let resolutionBreakpoints = {
+          "480p": 0,
+          "720p": 1067,
+          "1080p": 1600,
+          "1440p": 2240,
+          "2160p": 3200,
+          "4320p": 5760
+        }
+        let resOption
+        for(let res in resolutionBreakpoints) {
+          if(resolution > resolutionBreakpoints[res]) {
+            equivalentResolution = res
+            resOption = document.createElement('soci-option')
+            resOption.innerHTML = res
+            this.select('#resolution').appendChild(resOption)
+          }
+        }
+        resOption.setAttribute('slot', 'selected')
+        let viewportResolution = '480p'
+        for(let res in resolutionBreakpoints) {
+          if(this.offsetWidth > resolutionBreakpoints[res]){
+            //todo - detect viewport resolution
+            viewportResolution = 0
+          }
+        }
+      }
+      this._video.src = `${config.VIDEO_HOST}/${val}.mp4`
+    },1)
   }
 }
