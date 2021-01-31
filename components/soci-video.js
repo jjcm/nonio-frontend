@@ -236,7 +236,9 @@ export default class SociVideoPlayer extends SociComponent {
     this._volumeMove = this._volumeMove.bind(this)
     this._volumeUp = this._volumeUp.bind(this)
     this._closeVolume = this._closeVolume.bind(this)
+    this._spacePause = this._spacePause.bind(this)
     this.toggleAttribute('paused', true)
+    document.addEventListener('keydown', this._spacePause)
   }
 
   disconnectedCallback(){
@@ -377,6 +379,13 @@ export default class SociVideoPlayer extends SociComponent {
 
   _exitFullscreen(e){
     document.exitFullscreen()
+  }
+
+  _spacePause(e){
+    if(e.keyCode == '32' && e.target == document.body){
+      e.preventDefault()
+      this._togglePlay()
+    }
   }
 
   get volume(){
