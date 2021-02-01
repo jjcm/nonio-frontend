@@ -56,11 +56,9 @@ export default class SociVideoPlayer extends SociComponent {
       border-radius: 3px;
       overflow: hidden;
       pointer-events: none;
-      transition: all 0.1s linear;
     }
     .track-container:hover .track {
       height: 6px;
-      border-radius: 3px;
     }
     soci-icon {
       opacity: 0.7;
@@ -193,6 +191,9 @@ export default class SociVideoPlayer extends SociComponent {
     soci-select:hover soci-option[slot="selected"] {
       opacity: 1;
     }
+    soci-select[disabled] {
+      pointer-events: none;
+    }
   `}
 
   html(){ return `
@@ -237,6 +238,7 @@ export default class SociVideoPlayer extends SociComponent {
     this._volumeUp = this._volumeUp.bind(this)
     this._closeVolume = this._closeVolume.bind(this)
     this._spacePause = this._spacePause.bind(this)
+    this._forceResolution = this._forceResolution.bind(this)
     this.toggleAttribute('paused', true)
     document.addEventListener('keydown', this._spacePause)
   }
@@ -388,6 +390,31 @@ export default class SociVideoPlayer extends SociComponent {
     }
   }
 
+  _adjustResForScreenSize(){
+    let viewportResolution = '480p'
+    for(let res in this._resolutions) {
+      viewportResolution = res
+      if(this.offsetWidth < this._resolutions[res]) break
+    }
+    this.resolution = viewportResolution
+  }
+
+  _forceResolution(e){
+    this.resolution = e.currentTarget.getAttribute('value')
+  }
+
+  get resolution(){
+    return this._currentResolution
+  }
+
+  set resolution(res){
+    this._currentResolution = res
+    this.select('soci-option[slot="selected"]')?.removeAttribute('slot')
+    let resSuffix = res == this._sourceResolution ? '' : '-' + res
+    this._video.src = `${config.VIDEO_HOST}/${this.url}${resSuffix}.mp4`
+    this.select(`soci-option[value="${res}"]`).setAttribute('slot', 'selected')
+  }
+
   get volume(){
     return this._video.volume
   }
@@ -418,32 +445,39 @@ export default class SociVideoPlayer extends SociComponent {
         let resolution = Math.max(width, height)
         let equivalentResolution = '480p'
         let resolutionBreakpoints = {
-          "480p": 0,
+          "480p": 720,
           "720p": 1067,
           "1080p": 1600,
           "1440p": 2240,
           "2160p": 3200,
           "4320p": 5760
         }
+        let resCount = 0
         let resOption
         for(let res in resolutionBreakpoints) {
-          if(resolution > resolutionBreakpoints[res]) {
+          if(resolution > resolutionBreakpoints[res] || res == "480p") {
+            resCount++
             equivalentResolution = res
             resOption = document.createElement('soci-option')
+            resOption.setAttribute('value', res)
             resOption.innerHTML = res
+            resOption.addEventListener('click', this._forceResolution)
             this.select('#resolution').appendChild(resOption)
           }
-        }
-        resOption.setAttribute('slot', 'selected')
-        let viewportResolution = '480p'
-        for(let res in resolutionBreakpoints) {
-          if(this.offsetWidth > resolutionBreakpoints[res]){
-            //todo - detect viewport resolution
-            viewportResolution = 0
+          else {
+            delete resolutionBreakpoints[res]
           }
         }
+        this._resolutions = resolutionBreakpoints
+        this._sourceResolution = equivalentResolution
+        if(resCount == 1) this.select('#resolution').toggleAttribute('disabled', true)
+
+        this._adjustResForScreenSize()
       }
-      this._video.src = `${config.VIDEO_HOST}/${val}.mp4`
+      else {
+        this.select('#resolution').style.display = "none"
+        this._video.src = `${config.VIDEO_HOST}/${val}.mp4`
+      }
     },1)
   }
 }
