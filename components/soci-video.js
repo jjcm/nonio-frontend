@@ -14,8 +14,13 @@ export default class SociVideoPlayer extends SociComponent {
       background: #000;
     }
     video {
+      /*
       max-width: min(var(--media-width), 100%);
       max-height: min(calc(100vh - 100px), var(--media-height));
+      */
+
+      width: 100%;
+      max-height: calc(100vh - 100px);
       margin: 0 auto;
       display: block;
     }
@@ -197,7 +202,9 @@ export default class SociVideoPlayer extends SociComponent {
   `}
 
   html(){ return `
-    <video autoplay @play=_onplay @pause=_onpause></video>
+    <div id="video-container">
+      <video autoplay @play=_onplay @pause=_onpause></video>
+    </div>
     <controls>
       <soci-icon id="play" glyph="play" @click=_togglePlay></soci-icon>
       <div id="volume-container">
@@ -408,10 +415,43 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   set resolution(res){
+    console.log('set resolution')
+    let timestamp = this._video.currentTime
     this._currentResolution = res
     this.select('soci-option[slot="selected"]')?.removeAttribute('slot')
     let resSuffix = res == this._sourceResolution ? '' : '-' + res
-    this._video.src = `${config.VIDEO_HOST}/${this.url}${resSuffix}.mp4`
+
+    if(this._video.src){
+      let newVideo = document.createElement('video')
+      newVideo.src = `${config.VIDEO_HOST}/${this.url}${resSuffix}.mp4`
+      newVideo.style.display = "none"
+      newVideo.currentTime = timestamp
+      newVideo.addEventListener('play', this._onplay)
+      newVideo.addEventListener('pause', this._onpause)
+      this.select('#video-container').appendChild(newVideo)
+
+      let hotswap = ()=>{
+        timestamp = this._video.currentTime
+        this._video.remove()
+        newVideo.currentTime = timestamp
+        newVideo.style.display = "block"
+        this._video = newVideo
+      }
+
+      newVideo.addEventListener('playing', hotswap, {once: true})
+      if(this.playing){
+        newVideo.play()
+      } 
+      else {
+        this._video.addEventListener('playing', ()=>{
+          newVideo.play()
+        }, {once: true})
+      }
+    }
+    else {
+      this._video.src = `${config.VIDEO_HOST}/${this.url}${resSuffix}.mp4`
+    }
+
     this.select(`soci-option[value="${res}"]`).setAttribute('slot', 'selected')
   }
 
