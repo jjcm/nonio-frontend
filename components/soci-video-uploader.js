@@ -226,9 +226,6 @@ export default class SociVideoUploader extends SociComponent {
     )
 
     this.select("#file").addEventListener('change', this.upload.bind(this))
-    this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
-    this.select("#file").addEventListener('input', ()=>{console.log('file input')})
-
     this.encode = this.encode.bind(this)
   }
 
@@ -292,7 +289,6 @@ export default class SociVideoUploader extends SociComponent {
     this.fileUrl = filename.slice(0, -4)
     let protocol = config.VIDEO_HOST.match(/^https/) ? 'wss' : 'ws'
     let server = config.VIDEO_HOST.replace(/(^\w+:|^)\/\//, '')
-    console.log(`protocol: ${protocol}. server: ${server}`)
     var conn = new WebSocket(`${protocol}://${server}/encode?file=${filename}`);
     conn.addEventListener('close', e => {
       let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
@@ -308,8 +304,6 @@ export default class SociVideoUploader extends SociComponent {
         this.videoWidth = parseInt(resolution[0])
         this.videoHeight = parseInt(resolution[1])
         resolution = Math.max(this.videoWidth, this.videoHeight)
-        console.log(resolution)
-        console.log(this.videoWidth)
         this.equivalentResolution = '480p'
         let resolutionBreakpoints = {
           "480p": 0,
@@ -325,7 +319,6 @@ export default class SociVideoUploader extends SociComponent {
             this.select(`[resolution="${res}"]`)?.toggleAttribute('disabled', false)
           }
         }
-        console.log(this.equivalentResolution)
         let fidelity = this.select(`[resolution="${this.equivalentResolution}"] .resolution`)
         fidelity.innerHTML += '<span>source</span>'
       }
