@@ -248,6 +248,7 @@ export default class SociVideoPlayer extends SociComponent {
     this._forceResolution = this._forceResolution.bind(this)
     this.toggleAttribute('paused', true)
     document.addEventListener('keydown', this._spacePause)
+    if(window.volume) this.volume = window.volume
   }
 
   disconnectedCallback(){
@@ -428,6 +429,7 @@ export default class SociVideoPlayer extends SociComponent {
       newVideo.currentTime = timestamp
       newVideo.addEventListener('play', this._onplay)
       newVideo.addEventListener('pause', this._onpause)
+      newVideo.volume = this.volume
       this.select('#video-container').appendChild(newVideo)
 
       let hotswap = ()=>{
@@ -460,6 +462,7 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   set volume(percent){
+    window.volume = percent
     this.select('#volume .progress').style.width = `${100 * percent}%`
     this.select('#volume .thumb').style.left = `${100 * percent}%`
     this._video.volume = percent * percent

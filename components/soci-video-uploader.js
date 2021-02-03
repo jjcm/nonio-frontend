@@ -267,12 +267,9 @@ export default class SociVideoUploader extends SociComponent {
     this.select('label').classList.add('uploading')
     let data = new FormData()
     let request = new XMLHttpRequest()
-    let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.VIDEO_HOST
 
     data.append('files', this.select('input').files[0])
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
-
-    request.open('post', UPLOAD_HOST + '/upload') 
 
     request.addEventListener('load', e => {
       setTimeout(()=>{
@@ -286,17 +283,20 @@ export default class SociVideoUploader extends SociComponent {
       this.style.setProperty('--upload-progress', `${percent_complete}%`)
     })
 
-    request.open('post', UPLOAD_HOST + '/upload') 
+    request.open('post', `${config.VIDEO_HOST}/upload`) 
     request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
     request.send(data)
   }
 
   async encode(filename){
     this.fileUrl = filename.slice(0, -4)
-    var conn = new WebSocket(`ws://localhost:4204/encode?file=${filename}`);
+    let protocol = config.VIDEO_HOST.match(/^https/) ? 'wss' : 'ws'
+    let server = config.VIDEO_HOST.replace(/(^\w+:|^)\/\//, '')
+    console.log(`protocol: ${protocol}. server: ${server}`)
+    var conn = new WebSocket(`${protocol}://${server}/encode?file=${filename}`);
     conn.addEventListener('close', e => {
       let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
-      this.select('video').setAttribute('src', `http://localhost:4204/${filename.slice(0, -4)}${previewResolution}.mp4`)
+      this.select('video').setAttribute('src', `${config.VIDEO_HOST}/${filename.slice(0, -4)}${previewResolution}.mp4`)
       setTimeout(()=> {
         this.setAttribute('state', 'preview')
       }, 500)
