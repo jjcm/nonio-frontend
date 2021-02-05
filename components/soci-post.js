@@ -239,28 +239,7 @@ export default class SociPost extends SociComponent {
   }
 
   html(){ return `
-    <div id="media-container">
-      <div id="video" class="media">
-        <soci-video></soci-video>
-        <picture>
-          <source>
-          <source>
-          <img class="bg" />
-        </picture>
-      </div>
-      <div id="image" class="media">
-        <picture>
-          <source>
-          <source>
-          <img @load=_pictureLoaded />
-        </picture>
-        <picture>
-          <source>
-          <source>
-          <img class="bg" />
-        </picture>
-      </div>
-    </div>
+    <div id="media-container"></div>
     <content>
       <div id="details-container">
         <div id="details">
@@ -356,14 +335,38 @@ export default class SociPost extends SociComponent {
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
     switch(type){
       case 'image':
-        this.select('img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
-        this.select('img#bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+        this.select('#media-container').innerHTML = `
+          <div id="image" class="media">
+            <picture>
+              <source>
+              <source>
+              <img @load=_pictureLoaded />
+            </picture>
+            <picture>
+              <source>
+              <source>
+              <img class="bg" />
+            </picture>
+          </div>
+        `
+        this.select('#image img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+        this.select('#image img.bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{
-          this.select('img').src = `${config.IMAGE_HOST}/${this.url}.webp`
-          this.select('source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
+          this.select('#image img').src = `${config.IMAGE_HOST}/${this.url}.webp`
+          this.select('#image source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
         },1)
         break
       case 'video':
+        this.select('#media-container').innerHTML = `
+          <div id="video" class="media">
+            <soci-video></soci-video>
+            <picture>
+              <source>
+              <source>
+              <img class="bg" />
+            </picture>
+          </div>
+        `
         this.select('soci-video').url = this.url
         break
     }

@@ -6,12 +6,12 @@
     
     .load-group(load-order="secondary")
       soci-tab-group
-        soci-tab(name="Image")
-          soci-file-drop(type="image")
+        soci-tab(name="Image" default)
+          soci-image-uploader
           h2 Description
           soci-input(placeholder="Enter description" name="description")
 
-        soci-tab(name="Video" default)
+        soci-tab(name="Video")
           soci-video-uploader
           h2 Description
           soci-input(placeholder="Enter description" name="description")

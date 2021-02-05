@@ -22,11 +22,11 @@ window.customElements.define('soci-contribution-slider', SociContributionSlider)
 import SociCommentList from "./soci-comment-list.js"
 window.customElements.define('soci-comment-list', SociCommentList)
 
-import SociFileDrop from "./soci-file-drop.js"
-window.customElements.define('soci-file-drop', SociFileDrop)
-
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
+
+import SociImageUploader from "./soci-image-uploader.js"
+window.customElements.define('soci-image-uploader', SociImageUploader)
 
 import SociInput from "./soci-input.js"
 window.customElements.define('soci-input', SociInput)
