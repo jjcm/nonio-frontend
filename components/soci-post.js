@@ -44,6 +44,11 @@ export default class SociPost extends SociComponent {
         margin: 0 auto;
       }
 
+      .media img {
+        max-width: var(--media-width);
+        max-height: var(--media-height);
+      }
+
       .media img.bg {
         position: inherit;
         z-index: 9;
@@ -52,6 +57,9 @@ export default class SociPost extends SociComponent {
         transform: scale(1.1);
         filter: blur(20px) brightness(0.8) saturate(0.8);
         margin-bottom: 0;
+        position: absolute;
+        top: 0;
+        max-width: 100%;
       }
 
       .media {
@@ -61,6 +69,7 @@ export default class SociPost extends SociComponent {
       :host([loaded]) .media {
         opacity: 1;
         transition: opacity 0.3s var(--soci-ease);
+        position: relative;
       }
 
       :host([type="image"]) #image {
@@ -309,6 +318,7 @@ export default class SociPost extends SociComponent {
           case 'url':
             break
           case 'width':
+            console.log(post[key])
             if(parseInt(post[key]) != 0) 
               this.select('#media-container').style.setProperty('--media-width', post[key] + 'px')
             break
@@ -331,12 +341,12 @@ export default class SociPost extends SociComponent {
   }
 
   loadContent(type) {
-    console.log('loading content')
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
     switch(type){
       case 'image':
         this.select('#media-container').innerHTML = `
-          <div id="image" class="media">
+          <soci-image url="${this.url}"></soci-image>
+          <div id="image" class="media" style="display: none">
             <picture>
               <source>
               <source>
@@ -349,6 +359,7 @@ export default class SociPost extends SociComponent {
             </picture>
           </div>
         `
+        this.select('#media-container #image').addEventListener('click', this._zoomImage)
         this.select('#image img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         this.select('#image img.bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
         setTimeout(()=>{
@@ -411,5 +422,9 @@ export default class SociPost extends SociComponent {
     else {
       //console.log('mini boi')
     }
+  }
+
+  _zoomImage(){
+    this.select()
   }
 }

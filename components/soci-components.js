@@ -25,6 +25,9 @@ window.customElements.define('soci-comment-list', SociCommentList)
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 
+import SociImage from "./soci-image.js"
+window.customElements.define('soci-image', SociImage)
+
 import SociImageUploader from "./soci-image-uploader.js"
 window.customElements.define('soci-image-uploader', SociImageUploader)
 
