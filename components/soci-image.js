@@ -34,35 +34,19 @@ export default class SociImageViewer extends SociComponent {
       height: 100%;
       width: 100%;
     }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      width: 100%;
-    }
   `}
 
   html(){ return `
     <img id="image"/>
     <img class="bg"/>
-    <canvas width="10" height="10"></canvas>
   `}
 
   static get observedAttributes() {
     return ['url']
   }
 
-  connectedCallback(){
-  }
-
   attributeChangedCallback(name, oldValue, newValue){
-    switch(name) {
-      case 'url':
-        this.url = newValue
-        break
-    }
+    if(name == 'url') this.url = newValue
   }
 
   get url(){
@@ -74,31 +58,12 @@ export default class SociImageViewer extends SociComponent {
       this.setAttribute('url', val)
       return
     }
-
-    console.log('setting url')
-
     let image = this.select('#image')
     let thumbUrl = `${config.THUMBNAIL_HOST}/${this.url}.webp`
     image.src = thumbUrl
     this.select('img.bg').src = thumbUrl
-    this._createBlur(thumbUrl)
     setTimeout(()=>{
       image.src = `${config.IMAGE_HOST}/${this.url}.webp`
     },1)
-
-
-  }
-
-  _createBlur(url){
-    let canvas = this.select('canvas')
-    let ctx = canvas.getContext('2d')
-    var imageObj = new Image();
-    imageObj.onload = () => {
-      ctx.drawImage(imageObj, 0, 0, 10, 10)
-      setTimeout(()=>{
-        console.log(canvas.toDataURL('image/png'))
-      }, 1000)
-    }
-    imageObj.src = 'https://image.non.io/painting.webp'
   }
 }
