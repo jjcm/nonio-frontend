@@ -24,9 +24,11 @@ let webcomics = {
     let outputs = webcomics.dom.querySelectorAll('.user')
     outputs.forEach(output => {
       if(webcomics.users.has(output.id.replace('#', ''))){
+        output.toggleAttribute('payout', true)
         output.querySelector('.amount').innerHTML = `$${9 / webcomics.users.size}`
       }
       else {
+        output.toggleAttribute('payout', false)
         output.querySelector('.amount').innerHTML = `$0`
       }
     })

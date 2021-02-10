@@ -4,6 +4,7 @@
     #why-webcomics {
       padding: 40px;
       font-size: 16px;
+      line-height: 1.5;
     }
     #why-webcomics .posts {
       background: var(--base-background-bold);
@@ -18,6 +19,33 @@
     #why-webcomics img {
       max-width: 1200px;
       width: 100%;
+    }
+
+    #why-webcomics .users {
+      margin-bottom: 20px;
+      align-items: center;
+      display: flex;
+    }
+    #why-webcomics .user {
+      display: flex;
+      margin-right: 80px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    #why-webcomics .user[payout] {
+      color: var(--success-text);
+    }
+    #why-webcomics .user soci-user {
+      --avatar-size: 32px;
+      --font-size: 24px;
+      --line-height: 30px;
+      --spacing: 12px;
+      margin-right: 20px;
+    }
+    #why-webcomics .prompt:after {
+      content: '<-- CLICK ONE OF THESE';
+      font-weight: bold;
+      color: var(--error-text);
     }
     
 
@@ -37,7 +65,7 @@
     .posts
       soci-post-li(score="32" comments="0" title="Space Law!" type="image" time="1612676474000" url="rendezvous")
         soci-user(name="fakezach" slot="user")
-        soci-tag-group(slot="tags" score="32")
+        soci-tag-group(slot="tags" score="32").prompt
           soci-tag(score="32") webcomic
           soci-tag(score="28") space
           soci-tag(score="11") smbc
@@ -56,20 +84,21 @@
           soci-tag(score="0") funny
     .outputs
       h2 Payouts
-      #fakezach.user
-        soci-user(name="fakezach")
-        .amount $0
-      #fakekelly.user
-        soci-user(name="fakekelly")
-        .amount $0
-      #adude.user
-        soci-user(name="adude")
-        .amount $0
+      .users
+        #fakezach.user
+          soci-user(name="fakezach")
+          .amount $0
+        #fakekelly.user
+          soci-user(name="fakekelly")
+          .amount $0
+        #adude.user
+          soci-user(name="adude")
+          .amount $0
   .loading-block(load-order="tertiary")
     h2 Pretty simple right?
     p These posts are sortable and ranked just like you'd see on reddit:
     <img src="https://i.imgur.com/8mQJ4PV.png"/>
-    p The nice thing about this is it means a.) it surfaces quality things to the top (since you wont just upvote a picture of a cat if it detracts from what you'll pay out to something better), and b.) there's more discoverability than sites like Patreon. I find the issue with per-user subscription sites (i.e. pateron or onlyfans for the dirtier of you) is that it forces the creator to stick to a cadence. You have to continuously output or your base will wonder if their dedicated subscription is worth it. In addition, there's no virality. Your audience is only as big as your base when you release. With Nonio, your audience is the entire site always. All content is viewable, but only the good stuff gets rewarded.
+    p The nice thing about this is it means a.) it surfaces quality things to the top (since you wont just upvote a picture of a cat if it detracts from what you'll pay out to something better), and b.) there's more discoverability than sites like Patreon. I find the issue with per-user subscription sites (i.e. patreon or onlyfans for the dirtier of you) is that it forces the creator to stick to a cadence. You have to continuously output or your base will wonder if their dedicated subscription is worth it. In addition, there's no virality. Your audience is only as big as your base when you release. With Nonio, your audience is the entire site always. All content is viewable, but only the good stuff gets rewarded.
     br
     p Also, it's open source and ad free. That means there will always be a high quality experience, and if not someone can clone it tomorrow. 
     br 
