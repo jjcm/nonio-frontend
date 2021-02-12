@@ -10,14 +10,31 @@ export default class SociImageViewer extends SociComponent {
     :host {
       width: 100%;
       display: block;
-      max-height: min(calc(100vh - 100px), var(--media-height));
-      overflow: hidden;
+      overflow: auto;
       position: relative;
+    }
+    ::-webkit-scrollbar {
+      width: 14px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--base-background-bold);
+    }
+
+    /* this is a bad hack to get alpha transparency on the scroll bars */
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
+      border-radius: 7px;
+      border: 3px solid var(--base-background-bold);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px);
     }
     #image {
       max-width: min(var(--media-width), 100%);
       margin: 0 auto;
-      height: 100%;
+      max-height: min(calc(100vh - 100px), var(--media-height));
       display: block;
       position: relative;
       z-index: 2;
@@ -41,10 +58,8 @@ export default class SociImageViewer extends SociComponent {
     :host([zoomed]) #image {
       cursor: zoom-out;
     }
-    :host([zoomed]) {
-      max-height: var(--media-height);
-    }
     :host([zoomed]) #image {
+      max-height: var(--media-height);
       max-width: var(--media-width);
     }
   `}
