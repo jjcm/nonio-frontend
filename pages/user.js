@@ -6,6 +6,7 @@ let user = {
   },
   onActivate: () => {
     document.querySelector('#user .password soci-button').addEventListener('click', user.changePassword)
+    document.querySelector('#user soci-tab[name="Financials"]').addEventListener('tabactivate', user.checkFinancials)
   },
   onDeactivate: () => {
   },
@@ -30,8 +31,11 @@ let user = {
   },
   cancelChangePassword: () => {
     Array.from(document.querySelectorAll('#user soci-password')).forEach(pass => pass.value = '')
+  },
+  checkFinancials: async () => {
+    let response = await soci.getData('user/get-financials')
+    document.querySelector('#user .profit h1').innerHTML = `$${Number.parseFloat(response.cash).toPrecision(3)}`
   }
-
 }
 
 user.postTab.addEventListener('tabactivate', e=>{
