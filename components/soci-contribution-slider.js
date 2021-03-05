@@ -130,6 +130,7 @@ export default class SociContributionSlider extends SociComponent {
   connectedCallback(){
     this.state = {}
     this.state.x = 110
+    this.state.xDown = this.state.mouseClientX = 0
     this._contributionHandle = this.select('slider-handle')
     this._contributionAmount = this.select('contribution amount')
     this._totalAmount = this.select('total amount')
@@ -140,7 +141,7 @@ export default class SociContributionSlider extends SociComponent {
   }
 
   get value(){
-    let val = (this._dragOffset - 52) / 22
+    let val = (this._dragOffset - 52) / 18
     return Math.floor(val + 2)
   }
 
@@ -149,7 +150,7 @@ export default class SociContributionSlider extends SociComponent {
 
   get _dragOffset(){
     let leftOffset = this.state.x - (this.state.xDown - this.state.mouseClientX)
-    leftOffset = Math.min(228, Math.max(52, leftOffset))
+    leftOffset = Math.min(212, Math.max(52, leftOffset))
     return leftOffset
   }
 

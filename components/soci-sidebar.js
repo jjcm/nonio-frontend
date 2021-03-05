@@ -191,33 +191,6 @@ export default class SociSidebar extends SociComponent {
         padding-left: 0;
       }
 
-      button {
-        border-radius: 16px;
-        height: 32px;
-        outline: 0;
-        border: 0;
-        width: 100%;
-        text-align: center;
-        font-weight: 600;
-        color: var(--base-text);
-        border: 1px solid var(--base-background-subtle);
-        background: var(--base-background);
-        cursor: pointer;
-        position: relative;
-        margin: 0 0 8px;
-      }
-
-      button svg {
-        position: absolute;
-        width: 24px;
-        left: 6px;
-        top: 3px;
-      }
-
-      button:hover {
-        background: var(--base-background-hover);
-      }
-
       #noauth soci-link {
         display: block;
         margin-top: 28px;
@@ -243,12 +216,18 @@ export default class SociSidebar extends SociComponent {
         line-height: 32px;
       }
 
+      #create form {
+        display: flex;
+        flex-direction: column;
+      }
+
       #create h2:not(:first-child) {
         margin-top: 50px;
       }
 
-      #create button {
+      #create soci-button {
         margin-top: 16px;
+        align-self: flex-end;
       }
 
       input {
@@ -374,9 +353,9 @@ export default class SociSidebar extends SociComponent {
           <soci-username-input name="username" tabindex="0"></soci-username-input>
           <input type="email" placeholder="Email address"/>
           <soci-password tabindex="0" name="password"></soci-password>
-          <soci-password tabindex="0" name="confirm-password" placeholder="Confirm Password" match="password"></soci-password>
+          <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
           <h2>Contribution</h2>
-          <soci-contribution-slider></soci-contribution-slider>
+          <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
           <h2>Billing</h2>
           <input type="text" placeholder="Credit Card Name"/>
           <input type="text" placeholder="Credit Card Number"/>
@@ -384,7 +363,7 @@ export default class SociSidebar extends SociComponent {
             <input type="text" placeholder="Exp. Date"/>
             <input type="text" placeholder="CCV"/>
           </cc-details>
-          <button type="submit" @click=register>Create Account</button>
+          <soci-button async @click=register>Create Account</soci-button>
         </form>
       </panel>
       <section id="footer">
@@ -526,7 +505,7 @@ export default class SociSidebar extends SociComponent {
       this._loadCommonTags()
       this._populateTags()
       soci.loadVotes()
-
+      this.select('#logout').innerHTML = "Logout"
     }
     else {
       soci.log('Invalid login', response, 'error')
@@ -538,7 +517,7 @@ export default class SociSidebar extends SociComponent {
     soci.clearToken()
     this.removeAttribute('create')
     this.setAttribute('noauth', '')
-    this.select('#logout').innerHTML = "Logout"
+    this.select('#logout').innerHTML = "Login"
   }
 
   async register(){
@@ -546,13 +525,15 @@ export default class SociSidebar extends SociComponent {
       username: this.select('#create soci-username-input'),
       email: this.select('#create input[type="email"]'),
       password: this.select('#create soci-password'),
+      subscriptionAmount: this.select('#create soci-contribution-slider'),
       //eventually this will be the rest of the stuff - i.e. payment deets
     }
 
     let response = await soci.postData('register', {
       username: fields.username.value,
       email: fields.email.value,
-      password: fields.password.value
+      password: fields.password.value,
+      subscriptionAmount: fields.subscriptionAmount.value
     })
 
     if(response.token){
@@ -560,6 +541,8 @@ export default class SociSidebar extends SociComponent {
       soci.storeToken(response.token)
       soci.username = response.username
       this.toggleAttribute('create')
+      this.select('#logout').innerHTML = "Logout"
+      console.log('token!')
     }
 
   }
