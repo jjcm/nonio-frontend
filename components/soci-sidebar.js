@@ -521,6 +521,14 @@ export default class SociSidebar extends SociComponent {
   }
 
   async register(){
+    let form = this.select('#create form')
+    if(!form.reportValidity()) {
+      this.select('#create soci-button').setAttribute('state', 'error')
+      setTimeout(()=>{
+        this.select('#create soci-button').removeAttribute('state')
+      }, 2000)
+      return 0
+    }
     let fields = {
       username: this.select('#create soci-username-input'),
       email: this.select('#create input[type="email"]'),
@@ -537,14 +545,18 @@ export default class SociSidebar extends SociComponent {
     })
 
     if(response.token){
+      this.select('#create soci-button').setAttribute('state', 'success')
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       soci.username = response.username
-      this.toggleAttribute('create')
-      this.select('#logout').innerHTML = "Logout"
-      console.log('token!')
+      this._loadSubscribedTags()
+      this._loadCommonTags()
+      setTimeout(()=>{
+        this._populateTags()
+        this.select('#logout').innerHTML = "Logout"
+        this.toggleAttribute('create')
+      }, 400)
     }
-
   }
 
   _loginOnEnter(e){
