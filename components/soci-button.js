@@ -22,6 +22,7 @@ export default class SociButton extends SociComponent {
         cursor: pointer;
         position: relative;
         float: right;
+        user-select: none;
       }
 
       :host:after,
@@ -76,6 +77,10 @@ export default class SociButton extends SociComponent {
       }
 
       :host(:focus) {
+        outline: none;
+      }
+
+      :host(:focus-visible) {
         outline: var(--brand-background-bold) auto 2px;
       }
 
