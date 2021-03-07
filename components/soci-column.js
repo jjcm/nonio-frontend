@@ -225,7 +225,8 @@ export default class SociColumn extends SociComponent {
   }
 
   connectedCallback() {
-    this.select('soci-select').addEventListener('selected', this._sortChanged.bind(this))
+    this.select('#sort-select').addEventListener('selected', this._sortChanged.bind(this))
+    this.select('#filter-select').addEventListener('selected', this._filterChanged.bind(this))
 
     this._ro = new ResizeObserver(observable => {
       this.toggleAttribute('large', this.offsetWidth > 800)
@@ -234,7 +235,10 @@ export default class SociColumn extends SociComponent {
     this._ro.observe(this)
 
     let posts = document.createElement('soci-post-list')
-    posts.setAttribute('data', '/posts')
+    let hash = window.location.hash.substr(1)
+    if(hash.match(/all|images|videos|blogs/) || hash == '') posts.setAttribute('data', `/posts`)
+    else posts.setAttribute('data', `/posts?tag=${hash}`)
+
     posts.setAttribute('slot', 'posts')
     posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
@@ -313,7 +317,7 @@ export default class SociColumn extends SociComponent {
     if(this.tag) params.push(`tag=${this.tag}`)
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
-    this._updateBar(this.select('sorts'), filter)
+    this._updateBar(this.select('sorts'), sort)
     this.querySelector('soci-post-list').setAttribute('data', '/posts' + paramString)
   }
 
@@ -331,13 +335,19 @@ export default class SociColumn extends SociComponent {
 
   _filterBarClick(e){
     let filter = e.target.innerHTML
+    this._visuallyFilter(filter)
+  }
+
+  _visuallyFilter(filter){
     let special = this.getAttribute('tag')?.match(/all|images|videos|blogs/)
     if(special) {
       this.select('#tag-title').innerHTML = filter
       document.querySelector('soci-sidebar').activateTag(filter)
     }
     this.setAttribute('filter', filter)
-    this._updateBar(e.currentTarget, filter)
+    this._updateBar(this.select('filters'), filter)
+
+    //TODO - make this update the dropdown as well, as the dropdown updates wont be mirrored
   }
 
   _updateBar(bar, value) {
@@ -348,7 +358,12 @@ export default class SociColumn extends SociComponent {
   }
 
   _sortChanged(){
-    let sort = this.select('soci-select').value
+    let sort = this.select('#sort-select').value
     this.sortPosts(sort)
+  }
+
+  _filterChanged(){
+    let filter = this.select('#filter-select').value
+    this._visuallyFilter(filter)
   }
 }

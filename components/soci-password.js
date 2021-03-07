@@ -128,11 +128,11 @@ export default class SociPassword extends SociComponent {
         this._updateValidity('Not strong enough. Add complexity until the circle fills.')
       }
       else if(!this.checkMatch()){
-        this.closest('form').querySelector(`soci-password[name="${this.getAttribute('match')}"]`)._updateValidity("Passwords do not match.")
+        this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity("Passwords do not match.")
         this._updateValidity('Passwords do not match.')
       }
       else {
-        this.closest('form').querySelector(`soci-password[name="${this.getAttribute('match')}"]`)._updateValidity()
+        this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity()
         this._updateValidity()
       }
       this._internals.setFormValue(this.value)
