@@ -523,7 +523,7 @@ export default class SociSidebar extends SociComponent {
   async register(){
     let form = this.select('#create form')
     if(!form.reportValidity()) {
-      this.select('#create soci-button').setAttribute('state', 'error')
+      this.select('#create soci-button').error()
       setTimeout(()=>{
         this.select('#create soci-button').removeAttribute('state')
       }, 2000)
@@ -545,7 +545,7 @@ export default class SociSidebar extends SociComponent {
     })
 
     if(response.token){
-      this.select('#create soci-button').setAttribute('state', 'success')
+      this.select('#create soci-button').success()
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       soci.username = response.username
