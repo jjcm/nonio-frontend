@@ -205,7 +205,7 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         border: 1px solid transparent;
-        transition: height 1.1s ease-out;
+        transition: height 2.1s ease-out;
         margin-top: 0;
       }
 
@@ -388,7 +388,7 @@ export default class SociComment extends SociComponent {
 
   prependToElement(el){
     this.toggleAttribute('inserting', true)
-    this.style.transition = 'all 0.1s ease-out 0.1s, transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
+    this.style.transition = 'height 0.1s ease-out 0.1s, transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
     el.prepend(this)
     setTimeout(()=>{
       let finalHeight = this.offsetHeight
@@ -418,7 +418,7 @@ export default class SociComment extends SociComponent {
     replyContainer.style.height = '172px'
     setTimeout(()=>{
       replyContainer.style.height = ''
-    }, 100)
+    }, 2000)
 
     this.select('#actions').classList.add('replying')
     if(!this.hasAttribute('expanded')) this._toggleReplies()

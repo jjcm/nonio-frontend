@@ -19,6 +19,19 @@ export default class SociQuillView extends HTMLElement {
     italic: 'em'
   }
 
+  _sanitize(string){
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return string.replace(reg, (match)=>(map[match]));
+  }
+
   render(ops){
     this.innerHTML = ''
     try {
@@ -91,7 +104,8 @@ export default class SociQuillView extends HTMLElement {
 
         // Otherwise treat it as inline
         else {
-          let inserts = op.insert
+          let inserts = this._sanitize(op.insert)
+          console.log(op.insert)
           while(inserts.length) {
             let newLinePos = inserts.indexOf('\n')
             if(newLinePos >= 0){
@@ -123,4 +137,5 @@ export default class SociQuillView extends HTMLElement {
       this.innerHTML = "<error style='color: var(--error-text);'>Error: Malformed content</error>"
     }
   }
+
 }
