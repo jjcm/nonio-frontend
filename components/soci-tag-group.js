@@ -107,6 +107,7 @@ export default class SociTagGroup extends SociComponent {
       border: 1px solid var(--base-background-subtle);
       border-radius: 3px;
       font-weight: 600;
+      user-select: none;
     }
 
     :host([upvoted]) ::slotted(div) {

@@ -205,11 +205,13 @@ export default class SociComment extends SociComponent {
         position: relative;
         overflow: hidden;
         border: 1px solid transparent;
+        transition: height 1.1s ease-out;
+        margin-top: 0;
       }
 
       #comment-reply.active {
-        margin-top: 10px;
         height: auto;
+        margin-top: 10px;
       }
 
       #comment-reply.active actions {
@@ -258,6 +260,13 @@ export default class SociComment extends SociComponent {
 
       :host(:not([self])) .user-control {
         display: none;
+      }
+
+      :host([inserting]) {
+        position: absolute;
+        margin: 0;
+        opacity: 0;
+        transform: translateY(-32px);
       }
     `
   }
@@ -367,6 +376,34 @@ export default class SociComment extends SociComponent {
     return this.closest('soci-comment-list').getAttribute('url')
   }
 
+  factory(user, score, date, id, content){
+    let comment = document.createElement('soci-comment')
+    comment.setAttribute('user', user)
+    comment.setAttribute('score', score)
+    comment.setAttribute('date', date)
+    comment.setAttribute('comment-id', id)
+    comment.content = content
+    return comment
+  }
+
+  prependToElement(el){
+    this.toggleAttribute('inserting', true)
+    this.style.transition = 'all 0.1s ease-out 0.1s, transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
+    el.prepend(this)
+    setTimeout(()=>{
+      let finalHeight = this.offsetHeight
+      this.style.position = ''
+      this.style.height = '0'
+      setTimeout(()=>{
+        this.style.height = finalHeight + 'px'
+        this.toggleAttribute('inserting', false)
+        setTimeout(()=>{
+          this.style.height = ''
+        }, 100)
+      }, 1)
+    }, 1)
+  }
+
   _renderContent(){
     let contentContainer = this.querySelector('soci-quill-view[slot="content"]')
     contentContainer?.render(this._content)
@@ -378,6 +415,10 @@ export default class SociComment extends SociComponent {
     replyContainer.querySelector('.cancel').addEventListener('click', this._cancelReply.bind(this))
     replyContainer.querySelector('button').addEventListener('click', this._submitReply.bind(this))
     replyContainer.classList.add('active')
+    replyContainer.style.height = '172px'
+    setTimeout(()=>{
+      replyContainer.style.height = ''
+    }, 100)
 
     this.select('#actions').classList.add('replying')
     if(!this.hasAttribute('expanded')) this._toggleReplies()
@@ -385,11 +426,15 @@ export default class SociComment extends SociComponent {
 
   _cancelReply(){
     let replyContainer = this.select('#comment-reply')
-    replyContainer.classList.remove('active')
-    this.select('#actions').classList.remove('replying')
+    replyContainer.style.height = replyContainer.offsetHeight + 'px'
     setTimeout(()=>{
-      replyContainer.innerHTML = ''
-    }, 200)
+      replyContainer.style.height = '0'
+      this.select('#actions').classList.remove('replying')
+      //replyContainer.classList.remove('active')
+      setTimeout(()=>{
+        replyContainer.innerHTML = ''
+      }, 2000)
+    }, 1)
   }
 
   _toggleReplies(e){
@@ -435,6 +480,19 @@ export default class SociComment extends SociComponent {
       post: this.url,
       content: this.select('soci-input').value,
       parent: parseInt(this.getAttribute('comment-id'))
+    }).then(res=>{
+      if(res.id){
+        //this.select('#submit').success()
+        let comment = document.createElement('soci-comment')
+        comment = comment.factory(res.user, 0, res.date, res.id, res.content)
+        comment.prependToElement(this.querySelector('div'))
+        setTimeout(() => {
+          this._cancelReply()
+        }, 100)
+      }
+      else {
+        //this.select('#submit').error()
+      }
     })
   }
 

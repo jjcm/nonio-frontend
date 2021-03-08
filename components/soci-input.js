@@ -526,6 +526,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-bubble .ql-editor a {
         text-decoration: underline;
+        color: var(--brand-text);
       }
       .ql-bubble .ql-editor blockquote {
         border-left: 4px solid #ccc;
@@ -597,7 +598,7 @@ export default class SociInput extends SociComponent {
       .ql-bubble .ql-tooltip-editor input[type=text] {
         background: transparent;
         border: none;
-        color: var(--base-text-inverse);
+        color: var(--base-text);
         font-size: 13px;
         height: 100%;
         outline: none;

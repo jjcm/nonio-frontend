@@ -156,7 +156,8 @@ export default class SociCommentList extends SociComponent {
     let comments = data.comments
 
     comments.forEach(comment => {
-      let newComment = this.commentFactory(comment.user, comment.upvotes - comment.downvotes, comment.date, comment.id, comment.content)
+      let newComment = document.createElement('soci-comment')
+      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.date, comment.id, comment.content)
       let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"] div[slot="replies"]`) : this
       parent.appendChild(newComment)
     })
@@ -170,45 +171,17 @@ export default class SociCommentList extends SociComponent {
     }).then(res=>{
       if(res.id){
         this.select('#submit').success()
-        let comment = this.commentFactory(res.user, 0, res.date, res.id, res.content)
-        // This chaos here is to animate in a comment
-        comment.style.position = "absolute"
-        comment.style.transition = 'all 0.1s ease-out 0.1s, transform 0.4s ease-in-out, opacity 0.4s ease-in-out'
-        comment.style.margin = '0'
-        comment.style.overflow = 'hidden'
-        comment.style.opacity = '0'
-        comment.style.transform = "translateY(-32px)"
-        this.prepend(comment)
-        setTimeout(()=>{
-          let finalHeight = comment.offsetHeight
-          comment.style.position = ''
-          comment.style.height = '0'
-          setTimeout(()=>{
-            comment.style.height = finalHeight + 'px'
-            comment.style.margin = ''
-            comment.style.opacity = 1
-            comment.style.transform = 'translateY(0)'
-            setTimeout(()=>{
-              comment.style.height = ''
-              this.cancelComment()
-            }, 100)
-          }, 1)
-        }, 1)
+        let comment = document.createElement('soci-comment')
+        comment = comment.factory(res.user, 0, res.date, res.id, res.content)
+        comment.prependToElement(this)
+        setTimeout(() => {
+          this.cancelComment()
+        }, 100)
       }
       else {
         this.select('#submit').error()
       }
     })
-  }
-
-  commentFactory(user, score, date, id, content){
-    let comment = document.createElement('soci-comment')
-    comment.setAttribute('user', user)
-    comment.setAttribute('score', score)
-    comment.setAttribute('date', date)
-    comment.setAttribute('comment-id', id)
-    comment.content = content
-    return comment
   }
 
   get url(){
