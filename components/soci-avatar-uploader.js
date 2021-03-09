@@ -125,7 +125,7 @@ export default class SociFileDrop extends SociComponent {
         right: -1px;
       }
       svg {
-        height: 420px;
+        height: 100%;
         pointer-events: none;
         width: 420px;
         position: absolute;
@@ -181,7 +181,6 @@ export default class SociFileDrop extends SociComponent {
         transform: scale(1);
         transform-origin: top left;
       }
-
     `
   }
 
@@ -198,7 +197,7 @@ export default class SociFileDrop extends SociComponent {
         </div>
         <svg>
           <mask id="mask">
-            <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+            <rect x="0" y="0" width="100%" height="9999px" fill="white"/>
             <circle cx="0" cy="0" r="10" fill="black"/>
           </mask>
           <rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#mask)"/>
@@ -276,6 +275,7 @@ export default class SociFileDrop extends SociComponent {
       this._mask.setAttribute('r', radius)
       this._mask.setAttribute('cx', radius + this._positionX)
       this._mask.setAttribute('cy', radius + this._positionY)
+      this.select('#mask rect').style.minHeight = '100%'
     })
     reader.readAsDataURL(files)
   }
