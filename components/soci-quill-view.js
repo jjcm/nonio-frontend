@@ -105,7 +105,6 @@ export default class SociQuillView extends HTMLElement {
         // Otherwise treat it as inline
         else {
           let inserts = this._sanitize(op.insert)
-          console.log(op.insert)
           while(inserts.length) {
             let newLinePos = inserts.indexOf('\n')
             if(newLinePos >= 0){
