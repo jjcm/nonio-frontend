@@ -376,10 +376,11 @@ export default class SociComment extends SociComponent {
     return this.closest('soci-comment-list').getAttribute('url')
   }
 
-  factory(user, score, date, id, content){
+  factory(user, score, lineageScore, date, id, content){
     let comment = document.createElement('soci-comment')
     comment.setAttribute('user', user)
     comment.setAttribute('score', score)
+    comment.setAttribute('lineage-score', lineageScore)
     comment.setAttribute('date', date)
     comment.setAttribute('comment-id', id)
     comment.content = content
@@ -446,6 +447,17 @@ export default class SociComment extends SociComponent {
     }
     else {
       button.innerHTML = `view ${this.querySelectorAll('soci-comment').length} replies`
+    }
+  }
+
+  showVote(upvote){
+    if(upvote){
+      let upvote = this.select('#upvote')
+      upvote.toggleAttribute('upvoted', true)
+    }
+    else {
+      let downvote = this.select('soci-icon[glyph="downvote"]')
+      downvote.toggleAttribute('downvoted', true)
     }
   }
 
