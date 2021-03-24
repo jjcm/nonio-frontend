@@ -472,6 +472,10 @@ export default class SociComment extends SociComponent {
     if(downvote.hasAttribute('downvoted')){
       this.score -= upvote.hasAttribute('upvoted') ? 2 : 1
       upvote.removeAttribute('upvoted')
+      this.postData('/comment/add-vote', {
+        id: parseInt(this.getAttribute('comment-id')),
+        upvoted: false
+      })
     }
     else {
       this.score++
