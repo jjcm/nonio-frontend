@@ -55,7 +55,7 @@ export default class SociCommentList extends SociComponent {
       }
       content {
         display: block;
-        padding: 0 8px 24px;
+        padding: 0 20px 24px;
         max-width: 840px;
         margin: 0 auto;
         box-sizing: border-box;
@@ -90,6 +90,10 @@ export default class SociCommentList extends SociComponent {
       }
       comment-input[active] button-container {
         height: 20px;
+      }
+
+      ::slotted(soci-comment) {
+        padding-left: 0;
       }
     `
   }
