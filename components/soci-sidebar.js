@@ -479,16 +479,14 @@ export default class SociSidebar extends SociComponent {
   async login(){
     let creds = {
       email: this.querySelector('input[type="email"]'),
-      password: this.querySelector('input[type="password"]')
+      password: this.querySelector('soci-password')
     }
 
-    if(!creds.email.checkValidity()){
-      creds.email.focus()
+    if(!creds.email.reportValidity()){
       return 0
     }
 
-    if(!creds.password.checkValidity()){
-      creds.password.focus()
+    if(!creds.password.reportValidity()){
       return 0
     }
 
