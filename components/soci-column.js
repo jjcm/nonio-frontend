@@ -261,7 +261,7 @@ export default class SociColumn extends SociComponent {
         this.filterPosts(newValue)
         break
       case 'tag':
-        this.select('#tag-title').innerHTML = newValue
+        this.select('#tag-title').innerHTML = decodeURIComponent(newValue)
         document.querySelector('soci-sidebar').activateTag(newValue)
         let special = newValue.match(/all|images|videos|blogs/)
         if(special){
