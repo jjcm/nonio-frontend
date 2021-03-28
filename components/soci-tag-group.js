@@ -194,7 +194,6 @@ export default class SociTagGroup extends SociComponent {
       post: url,
       tag: tagName
     }).then(res => {
-      console.log(res.postID)
       //TODO - check if the post succeeded or failed
       //for now we'll just blindly trust that it worked
     })
