@@ -53,7 +53,7 @@ export default class SociTagGroup extends SociComponent {
       height: 18px;
       padding-left: 28px;
       line-height: 18px;
-      background: var(--base-background);
+      background: transparent;
       color: var(--base-text-subtle);
     }
     #add-tag svg {
@@ -61,7 +61,10 @@ export default class SociTagGroup extends SociComponent {
       left: 7px;
     }
     #add-tag[active] {
+      transition: all 0.1s var(--soci-ease-out);
       width: 150px;
+      background: var(--brand-background-subtle);
+      border: 1px solid var(--brand-background);
     }
     #add-tag[active] input {
       opacity: 1;
@@ -125,10 +128,10 @@ export default class SociTagGroup extends SociComponent {
       <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="icon/tags" transform="translate(-4.000000, -5.000000)">
               <g>
-                  <path d="M11.557416,6.29956503 C11.1595912,6.29956503 10.7780604,6.45760029 10.4967558,6.73890486 L6.49675579,10.7389049 C5.91096935,11.3246913 5.91096935,12.2744388 6.49675579,12.8602252 L10.4967558,16.8602252 C10.7780604,17.1415298 11.1595912,17.299565 11.557416,17.299565 L21.2959045,17.299565 C22.1243317,17.299565 22.7959045,16.6279922 22.7959045,15.799565 L22.7959045,7.79956503 C22.7959045,6.9711379 22.1243317,6.29956503 21.2959045,6.29956503 L11.557416,6.29956503 Z" id="Rectangle" stroke="#7B9089" transform="translate(14.012447, 11.799565) rotate(135.000000) translate(-14.012447, -11.799565) "></path>
-                  <path d="M15.9239992,8.86037916 L17.5218753,11.416981 C17.6682305,11.6511493 17.5970439,11.9596245 17.3628756,12.1059797 C17.2834098,12.1556458 17.191586,12.1819805 17.0978762,12.1819805 L13.9021238,12.1819805 C13.6259814,12.1819805 13.4021238,11.9581229 13.4021238,11.6819805 C13.4021238,11.5882707 13.4284585,11.4964468 13.4781247,11.416981 L15.0760008,8.86037916 C15.222356,8.62621089 15.5308312,8.55502431 15.7649995,8.70137948 C15.829384,8.74161983 15.8837588,8.79599459 15.9239992,8.86037916 Z" id="Triangle" stroke="#7B9089" transform="translate(15.500000, 10.181981) rotate(45.000000) translate(-15.500000, -10.181981) "></path>
-                  <rect id="Rectangle" fill="#7B9089" x="23" y="13" width="5" height="1" rx="0.5"></rect>
-                  <rect id="Rectangle" fill="#7B9089" transform="translate(25.500000, 13.500000) rotate(-270.000000) translate(-25.500000, -13.500000) " x="23" y="13" width="5" height="1" rx="0.5"></rect>
+                  <path d="M11.557416,6.29956503 C11.1595912,6.29956503 10.7780604,6.45760029 10.4967558,6.73890486 L6.49675579,10.7389049 C5.91096935,11.3246913 5.91096935,12.2744388 6.49675579,12.8602252 L10.4967558,16.8602252 C10.7780604,17.1415298 11.1595912,17.299565 11.557416,17.299565 L21.2959045,17.299565 C22.1243317,17.299565 22.7959045,16.6279922 22.7959045,15.799565 L22.7959045,7.79956503 C22.7959045,6.9711379 22.1243317,6.29956503 21.2959045,6.29956503 L11.557416,6.29956503 Z" id="Rectangle" stroke="currentColor" transform="translate(14.012447, 11.799565) rotate(135.000000) translate(-14.012447, -11.799565) "></path>
+                  <path d="M15.9239992,8.86037916 L17.5218753,11.416981 C17.6682305,11.6511493 17.5970439,11.9596245 17.3628756,12.1059797 C17.2834098,12.1556458 17.191586,12.1819805 17.0978762,12.1819805 L13.9021238,12.1819805 C13.6259814,12.1819805 13.4021238,11.9581229 13.4021238,11.6819805 C13.4021238,11.5882707 13.4284585,11.4964468 13.4781247,11.416981 L15.0760008,8.86037916 C15.222356,8.62621089 15.5308312,8.55502431 15.7649995,8.70137948 C15.829384,8.74161983 15.8837588,8.79599459 15.9239992,8.86037916 Z" id="Triangle" stroke="currentColor" transform="translate(15.500000, 10.181981) rotate(45.000000) translate(-15.500000, -10.181981) "></path>
+                  <rect id="Rectangle" fill="currentColor" x="23" y="13" width="5" height="1" rx="0.5"></rect>
+                  <rect id="Rectangle" fill="currentColor" transform="translate(25.500000, 13.500000) rotate(-270.000000) translate(-25.500000, -13.500000) " x="23" y="13" width="5" height="1" rx="0.5"></rect>
               </g>
           </g>
       </g>
@@ -200,10 +203,10 @@ export default class SociTagGroup extends SociComponent {
     newTag.innerHTML = tagName
     newTag.setAttribute('score', 1)
     newTag.toggleAttribute('upvoted')
-    this.appendChild(newTag)
-
-    this._tagVoted()
-    this._cancelAddTag()
+    if(this.childNodes[0].nodeType == 3) this.childNodes[0].remove()
+    this.prepend(newTag)
+    this._tagVoted({detail:{upvoted: true}})
+    this.select('#add-tag input').value = ''
   }
 
   _addTagClick(e){
@@ -231,6 +234,14 @@ export default class SociTagGroup extends SociComponent {
     }
     else if (e.key == 'Escape') {
       this._cancelAddTag()
+    }
+    else if (e.key == ' ') {
+      e.preventDefault()
+      let input = this.select('#add-tag input')
+      setTimeout(()=>{
+        if(input.value.charAt(input.value.length - 1) != '-')
+          input.value = input.value + '-'
+      }, 1)
     }
   }
 
