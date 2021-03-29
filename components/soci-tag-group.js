@@ -194,8 +194,8 @@ export default class SociTagGroup extends SociComponent {
       post: url,
       tag: tagName
     }).then(res => {
-      //TODO - check if the post succeeded or failed
-      //for now we'll just blindly trust that it worked
+      if(res.postID && res.tagID)
+        soci.votes[res.postID].push(res.tagID)
     })
 
     let newTag = document.createElement('soci-tag')
