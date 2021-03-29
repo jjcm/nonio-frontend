@@ -102,8 +102,9 @@ export default class SociCommentList extends SociComponent {
       <controls>
         <comment-count>0 comments</comment-count>
         <filtering @click=_filter>
-          <filter active>Top</filter>
-          <filter>New</filter>
+          <filter active data-sort="lineage-score">Best</filter>
+          <filter data-sort="score">Top</filter>
+          <filter data-sort="date">New</filter>
         </filtering>
       </controls>
       <comment-input>
@@ -146,13 +147,22 @@ export default class SociCommentList extends SociComponent {
     if(current) current.removeAttribute('active')
     e.target.toggleAttribute('active')
 
-    let filteredAttr = e.target.innerHTML == 'Top' ? 'score' : 'date'
+    let sort = e.target.dataset.sort
     let comments = Array.from(this.children)
-    comments = comments.sort((a,b)=>{
-      return parseInt(b.getAttribute(filteredAttr)) - parseInt(a.getAttribute(filteredAttr))
-    })
-    this.innerHTML = ''
-    comments.forEach(comment => this.appendChild(comment))
+
+    let sortComments = (parent, comments, sort) => {
+      comments = comments.sort((a,b)=>{
+        return parseInt(b.getAttribute(sort)) - parseInt(a.getAttribute(sort))
+      })
+      comments.forEach(comment => {
+        parent.appendChild(comment)
+        if(comment.children.length > 2){
+          sortComments(comment, Array.from(comment.children), sort)
+        }
+      })
+    }
+
+    sortComments(this, comments, sort)
   }
 
   async renderComments(url){
@@ -164,7 +174,7 @@ export default class SociCommentList extends SociComponent {
     comments.forEach(comment => {
       let newComment = document.createElement('soci-comment')
       newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content)
-      let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"] div[slot="replies"]`) : this
+      let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"]`) : this
       parent?.appendChild(newComment)
     })
 

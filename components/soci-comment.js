@@ -309,7 +309,7 @@ export default class SociComment extends SociComponent {
     </comment>
     <div id="comment-reply"></div>
     <div id="replies">
-      <slot name="replies">
+      <slot>
       </slot>
     </div>
     <guide></guide>
@@ -342,7 +342,11 @@ export default class SociComment extends SociComponent {
 
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
 
-    this.innerHTML = '<soci-quill-view slot="content"></soci-quill-view><div slot="replies"></div>'
+    if(!this.quillView){
+      this.quillView = document.createElement('soci-quill-view')
+      this.quillView.setAttribute('slot', 'content')
+      this.appendChild(this.quillView)
+    }
     this._renderContent()
 
     let user = this.select('soci-user')
@@ -505,7 +509,7 @@ export default class SociComment extends SociComponent {
         //this.select('#submit').success()
         let comment = document.createElement('soci-comment')
         comment = comment.factory(res.user, 0, 0, res.date, res.id, res.content)
-        comment.prependToElement(this.querySelector('div'))
+        comment.prependToElement(this)
         setTimeout(() => {
           this._cancelReply()
         }, 100)
