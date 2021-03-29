@@ -160,10 +160,8 @@ export default class SociCommentList extends SociComponent {
     comments = comments.comments
     let votes = await this.getData('/comment-votes/post/' + url, this.authToken)
     votes = votes.votes
-    console.log(votes)
 
     comments.forEach(comment => {
-      console.log(comment)
       let newComment = document.createElement('soci-comment')
       newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content)
       let parent = comment.parent > 0 ? this.querySelector(`soci-comment[comment-id="${comment.parent}"] div[slot="replies"]`) : this

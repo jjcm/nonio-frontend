@@ -5,7 +5,6 @@ let submit = {
   },
   form: null, 
   onActivate() {
-    console.log('submit page activate')
     submit.form = document.querySelector('#submit form')
 
     let title = document.querySelector('#submit input[name="title"]')
@@ -15,7 +14,6 @@ let submit = {
     submit.submitButton.addEventListener('click', submit.submit)
   },
   async submit(e) {
-    console.log('submit time')
     if(submit.form.reportValidity()){
       let data = new FormData(submit.form)
       let type = document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()

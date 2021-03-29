@@ -496,7 +496,6 @@ export default class SociComment extends SociComponent {
   }
 
   _submitReply(){
-    console.log(this)
     this.postData('/comment/create', {
       post: this.url,
       content: this.select('soci-input').value,

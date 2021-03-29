@@ -330,7 +330,6 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   _toggleMute(e){
-    console.log('toigglemute')
     this.toggleAttribute('muted')
     if(this.hasAttribute('muted')){
       this.select('#volume-container soci-icon').setAttribute('glyph', 'muted')
@@ -416,7 +415,6 @@ export default class SociVideoPlayer extends SociComponent {
   }
 
   set resolution(res){
-    console.log('set resolution')
     let timestamp = this._video.currentTime
     this._currentResolution = res
     this.select('soci-option[slot="selected"]')?.removeAttribute('slot')

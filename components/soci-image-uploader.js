@@ -138,8 +138,6 @@ export default class SociImageUploader extends SociComponent {
     )
 
     this.select("#file").addEventListener('change', this.upload.bind(this))
-    this.select("#file").addEventListener('change', ()=>{console.log('file changed')})
-    this.select("#file").addEventListener('input', ()=>{console.log('file input')})
   }
 
   static get observedAttributes() {
@@ -210,7 +208,6 @@ export default class SociImageUploader extends SociComponent {
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
 
     request.addEventListener('load', e => {
-      console.log('load')
       this.preview(request.response)
     })
 

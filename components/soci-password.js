@@ -151,7 +151,6 @@ export default class SociPassword extends SociComponent {
   checkMatch(){
     if(this.hasAttribute('match')){
       let matchedField = this.getRootNode().querySelector(`soci-password[name=${this.getAttribute('match')}]`)
-      console.log(matchedField.value == this.value)
       return matchedField.value == this.value
     }
     return true

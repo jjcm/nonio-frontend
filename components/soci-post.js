@@ -318,7 +318,6 @@ export default class SociPost extends SociComponent {
           case 'url':
             break
           case 'width':
-            console.log(post[key])
             if(parseInt(post[key]) != 0) 
               this.select('#media-container').style.setProperty('--media-width', post[key] + 'px')
             break
