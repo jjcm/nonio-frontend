@@ -8,6 +8,7 @@ let submit = {
     submit.form = document.querySelector('#submit form')
 
     let title = document.querySelector('#submit input[name="title"]')
+    title.setCustomValidity("A title is required.")
     title.focus()
 
     submit.submitButton = document.querySelector('#submit soci-button')

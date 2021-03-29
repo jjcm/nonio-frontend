@@ -384,7 +384,10 @@ export default class SociSidebar extends SociComponent {
 
   async connectedCallback(){
     this.toggleAttribute('loading', false)
-    if(!this.authToken) this.setAttribute('noauth', '')
+    if(!this.authToken) {
+      this.setAttribute('noauth', '')
+      this.querySelector('input').focus()
+    }
     else {
       this._loadSubscribedTags()
       this._loadCommonTags()

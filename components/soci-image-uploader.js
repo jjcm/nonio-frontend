@@ -58,7 +58,7 @@ export default class SociImageUploader extends SociComponent {
       }
 
       label {
-        border-radius: 14px;
+        border-radius: 4px;
         height: 24px;
         color: var(--base-text-inverse);
         cursor: pointer;

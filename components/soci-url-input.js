@@ -22,8 +22,11 @@ export default class SociUrlInput extends SociComponent {
       width: 100%;
       font-size: 14px;
       padding: 0 8px;
-      border-radius: 16px;
+      border-radius: 8px;
       transition: none;
+    }
+    :host(:focus) {
+      outline: 0;
     }
     :host([available="true"]) {
       background: var(--success-background);
