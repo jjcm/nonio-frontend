@@ -131,34 +131,45 @@ button
   padding: 30px 50px
   min-width: 420px
   &[active]
-    display: block
-  header
     display: flex
-    flex-wrap: wrap
+  header
+    width: 300px
+    min-width: 300px
+    margin-right: 40px
+    soci-button
+      width: 100%
+      margin-bottom: 16px
+      float: none
+  .stats
+    border: 1px solid var(--base-background-subtle)
+    border-radius: 8px
+    .stat
+      display: flex
+      border-bottom: inherit
+      padding: 8px 12px
+    label
+      flex: 1
+      font-weight: 600
+    .value
+      flex: 1
+      text-align: right
+
   .hero
-    margin-right: 20px
-    flex: 1
-    min-width: 420px
+    margin-bottom: 16px
     .description
       text-align: justify
   soci-user[avatar-only]
-    float: left
-    margin-right: 16px
+    --avatar-size: 220px
+    display: block
+    width: 220px
+    margin: 0 auto 8px
   soci-user[username-only]
     margin-bottom: 8px
+    display: block
   soci-input
     border: 1px solid var(--base-background-subtle)
     border-radius: 3px
     min-height: 240px
-  .stats
-    margin-top: 40px
-    .stat
-      white-space: nowrap
-      margin-right: 12px
-      &:last-child
-        margin-right: 0
-    label
-      font-weight: 600
   .blocks
     display: flex
     flex-wrap: wrap
@@ -216,11 +227,11 @@ button
     margin-top: 0
   .content
     display: flex
+    width: 100%
     soci-post-list
       padding: 0
     soci-tab-group
       width: 100%
-      margin-top: 12px
 
 @media screen and (max-width: 968px) 
   #user .stats

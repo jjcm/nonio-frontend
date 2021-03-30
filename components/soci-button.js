@@ -23,6 +23,8 @@ export default class SociButton extends SociComponent {
         position: relative;
         float: right;
         user-select: none;
+        text-align: center;
+        box-sizing: border-box;
       }
 
       :host:after,

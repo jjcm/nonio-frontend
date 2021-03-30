@@ -1,31 +1,32 @@
 header(load-order="primary")
   .hero
-    soci-user(size="x-large" self avatar-only)
-    soci-user(size="x-large" self username-only)
+    soci-user(size="large" avatar-only)
+    soci-user(size="large" username-only)
     .description I'm a dog who does dog things. Sometimes I poop on the carpet because I'm a bad dog, but usually I just worry lightly and paw at my owners to play with me despite them working on this very site right now yes avo I will play with you soon you impatient dog you just want to play with your rope toy why do you like it so much jesus christ leave me alone.
+  soci-button(subtle) edit profile
   .stats
     .stat 
-      label Posts: 
-      | 1
+      label Posts
+      .value 1
     .stat 
-      label Post Karma: 
-      | 8
+      label Post Karma
+      .value 8
     .stat 
-      label Comments: 
-      | 8
+      label Comments
+      .value 8
     .stat 
-      label Comment Karma: 
-      | 53
+      label Comment Karma
+      .value 53
 
 
 
 .content(load-order="secondary")
   soci-tab-group
-    soci-tab(name="Posts") 
+    soci-tab(name="Posts" default) 
       soci-post-list.my-posts
     soci-tab(name="Comments")
       soci-comment-list.my-comments(data="/posts")
-    soci-tab(name="Settings" default)
+    soci-tab(name="Settings" style="display: none")
       .blocks
         .block.avatar
           h2 Avatar
@@ -45,7 +46,7 @@ header(load-order="primary")
             .actions
               soci-button(async) submit
               soci-button(subtle) cancel
-    soci-tab(name="Financials")
+    soci-tab(name="Financials" style="display: none")
       .blocks
         .block.profit
           h2 Post Profit

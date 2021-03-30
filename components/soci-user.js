@@ -4,6 +4,7 @@ import config from '../config.js'
 export default class SociUser extends SociComponent {
   constructor() {
     super()
+    this._imageFolder = '/thumbnail/'
   }
 
   css(){
@@ -60,7 +61,7 @@ export default class SociUser extends SociComponent {
         --spacing: 6px;
       }
 
-      :host([size="x-large"]) {
+      :host([size="large"]) {
         --avatar-size: 116px;
         --font-size: 32px;
         --font-weight: 600;
@@ -110,7 +111,7 @@ export default class SociUser extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['name', 'op', 'self']
+    return ['name', 'op', 'self', 'size']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -126,6 +127,9 @@ export default class SociUser extends SociComponent {
           this._updateUser()
         }
         break
+      case 'size':
+        if(newValue == 'large') this._imageFolder = '/'
+        else this._imageFolder = '/thumbnail/'
     }
   }
 
@@ -141,7 +145,7 @@ export default class SociUser extends SociComponent {
   _setImages(path, force = false){
     let cacheBuster = force ? `?${Date.now()}` : ''
     let picture = this.select('picture')
-    let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}/thumbnail/${path}.${format}${cacheBuster}" />`).join('')
+    let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}${this._imageFolder}${path}.${format}${cacheBuster}" />`).join('')
     picture.innerHTML = (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
   }
 }
