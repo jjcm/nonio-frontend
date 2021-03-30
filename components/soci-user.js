@@ -9,7 +9,6 @@ export default class SociUser extends SociComponent {
   css(){
     return `
       :host {
-        display: inline-flex;
         color: var(--base-text);
         cursor: pointer;
         --font-size: 12px;
@@ -17,6 +16,10 @@ export default class SociUser extends SociComponent {
         --avatar-size: 16px;
         --line-height: 16px;
         --spacing: 4px;
+      }
+
+      div {
+        display: inline-flex;
       }
 
       img {
@@ -87,8 +90,12 @@ export default class SociUser extends SociComponent {
   }
 
   html(){ return `
-    <picture></picture>
-    <username></username>
+    <soci-link>
+      <div>
+      <picture></picture>
+      <username></username>
+      </div>
+    </soci-link>
   `}
 
   connectedCallback(){
@@ -110,6 +117,7 @@ export default class SociUser extends SociComponent {
     switch(name) {
       case 'name':
         this.select('username').innerHTML = newValue
+        this.select('soci-link').setAttribute('href', `/user/${newValue}`)
         this._setImages(newValue)
         this.toggleAttribute('self', newValue == soci.username) 
         break
@@ -122,8 +130,7 @@ export default class SociUser extends SociComponent {
   }
 
   _updateUser(){
-    let username = soci.username
-    this.setAttribute('name', username)
+    this.setAttribute('name', soci.username)
   }
 
   _updateAvatar(){

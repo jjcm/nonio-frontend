@@ -96,8 +96,9 @@ export default class SociSidebar extends SociComponent {
         border-bottom: 2px solid var(--base-background-subtle);
       }
 
-      #user soci-link:first-child {
+      #user soci-user {
         display: flex;
+        box-sizing: border-box;
         align-items: center;
         padding-left: 22px;
         width: 100%;
@@ -293,9 +294,7 @@ export default class SociSidebar extends SociComponent {
     return `
       <panel id="auth">
         <section id="user">
-          <soci-link href="/user">
-            <soci-user self></soci-user>
-          </soci-link>
+          <soci-user self></soci-user>
           <soci-link href="/submit" fresh>
             <soci-icon glyph="create"></soci-icon>
           </soci-link>
