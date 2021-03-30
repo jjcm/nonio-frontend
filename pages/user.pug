@@ -1,9 +1,11 @@
-header(load-order="primary")
+.sidebar(load-order="primary")
   .hero
     soci-user(size="large" avatar-only)
     soci-user(size="large" username-only)
     .description I'm a dog who does dog things. Sometimes I poop on the carpet because I'm a bad dog, but usually I just worry lightly and paw at my owners to play with me despite them working on this very site right now yes avo I will play with you soon you impatient dog you just want to play with your rope toy why do you like it so much jesus christ leave me alone.
-  soci-button(subtle) edit profile
+  .self-actions
+    soci-button(subtle) edit profile
+    soci-button(subtle) view financials
   .stats
     .stat 
       label Posts
@@ -21,6 +23,12 @@ header(load-order="primary")
 
 
 .content(load-order="secondary")
+  header
+    .tab(selected) Posts
+    .tab Comments
+  .inner-content
+    soci-post-list
+//
   soci-tab-group
     soci-tab(name="Posts" default) 
       soci-post-list.my-posts

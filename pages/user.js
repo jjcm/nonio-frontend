@@ -1,6 +1,5 @@
 let user = {
   dom: document.currentScript.closest('soci-route'),
-  postTab: document.querySelector("#user soci-tab[name='Posts']"),
   init: () => {
     soci.registerPage(user)
   },
@@ -14,14 +13,30 @@ let user = {
     if(username == soci.username){
       user.showPersonalControls()
     }
-    document.querySelector('#user .password soci-button').addEventListener('click', user.changePassword)
-    document.querySelector('#user soci-tab[name="Financials"]').addEventListener('tabactivate', user.checkFinancials)
+
+    let myPosts = document.querySelector('#user soci-post-list')
+    myPosts.setAttribute('data', `/posts?user=${username}`)
+    //document.querySelector('#user .password soci-button').addEventListener('click', user.changePassword)
+    //document.querySelector('#user soci-tab[name="Financials"]').addEventListener('tabactivate', user.checkFinancials)
+
+    user.dom.querySelector('header').addEventListener('click', user.tabClick)
   },
-  onDeactivate: () => {
+  tabClick: e => {
+    if(e.target.className == 'tab') {
+      let container = user.dom.querySelector('.inner-content')
+      let username = document.location.pathname.slice(6)
+      e.target.parentElement.querySelector('[selected]').removeAttribute('selected')
+      e.target.toggleAttribute('selected', true)
+      if(e.target.innerHTML == 'Posts') {
+        container.innerHTML = `<soci-post-list data="/posts?user=${username}"></soci-post-list>`
+      }
+      else {
+        container.innerHTML = `<soci-comment-list url="andy"></soci-post-list>`
+      }
+    }
   },
   showPersonalControls: () => {
-    document.querySelector('#user soci-tab[name="Financials"]').style.display = 'block'
-    document.querySelector('#user soci-tab[name="Settings"]').style.display = 'block'
+
   },
   changePassword: async e => {
     let button = e.currentTarget
@@ -51,9 +66,10 @@ let user = {
   }
 }
 
-user.postTab.addEventListener('tabactivate', e=>{
-  let myPosts = document.querySelector('#user soci-post-list.my-posts')
-  myPosts.setAttribute('data', `/posts?user=${soci.username}`)
+user.dom.querySelector('soci-post-list').addEventListener('tabactivate', e=>{
+  let username = document.location.pathname.slice(6)
+  let myPosts = document.querySelector('#user soci-post-list')
+  myPosts.setAttribute('data', `/posts?user=${username}`)
 })
 
 document.addEventListener('DOMContentLoaded', user.init)

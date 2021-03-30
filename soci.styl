@@ -128,14 +128,16 @@ button
       &:first-child
         margin-left: 0
 #user
-  padding: 30px 50px
   min-width: 420px
   &[active]
     display: flex
-  header
+  .sidebar
+    padding: 30px 50px
     width: 300px
     min-width: 300px
-    margin-right: 40px
+    position: relative
+    z-index: 1
+    box-shadow: 1px 0 5px var(--shadow)
     soci-button
       width: 100%
       margin-bottom: 16px
@@ -154,6 +156,8 @@ button
       flex: 1
       text-align: right
 
+  .self-actions 
+    display: flex
   .hero
     margin-bottom: 16px
     .description
@@ -226,12 +230,54 @@ button
   h2
     margin-top: 0
   .content
-    display: flex
     width: 100%
-    soci-post-list
-      padding: 0
-    soci-tab-group
+    background: var(--base-background-bold)
+    height: 100vh
+    overflow: auto
+    overflow-x: hidden
+    header 
+      background-color: var(--base-background)
+      position: sticky
+      top: 0
+      height: 41px
       width: 100%
+      z-index: 2
+      display: block
+      padding: 0 12px
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      box-shadow: 0 1px 2px var(--shadow)
+
+      .tab
+        text-transform: capitalize
+        position: relative
+        padding: 6px 12px
+        cursor: pointer
+        font-weight: 500
+        font-size: 12px
+        line-height: 18px
+        position: relative
+        z-index: 2
+        color: var(--base-text-subtle)
+        &:hover
+          color: var(--base-text-subtle-hover)
+
+        &[selected]
+          opacity: 1
+          color: var(--brand-text-bold)
+
+          &::after
+            content:''
+            display: block
+            position: absolute
+            top: 34px
+            left: calc(50% - 8px)
+            width: 16px
+            height: 3px
+            border-radius: 0 0 2px 2px
+            background: var(--base-background)
+            box-shadow: 0 1px 1px var(--shadow)
 
 @media screen and (max-width: 968px) 
   #user .stats
