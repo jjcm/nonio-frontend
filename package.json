@@ -19,7 +19,7 @@
   "homepage": "https://github.com/jjcm/soci-components#readme",
   "dependencies": {
     "mime-types": "^2.1.24",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "stylus": "^0.54.8"
   }
 }
