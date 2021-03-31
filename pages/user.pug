@@ -2,7 +2,7 @@
   .hero
     soci-user(size="large" avatar-only)
     soci-user(size="large" username-only)
-    .description I'm a dog who does dog things. Sometimes I poop on the carpet because I'm a bad dog, but usually I just worry lightly and paw at my owners to play with me despite them working on this very site right now yes avo I will play with you soon you impatient dog you just want to play with your rope toy why do you like it so much jesus christ leave me alone.
+    .description(value="description")
   .self-actions
     soci-button(subtle)
       svg(width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg")
@@ -20,16 +20,16 @@
   .stats
     .stat 
       label Posts
-      .value 1
+      .value(value="posts")
     .stat 
       label Post Karma
-      .value 8
+      .value(value="karma")
     .stat 
       label Comments
-      .value 8
+      .value(value="comments")
     .stat 
       label Comment Karma
-      .value 53
+      .value(value="comment_karma")
 
 
 

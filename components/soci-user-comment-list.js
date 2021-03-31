@@ -41,10 +41,9 @@ export default class SociCommentList extends SociComponent {
   }
 
   async renderComments(username){
-    console.log('render comment time')
     let comments = await this.getData('/comments/user/' + username)
     comments = comments.comments
-    /*
+    /* TODO
     let votes = await this.getData('/comment-votes/user/' + username, this.authToken)
     votes = votes.votes
     */
@@ -55,7 +54,7 @@ export default class SociCommentList extends SociComponent {
       this.appendChild(newComment)
     })
 
-    /*
+    /* TODO
     votes.forEach(vote => {
       let comment = this.querySelector(`soci-comment[comment-id="${vote.comment_id}`)
       comment.showVote(vote.upvote)
