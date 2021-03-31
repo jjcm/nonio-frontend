@@ -9,7 +9,7 @@ export default class SociCommentList extends SociComponent {
     return `
       :host {
         display: block;
-        padding: 0 8px;
+        padding: 2px 8px;
       }
       content {
         display: block;
@@ -20,7 +20,8 @@ export default class SociCommentList extends SociComponent {
       ::slotted(soci-comment) {
         padding-left: 0;
         padding: 12px 20px;
-        border-radius: 4px;
+        margin: 8px 0;
+        border-radius: 8px;
         background: var(--base-background);
         box-shadow: 0px 1px 3px var(--shadow);
       }
@@ -49,8 +50,8 @@ export default class SociCommentList extends SociComponent {
     */
 
     comments.forEach(comment => {
-      let newComment = document.createElement('soci-comment')
-      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content)
+      let newComment = document.createElement('soci-user-comment')
+      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.post, comment.post_title)
       this.appendChild(newComment)
     })
 
