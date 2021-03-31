@@ -142,6 +142,10 @@ button
       width: 100%
       margin-bottom: 16px
       float: none
+      svg
+        margin-right: 4px
+        position: relative
+        top: 1.5px
   .stats
     border: 1px solid var(--base-background-subtle)
     border-radius: 8px
@@ -233,8 +237,7 @@ button
     width: 100%
     background: var(--base-background-bold)
     height: 100vh
-    overflow: auto
-    overflow-x: hidden
+    overflow: hidden
     header 
       background-color: var(--base-background)
       position: sticky
@@ -248,8 +251,13 @@ button
       display: flex
       align-items: center
       box-shadow: 0 1px 2px var(--shadow)
+      justify-content: space-between
 
-      .tab
+      .types,
+      .sorts
+        display: flex
+      .type,
+      .sort
         text-transform: capitalize
         position: relative
         padding: 6px 12px
@@ -278,6 +286,9 @@ button
             border-radius: 0 0 2px 2px
             background: var(--base-background)
             box-shadow: 0 1px 1px var(--shadow)
+    .inner-content
+      height: 100%
+      overflow-y: auto
 
 @media screen and (max-width: 968px) 
   #user .stats

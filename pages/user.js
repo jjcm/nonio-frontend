@@ -22,7 +22,7 @@ let user = {
     user.dom.querySelector('header').addEventListener('click', user.tabClick)
   },
   tabClick: e => {
-    if(e.target.className == 'tab') {
+    if(e.target.className == 'type') {
       let container = user.dom.querySelector('.inner-content')
       let username = document.location.pathname.slice(6)
       e.target.parentElement.querySelector('[selected]').removeAttribute('selected')
@@ -31,7 +31,7 @@ let user = {
         container.innerHTML = `<soci-post-list data="/posts?user=${username}"></soci-post-list>`
       }
       else {
-        container.innerHTML = `<soci-comment-list url="andy"></soci-post-list>`
+        container.innerHTML = `<soci-user-comment-list user="${username}"></soci-post-list>`
       }
     }
   },
