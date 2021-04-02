@@ -1,0 +1,21 @@
+#admin-settings-container.container
+  script(src="/pages/admin-settings.js")
+  .blocks
+    .block.avatar
+      h2 Avatar
+      soci-avatar-uploader
+    .block.description
+      h2 Description
+      soci-input(placeholder="Enter description")
+      .actions
+        soci-button(async) submit
+        soci-button(subtle) cancel
+    .block.password
+      h2 Change Password
+      form
+        soci-password(name="oldPassword" placeholder="Old password")
+        soci-password(name="newPassword" placeholder="New password")
+        soci-password(name="confirmPassword" match="newPassword" placeholder="Confirm new password")
+        .actions
+          soci-button(async) submit
+          soci-button(subtle) cancel
