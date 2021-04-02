@@ -18,7 +18,7 @@ export default class SociPostLi extends SociComponent {
       :host([loaded]) {
         transform: translateY(0);
         opacity: 1;
-        transition: all 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+        transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
       ::slotted(soci-post-li){
         margin-top: 8px;

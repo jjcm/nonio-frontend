@@ -132,9 +132,13 @@ button
   &[active]
     display: flex
   .sidebar
-    padding: 30px 50px
-    width: 300px
-    min-width: 300px
+    padding: 30px 46px 30px 50px
+    border-right: 4px solid var(--base-background)
+    box-sizing: border-box
+    overflow-y: auto
+    width: 400px
+    min-width: 400px
+    height: 100vh
     position: relative
     z-index: 1
     box-shadow: 1px 0 5px var(--shadow)
@@ -475,13 +479,13 @@ soci-sidebar
 [load-order]
   transform: translateY(20px)
   opacity: 0
-  transition: all 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease)
+  transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease)
 [load-order="secondary"]
   transform: translateY(25px)
-  transition: all 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease)
+  transition: transform 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease)
 [load-order="tertiary"]
   transform: translateY(30px)
-  transition: all 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease)
+  transition: transform 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease)
 soci-route[active]
   [load-order]
   [load-order="secondary"]
