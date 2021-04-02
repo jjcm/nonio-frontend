@@ -40,28 +40,6 @@ let user = {
   showPersonalControls: () => {
 
   },
-  changePassword: async e => {
-    let button = e.currentTarget
-    let form = button.closest('form')
-    if(form.reportValidity()){
-      let data = soci.getJSONFromForm(button.closest('form'))
-      let response = await soci.postData('user/change-password', data)
-      button.wait()
-      if(response == true) {
-        button.success()
-        user.cancelChangePassword()
-      }
-      else {
-        button.error()
-      }
-    }
-    else {
-      button.error()
-    }
-  },
-  cancelChangePassword: () => {
-    Array.from(document.querySelectorAll('#user soci-password')).forEach(pass => pass.value = '')
-  },
   checkFinancials: async () => {
     let response = await soci.getData('user/get-financials')
     document.querySelector('#user .profit h1').innerHTML = `$${Number.parseFloat(response.cash).toPrecision(3)}`
@@ -71,7 +49,9 @@ let user = {
     let response = await soci.getData(`users/${username}`)
 
     for (var property in response){
-      user.dom.querySelector(`.sidebar [value="${property}"]`).innerHTML = response[property]
+      let dom = user.dom.querySelector(`.sidebar [value="${property}"]`)
+      if(property == 'description') dom.value = response[property]
+      else dom.innerHTML = response[property]
     }
   }
 }

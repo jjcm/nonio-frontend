@@ -138,6 +138,11 @@ button
     position: relative
     z-index: 1
     box-shadow: 1px 0 5px var(--shadow)
+    soci-link
+      display: block
+      width: 100%
+      &:first-child
+        margin-right: 6px
     soci-button
       width: 100%
       margin-bottom: 16px
@@ -174,6 +179,67 @@ button
   soci-user[username-only]
     margin-bottom: 8px
     display: block
+  .content
+    width: 100%
+    background: var(--base-background-bold)
+    height: 100vh
+    overflow: hidden
+    header 
+      background-color: var(--base-background)
+      position: sticky
+      top: 0
+      height: 41px
+      width: 100%
+      z-index: 2
+      display: block
+      padding: 0 12px
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      box-shadow: 0 1px 2px var(--shadow)
+      justify-content: space-between
+
+      .types,
+      .sorts
+        display: flex
+      .type,
+      .sort
+        text-transform: capitalize
+        position: relative
+        padding: 6px 12px
+        cursor: pointer
+        font-weight: 500
+        font-size: 12px
+        line-height: 18px
+        position: relative
+        z-index: 2
+        color: var(--base-text-subtle)
+        &:hover
+          color: var(--base-text-subtle-hover)
+
+        &[selected]
+          opacity: 1
+          color: var(--brand-text-bold)
+
+          &::after
+            content:''
+            display: block
+            position: absolute
+            top: 34px
+            left: calc(50% - 8px)
+            width: 16px
+            height: 3px
+            border-radius: 0 0 2px 2px
+            background: var(--base-background)
+            box-shadow: 0 1px 1px var(--shadow)
+    .inner-content
+      height: 100%
+      overflow-y: auto
+
+#admin-financials,
+#admin-settings
+  .container
+    padding: 30px 50px
   soci-input
     border: 1px solid var(--base-background-subtle)
     border-radius: 3px
@@ -233,62 +299,6 @@ button
       margin-right: 0
   h2
     margin-top: 0
-  .content
-    width: 100%
-    background: var(--base-background-bold)
-    height: 100vh
-    overflow: hidden
-    header 
-      background-color: var(--base-background)
-      position: sticky
-      top: 0
-      height: 41px
-      width: 100%
-      z-index: 2
-      display: block
-      padding: 0 12px
-      box-sizing: border-box
-      display: flex
-      align-items: center
-      box-shadow: 0 1px 2px var(--shadow)
-      justify-content: space-between
-
-      .types,
-      .sorts
-        display: flex
-      .type,
-      .sort
-        text-transform: capitalize
-        position: relative
-        padding: 6px 12px
-        cursor: pointer
-        font-weight: 500
-        font-size: 12px
-        line-height: 18px
-        position: relative
-        z-index: 2
-        color: var(--base-text-subtle)
-        &:hover
-          color: var(--base-text-subtle-hover)
-
-        &[selected]
-          opacity: 1
-          color: var(--brand-text-bold)
-
-          &::after
-            content:''
-            display: block
-            position: absolute
-            top: 34px
-            left: calc(50% - 8px)
-            width: 16px
-            height: 3px
-            border-radius: 0 0 2px 2px
-            background: var(--base-background)
-            box-shadow: 0 1px 1px var(--shadow)
-    .inner-content
-      height: 100%
-      overflow-y: auto
 
 @media screen and (max-width: 968px) 
   #user .stats
