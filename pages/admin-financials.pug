@@ -1,0 +1,30 @@
+#admin-financials-container.container
+  script(src="/pages/admin-financials.js")
+  .blocks
+    .block.profit
+      h2 Post Profit
+      h1 $
+      .actions
+        button withdrawal
+    .block.billing
+      h2 Billing Info
+      p Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.
+      form
+        input(placeholder="Credit Card Name")
+        input(placeholder="Credit Card Number")
+        .cc-details
+          input(placeholder="Exp. Date")
+          input(placeholder="CCV")
+        .actions
+          button save
+          button(class="cancel") cancel
+    .block.bank
+      h2 Withdrawl Location
+      p This is the account that money will be deposited in once you choose to withdrawl your post profit.
+      form.change-password
+        input(placeholder="Bank Name")
+        input(placeholder="Routing No.")
+        input(placeholder="Account No.")
+        .actions
+          button save
+          button(class="cancel") cancel
