@@ -436,10 +436,10 @@ export default class SociComment extends SociComponent {
     setTimeout(()=>{
       replyContainer.style.height = '0'
       this.select('#actions').classList.remove('replying')
-      //replyContainer.classList.remove('active')
       setTimeout(()=>{
         replyContainer.innerHTML = ''
-      }, 2000)
+        replyContainer.classList.remove('active')
+      }, 100)
     }, 1)
   }
 

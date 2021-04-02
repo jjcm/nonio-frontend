@@ -200,7 +200,7 @@ export default class SociPostLi extends SociComponent {
           <div id="time"></div>
           <div id="comments"></div>
         </div>
-        <soci-link href=${this.url}>
+        <soci-link>
           <div id="title"></div>
         </soci-link>
       </div>
@@ -236,7 +236,7 @@ export default class SociPostLi extends SociComponent {
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break;
       case 'url':
-        this.select('soci-link').href = newValue
+        this.select('soci-link').setAttribute('href', '/' + newValue)
         break;
 
     }

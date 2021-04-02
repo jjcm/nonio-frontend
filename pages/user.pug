@@ -1,31 +1,58 @@
-header(load-order="primary")
+.sidebar(load-order="primary")
   .hero
-    soci-user(size="x-large" self avatar-only)
-    soci-user(size="x-large" self username-only)
-    .description I'm a dog who does dog things. Sometimes I poop on the carpet because I'm a bad dog, but usually I just worry lightly and paw at my owners to play with me despite them working on this very site right now yes avo I will play with you soon you impatient dog you just want to play with your rope toy why do you like it so much jesus christ leave me alone.
+    soci-user(size="large" avatar-only)
+    soci-user(size="large" username-only)
+    soci-quill-view.description(value="description")
+  .self-actions
+    soci-link(href="/admin/settings")
+      soci-button(subtle)
+        svg(width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg")
+          path(d="M7 2.5L1.5 8C0.767767 8.73223 0.767767 9.76777 1.5 10.5C2.23223 11.2322 3.26777 11.2322 4 10.5L9.5 5L10.75 1.25L7 2.5Z" stroke="currentColor")
+          path(d="M2 7.5L4.5 10" stroke="currentColor")
+          path(d="M7 2.5L9.5 5" stroke="currentColor")
+        | edit profile
+
+    soci-link(href="/admin/financials")
+      soci-button(subtle)
+        svg(width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg")
+          path(d="M7.5 2.9V4.5H2.5V2.9C2.5 1.57452 3.61929 0.5 5 0.5C6.38071 0.5 7.5 1.57452 7.5 2.9Z" stroke="currentColor")
+          rect(x="0.5" y="4.5" width="9" height="7" rx="1.5" stroke="currentColor")
+          circle(cx="5" cy="8" r="0.75" fill="currentColor")
+        | view financials
   .stats
     .stat 
-      label Posts: 
-      | 1
+      label Posts
+      .value(value="posts")
     .stat 
-      label Post Karma: 
-      | 8
+      label Post Karma
+      .value(value="karma")
     .stat 
-      label Comments: 
-      | 8
+      label Comments
+      .value(value="comments")
     .stat 
-      label Comment Karma: 
-      | 53
+      label Comment Karma
+      .value(value="comment_karma")
 
 
 
 .content(load-order="secondary")
+  header
+    .sorts
+      .sort(selected) Popular
+      .sort New
+    .types
+      .type(selected) Posts
+      .type Comments
+
+  .inner-content
+    soci-post-list
+//
   soci-tab-group
-    soci-tab(name="Posts") 
+    soci-tab(name="Posts" default) 
       soci-post-list.my-posts
     soci-tab(name="Comments")
       soci-comment-list.my-comments(data="/posts")
-    soci-tab(name="Settings" default)
+    soci-tab(name="Settings" style="display: none")
       .blocks
         .block.avatar
           h2 Avatar
@@ -45,7 +72,7 @@ header(load-order="primary")
             .actions
               soci-button(async) submit
               soci-button(subtle) cancel
-    soci-tab(name="Financials")
+    soci-tab(name="Financials" style="display: none")
       .blocks
         .block.profit
           h2 Post Profit

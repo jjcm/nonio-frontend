@@ -29,7 +29,7 @@ html(lang="en")
       include pages/tags.pug
     soci-route#home(test="both" path="^/$")
       include pages/home.pug
-    soci-route#user(path="/user")
+    soci-route#user(test="both" path="^/user/")
       include pages/user.pug
     soci-route#user-create(path="/user/create")
       include pages/user-create.pug
@@ -37,6 +37,10 @@ html(lang="en")
       include pages/blog-test.pug
     soci-route#submit(path="/submit")
       include pages/submit.pug
+    soci-route#admin-financials(path="/admin/financials")
+      include pages/admin-financials.pug
+    soci-route#admin-settings(path="/admin/settings")
+      include pages/admin-settings.pug
     soci-route#submit(path="/webcomics")
       include pages/why-webcomics.pug
     soci-route#post(default fresh)

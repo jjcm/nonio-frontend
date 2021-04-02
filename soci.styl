@@ -128,37 +128,122 @@ button
       &:first-child
         margin-left: 0
 #user
-  padding: 30px 50px
   min-width: 420px
   &[active]
-    display: block
-  header
     display: flex
-    flex-wrap: wrap
+  .sidebar
+    padding: 30px 50px
+    width: 300px
+    min-width: 300px
+    position: relative
+    z-index: 1
+    box-shadow: 1px 0 5px var(--shadow)
+    soci-link
+      display: block
+      width: 100%
+      &:first-child
+        margin-right: 6px
+    soci-button
+      width: 100%
+      margin-bottom: 16px
+      float: none
+      svg
+        margin-right: 4px
+        position: relative
+        top: 1.5px
+  .stats
+    border: 1px solid var(--base-background-subtle)
+    border-radius: 8px
+    .stat
+      display: flex
+      border-bottom: inherit
+      padding: 8px 12px
+    label
+      flex: 1
+      font-weight: 600
+    .value
+      flex: 1
+      text-align: right
+
+  .self-actions 
+    display: flex
   .hero
-    margin-right: 20px
-    flex: 1
-    min-width: 420px
+    margin-bottom: 16px
     .description
       text-align: justify
   soci-user[avatar-only]
-    float: left
-    margin-right: 16px
+    --avatar-size: 220px
+    display: block
+    width: 220px
+    margin: 0 auto 8px
   soci-user[username-only]
     margin-bottom: 8px
+    display: block
+  .content
+    width: 100%
+    background: var(--base-background-bold)
+    height: 100vh
+    overflow: hidden
+    header 
+      background-color: var(--base-background)
+      position: sticky
+      top: 0
+      height: 41px
+      width: 100%
+      z-index: 2
+      display: block
+      padding: 0 12px
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      box-shadow: 0 1px 2px var(--shadow)
+      justify-content: space-between
+
+      .types,
+      .sorts
+        display: flex
+      .type,
+      .sort
+        text-transform: capitalize
+        position: relative
+        padding: 6px 12px
+        cursor: pointer
+        font-weight: 500
+        font-size: 12px
+        line-height: 18px
+        position: relative
+        z-index: 2
+        color: var(--base-text-subtle)
+        &:hover
+          color: var(--base-text-subtle-hover)
+
+        &[selected]
+          opacity: 1
+          color: var(--brand-text-bold)
+
+          &::after
+            content:''
+            display: block
+            position: absolute
+            top: 34px
+            left: calc(50% - 8px)
+            width: 16px
+            height: 3px
+            border-radius: 0 0 2px 2px
+            background: var(--base-background)
+            box-shadow: 0 1px 1px var(--shadow)
+    .inner-content
+      height: 100%
+      overflow-y: auto
+
+#admin-financials,
+#admin-settings
+  .container
+    padding: 30px 50px
   soci-input
     border: 1px solid var(--base-background-subtle)
     border-radius: 3px
     min-height: 240px
-  .stats
-    margin-top: 40px
-    .stat
-      white-space: nowrap
-      margin-right: 12px
-      &:last-child
-        margin-right: 0
-    label
-      font-weight: 600
   .blocks
     display: flex
     flex-wrap: wrap
@@ -214,13 +299,6 @@ button
       margin-right: 0
   h2
     margin-top: 0
-  .content
-    display: flex
-    soci-post-list
-      padding: 0
-    soci-tab-group
-      width: 100%
-      margin-top: 12px
 
 @media screen and (max-width: 968px) 
   #user .stats

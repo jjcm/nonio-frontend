@@ -33,6 +33,7 @@ export default class SociQuillView extends HTMLElement {
   }
 
   render(ops){
+    this._ops = ops
     this.innerHTML = ''
     try {
       if(typeof ops == 'string') ops = JSON.parse(ops)
@@ -137,4 +138,11 @@ export default class SociQuillView extends HTMLElement {
     }
   }
 
+  set value(val) {
+    this.render(val)
+  }
+
+  get value(){
+    return this._ops
+  }
 }
