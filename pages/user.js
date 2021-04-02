@@ -40,10 +40,6 @@ let user = {
   showPersonalControls: () => {
 
   },
-  checkFinancials: async () => {
-    let response = await soci.getData('user/get-financials')
-    document.querySelector('#user .profit h1').innerHTML = `$${Number.parseFloat(response.cash).toPrecision(3)}`
-  },
   checkInfo: async () => {
     let username = document.location.pathname.slice(6)
     let response = await soci.getData(`users/${username}`)
