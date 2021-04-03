@@ -170,7 +170,9 @@ button
       text-align: right
 
   .self-actions 
-    display: flex
+    display: none
+    &[active]
+      display: flex
   .hero
     margin-bottom: 16px
     .description
@@ -179,6 +181,9 @@ button
     --avatar-size: 220px
     display: block
     width: 220px
+    height: 220px
+    background: var(--base-background-subtle)
+    border-radius: 50%
     margin: 0 auto 8px
   soci-user[username-only]
     margin-bottom: 8px

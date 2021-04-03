@@ -38,7 +38,7 @@ let user = {
     }
   },
   showPersonalControls: () => {
-
+    user.dom.querySelector('.self-actions').toggleAttribute('active', true)
   },
   checkInfo: async () => {
     let username = document.location.pathname.slice(6)
@@ -46,7 +46,7 @@ let user = {
 
     for (var property in response){
       let dom = user.dom.querySelector(`.sidebar [value="${property}"]`)
-      if(property == 'description') dom.value = response[property]
+      if(property == 'description' && response[property] != '') dom.value = response[property]
       else dom.innerHTML = response[property]
     }
   }

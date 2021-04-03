@@ -10,6 +10,13 @@ export default class SociCommentList extends SociComponent {
       :host {
         display: block;
         padding: 2px 8px;
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      :host([loaded]) {
+        transform: translateY(0);
+        opacity: 1;
+        transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
       content {
         display: block;
@@ -32,17 +39,18 @@ export default class SociCommentList extends SociComponent {
     return ['user']
   }
 
-  attributeChangedCallback(name, oldValue, newValue){
+  async attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'user':
-        this.renderComments(newValue)
+        this.toggleAttribute('loaded', false)
+        let comments = await this.getData('/comments/user/' + newValue)
+        if(comments.comments) this.renderComments(comments.comments)
+        this.toggleAttribute('loaded', true)
         break
     }
   }
 
-  async renderComments(username){
-    let comments = await this.getData('/comments/user/' + username)
-    comments = comments.comments
+  async renderComments(comments){
     /* TODO
     let votes = await this.getData('/comment-votes/user/' + username, this.authToken)
     votes = votes.votes

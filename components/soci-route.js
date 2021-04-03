@@ -64,10 +64,14 @@ export default class SociRouter extends SociComponent {
   }
 
   activate(fresh){
-    if(this.hasAttribute('active')) return 0
+    fresh = fresh || this.hasAttribute('fresh')
+    if(this.hasAttribute('active')) {
+      if(!fresh) return 0
+      else this.removeAttribute('active')
+    }
     // If fresh is true, we load a fresh copy of the route. Otherwise we load
     // the previous state.
-    if(fresh || this.hasAttribute('fresh')) this.innerHTML = this.domCopy
+    if(fresh) this.innerHTML = this.domCopy
     else this._attachChildren()
 
     // Very briefly add the activating class, followed immediately by the active

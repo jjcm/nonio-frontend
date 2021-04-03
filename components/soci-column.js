@@ -190,7 +190,8 @@ export default class SociColumn extends SociComponent {
               <soci-option value="all">Top - All Time</soci-option>
             </soci-select>
             <sorts @click=_sortBarClick>
-              <sort selected>popular</sort>
+              <sort>popular</sort>
+              <sort selected>new</sort>
               <sort>week</sort>
               <sort>month</sort>
               <sort>year</sort>
@@ -235,13 +236,16 @@ export default class SociColumn extends SociComponent {
     this._ro.observe(this)
 
     let posts = document.createElement('soci-post-list')
+    /*
     let hash = window.location.hash.substr(1)
     if(hash.match(/all|images|videos|blogs/) || hash == '') posts.setAttribute('data', `/posts`)
     else posts.setAttribute('data', `/posts?tag=${hash}`)
+    */
 
     posts.setAttribute('slot', 'posts')
     posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
+    this.sortPosts('new')
   }
 
   disconnectedCallback(){
@@ -264,13 +268,8 @@ export default class SociColumn extends SociComponent {
         newValue = decodeURIComponent(newValue)
         this.select('#tag-title').innerHTML = newValue
         document.querySelector('soci-sidebar').activateTag(newValue)
-        let special = newValue.match(/all|images|videos|blogs/)
-        if(special){
-          this.querySelector('soci-post-list')?.setAttribute('data', `/posts`)
-          this.setAttribute('filter', newValue)
-        }
-        else 
-          this.querySelector('soci-post-list')?.setAttribute('data', `/posts?tag=${newValue}`)
+        if(newValue.match(/all|images|videos|blogs/)) this.setAttribute('filter', newValue)
+        this.sortPosts('new')
         break
       case 'subscribers':
         let subs = newValue || 0
