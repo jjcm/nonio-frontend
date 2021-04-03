@@ -20,6 +20,7 @@ export default class SociRouter {
   }
 
   route(path, fresh){
+    console.log(fresh)
     document.querySelectorAll('soci-route').forEach(route=>{
       if(route.test()){
         route.activate(fresh)

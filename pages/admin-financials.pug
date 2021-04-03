@@ -1,12 +1,12 @@
 #admin-financials-container.container
   script(src="/pages/admin-financials.js")
   .blocks
-    .block.profit
+    .block.profit(load-order="primary")
       h2 Post Profit
       h1 $
       .actions
         button withdrawal
-    .block.billing
+    .block.billing(load-order="secondary")
       h2 Billing Info
       p Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.
       form
@@ -18,7 +18,7 @@
         .actions
           button save
           button(class="cancel") cancel
-    .block.bank
+    .block.bank(load-order="secondary")
       h2 Withdrawl Location
       p This is the account that money will be deposited in once you choose to withdrawl your post profit.
       form.change-password
