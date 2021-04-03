@@ -181,8 +181,8 @@ export default class SociColumn extends SociComponent {
         <content>
           <header>
             <soci-select id="sort-select">
-              <soci-option slot="selected">Popular</soci-option>
-              <soci-option value="new">New</soci-option>
+              <soci-option value="popular">Popular</soci-option>
+              <soci-option slot="selected" value="new">New</soci-option>
               <soci-option value="day">Top - Day</soci-option>
               <soci-option value="week">Top - Week</soci-option>
               <soci-option value="month">Top - Month</soci-option>
@@ -236,12 +236,6 @@ export default class SociColumn extends SociComponent {
     this._ro.observe(this)
 
     let posts = document.createElement('soci-post-list')
-    /*
-    let hash = window.location.hash.substr(1)
-    if(hash.match(/all|images|videos|blogs/) || hash == '') posts.setAttribute('data', `/posts`)
-    else posts.setAttribute('data', `/posts?tag=${hash}`)
-    */
-
     posts.setAttribute('slot', 'posts')
     posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
@@ -318,7 +312,7 @@ export default class SociColumn extends SociComponent {
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
     this._updateBar(this.select('sorts'), sort)
-    this.querySelector('soci-post-list').setAttribute('data', '/posts' + paramString)
+    this.querySelector('soci-post-list')?.setAttribute('data', '/posts' + paramString)
   }
 
   filterPosts(filter){
