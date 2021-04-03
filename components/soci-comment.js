@@ -377,7 +377,7 @@ export default class SociComment extends SociComponent {
   }
 
   get url(){
-    return this.closest('soci-comment-list').getAttribute('url')
+    return this.closest('[url]').getAttribute('url')
   }
 
   factory(user, score, lineageScore, date, id, content){
