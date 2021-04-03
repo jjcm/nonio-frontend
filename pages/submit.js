@@ -9,10 +9,17 @@ let submit = {
 
     let title = document.querySelector('#submit input[name="title"]')
     title.setCustomValidity("A title is required.")
+    title.addEventListener('keydown', submit.checkTitleValidity)
     title.focus()
 
     submit.submitButton = document.querySelector('#submit soci-button')
     submit.submitButton.addEventListener('click', submit.submit)
+  },
+  checkTitleValidity(e) {
+    setTimeout(()=>{
+      if(e.target.value.length) e.target.setCustomValidity('')
+      else e.target.setCustomValidity("A title is required.")
+    }, 1)
   },
   async submit(e) {
     if(submit.form.reportValidity()){
