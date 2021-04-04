@@ -1,5 +1,7 @@
 let user = {
   dom: document.currentScript.closest('soci-route'),
+  sort: 'top',
+  type: 'posts',
   init: () => {
     soci.registerPage(user)
   },
@@ -16,26 +18,41 @@ let user = {
 
     let myPosts = document.querySelector('#user soci-post-list')
     myPosts.setAttribute('data', `/posts?user=${username}`)
-    //document.querySelector('#user .password soci-button').addEventListener('click', user.changePassword)
-    //document.querySelector('#user soci-tab[name="Financials"]').addEventListener('tabactivate', user.checkFinancials)
-
     user.dom.querySelector('header').addEventListener('click', user.tabClick)
 
     user.checkInfo()
   },
   tabClick: e => {
-    if(e.target.className == 'type') {
+    if(e.target.className.match(/type|sort/)){
       let container = user.dom.querySelector('.inner-content')
       let username = document.location.pathname.slice(6)
       e.target.parentElement.querySelector('[selected]').removeAttribute('selected')
       e.target.toggleAttribute('selected', true)
-      if(e.target.innerHTML == 'Posts') {
-        container.innerHTML = `<soci-post-list data="/posts?user=${username}"></soci-post-list>`
+      user[e.target.className] = e.target.innerHTML.toLowerCase()
+      /*
+      if(e.target.className == 'type') {
+        if(e.target.innerHTML == 'Posts') {
+          //container.innerHTML = `<soci-post-list data="/posts?user=${username}"></soci-post-list>`
+        }
+        else {
+          container.innerHTML = `<soci-user-comment-list user="${username}"></soci-post-list>`
+        }
       }
-      else {
-        container.innerHTML = `<soci-user-comment-list user="${username}"></soci-post-list>`
+      if(e.target.className == 'sort') {
+        user.contentSort = e.target.innerHTML.toLowerCase()
+        console.log(user.contentSort)
       }
+      */
+      let params = `data="/${user.type}?user=${username}&sort=${user.sort}"`
+
+      if(user.type == "posts")
+        container.innerHTML = `<soci-post-list ${params}></soci-post-list>`
+      else 
+        container.innerHTML = `<soci-user-comment-list ${params}></soci-user-comment-list>`
     }
+  },
+  setContents: () => {
+
   },
   showPersonalControls: () => {
     user.dom.querySelector('.self-actions').toggleAttribute('active', true)
