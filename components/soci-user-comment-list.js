@@ -42,19 +42,15 @@ export default class SociCommentList extends SociComponent {
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'data':
-        this.toggleAttribute('loaded', false)
-        let data = await this.getData(newValue, this.authToken)
-        if(data.comments) this.renderComments(data.comments)
-        this.toggleAttribute('loaded', true)
+        this.renderComments(newValue)
         break
     }
   }
 
-  async renderComments(comments){
-    /* TODO
-    let votes = await this.getData('/comment-votes/user/' + username, this.authToken)
-    votes = votes.votes
-    */
+  async renderComments(path){
+    this.toggleAttribute('loaded', false)
+    let comments = await this.getData(path, this.authToken)
+    comments = comments.comments
 
     comments.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')
@@ -62,11 +58,14 @@ export default class SociCommentList extends SociComponent {
       this.appendChild(newComment)
     })
 
-    /* TODO
+    this.toggleAttribute('loaded', true)
+
+    let votes = await this.getData(path.replace(/^\/comments/, '/comment-votes'), this.authToken)
+    votes = votes.commentVotes
+
     votes.forEach(vote => {
       let comment = this.querySelector(`soci-comment[comment-id="${vote.comment_id}`)
       comment.showVote(vote.upvote)
     })
-    */
   }
 }
