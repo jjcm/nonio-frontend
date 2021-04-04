@@ -166,7 +166,7 @@ export default class SociCommentList extends SociComponent {
   }
 
   async renderComments(url){
-    let comments = await this.getData('/comments/post/' + url)
+    let comments = await this.getData('/comments?post=' + url)
     comments = comments.comments
     let votes = await this.getData('/comment-votes/post/' + url, this.authToken)
     votes = votes.votes

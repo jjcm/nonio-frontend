@@ -36,15 +36,15 @@ export default class SociCommentList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['user']
+    return ['data']
   }
 
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'user':
+      case 'data':
         this.toggleAttribute('loaded', false)
-        let comments = await this.getData('/comments/user/' + newValue)
-        if(comments.comments) this.renderComments(comments.comments)
+        let data = await this.getData(newValue, this.authToken)
+        if(data.comments) this.renderComments(data.comments)
         this.toggleAttribute('loaded', true)
         break
     }
