@@ -242,6 +242,9 @@ export default class SociTagGroup extends SociComponent {
           input.value = input.value + '-'
       }, 1)
     }
+    else if (e.key == '#') {
+      e.preventDefault()
+    }
   }
 
   _tagVoted(e){
