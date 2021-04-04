@@ -303,6 +303,7 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.toggleAttribute('loaded', false)
     this.getData('/posts/' + url).then(post => {
+      document.title = post['title']
       for(let key in post) {
         switch(key){
           case 'content':

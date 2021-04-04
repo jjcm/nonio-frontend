@@ -4,7 +4,7 @@ let adminFinancials = {
     soci.registerPage(adminFinancials)
   },
   onActivate: () => {
-    document.title = "Your Financials"
+    document.title = "Nonio - Your Financials"
     adminFinancials.checkFinancials()
   },
   onDeactivate: () => {

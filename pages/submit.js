@@ -7,6 +7,7 @@ let submit = {
   onActivate() {
     submit.form = document.querySelector('#submit form')
 
+    document.title = 'Submit post to Nonio'
     let title = document.querySelector('#submit input[name="title"]')
     title.setCustomValidity("A title is required.")
     title.addEventListener('keydown', submit.checkTitleValidity)

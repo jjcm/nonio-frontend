@@ -4,7 +4,7 @@ let adminSettings = {
     soci.registerPage(adminSettings)
   },
   onActivate: () => {
-    document.title = "Profile Settings"
+    document.title = 'Nonio - Settings'
 
     adminSettings.dom.querySelector('.description soci-button').addEventListener('click', adminSettings.changeDescription)
     adminSettings.dom.querySelector('.password soci-button').addEventListener('click', adminSettings.changePassword)

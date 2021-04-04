@@ -7,6 +7,7 @@ let user = {
   },
   onActivate: () => {
     let username = document.location.pathname.slice(6)
+    document.title = 'Overview for ' + username
 
     document.querySelectorAll('#user soci-user').forEach(user => {
       user.setAttribute('name', username)

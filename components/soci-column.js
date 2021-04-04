@@ -257,10 +257,12 @@ export default class SociColumn extends SociComponent {
         break
       case 'filter':
         this.filterPosts(newValue)
+        this.updateTitle()
         break
       case 'tag':
         newValue = decodeURIComponent(newValue)
         this.select('#tag-title').innerHTML = newValue
+        this.updateTitle()
         document.querySelector('soci-sidebar').activateTag(newValue)
         if(newValue.match(/all|images|videos|blogs/)) this.setAttribute('filter', newValue)
         this.sortPosts('new')
@@ -270,6 +272,15 @@ export default class SociColumn extends SociComponent {
         this.select('subscribers').innerHTML = subs + ' subscribers'
         break
     }
+  }
+
+  updateTitle(){
+    let filter = this.filter
+    if(!filter || filter == 'all') filter = 'Posts'
+    else filter = filter.charAt(0).toUpperCase() + filter.slice(1)
+    if(this.tag == 'all') document.title = 'All posts'
+    else if(this.tag?.match(/images|videos|blogs|audio|html/)) document.title = 'All ' + this.tag
+    else document.title = filter + ' in #' + this.getAttribute('tag')
   }
 
   get tag(){
