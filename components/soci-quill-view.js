@@ -35,6 +35,8 @@ export default class SociQuillView extends HTMLElement {
   render(ops){
     this._ops = ops
     this.innerHTML = ''
+    if(ops == '') return this.style.display = 'none'
+    else this.style.display = ''
     try {
       if(typeof ops == 'string') ops = JSON.parse(ops)
       ops = ops.ops

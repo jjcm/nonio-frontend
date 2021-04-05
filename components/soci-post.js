@@ -102,7 +102,7 @@ export default class SociPost extends SociComponent {
       #details {
         margin: 0 auto;
         box-sizing: border-box;
-        padding: 12px 18px 24px;
+        padding: 12px 18px;
         position: sticky;
         top: 0;
       }
@@ -155,14 +155,17 @@ export default class SociPost extends SociComponent {
       }
 
        slot[name="description"] {
-        margin-top: 12px;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      ::slotted(soci-quill-view){
+        margin: 12px 0;
+        border: 1px solid var(--base-background-subtle);
+        border-radius: 4px;
         line-height: 1.5;
         display: block;
         padding: 8px;
-        border: 1px solid var(--base-background-subtle);
-        border-radius: 4px;
-        opacity: 0;
-        transform: translateY(20px);
       }
 
       :host([type="blog"]) slot[name="description"] {
