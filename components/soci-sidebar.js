@@ -347,7 +347,7 @@ export default class SociSidebar extends SociComponent {
         <h2>Login to your account</h2>
         <slot name="login">
         </slot>
-        <soci-link #create href="/user/create" @click=_createAccount>create account</soci-link>
+        <soci-link #create href="/admin/create-account" @click=_createAccount>create account</soci-link>
       </panel>
       <panel id="create">
         <h2>Essentials</h2>
@@ -555,6 +555,8 @@ export default class SociSidebar extends SociComponent {
       this._loadSubscribedTags()
       this._loadCommonTags()
       setTimeout(()=>{
+        window.history.pushState(null, null, '/#all')
+        window.dispatchEvent(new CustomEvent('link'))
         this._populateTags()
         this.select('#logout').innerHTML = "Logout"
         this.toggleAttribute('create')

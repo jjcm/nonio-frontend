@@ -30,10 +30,10 @@ html(lang="en")
       include pages/tags.pug
     soci-route#home(test="both" path="^/$")
       include pages/home.pug
+    soci-route#admin-create(path="/admin/create-account")
+      include pages/admin-create.pug
     soci-route#user(test="both" path="^/user/" fresh)
       include pages/user.pug
-    soci-route#user-create(path="/user/create")
-      include pages/user-create.pug
     //soci-route#blog(path="/blog-test")
       include pages/blog-test.pug
     soci-route#submit(path="/submit")
