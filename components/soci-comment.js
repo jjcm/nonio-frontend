@@ -508,7 +508,7 @@ export default class SociComment extends SociComponent {
       if(res.id){
         //this.select('#submit').success()
         let comment = document.createElement('soci-comment')
-        comment = comment.factory(res.user, 0, 0, res.date, res.id, res.content)
+        comment = comment.factory(res.user, 0, 0, Date.now(), res.id, res.content)
         comment.prependToElement(this)
         setTimeout(() => {
           this._cancelReply()
