@@ -61,7 +61,7 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
       }
       soci-input {
-        min-height: 82px;
+        --min-height: 82px;
         border: 1px solid var(--base-background-subtle);
         border-radius: 4px;
         margin: 2px auto 20px;
@@ -74,8 +74,7 @@ export default class SociCommentList extends SociComponent {
         margin: 0 auto;
       }
       comment-input[active] soci-input {
-        min-height: 200px;
-        padding-bottom: 40px;
+        --min-height: 200px;
         margin-bottom: 8px;
       }
       button-container {
@@ -134,11 +133,13 @@ export default class SociCommentList extends SociComponent {
 
   _onFocus(){
     this.select('comment-input').toggleAttribute('active', true)
+    this.select('soci-input').toggleAttribute('active', true)
   }
 
   cancelComment(){
     this.select('soci-input').clear()
     this.select('comment-input').toggleAttribute('active', false)
+    this.select('soci-input').toggleAttribute('active', false)
   }
 
   _filter(e){

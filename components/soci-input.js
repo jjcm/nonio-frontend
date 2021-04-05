@@ -13,10 +13,11 @@ export default class SociInput extends SociComponent {
 
     let css = `
       :host {
+        --min-height: 0;
+        min-height: var(--min-height);
         position: relative;
         display: flex;
-        flex-direction: column;
-        transition: min-height 0.1s ease-out, padding 0.1s ease-out;
+        transition: padding 0.1s ease-out;
         padding-bottom: 0px;
         box-sizing: border-box;
       }
@@ -32,7 +33,6 @@ export default class SociInput extends SociComponent {
       }
       .ql-container {
         box-sizing: border-box;
-        height: 100%;
         margin: 0px;
         position: relative;
       }
@@ -56,7 +56,8 @@ export default class SociInput extends SociComponent {
       .ql-editor {
         box-sizing: border-box;
         line-height: 1.42;
-        height: 100%;
+        min-height: var(--min-height);
+        transition: min-height 0.1s ease-out;
         outline: none;
         overflow-y: auto;
         padding: 12px 15px;

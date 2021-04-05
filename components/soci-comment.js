@@ -255,7 +255,7 @@ export default class SociComment extends SociComponent {
       soci-input:not([readonly]) {
         border: 1px solid var(--base-background-subtle);
         border-radius: 4px;
-        min-height: 140px;
+        --min-height: 140px;
       }
 
       :host(:not([self])) .user-control {
