@@ -64,7 +64,7 @@ let user = {
 
     for (var property in response){
       let dom = user.dom.querySelector(`.sidebar [value="${property}"]`)
-      if(property == 'description' && response[property] != '') dom.value = response[property]
+      if(property == 'description') dom.value = response[property]
       else dom.innerHTML = response[property]
     }
   }
