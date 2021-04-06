@@ -278,7 +278,14 @@ export default class SociPost extends SociComponent {
     switch(name) {
       case 'post-title':
         document.title = newValue
-        document.head.querySelector('meta[property="og:title"]')?.setAttribute('content', newValue)
+        let meta = document.head.querySelector('meta[property="og:title"]')
+        if(meta) meta.setAttribute('content', newValue)
+        else {
+          meta = document.createElement('meta')
+          meta.setAttribute('property', 'og:title')
+          meta.setAttribute('content', newValue)
+          document.head.appendChild(meta)
+        }
         this.select('h1').innerHTML = newValue
         break
       case 'time':
