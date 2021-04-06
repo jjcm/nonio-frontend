@@ -277,6 +277,8 @@ export default class SociPost extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'post-title':
+        document.title = newValue
+        document.head.querySelector('meta[property="og:title"]')?.setAttribute('content', newValue)
         this.select('h1').innerHTML = newValue
         break
       case 'time':
@@ -306,7 +308,6 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.toggleAttribute('loaded', false)
     this.getData('/posts/' + url).then(post => {
-      document.title = post['title']
       for(let key in post) {
         switch(key){
           case 'content':
