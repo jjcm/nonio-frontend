@@ -6,6 +6,7 @@ var http = require('http')
 var fs = require('fs')
 var path = require('path')
 var pug = require('pug')
+var url = require('url')
 var mime = require('mime-types')
 var stylus = require('stylus')
 var prerender = require('prerender-node')
@@ -39,11 +40,64 @@ var server = http.createServer(function (req, res) {
   }
 
   if(config.PRERENDER_HOST){
+    //console.log(`Showing prerendered page: ${prerender.shouldShowPrerenderedPage(req)}`)
+    if(prerender.shouldShowPrerenderedPage(req)) {
+      console.log(prerender.getPrerenderedPageResponse(req, res => {
+        console.log(res)
+      }))
+    }
     prerender.set("prerenderServiceUrl", config.PRERENDER_HOST)
+    console.log(req.headers['user-agent'])
     prerender(req, res, sociServer)
   }
   else sociServer()
 })
+
+var sss = function(req) {
+  var userAgent = req.headers['user-agent']
+    , bufferAgent = req.headers['x-bufferbot']
+    , isRequestingPrerenderedPage = false;
+
+  if(!userAgent) return false;
+  if(req.method != 'GET' && req.method != 'HEAD') return false;
+  if(req.headers && req.headers['x-prerender']) return false;
+
+  console.log('basic checks passed')
+
+  //if it contains _escaped_fragment_, show prerendered page
+  var parsedQuery = url.parse(req.url, true).query;
+  if(parsedQuery && parsedQuery['_escaped_fragment_'] !== undefined) isRequestingPrerenderedPage = true;
+
+  //if it is a bot...show prerendered page
+  if(prerender.crawlerUserAgents.some(function(crawlerUserAgent){ return userAgent.toLowerCase().indexOf(crawlerUserAgent.toLowerCase()) !== -1;})) isRequestingPrerenderedPage = true;
+  console.log(`it was a crawler? ${isRequestingPrerenderedPage}`)
+
+  //if it is BufferBot...show prerendered page
+  if(bufferAgent) isRequestingPrerenderedPage = true;
+
+  console.log('almost there')
+  //if it is a bot and is requesting a resource...dont prerender
+  if(prerender.extensionsToIgnore.some(function(extension){return req.url.toLowerCase().indexOf(extension) !== -1;})) return false;
+
+  console.log('almost there 2')
+  //if it is a bot and not requesting a resource and is not whitelisted...dont prerender
+  if(Array.isArray(prerender.whitelist) && prerender.whitelist.every(function(whitelisted){return (new RegExp(whitelisted)).test(req.url) === false;})) return false;
+
+  //if it is a bot and not requesting a resource and is not blacklisted(url or referer)...dont prerender
+  console.log('almost there 3')
+  if(Array.isArray(prerender.blacklist) && prerender.blacklist.some(function(blacklisted){
+    var blacklistedUrl = false
+      , blacklistedReferer = false
+      , regex = new RegExp(blacklisted);
+
+    blacklistedUrl = regex.test(req.url) === true;
+    if(req.headers['referer']) blacklistedReferer = regex.test(req.headers['referer']) === true;
+
+    return blacklistedUrl || blacklistedReferer;
+  })) return false;
+
+  return isRequestingPrerenderedPage;
+}
 
 var handler = {
   error: function(req, res, err){

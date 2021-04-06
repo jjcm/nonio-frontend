@@ -2,51 +2,52 @@ html(lang="en")
   title Nonio
   meta(http-equiv="content-type" content="text/html; charset=utf-8")
   link(rel="icon" type="image/svg+xml" href="/lib/favicon.svg")
-  script(src="/soci.js" type="module")
-  script(src="/components/soci-components.js" type="module")
-  //script(src="/blog-components/blog-components.js" type="module")
-  script.
-    let lazyload = (path, parent) => {
-      document.addEventListener('DOMContentLoaded', ()=>{
-        let resource = document.createElement('script')
-        resource.async = 'true'
-        resource.src = path
-        let root = parent ? parent : document.head
-        root.appendChild(resource)
-      })
-    }
-  link(rel="stylesheet" href="/soci-tokens.styl")
-  link(rel="stylesheet" href="/soci.styl")
+  //
+    script(src="/soci.js" type="module")
+    script(src="/components/soci-components.js" type="module")
+    //script(src="/blog-components/blog-components.js" type="module")
+    script.
+      let lazyload = (path, parent) => {
+        document.addEventListener('DOMContentLoaded', ()=>{
+          let resource = document.createElement('script')
+          resource.async = 'true'
+          resource.src = path
+          let root = parent ? parent : document.head
+          root.appendChild(resource)
+        })
+      }
+    link(rel="stylesheet" href="/soci-tokens.styl")
+    link(rel="stylesheet" href="/soci.styl")
 
-  soci-sidebar(loading)
-    div(slot="login")
-      form
-        input(type="email" placeholder="Email address" autocomplete="email")
-        soci-password
-        soci-button(async onclick="this.closest('soci-sidebar').login()") login
-    tags(slot="tags")
-  #pages
-    soci-route#tags(test="both" path="^/#")
-      include pages/tags.pug
-    soci-route#home(test="both" path="^/$")
-      include pages/home.pug
-    soci-route#admin-create(path="/admin/create-account")
-      include pages/admin-create.pug
-    soci-route#user(test="both" path="^/user/" fresh)
-      include pages/user.pug
-    //soci-route#blog(path="/blog-test")
-      include pages/blog-test.pug
-    soci-route#submit(path="/submit")
-      include pages/submit.pug
-    soci-route#admin-financials(path="/admin/financials")
-      include pages/admin-financials.pug
-    soci-route#admin-settings(path="/admin/settings")
-      include pages/admin-settings.pug
-    soci-route#submit(path="/webcomics")
-      include pages/why-webcomics.pug
-    soci-route#post(default fresh)
-      include pages/post.pug
+    soci-sidebar(loading)
+      div(slot="login")
+        form
+          input(type="email" placeholder="Email address" autocomplete="email")
+          soci-password
+          soci-button(async onclick="this.closest('soci-sidebar').login()") login
+      tags(slot="tags")
+    #pages
+      soci-route#tags(test="both" path="^/#")
+        include pages/tags.pug
+      soci-route#home(test="both" path="^/$")
+        include pages/home.pug
+      soci-route#admin-create(path="/admin/create-account")
+        include pages/admin-create.pug
+      soci-route#user(test="both" path="^/user/" fresh)
+        include pages/user.pug
+      //soci-route#blog(path="/blog-test")
+        include pages/blog-test.pug
+      soci-route#submit(path="/submit")
+        include pages/submit.pug
+      soci-route#admin-financials(path="/admin/financials")
+        include pages/admin-financials.pug
+      soci-route#admin-settings(path="/admin/settings")
+        include pages/admin-settings.pug
+      soci-route#submit(path="/webcomics")
+        include pages/why-webcomics.pug
+      soci-route#post(default fresh)
+        include pages/post.pug
 
 
-  script.
-    lazyload('/lib/quill.min.js')
+    script.
+      lazyload('/lib/quill.min.js')
