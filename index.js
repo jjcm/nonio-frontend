@@ -8,31 +8,41 @@ var path = require('path')
 var pug = require('pug')
 var mime = require('mime-types')
 var stylus = require('stylus')
+var prerender = require('prerender-node')
 
 
 var server = http.createServer(function (req, res) {
-  var ext = path.extname(req.url)
-  if(fs.existsSync('.' + req.url)) {
-    switch(ext){
-      case '.pug':
-        handler.pug(req,res)
-        break
-      case '.styl':
-        handler.styl(req,res)
-        break
-      case '':
-        handler.folder(req, res)
-        break
-      default:
-        handler.file(req, res)
-        break
-    }
+
+  var sociServer = () => {
+      var ext = path.extname(req.url)
+      if(fs.existsSync('.' + req.url)) {
+        switch(ext){
+          case '.pug':
+            handler.pug(req,res)
+            break
+          case '.styl':
+            handler.styl(req,res)
+            break
+          case '':
+            handler.folder(req, res)
+            break
+          default:
+            handler.file(req, res)
+            break
+        }
+      }
+      else {
+        console.log(req.method + ' | ' + 'PATH   | ' + req.url)
+        let html = pug.renderFile('index.pug')
+        res.end(html, 'utf-8')
+      }
   }
-  else {
-    console.log(req.method + ' | ' + 'PATH   | ' + req.url)
-    let html = pug.renderFile('index.pug')
-    res.end(html, 'utf-8')
+
+  if(config.PRERENDER_HOST){
+    prerender.set("prerenderServiceUrl", config.PRERENDER_HOST)
+    prerender(req, res, sociServer)
   }
+  else sociServer()
 })
 
 var handler = {

@@ -8,12 +8,12 @@ let submit = {
     submit.form = document.querySelector('#submit form')
 
     document.title = 'Submit post to Nonio'
-    let title = document.querySelector('#submit input[name="title"]')
+    let title = submit.dom.querySelector('input[name="title"]')
     title.setCustomValidity("A title is required.")
     title.addEventListener('input', submit.checkTitleValidity)
     title.focus()
 
-    submit.submitButton = document.querySelector('#submit soci-button')
+    submit.submitButton = submit.dom.querySelector('soci-button')
     submit.submitButton.addEventListener('click', submit.submit)
   },
   checkTitleValidity(e) {
@@ -22,8 +22,8 @@ let submit = {
   async submit(e) {
     if(submit.form.reportValidity()){
       let data = new FormData(submit.form)
-      let type = document.querySelector('#submit soci-tab[active]').getAttribute('name').toLowerCase()
-      let fileUploader = document.querySelector(`#submit soci-${type}-uploader`)
+      let type = submit.dom.querySelector('soci-tab[active]').getAttribute('name').toLowerCase()
+      let fileUploader = submit.dom.querySelector(`soci-${type}-uploader`)
       if(fileUploader){
         let newPath = await fileUploader.move(data.get('url'))
         if(newPath == null) {
