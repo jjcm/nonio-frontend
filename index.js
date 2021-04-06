@@ -39,6 +39,9 @@ var server = http.createServer(function (req, res) {
       }
   }
 
+  sociServer()
+  return 0
+
   if(config.PRERENDER_HOST){
     //console.log(`Showing prerendered page: ${prerender.shouldShowPrerenderedPage(req)}`)
     if(prerender.shouldShowPrerenderedPage(req)) {
