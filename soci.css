@@ -1,0 +1,883 @@
+:root {
+  --n0: #fff;
+  --n1: #f0f4f0;
+  --n2: #d9d9d9;
+  --n3: #7e8b87;
+  --n4: #232f34;
+  --z0: #fff;
+  --z1: #eaebeb;
+  --z2: #d6d7d8;
+  --z3: #c2c3c4;
+  --z4: #aeb0b1;
+  --z5: #696d70;
+  --z6: #3a3e41;
+  --z7: #2b2f33;
+  --z8: #1c2024;
+  --z9: #0d1216;
+  --r3: #c40808;
+  --r2: #fe3434;
+  --r1: #f66;
+  --r0: #ff9b99;
+  --o3: #ff5e24;
+  --o2: #ff7a33;
+  --o1: #ff9c33;
+  --o0: #ffdba8;
+  --y3: #cfc120;
+  --y2: #e6d72d;
+  --y1: #ebeb60;
+  --y0: #f6fac2;
+  --l3: #0e6600;
+  --l2: #129e00;
+  --l1: #3ee029;
+  --l0: #9ef788;
+  --g3: #006636;
+  --g2: #009e57;
+  --g1: #29e08e;
+  --g0: #88f7bc;
+  --t3: #008cb3;
+  --t2: #00bad6;
+  --t1: #00dfeb;
+  --t0: #94fffa;
+  --a3: #0075a3;
+  --a2: #0096db;
+  --a1: #00bcf5;
+  --a0: #80e5ff;
+  --b3: #1357a0;
+  --b2: #1e72d2;
+  --b1: #319ef2;
+  --b0: #8fcafa;
+  --p3: #344598;
+  --p2: #4e5ab7;
+  --p1: #777fda;
+  --p0: #acb0ec;
+  --soci-ease-in: cubic-bezier(1, 0, 0.85, 1);
+  --soci-ease-out: cubic-bezier(0.25, 0, 0, 1);
+  --soci-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --soci-blog-padding: 32px;
+  --soci-blog-width: 920px;
+  --shadow-light: rgba(0,5,5,0.1);
+  --shadow: rgba(0,5,5,0.2);
+  --shadow-dark: rgba(0,5,5,0.3);
+  --base-background: var(--z0);
+  --base-background-hover: var(--base-background);
+  --base-background-active: var(--base-background);
+  --base-background-subtle: var(--base-background);
+  --base-background-subtle-hover: var(--base-background-subtle);
+  --base-background-subtle-active: var(--base-background-subtle);
+  --base-background-bold: var(--base-background);
+  --base-background-bold-hover: var(--base-background-bold);
+  --base-background-bold-active: var(--base-background-bold);
+  --base-background-inverse: var(--base-background);
+  --base-background-inverse-hover: var(--base-background-inverse);
+  --base-background-inverse-active: var(--base-background-inverse);
+  --base-text: #000;
+  --base-text-hover: var(--base-text);
+  --base-text-active: var(--base-text);
+  --base-text-subtle: var(--base-text);
+  --base-text-subtle-hover: var(--base-text-subtle);
+  --base-text-subtle-active: var(--base-text-subtle);
+  --base-text-bold: var(--base-text);
+  --base-text-bold-hover: var(--base-text-bold);
+  --base-text-bold-active: var(--base-text-bold);
+  --base-text-inverse: var(--base-text);
+  --base-text-inverse-hover: var(--base-text-inverse);
+  --base-text-inverse-active: var(--base-text-inverse);
+  --brand-background: var(--b1);
+  --brand-background-hover: var(--brand-background);
+  --brand-background-active: var(--brand-background);
+  --brand-background-subtle: var(--brand-background);
+  --brand-background-subtle-hover: var(--brand-background-subtle);
+  --brand-background-subtle-active: var(--brand-background-subtle);
+  --brand-background-bold: var(--brand-background);
+  --brand-background-bold-hover: var(--brand-background-bold);
+  --brand-background-bold-active: var(--brand-background-bold);
+  --brand-background-inverse: var(--brand-background);
+  --brand-background-inverse-hover: var(--brand-background-inverse);
+  --brand-background-inverse-active: var(--brand-background-inverse);
+  --brand-text: var(--b3);
+  --brand-text-hover: var(--brand-text);
+  --brand-text-active: var(--brand-text);
+  --brand-text-subtle: var(--brand-text);
+  --brand-text-subtle-hover: var(--brand-text-subtle);
+  --brand-text-subtle-active: var(--brand-text-subtle);
+  --brand-text-bold: var(--brand-text);
+  --brand-text-bold-hover: var(--brand-text-bold);
+  --brand-text-bold-active: var(--brand-text-bold);
+  --brand-text-inverse: var(--brand-text);
+  --brand-text-inverse-hover: var(--brand-text-inverse);
+  --brand-text-inverse-active: var(--brand-text-inverse);
+  --success-background: var(--g1);
+  --success-background-hover: var(--success-background);
+  --success-background-active: var(--success-background);
+  --success-background-subtle: var(--success-background);
+  --success-background-subtle-hover: var(--success-background-subtle);
+  --success-background-subtle-active: var(--success-background-subtle);
+  --success-background-bold: var(--success-background);
+  --success-background-bold-hover: var(--success-background-bold);
+  --success-background-bold-active: var(--success-background-bold);
+  --success-background-inverse: var(--success-background);
+  --success-background-inverse-hover: var(--success-background-inverse);
+  --success-background-inverse-active: var(--success-background-inverse);
+  --success-text: var(--g3);
+  --success-text-hover: var(--success-text);
+  --success-text-active: var(--success-text);
+  --success-text-subtle: var(--success-text);
+  --success-text-subtle-hover: var(--success-text-subtle);
+  --success-text-subtle-active: var(--success-text-subtle);
+  --success-text-bold: var(--success-text);
+  --success-text-bold-hover: var(--success-text-bold);
+  --success-text-bold-active: var(--success-text-bold);
+  --success-text-inverse: var(--success-text);
+  --success-text-inverse-hover: var(--success-text-inverse);
+  --success-text-inverse-active: var(--success-text-inverse);
+  --error-background: var(--r1);
+  --error-background-hover: var(--error-background);
+  --error-background-active: var(--error-background);
+  --error-background-subtle: var(--error-background);
+  --error-background-subtle-hover: var(--error-background-subtle);
+  --error-background-subtle-active: var(--error-background-subtle);
+  --error-background-bold: var(--error-background);
+  --error-background-bold-hover: var(--error-background-bold);
+  --error-background-bold-active: var(--error-background-bold);
+  --error-background-inverse: var(--error-background);
+  --error-background-inverse-hover: var(--error-background-inverse);
+  --error-background-inverse-active: var(--error-background-inverse);
+  --error-text: var(--r3);
+  --error-text-hover: var(--error-text);
+  --error-text-active: var(--error-text);
+  --error-text-subtle: var(--error-text);
+  --error-text-subtle-hover: var(--error-text-subtle);
+  --error-text-subtle-active: var(--error-text-subtle);
+  --error-text-bold: var(--error-text);
+  --error-text-bold-hover: var(--error-text-bold);
+  --error-text-bold-active: var(--error-text-bold);
+  --error-text-inverse: var(--error-text);
+  --error-text-inverse-hover: var(--error-text-inverse);
+  --error-text-inverse-active: var(--error-text-inverse);
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --base-background: var(--z0);
+    --base-background-hover: var(--z1);
+    --base-background-subtle: var(--z1);
+    --base-background-subtle-hover: var(--z2);
+    --base-background-inverse: var(--z5);
+    --base-background-bold: var(--z1);
+    --base-text: var(--z8);
+    --base-text-subtle: var(--z5);
+    --base-text-subtle-hover: var(--z8);
+    --base-text-bold: var(--z9);
+    --base-text-inverse: var(--z0);
+    --brand-background: var(--b2);
+    --brand-background-hover: var(--b3);
+    --brand-background-bold: var(--b3);
+    --brand-background-subtle: rgba(19,87,160,0.125);
+    --brand-background-subtle-hover: rgba(19,87,160,0.188);
+    --brand-text: var(--b2);
+    --brand-text-hover: var(--b3);
+    --brand-text-bold: var(--b3);
+    --success-background: var(--g2);
+    --success-text: var(--g1);
+    --error-background: var(--r2);
+    --error-text: var(--r2);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --base-background: var(--z8);
+    --base-background-hover: var(--z7);
+    --base-background-subtle: var(--z7);
+    --base-background-subtle-hover: var(--z6);
+    --base-background-inverse: var(--z3);
+    --base-background-bold: var(--z9);
+    --base-text: var(--z2);
+    --base-text-subtle: var(--z4);
+    --base-text-subtle-hover: var(--z2);
+    --base-text-bold: var(--z0);
+    --base-text-inverse: var(--z8);
+    --brand-background: var(--b1);
+    --brand-background-hover: var(--b0);
+    --brand-background-bold: var(--b0);
+    --brand-background-subtle: rgba(19,87,160,0.188);
+    --brand-background-subtle-hover: rgba(19,87,160,0.251);
+    --brand-text: var(--b1);
+    --brand-text-hover: var(--b0);
+    --brand-text-bold: var(--b0);
+    --success-background: var(--g1);
+    --success-text: var(--g1);
+    --error-background: var(--r1);
+    --error-text: var(--r1);
+    --shadow-light: rgba(0,5,5,0.25);
+    --shadow: rgba(0,5,5,0.8);
+    --shadow-dark: rgba(0,5,5,0.6);
+  }
+}
+body {
+  margin: 0;
+  display: flex;
+  background: var(--base-background);
+  scrollbar-width: none;
+  font-size: 14px;
+}
+body[dragging] {
+  user-select: none;
+}
+input,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  color: var(--base-text);
+}
+input:-internal-autofill-selected,
+input:-webkit-autofill {
+  background: var(--base-background) !important;
+  color: var(--base-text);
+}
+h1:first-child {
+  margin-top: 0;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  margin-bottom: 0.5em;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+  font-weight: 400;
+}
+h3 {
+  font-size: 1.17em;
+}
+p {
+  margin: 0;
+}
+p + h1,
+p + h2,
+p + h3 {
+  margin-top: 1em;
+}
+a {
+  color: var(--brand-text);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--brand-text-hover);
+}
+button {
+  border: 0;
+  border-radius: 3px;
+  background: var(--brand-background);
+  height: 20px;
+  color: var(--base-text-inverse);
+  padding: 0 8px;
+  font-size: 12px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+button.cancel {
+  background: var(--base-background-subtle);
+  color: var(--base-text-subtle);
+}
+button.cancel:hover {
+  background: var(--base-background-subtle-hover);
+  color: var(--base-text-subtle-hover);
+}
+button:hover {
+  background: var(--brand-background-hover);
+}
+button:active {
+  filter: brightness(0.9);
+  outline: 0;
+}
+button:focus {
+  outline: var(--brand-background-bold) auto 2px;
+}
+#pages {
+  height: 100vh;
+  width: calc(100vw - 280px);
+  position: relative;
+  margin-left: 280px;
+}
+#pages:before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 280px;
+  height: 100vh;
+  width: 30px;
+  background: linear-gradient(90deg, var(--shadow) 0px, var(--shadow-light) 1px, transparent 4px);
+  z-index: 11;
+  pointer-events: none;
+}
+#home svg {
+  color: var(--brand-text);
+}
+#home .other-platforms-illustration {
+  width: 100%;
+  height: 300px;
+  border-radius: 3px;
+  background: var(--base-background-subtle);
+}
+#home #home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 36px;
+}
+#home .header {
+  display: flex;
+  align-items: center;
+}
+#home .header .dash {
+  width: 100%;
+  height: 2px;
+  background: var(--base-text-subtle);
+  margin-left: 20px;
+}
+#home .header h1 {
+  margin: 0;
+  margin-left: 20px;
+  white-space: nowrap;
+  transform: translateY(-2px);
+}
+#home .header svg {
+  min-width: 200px;
+}
+#home .columns {
+  display: flex;
+}
+#home .columns .image {
+  width: 100%;
+  height: 200px;
+  border-radius: 3px;
+  background: var(--base-background-subtle);
+}
+#home .columns .column {
+  width: 100%;
+  margin-left: 20px;
+}
+#home .columns .column:first-child {
+  margin-left: 0;
+}
+#user {
+  min-width: 420px;
+  overflow: hidden;
+}
+#user[active] {
+  display: flex;
+}
+#user .sidebar {
+  padding: 30px 46px 30px 50px;
+  border-right: 4px solid var(--base-background);
+  box-sizing: border-box;
+  overflow-y: auto;
+  width: 400px;
+  min-width: 400px;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  box-shadow: 1px 0 5px var(--shadow);
+}
+#user .sidebar soci-link {
+  display: block;
+  width: 100%;
+}
+#user .sidebar soci-link:first-child {
+  margin-right: 6px;
+}
+#user .sidebar soci-button {
+  width: 100%;
+  margin-bottom: 16px;
+  float: none;
+}
+#user .sidebar soci-button svg {
+  margin-right: 4px;
+  position: relative;
+  top: 1.5px;
+}
+#user .stats {
+  border: 1px solid var(--base-background-subtle);
+  border-radius: 8px;
+}
+#user .stats .stat {
+  display: flex;
+  border-bottom: inherit;
+  padding: 8px 12px;
+}
+#user .stats label {
+  flex: 1;
+  font-weight: 600;
+}
+#user .stats .value {
+  flex: 1;
+  text-align: right;
+}
+#user .self-actions {
+  display: none;
+}
+#user .self-actions[active] {
+  display: flex;
+}
+#user .hero {
+  margin-bottom: 16px;
+}
+#user .hero .description {
+  text-align: justify;
+}
+#user soci-user[avatar-only] {
+  --avatar-size: 220px;
+  display: block;
+  width: 220px;
+  height: 220px;
+  background: var(--base-background-subtle);
+  border-radius: 50%;
+  margin: 0 auto 8px;
+}
+#user soci-user[username-only] {
+  margin-bottom: 8px;
+  display: block;
+}
+#user .content {
+  width: 100%;
+  background: var(--base-background-bold);
+  height: 100vh;
+  overflow: hidden;
+}
+#user .content header {
+  background-color: var(--base-background);
+  position: sticky;
+  top: 0;
+  height: 41px;
+  width: 100%;
+  z-index: 2;
+  display: block;
+  padding: 0 12px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px var(--shadow);
+  justify-content: space-between;
+  user-select: none;
+}
+#user .content header .types,
+#user .content header .sorts {
+  display: flex;
+}
+#user .content header .type,
+#user .content header .sort {
+  text-transform: capitalize;
+  position: relative;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  position: relative;
+  z-index: 2;
+  color: var(--base-text-subtle);
+}
+#user .content header .type:hover,
+#user .content header .sort:hover {
+  color: var(--base-text-subtle-hover);
+}
+#user .content header .type[selected],
+#user .content header .sort[selected] {
+  opacity: 1;
+  color: var(--brand-text-bold);
+}
+#user .content header .type[selected]::after,
+#user .content header .sort[selected]::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 34px;
+  left: calc(50% - 8px);
+  width: 16px;
+  height: 3px;
+  border-radius: 0 0 2px 2px;
+  background: var(--base-background);
+  box-shadow: 0 1px 1px var(--shadow);
+}
+#user .content .inner-content {
+  height: 100%;
+  overflow-y: auto;
+}
+#admin-financials .container,
+#admin-settings .container {
+  padding: 24px 50px;
+}
+#admin-financials soci-input,
+#admin-settings soci-input {
+  border: 1px solid var(--base-background-subtle);
+  border-radius: 3px;
+  --min-height: 240px;
+}
+#admin-financials .blocks,
+#admin-settings .blocks {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% + 40px);
+}
+#admin-financials .blocks .block,
+#admin-settings .blocks .block {
+  min-width: 240px;
+  width: 100%;
+  flex: 1;
+  margin-right: 40px;
+  margin-bottom: 20px;
+}
+#admin-financials .blocks .block.avatar,
+#admin-settings .blocks .block.avatar {
+  max-width: 420px;
+  flex: 1;
+}
+#admin-financials .blocks .block.description,
+#admin-settings .blocks .block.description {
+  min-width: 380px;
+  flex: 2;
+}
+#admin-financials .blocks .block.profit,
+#admin-settings .blocks .block.profit {
+  min-width: calc(100% - 40px);
+}
+#admin-financials .blocks .block.profit h2,
+#admin-settings .blocks .block.profit h2 {
+  margin-bottom: 0;
+}
+#admin-financials .blocks .block.profit h1,
+#admin-settings .blocks .block.profit h1 {
+  font-size: 60px;
+  margin: 0;
+  color: var(--success-text);
+}
+#admin-financials .blocks .block.profit .actions,
+#admin-settings .blocks .block.profit .actions {
+  justify-content: flex-start;
+}
+#admin-financials .cc-details,
+#admin-settings .cc-details {
+  display: flex;
+}
+#admin-financials .cc-details input:first-child,
+#admin-settings .cc-details input:first-child {
+  min-width: 160px;
+  margin-right: 12px;
+}
+#admin-financials input,
+#admin-settings input {
+  margin: 0 0 8px;
+  border: 0;
+  border-bottom: 2px solid var(--base-background-subtle);
+  background: var(--base-background);
+  height: 38px;
+  font-size: 14px;
+  width: 100%;
+}
+#admin-financials input:focus,
+#admin-settings input:focus {
+  border-bottom: 2px solid var(--brand-background);
+  outline: 0;
+}
+#admin-financials .actions,
+#admin-settings .actions {
+  width: 100%;
+  justify-content: flex-end;
+  display: flex;
+  margin-top: 8px;
+}
+#admin-financials .actions button:last-child,
+#admin-settings .actions button:last-child {
+  margin-right: 0;
+}
+#admin-financials h2,
+#admin-settings h2 {
+  margin-top: 0;
+}
+@media screen and (max-width: 968px) {
+  #user .stats {
+    margin-top: 12px;
+  }
+}
+#tags {
+  scroll-snap-type: x proximity;
+  scroll-padding: 16px;
+  overflow-y: hidden;
+}
+#tags soci-column {
+  transform: translateY(10px);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, margin 0.3s ease-out;
+  margin-right: 1px;
+}
+#tags soci-column:last-of-type {
+  margin-right: 0;
+}
+#tags[active] {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+#tags[active] soci-column {
+  transform: translateY(0);
+  opacity: 1;
+}
+#tags[active] soci-column:nth-child(2) {
+  transition-delay: 0.1s;
+}
+#tags[active] soci-column:nth-child(3) {
+  transition-delay: 0.2s;
+}
+#tags[active] soci-column:nth-child(4) {
+  transition-delay: 0.3s;
+}
+#tags[active] soci-column.inserting {
+  opacity: 0;
+  margin-left: -416px;
+}
+#submit-container {
+  max-width: 920px;
+  padding: 24px 40px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+#submit-container h1,
+#submit-container h2 {
+  margin: 0;
+  padding-left: 2px;
+}
+#submit-container soci-url-input {
+  margin-bottom: 12px;
+}
+#submit-container soci-button {
+  margin-top: 8px;
+}
+#submit-container soci-tab {
+  padding-top: 32px;
+}
+#submit-container label {
+  cursor: inherit;
+}
+#submit-container input {
+  text-decoration: inherit;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  padding: 0;
+  font-size: 14px;
+  width: 100%;
+  background: transparent;
+  color: inherit;
+}
+#submit-container input::placeholder {
+  font-weight: normal;
+  text-transform: none;
+  opacity: 0.5;
+  font-size: 14px;
+}
+#submit-container input[name="title"] {
+  font-size: 32px;
+  margin-bottom: 24px;
+  padding-left: 2px;
+}
+#submit-container input[name="title"]::placeholder {
+  font-size: 32px;
+}
+#submit-container soci-icon {
+  pointer-events: none;
+  position: absolute;
+  right: 2px;
+}
+#submit-container soci-tab soci-input {
+  width: 100%;
+  --min-height: 240px;
+}
+#submit-container soci-tab[name="Blog"] soci-input {
+  --min-height: 550px;
+}
+#submit-container button {
+  border-radius: 14px;
+  height: 28px;
+  color: var(--base-text-inverse);
+  cursor: pointer;
+  background: var(--brand-background);
+  border: none;
+  padding: 0 8px;
+  outline: none;
+  min-width: 100px;
+}
+#submit-container button:hover {
+  background: var(--brand-background-hover);
+}
+#submit-container button:active {
+  filter: brightness(0.9);
+}
+#submit-container soci-input {
+  border: 2px solid var(--base-background-subtle);
+  border-radius: 8px;
+}
+#submit-container h2 {
+  font-weight: 500;
+  margin-top: 36px;
+  margin-bottom: 12px;
+}
+#submit-container .tags {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 36px;
+  grid-column-gap: 10px;
+}
+#submit-container .tags soci-tag-input {
+  flex: 1;
+  --tag-height: 30px;
+}
+soci-sidebar[loading] {
+  opacity: 0;
+}
+soci-sidebar input:-webkit-autofill,
+soci-sidebar input:-webkit-autofill:focus,
+soci-sidebar input:-webkit-autofill:hover,
+soci-sidebar input {
+  margin: 0 0 8px;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 2px solid var(--base-background-subtle);
+  background: var(--base-background) !important;
+  -webkit-text-fill-color: var(--base-text);
+  -webkit-box-shadow: 0 0 0 30px var(--base-background) inset;
+  height: 38px;
+  font-size: 14px;
+  width: 100%;
+}
+soci-sidebar input::placeholder {
+  text-transform: none;
+  font-size: 12px;
+}
+soci-sidebar input:focus,
+soci-sidebar input:active {
+  box-shadow: none;
+  outline: none;
+  border-bottom: 2px solid var(--brand-background);
+}
+soci-sidebar button {
+  margin-top: 8px;
+  border-radius: 16px;
+  height: 32px;
+  outline: 0;
+  border: 0;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid var(--base-background-subtle);
+  background: var(--base-background);
+  cursor: pointer;
+  position: relative;
+}
+soci-sidebar button svg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 4px;
+  top: 3px;
+  display: none;
+}
+soci-sidebar button:hover {
+  border: 1px solid var(--base-background-subtle-hover);
+  background: var(--base-background-hover);
+}
+soci-sidebar button[waiting] svg {
+  display: block;
+}
+[load-order] {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.15, 0, 0, 1), opacity 0.3s var(--soci-ease);
+}
+[load-order="secondary"] {
+  transform: translateY(25px);
+  transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+}
+[load-order="tertiary"] {
+  transform: translateY(30px);
+  transition: transform 0.4s cubic-bezier(0.15, 0, 0.35, 1), opacity 0.4s var(--soci-ease);
+}
+soci-route[active] [load-order],
+soci-route[active] [load-order="secondary"],
+soci-route[active] [load-order="tertiary"] {
+  transform: translateY(0px);
+  opacity: 1;
+}
+#new-user #new-user-container {
+  padding: 24px 36px;
+}
+#post soci-comment-list {
+  width: 100%;
+}
+#blog {
+  display: block;
+  overflow-x: hidden;
+}
+#admin-create .content {
+  padding: 28px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+#admin-create .loading-block:not(:first-child) {
+  margin-top: 40px;
+}
+::-webkit-scrollbar {
+  width: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--base-background-bold);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
+  border-radius: 7px;
+  border: 3px solid var(--base-background-bold);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px);
+}
+@-moz-keyframes load-in {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes load-in {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@-o-keyframes load-in {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@keyframes load-in {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}

@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node first-launch-setup.js && node index.js"
+    "start": "node first-launch-setup.js && node index.js",
+    "build": "pug -O '{\"pretty\": true}' index.pug && sed -i 's/\\.styl/.css/g' index.html && stylus soci.styl"
   },
   "repository": {
     "type": "git",

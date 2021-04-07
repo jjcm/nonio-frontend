@@ -1,3 +1,5 @@
+import SociComponent from './soci-component.js'
+
 import SociRoute from "./soci-route.js"
 window.customElements.define('soci-route', SociRoute)
 
