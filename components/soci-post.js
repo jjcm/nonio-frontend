@@ -328,6 +328,7 @@ export default class SociPost extends SociComponent {
             this.createTags(post[key])
             break
           case 'url':
+            this.setMeta('url', post[key])
             break
           case 'width':
             if(parseInt(post[key]) != 0) 
@@ -338,7 +339,8 @@ export default class SociPost extends SociComponent {
               this.select('#media-container').style.setProperty('--media-height', post[key] + 'px')
             break
           case 'title':
-            this.setAttribute('post-title', post['title'])
+            this.setAttribute('post-title', post[key])
+            this.setMeta('title', post[key])
             break
           default:
             this.setAttribute(key, post[key])
@@ -353,8 +355,10 @@ export default class SociPost extends SociComponent {
 
   loadContent(type) {
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
+    document.head.querySelector(`meta[property="og:image"]`)?.remove()
     switch(type){
       case 'image':
+        this.setMeta('image', `${config.IMAGE_HOST}/${this.url}.webp`)
         this.select('#media-container').innerHTML = `
           <soci-image url="${this.url}"></soci-image>
           <div id="image" class="media" style="display: none">
@@ -394,6 +398,16 @@ export default class SociPost extends SociComponent {
     }
   }
 
+  setMeta(property, value){
+    let meta = document.head.querySelector(`meta[property="og:${property}"]`)
+    if(!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('property', `og:${property}`)
+      document.head.appendChild(meta)
+    }
+    meta.setAttribute('content', value)
+  }
+
   createTags(tags){
     let tagContainer = this.querySelector('soci-tag-group')
     tags.forEach(tag=>{
@@ -413,6 +427,7 @@ export default class SociPost extends SociComponent {
       this.appendChild(dom)
     }
     dom.render(description)
+    this.setMeta('description', dom.textContent)
   }
 
   get url(){
