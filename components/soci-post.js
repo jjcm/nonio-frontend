@@ -156,6 +156,7 @@ export default class SociPost extends SociComponent {
 
        slot[name="description"] {
         opacity: 0;
+        display: block;
         transform: translateY(20px);
       }
 

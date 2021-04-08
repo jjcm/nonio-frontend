@@ -44,7 +44,8 @@ export default class SociImageViewer extends SociComponent {
       z-index: 1;
       left: 0;
       object-fit: cover;
-      filter: blur(20px) brightness(0.8) saturate(0.8);
+      opacity: 0.2;
+      filter: blur(20px);
       margin-bottom: 0;
       position: absolute;
       top: 0;
