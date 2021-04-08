@@ -75,7 +75,7 @@ export default class SociPostLi extends SociComponent {
         <soci-post-li score=${post.score || 0} comments=${post.comments || 0} title="${post.title}" type=${post.type || 'image'} time=${post.time} url="${post.url}">
           <soci-user name="${post.user}" slot="user"></soci-user>
           <soci-tag-group slot="tags">
-            ${post.tags.map(tag => `<soci-tag score=${tag.score} tag=${tag.tag} ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}
+            ${this.sortTags(post.tags).map(tag => `<soci-tag score=${tag.score} tag=${tag.tag} ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}
           </soci-tag-group>
         </soci-post-li>
       `).join('')}

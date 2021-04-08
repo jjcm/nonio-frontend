@@ -134,4 +134,19 @@ export default class SociComponent extends HTMLElement {
       }
     }
   }
+
+  sortTags(tags){
+    const currentTag = this.closest('[tag]')?.getAttribute('tag')
+    const nsfwWeight = 3
+    const currentTagWeight = 10000
+    function weightScore(tag){
+      let score = parseInt(tag.score)
+      if(tag.tag == currentTag) score *= currentTagWeight
+      if(tag.tag.match(/nsfw|nsfl/)) score *= nsfwWeight
+      return score
+    }
+    let sorted = tags.sort((a, b) => weightScore(b) - weightScore(a))
+    console.log(sorted)
+    return sorted
+  }
 }
