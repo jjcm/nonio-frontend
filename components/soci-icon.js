@@ -34,6 +34,7 @@ export default class SociIcon extends SociComponent {
     svg {
       width: inherit;
       height: inherit;
+      display: block;
     }
   `}
 

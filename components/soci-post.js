@@ -247,6 +247,25 @@ export default class SociPost extends SociComponent {
         transform: translateY(0px);
         transition: all 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease);
       }
+
+      #vote-message span {
+        color: var(--success-text);
+        font-size: 11px;
+        transform: translateY(-1px);
+        animation: load 0.1s var(--soci-ease) forwards;
+        display: inline-block;
+      }
+
+      @keyframes load {
+        from {
+          transform: translateY(4px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(-1px);
+          opacity: 1;
+        }
+      }
     `
   }
 
@@ -272,6 +291,10 @@ export default class SociPost extends SociComponent {
 
   static get observedAttributes() {
     return ['post-title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
+  }
+
+  connectedCallback(){
+    this.addEventListener('scoreChanged', this._scoreChanged)
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -412,9 +435,12 @@ export default class SociPost extends SociComponent {
     let tagContainer = this.querySelector('soci-tag-group')
     tags.forEach(tag=>{
       let newTag = document.createElement('soci-tag')
-      newTag.innerHTML = tag.tag
+      newTag.setAttribute('tag', tag.tag)
       newTag.setAttribute('score', tag.score)
-      if(soci.votes[this.id]?.includes(tag.tagID)) newTag.toggleAttribute('upvoted')
+      if(soci.votes[this.id]?.includes(tag.tagID)){
+        newTag.toggleAttribute('upvoted', true)
+        tagContainer.toggleAttribute('upvoted', true)
+      } 
       tagContainer.appendChild(newTag)
     })
   }
@@ -452,5 +478,14 @@ export default class SociPost extends SociComponent {
 
   _zoomImage(){
     this.select()
+  }
+
+  _scoreChanged(e){
+    if(this.querySelector('soci-tag-group')?.hasAttribute('upvoted')){
+      this.select('meta-data').innerHTML += '<span id="vote-message">&nbsp;| &nbsp;<span>Contributing one share of your subscription at the end of the month</span></span>'
+    }
+    else {
+      this.select('meta-data #vote-message')?.remove()
+    }
   }
 }

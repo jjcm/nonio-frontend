@@ -8,71 +8,98 @@ export default class SociTag extends SociComponent {
   css(){
     return `
       :host {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         height: 20px;
         border-radius: 3px;
         background: var(--base-background-subtle);
+        box-shadow: 0 0 0 1px var(--base-background-subtle-hover) inset;
         font-size: 0.625em;
         line-height: 20px;
-        padding: 0 8px;
+        padding-right: 8px;
         color: var(--base-text-subtle);
         cursor: pointer;
         font-weight: 600;
         user-select: none;
-        transition: background 0.1s var(--soci-ease-out);
-        margin-right: 4px;
-      }
-      :host(:hover) {
-        background: var(--base-background-subtle-hover);
-        color: var(--base-text-subtle-hover);
+        //transition: background 0.1s var(--soci-ease-out);
+        margin-right: 6px;
+        overflow: hidden;
+        --fill-color: none;
       }
       :host([upvoted]) {
-        background: var(--brand-background);
+        box-shadow: none;
+        background: var(--success-background-subtle);
+        color: var(--success-text);
+        --fill-color: var(--base-text-color);
+      }
+      :host([upvoted]) #vote {
+        background: var(--success-background);
         color: var(--base-text-inverse);
         font-weight: 500;
+        border-right: 0;
       }
-      :host([upvoted]:hover) {
-        background: var(--brand-background-hover);
-        color: var(--base-text-inverse-hover);
-      }
-      a,
-      a:visited {
-        color: inherit;
-        text-decoration: inherit;
+      soci-link:hover {
+        text-decoration: underline;
       }
       slot {
-        display: inline-block;
         letter-spacing: 0.5px;
       }
       slot:before {
-        content: '#';
+        content: '';
       }
+      soci-icon {
+        width: 16px;
+        height: 24px;
+        margin-right: 2px;
+      }
+      #vote {
+        padding: 0 6px 0 3px;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 6px;
+        border-right: 1px solid var(--base-background-subtle-hover);
+      }
+      #vote:hover {
+        background: var(--base-background-subtle-hover);
+        color: var(--base-text-subtle-hover);
+      }
+      :host([tag="nsfw"]),
+      :host([tag="nsfw"]) #vote:hover {
+        color: var(--error-text);
+      }
+      :host([tag="nsfw"][upvoted]) {
+        background: var(--error-background-subtle);
+      }
+      :host([tag="nsfw"][upvoted]) #vote {
+        background: var(--error-background);
+        color: var(--base-text-inverse);
+      }
+
     `
   }
 
   html(){ return `
-    <a>
-      <slot></slot>
+    <div id="vote" @click=vote >
+      <soci-icon glyph="upvote"></soci-icon>
       <score></score>
-    </a>
+    </div>
+    <soci-link></soci-link>
   `}
 
-  connectedCallback(){
-    this.addEventListener('click', this.vote)
-    this.select('a').setAttribute('href', '/#' + this.innerHTML)
-  }
-
   static get observedAttributes() {
-    return ['color', 'name', 'upvoted', 'score', 'href']
+    return ['color', 'name', 'upvoted', 'score', 'tag']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'score') this.select('score').innerHTML = 
-      newValue != 0 ? 
-        '&bull; ' + newValue :
-        ''
-    
-    else if(name == 'href') this.select('a').setAttribute('href', newValue)
+    switch(name){
+      case 'score':
+        this.select('score').innerHTML = newValue
+        break
+      case 'tag':
+        let link = this.select('soci-link')
+        link.setAttribute('href', '/#' + newValue)
+        link.innerHTML = newValue
+    }
   }
 
   get score(){
@@ -82,15 +109,24 @@ export default class SociTag extends SociComponent {
   set score(val){
     this.setAttribute('score', val)
   }
+
+  get tag(){
+    return this.getAttribute('tag')
+  }
+
+  set tag(val){
+    this.setAttribute('tag', val)
+  }
   
   vote(e){
     e.preventDefault()
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
     this.setAttribute('score', score + (upvoted ? 1 : -1))
+    console.log(this.tag)
     this.fire('vote', {
       dom: this,
-      tag: this.innerHTML,
+      tag: this.tag,
       upvoted: upvoted
     })
 
@@ -98,7 +134,7 @@ export default class SociTag extends SociComponent {
     if(url) {
       this.postData(`/posttag/${upvoted ? 'add' : 'remove'}-vote`, {
         post: url.getAttribute('url'),
-        tag: this.innerHTML
+        tag: this.tag
       })
     }
     else {

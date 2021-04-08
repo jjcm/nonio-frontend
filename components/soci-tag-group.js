@@ -114,7 +114,9 @@ export default class SociTagGroup extends SociComponent {
     }
 
     :host([upvoted]) ::slotted(div) {
-      color: var(--brand-text);
+      color: var(--base-text-inverse);
+      background: var(--success-background);
+      border-color: var(--success-background);
     }
 
 
@@ -199,7 +201,7 @@ export default class SociTagGroup extends SociComponent {
     })
 
     let newTag = document.createElement('soci-tag')
-    newTag.innerHTML = tagName
+    newTag.setAttribute('tag', tagName)
     newTag.setAttribute('score', 1)
     newTag.toggleAttribute('upvoted')
     if(this.childNodes[0].nodeType == 3) this.childNodes[0].remove()
@@ -251,13 +253,16 @@ export default class SociTagGroup extends SociComponent {
     let numberOfUpvotes = this.querySelectorAll('soci-tag[upvoted]').length
     if(numberOfUpvotes > 0){
       this.toggleAttribute('upvoted', true)
-      if(numberOfUpvotes == 1 && e.detail.upvoted) this.score++
+      if(numberOfUpvotes == 1 && e.detail.upvoted){
+        this.score++
+        this.fire('scoreChanged', {score: this.score})
+      }
     }
     else {
       this.toggleAttribute('upvoted', false)
       this.score--
+      this.fire('scoreChanged', {score: this.score})
     }
 
-    this.fire('scoreChanged', {score: this.score})
   }
 }

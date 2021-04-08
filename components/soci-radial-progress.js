@@ -39,7 +39,7 @@ export default class SociRadialProgress extends SociComponent {
     }
 
     :host([percent="100"]) svg {
-      stroke: var(--success-text);
+      stroke: var(--success-text-subtle);
     }
 
     :host([percent="100"]) path {
