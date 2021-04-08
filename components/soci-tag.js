@@ -26,18 +26,6 @@ export default class SociTag extends SociComponent {
         overflow: hidden;
         --fill-color: none;
       }
-      :host([upvoted]) {
-        box-shadow: none;
-        background: var(--success-background-subtle);
-        color: var(--success-text);
-        --fill-color: var(--base-text-color);
-      }
-      :host([upvoted]) #vote {
-        background: var(--success-background);
-        color: var(--base-text-inverse);
-        font-weight: 500;
-        border-right: 0;
-      }
       soci-link:hover {
         text-decoration: underline;
       }
@@ -63,16 +51,34 @@ export default class SociTag extends SociComponent {
         background: var(--base-background-subtle-hover);
         color: var(--base-text-subtle-hover);
       }
-      :host([tag="nsfw"]),
-      :host([tag="nsfw"]) #vote:hover {
+      #vote:active {
+        background: var(--success-background-subtle);
+        border-right: 1px solid transparent;
+        --fill-color: var(--base-text);
+      }
+      :host([upvoted]) {
+        --fill-color: var(--base-text-color);
+      }
+      :host([upvoted]) #vote {
+        color: var(--success-text);
+        font-weight: 500;
+      }
+      :host([upvoted]) #vote:active {
+        --fill-color: transparent;
+        background: var(--base-background-subtle-hover);
+        border-right: 1px solid var(--base-background-subtle-hover);
+      }
+      :host([tag="nsfw"]) soci-link {
         color: var(--error-text);
       }
-      :host([tag="nsfw"][upvoted]) {
+      :host([tag="nsfw"]) #vote:active {
         background: var(--error-background-subtle);
       }
       :host([tag="nsfw"][upvoted]) #vote {
-        background: var(--error-background);
-        color: var(--base-text-inverse);
+        color: var(--error-text);
+      }
+      :host([tag="nsfw"][upvoted]) #vote:active {
+        background: var(--base-background-subtle-hover);
       }
 
     `
