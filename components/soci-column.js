@@ -49,7 +49,7 @@ export default class SociColumn extends SociComponent {
         background-color: var(--base-background);
         position: sticky;
         top: 0;
-        height: 41px;
+        height: 40px;
         width: 100%;
         z-index: 2;
         display: block;

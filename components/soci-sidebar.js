@@ -77,23 +77,13 @@ export default class SociSidebar extends SociComponent {
         padding-top: 16px;
       }
 
-      soci-icon {
-        position: absolute;
-        left: 20px;
-        top: 20px;
-      }
-
-      #search soci-icon{
-        top: 6px;
-      }
-
       #user {
         position: sticky;
         top: 0;
         background: var(--base-background);
         z-index: 10;
         height: 40px;
-        border-bottom: 2px solid var(--base-background-subtle);
+        box-shadow: 0 0 4px var(--shadow), 0 0 1px var(--shadow);
       }
 
       #user soci-user {
@@ -106,23 +96,27 @@ export default class SociSidebar extends SociComponent {
         margin: 0;
       }
 
-      #user soci-icon {
-        color: var(--base-text-subtle);
+      #user soci-button {
         right: 8px;
-        top: 8px;
-        left: auto;
-        width: 24px;
-        height: 24px;
-        --hover-color: transparent;
-        cursor: pointer;
-        opacity: 0.8;
+        top: 10px;
+        position: absolute;
+        display: inline-flex;
+        width: 20px;
+        overflow: hidden;
+        transition: width 0.1s var(--soci-ease);
       }
-      #user soci-icon:hover {
-        --hover-color: var(--base-background-subtle);
-        color: var(--base-text-subtle-hover);
+
+      #user soci-icon {
+        margin: -2px 8px -2px -10px;
+        transition: margin 0.1s var(--soci-ease);
       }
-      #user soci-icon:active {
-        --hover-color: var(--base-background-active);
+
+      #user soci-button:hover {
+        width: 66px;
+      }
+
+      #user soci-button:hover soci-icon {
+        margin: -2px 0 -2px -8px;
       }
 
       #user soci-user {
@@ -296,7 +290,7 @@ export default class SociSidebar extends SociComponent {
         <section id="user">
           <soci-user self></soci-user>
           <soci-link href="/submit" fresh>
-            <soci-icon glyph="create"></soci-icon>
+            <soci-button subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
           </soci-link>
         </section>
         <content>
