@@ -25,7 +25,7 @@ html(lang="en")
         soci-button(async onclick="this.closest('soci-sidebar').login()") login
     tags(slot="tags")
   #pages
-    soci-route#tags(test="both" path="^/#")
+    soci-route#tags(test="both" path="^/#" fresh)
       include pages/tags.pug
     soci-route#home(test="both" path="^/$")
       include pages/home.pug

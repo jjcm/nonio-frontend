@@ -30,20 +30,6 @@ let user = {
       e.target.parentElement.querySelector('[selected]').removeAttribute('selected')
       e.target.toggleAttribute('selected', true)
       user[e.target.className] = e.target.innerHTML.toLowerCase()
-      /*
-      if(e.target.className == 'type') {
-        if(e.target.innerHTML == 'Posts') {
-          //container.innerHTML = `<soci-post-list data="/posts?user=${username}"></soci-post-list>`
-        }
-        else {
-          container.innerHTML = `<soci-user-comment-list user="${username}"></soci-post-list>`
-        }
-      }
-      if(e.target.className == 'sort') {
-        user.contentSort = e.target.innerHTML.toLowerCase()
-        console.log(user.contentSort)
-      }
-      */
       let params = `data="/${user.type}?user=${username}&sort=${user.sort}"`
 
       if(user.type == "posts")
