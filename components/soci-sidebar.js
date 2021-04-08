@@ -112,11 +112,11 @@ export default class SociSidebar extends SociComponent {
       }
 
       #user soci-button:hover {
-        width: 66px;
+        width: 64px;
       }
 
       #user soci-button:hover soci-icon {
-        margin: -2px 0 -2px -8px;
+        margin: -2px -2px -2px -8px;
       }
 
       #user soci-user {
@@ -290,7 +290,7 @@ export default class SociSidebar extends SociComponent {
         <section id="user">
           <soci-user self></soci-user>
           <soci-link href="/submit" fresh>
-            <soci-button subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
+            <soci-button><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
           </soci-link>
         </section>
         <content>
