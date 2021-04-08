@@ -28,7 +28,7 @@
     <tags slot="tags"></tags>
   </soci-sidebar>
   <div id="pages">
-    <soci-route id="tags" test="both" path="^/#">
+    <soci-route id="tags" test="both" path="^/#" fresh="fresh">
       <script>lazyload('/pages/tags.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="home" test="both" path="^/$">
