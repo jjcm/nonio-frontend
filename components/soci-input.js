@@ -710,6 +710,10 @@ export default class SociInput extends SociComponent {
     this.select('.ql-editor').focus()
   }
 
+  setSelection(val) {
+    this.editor.setSelection(val)
+  }
+
   renderOpsToHTML(val){
     if(val) this.value = val
     return this.select('.ql-editor').innerHTML
