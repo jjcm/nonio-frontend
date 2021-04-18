@@ -14,6 +14,8 @@ export default class SociComment extends SociComponent {
         position: relative;
         padding-left: 3%; 
         margin: 12px 0 8px;
+        min-height: 0px;
+        transition: height 0.1s var(--soci-ease);
       }
 
       :host(:last-child) {
@@ -34,12 +36,36 @@ export default class SociComment extends SociComponent {
         color: var(--brand-text);
       }
 
+      .edited,
       time {
         color: var(--base-text-subtle);
         display: inline;
         font-size: 12px;
         line-height: 18px;
         margin-left: 18px;
+        position: relative;
+      }
+
+      .edited:before,
+      time:before {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--base-text-subtle);
+        position: absolute;
+        top: 8px;
+        left: -13px;
+      }
+
+      .edited {
+        margin-left: 24px;
+        font-style: italic;
+      }
+
+      :host(:not([edited])) .edited {
+        display: none;
       }
 
       #comment {
@@ -83,18 +109,6 @@ export default class SociComment extends SociComponent {
         display: flex;
         position: relative;
         margin-left: 8px;
-      }
-
-      #vote-container:after {
-        content: '';
-        display: block;
-        width: 4px;
-        height: 4px;
-        border-radius: 2px;
-        background: var(--base-text-subtle);
-        position: absolute;
-        top: 8px;
-        right: -9px;
       }
 
       #upvote {
@@ -253,6 +267,7 @@ export default class SociComment extends SociComponent {
           <soci-icon glyph="downvote" @click=_downvote></soci-icon>
         </div>
         <time>0s ago</time>
+        <span class="edited">edited</span>
       </top>
       <div id="comment">
         <slot name="content"></slot>
@@ -287,7 +302,7 @@ export default class SociComment extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['score', 'user', 'replies', 'date', 'content']
+    return ['score', 'user', 'replies', 'date', 'content', 'edited']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -351,13 +366,14 @@ export default class SociComment extends SociComponent {
     return this.closest('[url]').getAttribute('url')
   }
 
-  factory(user, score, lineageScore, date, id, content){
+  factory(user, score, lineageScore, date, id, content, edited){
     let comment = document.createElement('soci-comment')
     comment.setAttribute('user', user)
     comment.setAttribute('score', score)
     comment.setAttribute('lineage-score', lineageScore)
     comment.setAttribute('date', date)
     comment.setAttribute('comment-id', id)
+    comment.toggleAttribute('edited', edited)
     comment.content = content
     return comment
   }
@@ -528,12 +544,14 @@ export default class SociComment extends SociComponent {
   }
 
   _edit(){
+    this.style.minHeight = this.offsetHeight
+    let height = this.style.height = this.offsetHeight
     this.select('#comment').style.display = 'none'
     let editContainer = this.select('#comment-edit')
     editContainer.innerHTML = `
-      <soci-input placeholder="Enter comment"></soci-input>
+      <soci-input placeholder="Enter comment" subtle></soci-input>
       <actions>
-        <soci-button>save</soci-button>
+        <soci-button async>save</soci-button>
         <soci-button subtle>cancel</soci-button>
       </actions>`
     editContainer.querySelector('soci-button').addEventListener('click', this._submitEdit.bind(this))
@@ -541,25 +559,47 @@ export default class SociComment extends SociComponent {
     editContainer.querySelector('soci-input').value = this.querySelector('soci-quill-view').value
     editContainer.classList.add('active')
     editContainer.style.height = '172px'
+    let input = editContainer.querySelector('soci-input')
+    setTimeout(()=>{
+      input?.toggleAttribute('subtle', false)
+      this.style.height = (height + 43) + 'px'
+    },1)
     setTimeout(()=>{
       editContainer.style.height = ''
-      let input = editContainer.querySelector('soci-input')
       input?.focus()
       input?.setSelection(Number.MAX_SAFE_INTEGER)
+      this.style.height = ''
     }, 100)
 
     this.select('#actions').style.display = 'none'
   }
 
   _cancelEdit(){
+    let height = this.style.height = this.offsetHeight
     this.select('#comment').style.display = ''
     let editContainer = this.select('#comment-edit')
     editContainer.innerHTML = ''
     editContainer.classList.remove('active')
     this.select('#actions').style.display = ''
+    setTimeout(()=>{
+      this.style.height = (height - 43) + 'px'
+      setTimeout(()=>{
+        this.style.height = ''
+      }, 100)
+    },1)
   }
 
   _submitEdit(){
-
+    let content = this.select('#comment-edit soci-input').value
+    this.postData('/comment/edit', {
+      id: parseInt(this.getAttribute('comment-id')),
+      content: content
+    }).then(()=>{
+      this.select('#comment-edit soci-button').success()
+      setTimeout(()=>{
+        this.querySelector('soci-quill-view').value = content
+        this._cancelEdit()
+      }, 400)
+    })
   }
 }

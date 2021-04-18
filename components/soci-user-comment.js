@@ -84,18 +84,13 @@ export default class SociUserComment extends SociComponent {
     }
   }
 
-  factory(user, score, lineageScore, date, id, content, postUrl, postTitle){
+  factory(user, score, lineageScore, date, id, content, edited, postUrl, postTitle){
     let userComment = document.createElement('soci-user-comment')
     userComment.setAttribute('url', postUrl)
     userComment.setAttribute('title', postTitle)
 
     let comment = document.createElement('soci-comment')
-    comment.setAttribute('user', user)
-    comment.setAttribute('score', score)
-    comment.setAttribute('lineage-score', lineageScore)
-    comment.setAttribute('date', date)
-    comment.setAttribute('comment-id', id)
-    comment.content = content
+    comment = comment.factory(user, score, lineageScore, date, id, content, edited)
     userComment.appendChild(comment)
     return userComment
   }

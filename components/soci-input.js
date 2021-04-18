@@ -14,12 +14,17 @@ export default class SociInput extends SociComponent {
     let css = `
       :host {
         --min-height: 0;
+        --padding: 12px 16px;
         min-height: var(--min-height);
         position: relative;
         display: flex;
-        transition: padding 0.1s ease-out;
+        transition: padding 0.1s ease-out, border-color 0.5s ease;
         padding-bottom: 0px;
         box-sizing: border-box;
+      }
+      :host([subtle]){
+        --padding: 0px;
+        border-color: transparent !important;
       }
 
       #editor {
@@ -57,10 +62,10 @@ export default class SociInput extends SociComponent {
         box-sizing: border-box;
         line-height: 1.42;
         min-height: var(--min-height);
-        transition: min-height 0.1s ease-out;
+        transition: min-height 0.1s ease-out, padding 0.1s var(--soci-ease);
         outline: none;
         overflow-y: auto;
-        padding: 12px 15px;
+        padding: var(--padding);
         tab-size: 4;
         -moz-tab-size: 4;
         text-align: left;

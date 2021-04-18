@@ -146,7 +146,6 @@ export default class SociComponent extends HTMLElement {
       return score
     }
     let sorted = tags.sort((a, b) => weightScore(b) - weightScore(a))
-    console.log(sorted)
     return sorted
   }
 }

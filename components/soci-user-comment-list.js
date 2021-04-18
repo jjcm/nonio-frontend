@@ -54,7 +54,7 @@ export default class SociCommentList extends SociComponent {
 
     comments.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')
-      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.post, comment.post_title)
+      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.edited, comment.post, comment.post_title)
       this.appendChild(newComment)
     })
 
