@@ -373,7 +373,7 @@ export default class SociComment extends SociComponent {
     comment.setAttribute('lineage-score', lineageScore)
     comment.setAttribute('date', date)
     comment.setAttribute('comment-id', id)
-    comment.toggleAttribute('edited', edited)
+    comment.toggleAttribute('edited', Boolean(edited))
     comment.content = content
     return comment
   }
