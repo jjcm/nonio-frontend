@@ -115,8 +115,8 @@ export default class SociTagGroup extends SociComponent {
 
     :host([upvoted]) ::slotted(div) {
       color: var(--base-text-inverse);
-      background: var(--success-background);
-      border-color: var(--success-background);
+      background: var(--brand-background);
+      border-color: var(--brand-background);
     }
 
 

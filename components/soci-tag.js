@@ -52,7 +52,7 @@ export default class SociTag extends SociComponent {
         color: var(--base-text-subtle-hover);
       }
       #vote:active {
-        background: var(--success-background-subtle);
+        background: var(--brand-background-subtle);
         border-right: 1px solid transparent;
         --fill-color: var(--base-text);
       }
@@ -60,7 +60,7 @@ export default class SociTag extends SociComponent {
         --fill-color: var(--base-text-color);
       }
       :host([upvoted]) #vote {
-        color: var(--success-text);
+        color: var(--brand-text);
         font-weight: 500;
       }
       :host([upvoted]) #vote:active {
