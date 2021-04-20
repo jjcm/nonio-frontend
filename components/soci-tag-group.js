@@ -197,7 +197,7 @@ export default class SociTagGroup extends SociComponent {
       tag: tagName
     }).then(res => {
       if(res.postID && res.tagID)
-        soci.votes[res.postID].push(res.tagID)
+        soci.votes[res.postID]?.push(res.tagID)
     })
 
     let newTag = document.createElement('soci-tag')
@@ -227,6 +227,7 @@ export default class SociTagGroup extends SociComponent {
     this.select('#add-tag').removeAttribute('active')
     this.select('#add-tag input').value = ''
     document.removeEventListener('click', this._cancelAddTag)
+    document.removeEventListener('keydown', this._inputKeyListener)
   }
 
   _inputKeyListener(e){
