@@ -129,7 +129,6 @@ export default class SociTag extends SociComponent {
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
     this.setAttribute('score', score + (upvoted ? 1 : -1))
-    console.log(this.tag)
     this.fire('vote', {
       dom: this,
       tag: this.tag,
