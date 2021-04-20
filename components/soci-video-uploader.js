@@ -70,7 +70,7 @@ export default class SociVideoUploader extends SociComponent {
       }
 
       label {
-        border-radius: 14px;
+        border-radius: 4px;
         height: 24px;
         color: var(--base-text-inverse);
         cursor: pointer;
@@ -181,7 +181,7 @@ export default class SociVideoUploader extends SociComponent {
   html(){ return `
     <div id="uploading">
     <div class="info">drag video here</div>
-    <label for="file">select file</label>
+    <label for="file">select video</label>
     <input id="file" type="file" accept="video/*"/>
     <video id="preview" muted autoplay controls loop></video>
     </div>
@@ -255,8 +255,9 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   upload(e){
-    if(this.filename == "") {
+    if(!this.filename) {
       this.filename = this.select('input')?.files[0]?.name
+      console.log(this.filename)
     }
     this.setAttribute('state', 'uploading')
     this.select('#uploading .info').innerHTML = `Uploading ${this.filename}...`
