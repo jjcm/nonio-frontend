@@ -489,25 +489,25 @@ export default class SociSidebar extends SociComponent {
     creds.email = creds.email.value
     creds.password = creds.password.value
 
-    let response = await soci.postData('login', creds)
-    if(response.token){
-      soci.log('Login Successful! Token:', response.token)
-      soci.storeToken(response.token)
-      soci.username = response.username
-      this.querySelector('soci-button').success()
-      setTimeout(()=>{
-        this.toggleAttribute('noauth')
-      }, 400)
-      this._loadSubscribedTags()
-      this._loadCommonTags()
-      this._populateTags()
-      soci.loadVotes()
-      this.select('#logout').innerHTML = "Logout"
-    }
-    else {
-      soci.log('Invalid login', response, 'error')
+    soci.postData('login', creds).then(response => {
+      if(response.token){
+        soci.log('Login Successful! Token:', response.token)
+        soci.storeToken(response.token)
+        soci.username = response.username
+        this.querySelector('soci-button').success()
+        setTimeout(()=>{
+          this.toggleAttribute('noauth')
+        }, 400)
+        this._loadSubscribedTags()
+        this._loadCommonTags()
+        this._populateTags()
+        soci.loadVotes()
+        this.select('#logout').innerHTML = "Logout"
+        return
+      }
+      soci.log('Invalid login', response.error, 'error')
       this.querySelector('soci-button')?.error()
-    }
+    })
   }
 
   logout(){
