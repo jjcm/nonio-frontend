@@ -66,7 +66,7 @@ export default class SociUserComment extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['url', 'title', 'score', 'user', 'replies', 'date', 'content']
+    return ['url', 'post-title', 'score', 'user', 'replies', 'date', 'content']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -75,7 +75,7 @@ export default class SociUserComment extends SociComponent {
         this.select('#post').setAttribute('href', '/' + newValue)
         this.select('img').setAttribute('src', `${config.THUMBNAIL_HOST}/${newValue}.webp`)
         break
-      case 'title':
+      case 'post-title':
         this.select('#title').innerHTML = newValue
         break
       default:
@@ -87,7 +87,7 @@ export default class SociUserComment extends SociComponent {
   factory(user, score, lineageScore, date, id, content, edited, postUrl, postTitle){
     let userComment = document.createElement('soci-user-comment')
     userComment.setAttribute('url', postUrl)
-    userComment.setAttribute('title', postTitle)
+    userComment.setAttribute('post-title', postTitle)
 
     let comment = document.createElement('soci-comment')
     comment = comment.factory(user, score, lineageScore, date, id, content, edited)

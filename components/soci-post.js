@@ -366,6 +366,9 @@ export default class SociPost extends SociComponent {
             this.setAttribute('post-title', post[key])
             this.setMeta('title', post[key])
             break
+          case 'ID':
+            this.setAttribute('post-id', post[key])
+            break
           default:
             this.setAttribute(key, post[key])
             break
@@ -389,7 +392,7 @@ export default class SociPost extends SociComponent {
             <picture>
               <source>
               <source>
-              <img @load=_pictureLoaded />
+              <img/>
             </picture>
             <picture>
               <source>
@@ -434,16 +437,7 @@ export default class SociPost extends SociComponent {
 
   createTags(tags){
     let tagContainer = this.querySelector('soci-tag-group')
-    tags.forEach(tag=>{
-      let newTag = document.createElement('soci-tag')
-      newTag.setAttribute('tag', tag.tag)
-      newTag.setAttribute('score', tag.score)
-      if(soci.votes[this.id]?.includes(tag.tagID)){
-        newTag.toggleAttribute('upvoted', true)
-        tagContainer.toggleAttribute('upvoted', true)
-      } 
-      tagContainer.appendChild(newTag)
-    })
+    tagContainer.innerHTML = tags.map((tag) => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')
   }
 
   renderDescription(description){
@@ -459,22 +453,6 @@ export default class SociPost extends SociComponent {
 
   get url(){
     return this.getAttribute('url')
-  }
-
-  _pictureLoaded(e) {
-    let image = e.currentTarget
-    let width = image.naturalWidth
-    let height = image.naturalHeight
-    let sidebarWidth = document.querySelector('soci-sidebar').offsetWidth
-    if(width > window.innerWidth - sidebarWidth){
-      //console.log('wide boi')
-    }
-    else if(height > window.innerHeight){
-      //console.log('tall boi')
-    }
-    else {
-      //console.log('mini boi')
-    }
   }
 
   _zoomImage(){

@@ -214,12 +214,12 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['title', 'score', 'time', 'type', 'comments', 'url']
+    return ['post-title', 'score', 'time', 'type', 'comments', 'url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'title':
+      case 'post-title':
         this.select('#title').innerHTML = newValue
         break
       case 'type':

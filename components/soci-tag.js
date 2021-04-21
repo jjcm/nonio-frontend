@@ -135,11 +135,14 @@ export default class SociTag extends SociComponent {
       upvoted: upvoted
     })
 
-    const url = this.closest('[url]')
-    if(url) {
+    const post = this.closest('[post-id]')
+    if(post) {
       this.postData(`/posttag/${upvoted ? 'add' : 'remove'}-vote`, {
-        post: url.getAttribute('url'),
+        post: post.getAttribute('url'),
         tag: this.tag
+      }).then(()=>{
+        console.log(this.getAttribute('tag-id'))
+        soci.votes[post.getAttribute('post-id')].push(parseInt(this.getAttribute('tag-id')))
       })
     }
     else {
