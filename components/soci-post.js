@@ -326,9 +326,6 @@ export default class SociPost extends SociComponent {
       case 'score':
         this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break
-      case 'comments':
-        this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
-        break
       case 'url':
         this.querySelector('soci-comment-list').setAttribute('url', newValue)
         this.loadPost(newValue)
