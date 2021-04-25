@@ -103,8 +103,6 @@ export default class SociPost extends SociComponent {
         margin: 0 auto;
         box-sizing: border-box;
         padding: 12px 18px;
-        position: sticky;
-        top: 0;
       }
 
       title-container {
@@ -218,6 +216,8 @@ export default class SociPost extends SociComponent {
         opacity: 0;
         transform: translateY(20px);
         display: block;
+        position: relative;
+        z-index: 1;
       }
 
       :host([loaded]) title-container,

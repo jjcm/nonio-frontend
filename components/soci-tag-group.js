@@ -12,7 +12,6 @@ export default class SociTagGroup extends SociComponent {
       display: flex;
       line-height: var(--height);
       align-items: center;
-      position: relative;
     }
     #tags {
       overflow: hidden;
@@ -75,6 +74,48 @@ export default class SociTagGroup extends SociComponent {
       outline: 0;
     }
 
+    #tag-search {
+      display: none;
+      position: absolute;
+      left: 8px;
+      border: 1px solid var(--brand-background-subtle);
+      border-radius: 3px;
+      list-style: none;
+      padding: 4px 0;
+      line-height: 20px;
+      top: 10px;
+      z-index: 10;
+      background: var(--base-background);
+      box-shadow: 1px 0 8px var(--shadow-light);
+      min-width: 148px;
+    }
+
+    #tag-search[active] {
+      display: block;
+    }
+    
+    #tag-search li {
+      cursor: pointer;
+      padding: 0 12px;
+    }
+
+    #tag-search li[selected],
+    #tag-search li:hover {
+      background: var(--brand-background-subtle);
+    }
+
+    #tag-search span {
+      color: var(--base-text);
+      opacity: 0.5;
+    }
+
+    #tag-search .count {
+      float: right;
+      margin-left: 8px;
+      color: var(--base-text);
+      opacity: 0.5;
+    }
+
     :host([size="large"]) {
       --height: 20px;
       --tag-font-size: 14px;
@@ -124,6 +165,10 @@ export default class SociTagGroup extends SociComponent {
 
   html(){ return `
     <slot name="score"></slot>
+    <ul id="tag-search">
+      <li>asdf<span class="count">3</span></li>
+      <li>asd2f<span class="count">2</span></li>
+    </ul>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -208,6 +253,7 @@ export default class SociTagGroup extends SociComponent {
     this.prepend(newTag)
     this._tagVoted({detail:{upvoted: true}})
     this.select('#add-tag input').value = ''
+    this.select("#tag-search").removeAttribute('active')
   }
 
   _addTagClick(e){
@@ -228,14 +274,17 @@ export default class SociTagGroup extends SociComponent {
     this.select('#add-tag input').value = ''
     document.removeEventListener('click', this._cancelAddTag)
     document.removeEventListener('keydown', this._inputKeyListener)
+    this.select("#tag-search").removeAttribute('active')
   }
 
   _inputKeyListener(e){
     if(e.key == 'Enter') {
       this.addTag()
+      return
     }
     else if (e.key == 'Escape') {
       this._cancelAddTag()
+      return
     }
     else if (e.key == ' ') {
       e.preventDefault()
@@ -247,7 +296,27 @@ export default class SociTagGroup extends SociComponent {
     }
     else if (e.key == '#') {
       e.preventDefault()
+      return
     }
+    
+    setTimeout(()=>{
+      this._updateTagSearch(this.select('#add-tag input')?.value)
+    }, 1)
+  }
+
+  async _updateTagSearch(search){
+    let dom = this.select("#tag-search")
+    let tags = await this.getData('/tags/' + search, this.authToken)
+    dom.innerHTML = `
+      <li selected>Create tag "${search}"</li>
+      ${tags.tags.map(tag => {
+        if(tag.tag.indexOf(search) == 0) {
+          return `<li ${tag.tag == search ? 'selected':''} class="result">${tag.tag.slice(0,search.length)}<span>${tag.tag.slice(search.length)}</span><div class="count">${tag.count}</div></li>`
+        }
+        return ''
+      }).join('\n')}
+    `
+    dom.toggleAttribute('active', search.length)
   }
 
   _tagVoted(e){
