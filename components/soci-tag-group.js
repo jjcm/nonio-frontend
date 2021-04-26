@@ -77,7 +77,7 @@ export default class SociTagGroup extends SociComponent {
     #tag-search {
       display: none;
       position: absolute;
-      left: 8px;
+      left: 58px;
       border: 1px solid var(--brand-background-subtle);
       border-radius: 3px;
       list-style: none;
@@ -97,6 +97,7 @@ export default class SociTagGroup extends SociComponent {
     #tag-search li {
       cursor: pointer;
       padding: 0 12px;
+      user-select: none;
     }
 
     #tag-search li[selected],
@@ -107,13 +108,15 @@ export default class SociTagGroup extends SociComponent {
     #tag-search span {
       color: var(--base-text);
       opacity: 0.5;
+      pointer-events: none;
     }
 
     #tag-search .count {
       float: right;
-      margin-left: 8px;
+      margin-left: 12px;
       color: var(--base-text);
       opacity: 0.5;
+      pointer-events: none;
     }
 
     :host([size="large"]) {
@@ -165,10 +168,7 @@ export default class SociTagGroup extends SociComponent {
 
   html(){ return `
     <slot name="score"></slot>
-    <ul id="tag-search">
-      <li>asdf<span class="count">3</span></li>
-      <li>asd2f<span class="count">2</span></li>
-    </ul>
+    <ul id="tag-search" @mousemove=_tagSearchHover @click=addTag></ul>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -253,7 +253,7 @@ export default class SociTagGroup extends SociComponent {
     this.prepend(newTag)
     this._tagVoted({detail:{upvoted: true}})
     this.select('#add-tag input').value = ''
-    this.select("#tag-search").removeAttribute('active')
+    this._closeTagSearch()
   }
 
   _addTagClick(e){
@@ -274,29 +274,62 @@ export default class SociTagGroup extends SociComponent {
     this.select('#add-tag input').value = ''
     document.removeEventListener('click', this._cancelAddTag)
     document.removeEventListener('keydown', this._inputKeyListener)
+    this._closeTagSearch()
+  }
+
+  _tagSearchOpen = false
+  _currentlySelectedTag = null
+
+  _openTagSearch(e){
+    this.select("#tag-search").toggleAttribute('active', true)
+    this._tagSearchOpen = true
+  }
+
+  _closeTagSearch(e){
     this.select("#tag-search").removeAttribute('active')
+    this._tagSearchOpen = false
+  }
+
+  _tagSearchHover(e){
+    if(e.target != this._currentlySelectedTag){
+      this._changeSearchSelection(e.target)
+    }
+  }
+
+  _changeSearchSelection(selection){
+    this._currentlySelectedTag.removeAttribute('selected')
+    selection.toggleAttribute('selected', true)
+    this.select('#add-tag input').value = selection.getAttribute('value')
+    this._currentlySelectedTag = selection
   }
 
   _inputKeyListener(e){
-    if(e.key == 'Enter') {
-      this.addTag()
-      return
-    }
-    else if (e.key == 'Escape') {
-      this._cancelAddTag()
-      return
-    }
-    else if (e.key == ' ') {
-      e.preventDefault()
-      let input = this.select('#add-tag input')
-      setTimeout(()=>{
-        if(input.value.charAt(input.value.length - 1) != '-')
-          input.value = input.value + '-'
-      }, 1)
-    }
-    else if (e.key == '#') {
-      e.preventDefault()
-      return
+    switch(e.key) {
+      case 'Enter':
+        this.addTag()
+        return
+      case 'Escape':
+        this._cancelAddTag()
+        return
+      case ' ':
+        e.preventDefault()
+        let input = this.select('#add-tag input')
+        setTimeout(()=>{
+          if(input.value.charAt(input.value.length - 1) != '-')
+            input.value = input.value + '-'
+        }, 1)
+      case '#':
+      case 'Shift':
+        e.preventDefault()
+        return
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'Tab':
+        e.preventDefault()
+        let currentSelected = this.select('#tag-search [selected]')
+        let nextSelected = currentSelected[e.key == 'ArrowUp' ? 'previousElementSibling' : 'nextElementSibling']
+        if(nextSelected) this._changeSearchSelection(nextSelected)
+        return
     }
     
     setTimeout(()=>{
@@ -307,16 +340,21 @@ export default class SociTagGroup extends SociComponent {
   async _updateTagSearch(search){
     let dom = this.select("#tag-search")
     let tags = await this.getData('/tags/' + search, this.authToken)
-    dom.innerHTML = `
-      <li selected>Create tag "${search}"</li>
+
+    let match = false
+    let createLi = `<li selected value=${search}>${search}<div class="count">new tag</div></li>`
+    let tagsLis = `
       ${tags.tags.map(tag => {
+        if(tag.tag == search) match = true
         if(tag.tag.indexOf(search) == 0) {
-          return `<li ${tag.tag == search ? 'selected':''} class="result">${tag.tag.slice(0,search.length)}<span>${tag.tag.slice(search.length)}</span><div class="count">${tag.count}</div></li>`
+          return `<li ${tag.tag == search ? 'selected':''} value=${tag.tag} class="result">${tag.tag.slice(0,search.length)}<span>${tag.tag.slice(search.length)}</span><div class="count">${tag.count}</div></li>`
         }
         return ''
       }).join('\n')}
     `
-    dom.toggleAttribute('active', search.length)
+    dom.innerHTML = (!match ? createLi : '') + tagsLis
+    this._currentlySelectedTag = dom.querySelector('[selected]')
+    if(search.length && !this._tagSearchOpen) this._openTagSearch()
   }
 
   _tagVoted(e){

@@ -434,7 +434,7 @@ export default class SociPost extends SociComponent {
 
   createTags(tags){
     let tagContainer = this.querySelector('soci-tag-group')
-    tagContainer.innerHTML = tags.map((tag) => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')
+    tagContainer.innerHTML += tags.map((tag) => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[this.getAttribute('post-id')]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')
   }
 
   renderDescription(description){
