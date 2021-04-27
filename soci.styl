@@ -249,8 +249,11 @@ button
       height: 100%
       overflow-y: auto
 
-#admin-financials,
-#admin-settings
+.admin-page
+  .content
+    padding: 28px 40px
+    max-width: 800px
+    margin: 0 auto
   .container
     padding: 24px 50px
   soci-input
@@ -528,10 +531,6 @@ soci-route[active]
   overflow-x: hidden
 
 #admin-create
-  .content
-    padding: 28px 40px
-    max-width: 800px
-    margin: 0 auto
   .loading-block:not(:first-child)
     margin-top: 40px
   

@@ -191,14 +191,21 @@ export default class SociSidebar extends SociComponent {
 
       #noauth soci-link {
         display: block;
-        margin-top: 28px;
+        margin-top: 32px;
         font-size: 13px;
         color: var(--brand-text);
         font-weight: 700;
         letter-spacing: 0.5px;
-        opacity: 0.7;
+        opacity: 0.8;
         cursor: pointer;
         text-align: center;
+      }
+
+      #noauth #im-stupid {
+        margin-top: 12px;
+        color: var(--base-text-subtle);
+        font-weight: 400;
+        opacity: 0.5;
       }
 
       #auth content {
@@ -341,7 +348,8 @@ export default class SociSidebar extends SociComponent {
         <h2>Login to your account</h2>
         <slot name="login">
         </slot>
-        <soci-link #create href="/admin/create-account" @click=_createAccount>create account</soci-link>
+        <soci-link href="/admin/create-account" @click=_createAccount>create account</soci-link>
+        <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
       </panel>
       <panel id="create">
         <h2>Essentials</h2>
