@@ -134,8 +134,9 @@ export default class SociUser extends SociComponent {
   }
 
   _updateUser(){
-    if(this.hasAttribute('self'))
+    if(this.hasAttribute('self') && soci.username){
       this.setAttribute('name', soci.username)
+    }
   }
 
   _updateAvatar(){

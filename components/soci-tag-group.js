@@ -88,6 +88,7 @@ export default class SociTagGroup extends SociComponent {
       background: var(--base-background);
       box-shadow: 1px 0 8px var(--shadow-light);
       min-width: 148px;
+      overflow: auto;
     }
 
     #tag-search[active] {
@@ -100,8 +101,7 @@ export default class SociTagGroup extends SociComponent {
       user-select: none;
     }
 
-    #tag-search li[selected],
-    #tag-search li:hover {
+    #tag-search li[selected] {
       background: var(--brand-background-subtle);
     }
 
@@ -355,6 +355,7 @@ export default class SociTagGroup extends SociComponent {
     dom.innerHTML = (!match ? createLi : '') + tagsLis
     this._currentlySelectedTag = dom.querySelector('[selected]')
     if(search.length && !this._tagSearchOpen) this._openTagSearch()
+    else this._closeTagSearch()
   }
 
   _tagVoted(e){
