@@ -125,7 +125,7 @@ export default class SociTag extends SociComponent {
   }
   
   vote(e){
-    e.preventDefault()
+    e?.preventDefault()
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
     this.setAttribute('score', score + (upvoted ? 1 : -1))
@@ -141,7 +141,6 @@ export default class SociTag extends SociComponent {
         post: post.getAttribute('url'),
         tag: this.tag
       }).then(()=>{
-        console.log(this.getAttribute('tag-id'))
         soci.votes[post.getAttribute('post-id')].push(parseInt(this.getAttribute('tag-id')))
       })
     }

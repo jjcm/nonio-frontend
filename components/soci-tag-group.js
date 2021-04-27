@@ -231,6 +231,15 @@ export default class SociTagGroup extends SociComponent {
   addTag(){
     let input = this.select('#add-tag input')
     let tagName = input.value
+    // Check if this tag already exists on the post
+    let existingTag = Array.from(this.querySelectorAll('soci-tag')).find(tag=>tag.getAttribute('tag')==tagName)
+    if(existingTag){
+      existingTag.vote()
+      this.prepend(existingTag)
+      this.select('#add-tag input').value = ''
+      this._closeTagSearch()
+      return
+    }
     const url = this.closest('[url]')?.getAttribute('url')
     if(!url) {
       console.warn('No url found when creating tag.')
