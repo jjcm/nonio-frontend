@@ -497,7 +497,7 @@ export default class SociSidebar extends SociComponent {
     creds.email = creds.email.value
     creds.password = creds.password.value
 
-    soci.postData('login', creds).then(response => {
+    soci.postData('user/login', creds).then(response => {
       if(response.token){
         soci.log('Login Successful! Token:', response.token)
         soci.storeToken(response.token)
@@ -542,7 +542,7 @@ export default class SociSidebar extends SociComponent {
       //eventually this will be the rest of the stuff - i.e. payment deets
     }
 
-    let response = await soci.postData('register', {
+    let response = await soci.postData('user/register', {
       username: fields.username.value,
       email: fields.email.value,
       password: fields.password.value,
