@@ -509,69 +509,61 @@ button:focus {
   height: 100%;
   overflow-y: auto;
 }
-#admin-financials .container,
-#admin-settings .container {
+.admin-page .content {
+  padding: 28px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.admin-page .container {
   padding: 24px 50px;
 }
-#admin-financials soci-input,
-#admin-settings soci-input {
+.admin-page soci-input {
   border: 1px solid var(--base-background-subtle);
   border-radius: 3px;
   --min-height: 240px;
 }
-#admin-financials .blocks,
-#admin-settings .blocks {
+.admin-page .blocks {
   display: flex;
   flex-wrap: wrap;
   width: calc(100% + 40px);
 }
-#admin-financials .blocks .block,
-#admin-settings .blocks .block {
+.admin-page .blocks .block {
   min-width: 240px;
   width: 100%;
   flex: 1;
   margin-right: 40px;
   margin-bottom: 20px;
 }
-#admin-financials .blocks .block.avatar,
-#admin-settings .blocks .block.avatar {
+.admin-page .blocks .block.avatar {
   max-width: 420px;
   flex: 1;
 }
-#admin-financials .blocks .block.description,
-#admin-settings .blocks .block.description {
+.admin-page .blocks .block.description {
   min-width: 380px;
   flex: 2;
 }
-#admin-financials .blocks .block.profit,
-#admin-settings .blocks .block.profit {
+.admin-page .blocks .block.profit {
   min-width: calc(100% - 40px);
 }
-#admin-financials .blocks .block.profit h2,
-#admin-settings .blocks .block.profit h2 {
+.admin-page .blocks .block.profit h2 {
   margin-bottom: 0;
 }
-#admin-financials .blocks .block.profit h1,
-#admin-settings .blocks .block.profit h1 {
+.admin-page .blocks .block.profit h1 {
   font-size: 60px;
   margin: 0;
   color: var(--success-text);
 }
-#admin-financials .blocks .block.profit .actions,
-#admin-settings .blocks .block.profit .actions {
+.admin-page .blocks .block.profit .actions {
   justify-content: flex-start;
 }
-#admin-financials .cc-details,
-#admin-settings .cc-details {
+.admin-page .cc-details {
   display: flex;
 }
-#admin-financials .cc-details input:first-child,
-#admin-settings .cc-details input:first-child {
+.admin-page .cc-details input:first-child {
   min-width: 160px;
   margin-right: 12px;
 }
-#admin-financials input,
-#admin-settings input {
+.admin-page input {
   margin: 0 0 8px;
   border: 0;
   border-bottom: 2px solid var(--base-background-subtle);
@@ -580,25 +572,33 @@ button:focus {
   font-size: 14px;
   width: 100%;
 }
-#admin-financials input:focus,
-#admin-settings input:focus {
+.admin-page input:focus {
   border-bottom: 2px solid var(--brand-background);
   outline: 0;
 }
-#admin-financials .actions,
-#admin-settings .actions {
+.admin-page .actions {
   width: 100%;
   justify-content: flex-end;
   display: flex;
   margin-top: 8px;
 }
-#admin-financials .actions button:last-child,
-#admin-settings .actions button:last-child {
+.admin-page .actions button:last-child {
   margin-right: 0;
 }
-#admin-financials h2,
-#admin-settings h2 {
+.admin-page h2 {
   margin-top: 0;
+}
+#admin-change-forgotten-password .success {
+  transform: translateY(20px);
+  opacity: 0;
+}
+#admin-change-forgotten-password[success] .loading-block {
+  display: none;
+}
+#admin-change-forgotten-password[success] .success {
+  transform: translateY(0px);
+  opacity: 1;
+  display: block;
 }
 @media screen and (max-width: 968px) {
   #user .stats {
@@ -823,11 +823,6 @@ soci-route[active] [load-order="tertiary"] {
 #blog {
   display: block;
   overflow-x: hidden;
-}
-#admin-create .content {
-  padding: 28px 40px;
-  max-width: 800px;
-  margin: 0 auto;
 }
 #admin-create .loading-block:not(:first-child) {
   margin-top: 40px;

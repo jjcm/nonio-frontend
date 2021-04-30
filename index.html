@@ -70,7 +70,7 @@
         </div>
       </div>
     </soci-route>
-    <soci-route id="admin-create" path="/admin/create-account">
+    <soci-route class="admin-page" id="admin-create" path="/admin/create-account">
       <div class="content">
         <div class="loading-block" load-order="primary">
           <h1>Thanks for choosing to sign up</h1>
@@ -96,6 +96,39 @@
           <p>Nonio would be nothing without creators. The point of the platform is to fund their creativity. In addition, it means that your vote is worth something. When you're choosing to upvote a post, you're saying that this item is deserving of a slice of your pool of contribution. This means other things you've voted on will get a smaller percentage of your pool as well, so you have to vote with a conscience. A picture of a cat may not be worthy of a percentage of your pool when you've previously voted up a high quality piece of investigative journalism. The hope is that this leads to higher quality content that gets surfaced, rather than surfacing wide-appeal-but-low-effort content like r/all on reddit.</p>
         </div>
       </div>
+    </soci-route>
+    <soci-route class="admin-page" id="admin-forgot-password" path="/admin/forgot-password">
+      <div class="content">
+        <div class="loading-block" load-order="primary">
+          <h1>We all forget sometimes &lt;3</h1>
+          <p>Enter your email below. If it exists, we'll send you an email with a password reset link.</p><br/>
+        </div>
+        <div class="loading-block" load-order="secondary">
+          <input type="text" placeholder="email"/>
+          <soci-button async="async">submit</soci-button>
+        </div>
+      </div>
+      <script>lazyload('/pages/admin-forgot-password.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
+    <soci-route class="admin-page" id="admin-change-forgotten-password" path="/admin/change-forgotten-password">
+      <div class="content">
+        <div class="loading-block" load-order="primary">
+          <h1>Change forgotten password</h1>
+          <p>Enter your new password below. This link expires one hour after generation.</p><br/>
+        </div>
+        <div class="loading-block" load-order="secondary">
+          <form>
+            <soci-password name="newPassword" placeholder="New password"></soci-password>
+            <soci-password name="confirmPassword" match="newPassword" placeholder="Confirm new password"></soci-password>
+            <soci-button async="async">submit</soci-button>
+          </form>
+        </div>
+        <div class="success" load-order="primary">
+          <h1>Password changed successfully</h1>
+          <p>Please use the sidebar to log in.</p>
+        </div>
+      </div>
+      <script>lazyload('/pages/admin-change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh="fresh">
       <div class="sidebar" load-order="primary">
@@ -205,7 +238,7 @@
           
       </script>
     </soci-route>
-    <soci-route id="admin-financials" path="/admin/financials">
+    <soci-route class="admin-page" id="admin-financials" path="/admin/financials">
       <div class="container" id="admin-financials-container">
         <script src="/pages/admin-financials.js"></script>
         <div class="blocks">
@@ -248,7 +281,7 @@
         </div>
       </div>
     </soci-route>
-    <soci-route id="admin-settings" path="/admin/settings">
+    <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
         <script src="/pages/admin-settings.js"></script>
         <div class="blocks">
