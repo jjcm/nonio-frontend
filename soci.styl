@@ -316,6 +316,19 @@ button
   h2
     margin-top: 0
 
+#admin-change-forgotten-password
+  .success
+    transform: translateY(20px)
+    opacity: 0
+  &[success]
+    .loading-block
+      display: none
+    .success
+      transform: translateY(0px)
+      opacity: 1
+      display: block
+    
+
 @media screen and (max-width: 968px) 
   #user .stats
     margin-top: 12px

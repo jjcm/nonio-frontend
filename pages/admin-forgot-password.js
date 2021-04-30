@@ -2,12 +2,11 @@ let adminForgotPassword = {
   dom: document.currentScript.closest('soci-route'),
   init: () => {
     soci.registerPage(adminForgotPassword)
-    console.log('inited')
-    adminForgotPassword.submitButton = adminForgotPassword.dom.querySelector('soci-button')
-    adminForgotPassword.submitButton.addEventListener('click', adminForgotPassword.submitRequest)
   },
   onActivate: () => {
     document.title = 'Forgot password?'
+    adminForgotPassword.submitButton = adminForgotPassword.dom.querySelector('soci-button')
+    adminForgotPassword.submitButton.addEventListener('click', adminForgotPassword.submitRequest)
   },
   onDeactivate: () => {
   },
