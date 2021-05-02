@@ -15,7 +15,6 @@ export default class SociPostLi extends SociComponent {
         padding: 12px;
         border-radius: 8px;
         box-shadow: 0px 1px 3px var(--shadow);
-        overflow: hidden;
         box-sizing: border-box;
         opacity: 1;
         position: relative;
@@ -50,7 +49,6 @@ export default class SociPostLi extends SociComponent {
       content {
         display: flex;
         flex-direction: column;
-        overflow: hidden;
         padding-left: 8px;
         flex: 1;
       }
@@ -155,6 +153,7 @@ export default class SociPostLi extends SociComponent {
         display: block;
         opacity: 0;
         animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
+        z-index: 1;
       }
 
       :host([expanded]) ::slotted(soci-quill-view) {
@@ -162,6 +161,12 @@ export default class SociPostLi extends SociComponent {
         opacity: 0;
         animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
         font-size: 14px;
+      }
+
+      slot[name="description"] {
+        display: block;
+        max-height: 100%;
+        overflow: hidden;
       }
 
       @keyframes load-in {

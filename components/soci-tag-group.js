@@ -12,6 +12,7 @@ export default class SociTagGroup extends SociComponent {
       display: flex;
       line-height: var(--height);
       align-items: center;
+      position: relative;
     }
     #tags {
       overflow: hidden;
@@ -363,7 +364,10 @@ export default class SociTagGroup extends SociComponent {
     `
     dom.innerHTML = (!match ? createLi : '') + tagsLis
     this._currentlySelectedTag = dom.querySelector('[selected]')
-    if(search.length && !this._tagSearchOpen) this._openTagSearch()
+    if(search.length) {
+      console.log('stayin open')
+      if(!this._tagSearchOpen) this._openTagSearch()
+    }
     else this._closeTagSearch()
   }
 
