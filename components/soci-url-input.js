@@ -2,7 +2,9 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociUrlInput extends SociComponent {
-  static formAssociated = true
+  static get formAssociated() {
+    return true
+  }
 
   constructor() {
     super()

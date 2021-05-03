@@ -180,7 +180,7 @@ export default class SociCommentList extends SociComponent {
       parent?.appendChild(newComment)
     })
 
-    votes.forEach(vote => {
+    votes?.forEach(vote => {
       let comment = this.querySelector(`soci-comment[comment-id="${vote.comment_id}`)
       comment?.showVote(vote.upvote)
     })

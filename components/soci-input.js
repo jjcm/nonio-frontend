@@ -2,7 +2,9 @@ import SociComponent from './soci-component.js'
 import quillStyle from '../lib/quillStyle.js'
 
 export default class SociInput extends SociComponent {
-  static formAssociated = true
+  static get formAssociated() {
+    return true
+  }
 
   constructor() {
     super()
