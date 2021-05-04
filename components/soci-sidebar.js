@@ -467,7 +467,7 @@ export default class SociSidebar extends SociComponent {
   // Account control actions
   async login(){
     let form = this.querySelector('[slot="login"] form')
-    let button = this.querySelector('[slot="login"] soci-button')
+    let button = form.querySelector('soci-button')
     if(!form.reportValidity()) {
       setTimeout(()=>{
         button?.error()
@@ -510,20 +510,11 @@ export default class SociSidebar extends SociComponent {
       button.error()
       return
     }
-    let fields = {
-      username: this.querySelector('[slot="create"] soci-username-input'),
-      email: this.querySelector('[slot="create"] input[type="email"]'),
-      password: this.querySelector('[slot="create"] soci-password'),
-      subscriptionAmount: this.querySelector('[slot="create"] soci-contribution-slider'),
-      //eventually this will be the rest of the stuff - i.e. payment deets
-    }
 
-    let response = await soci.postData('user/register', {
-      username: fields.username.value,
-      email: fields.email.value,
-      password: fields.password.value,
-      subscriptionAmount: fields.subscriptionAmount.value
-    })
+    let formData = soci.getJSONFromForm(form)
+    formData.subscriptionAmount = form.querySelector('soci-contribution-slider').value
+
+    let response = await soci.postData('user/register', formData)
 
     if(response.token){
       button.success()
