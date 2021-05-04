@@ -21,9 +21,28 @@
   <soci-sidebar loading="loading">
     <div slot="login">
       <form>
-        <input type="email" placeholder="Email address" autocomplete="email"/>
-        <soci-password></soci-password>
+        <input type="email" name="email" placeholder="Email address" autocomplete="email"/>
+        <soci-password name="password"></soci-password>
         <soci-button async="async" onclick="this.closest('soci-sidebar').login()">login</soci-button>
+      </form>
+    </div>
+    <div slot="create">
+      <form>
+        <h2>Essentials</h2>
+        <soci-username-input name="username" tabindex="0"></soci-username-input>
+        <input type="email" name="email" placeholder="Email address"/>
+        <soci-password tabindex="0" name="password"></soci-password>
+        <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
+        <h2>Contribution</h2>
+        <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
+        <h2>Billing</h2>
+        <input type="text" placeholder="Credit Card Name"/>
+        <input type="text" placeholder="Credit Card Number"/>
+        <cc-details>
+          <input type="text" placeholder="Exp. Date"/>
+          <input type="text" placeholder="CCV"/>
+        </cc-details>
+        <soci-button async="async" onclick="this.closest('soci-sidebar').register()">Create Account</soci-button>
       </form>
     </div>
     <tags slot="tags"></tags>

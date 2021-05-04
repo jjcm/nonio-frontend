@@ -746,7 +746,6 @@ soci-sidebar input:-webkit-autofill:focus,
 soci-sidebar input:-webkit-autofill:hover,
 soci-sidebar input {
   margin: 0 0 8px;
-  padding: 0 10px;
   border: 0;
   border-bottom: 2px solid var(--base-background-subtle);
   background: var(--base-background) !important;
@@ -758,13 +757,21 @@ soci-sidebar input {
 }
 soci-sidebar input::placeholder {
   text-transform: none;
-  font-size: 12px;
+  font-size: 14px;
+  opacity: 0.5;
 }
 soci-sidebar input:focus,
 soci-sidebar input:active {
   box-shadow: none;
   outline: none;
   border-bottom: 2px solid var(--brand-background);
+}
+soci-sidebar h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: normal;
+  color: var(--base-text-subtle);
 }
 soci-sidebar button {
   margin-top: 8px;
@@ -794,6 +801,24 @@ soci-sidebar button:hover {
 }
 soci-sidebar button[waiting] svg {
   display: block;
+}
+soci-sidebar form {
+  display: flex;
+  flex-direction: column;
+}
+soci-sidebar h2:not(:first-child) {
+  margin-top: 50px;
+}
+soci-sidebar soci-button {
+  margin-top: 16px;
+  align-self: flex-end;
+}
+soci-sidebar cc-details {
+  display: flex;
+}
+soci-sidebar cc-details input:first-child {
+  min-width: 160px;
+  margin-right: 12px;
 }
 [load-order] {
   transform: translateY(20px);
