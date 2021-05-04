@@ -135,7 +135,6 @@ export default class SociPassword extends SociComponent {
         this._updateValidity('Passwords do not match.')
       }
       else {
-        console.log('updating validity to true')
         this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity()
         this._updateValidity()
       }
@@ -153,7 +152,6 @@ export default class SociPassword extends SociComponent {
   }
 
   checkMatch(){
-    console.log('checking match')
     if(this.hasAttribute('match')){
       let matchedField = this.closest('form').querySelector(`soci-password[name=${this.getAttribute('match')}]`)
       return matchedField.value == this.value
