@@ -466,28 +466,21 @@ export default class SociSidebar extends SociComponent {
 
   // Account control actions
   async login(){
-    let creds = {
-      email: this.querySelector('input[type="email"]'),
-      password: this.querySelector('soci-password')
+    let form = this.querySelector('[slot="login"] form')
+    let button = this.querySelector('[slot="login"] soci-button')
+    if(!form.reportValidity()) {
+      setTimeout(()=>{
+        button?.error()
+      }, 1)
+      return
     }
 
-    if(!creds.email.reportValidity()){
-      return 0
-    }
-
-    if(!creds.password.reportValidity()){
-      return 0
-    }
-
-    creds.email = creds.email.value
-    creds.password = creds.password.value
-
-    soci.postData('user/login', creds).then(response => {
+    soci.postData('user/login', soci.getJSONFromForm(form)).then(response => {
       if(response.token){
         soci.log('Login Successful! Token:', response.token)
         soci.storeToken(response.token)
         soci.username = response.username
-        this.querySelector('soci-button').success()
+        button?.success()
         setTimeout(()=>{
           this.toggleAttribute('noauth')
         }, 400)
@@ -499,7 +492,7 @@ export default class SociSidebar extends SociComponent {
         return
       }
       soci.log('Invalid login', response.error, 'error')
-      this.querySelector('soci-button')?.error()
+      button?.error()
     })
   }
 
@@ -512,12 +505,10 @@ export default class SociSidebar extends SociComponent {
 
   async register(){
     let form = this.querySelector('[slot="create"] form')
+    let button = form.querySelector('soci-button')
     if(!form.reportValidity()) {
-      this.querySelector('[slot="create"] soci-button').error()
-      setTimeout(()=>{
-        this.querySelector('[slot="create"] soci-button').removeAttribute('state')
-      }, 2000)
-      return 0
+      button.error()
+      return
     }
     let fields = {
       username: this.querySelector('[slot="create"] soci-username-input'),
@@ -535,7 +526,7 @@ export default class SociSidebar extends SociComponent {
     })
 
     if(response.token){
-      this.querySelector('[slot="create"] soci-button').success()
+      button.success()
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       soci.username = response.username

@@ -21,8 +21,8 @@ html(lang="en")
   soci-sidebar(loading)
     div(slot="login")
       form
-        input(type="email" placeholder="Email address" autocomplete="email")
-        soci-password
+        input(type="email" name="email" placeholder="Email address" autocomplete="email")
+        soci-password(name="password")
         soci-button(async onclick="this.closest('soci-sidebar').login()") login
     div(slot="create")
       form
