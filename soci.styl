@@ -452,7 +452,6 @@ soci-sidebar
   input:-webkit-autofill:hover,
   input
     margin: 0 0 8px
-    padding: 0 10px
     border: 0
     border-bottom: 2px solid var(--base-background-subtle)
     background: var(--base-background) !important
@@ -464,13 +463,21 @@ soci-sidebar
 
   input::placeholder
     text-transform: none
-    font-size: 12px
+    font-size: 14px
+    opacity: 0.5
 
   input:focus,
   input:active
     box-shadow: none
     outline: none
     border-bottom: 2px solid var(--brand-background)
+  
+  h2
+    font-size: 14px
+    text-transform: uppercase
+    letter-spacing: 1.4px
+    font-weight: normal
+    color: var(--base-text-subtle)
 
   button
     margin-top: 8px
@@ -500,6 +507,24 @@ soci-sidebar
     &[waiting] 
       svg 
         display: block
+
+  form
+    display: flex
+    flex-direction: column
+
+  h2:not(:first-child)
+    margin-top: 50px
+
+  soci-button
+    margin-top: 16px;
+    align-self: flex-end;
+
+  cc-details
+    display: flex
+
+  cc-details input:first-child
+    min-width: 160px
+    margin-right: 12px
 
 [load-order]
   transform: translateY(20px)

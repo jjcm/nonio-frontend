@@ -1,7 +1,9 @@
 import SociComponent from './soci-component.js'
 
 export default class SociPassword extends SociComponent {
-  static formAssociated = true
+  static get formAssociated() {
+    return true
+  }
 
   constructor() {
     super()

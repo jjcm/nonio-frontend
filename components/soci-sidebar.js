@@ -352,23 +352,8 @@ export default class SociSidebar extends SociComponent {
         <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
       </panel>
       <panel id="create">
-        <h2>Essentials</h2>
-        <form action="#">
-          <soci-username-input name="username" tabindex="0"></soci-username-input>
-          <input type="email" placeholder="Email address"/>
-          <soci-password tabindex="0" name="password"></soci-password>
-          <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
-          <h2>Contribution</h2>
-          <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
-          <h2>Billing</h2>
-          <input type="text" placeholder="Credit Card Name"/>
-          <input type="text" placeholder="Credit Card Number"/>
-          <cc-details>
-            <input type="text" placeholder="Exp. Date"/>
-            <input type="text" placeholder="CCV"/>
-          </cc-details>
-          <soci-button async @click=register>Create Account</soci-button>
-        </form>
+        <slot name="create">
+        </slot>
       </panel>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -526,19 +511,19 @@ export default class SociSidebar extends SociComponent {
   }
 
   async register(){
-    let form = this.select('#create form')
+    let form = this.querySelector('[slot="create"] form')
     if(!form.reportValidity()) {
-      this.select('#create soci-button').error()
+      this.querySelector('[slot="create"] soci-button').error()
       setTimeout(()=>{
-        this.select('#create soci-button').removeAttribute('state')
+        this.querySelector('[slot="create"] soci-button').removeAttribute('state')
       }, 2000)
       return 0
     }
     let fields = {
-      username: this.select('#create soci-username-input'),
-      email: this.select('#create input[type="email"]'),
-      password: this.select('#create soci-password'),
-      subscriptionAmount: this.select('#create soci-contribution-slider'),
+      username: this.querySelector('[slot="create"] soci-username-input'),
+      email: this.querySelector('[slot="create"] input[type="email"]'),
+      password: this.querySelector('[slot="create"] soci-password'),
+      subscriptionAmount: this.querySelector('[slot="create"] soci-contribution-slider'),
       //eventually this will be the rest of the stuff - i.e. payment deets
     }
 
@@ -550,7 +535,7 @@ export default class SociSidebar extends SociComponent {
     })
 
     if(response.token){
-      this.select('#create soci-button').success()
+      this.querySelector('[slot="create"] soci-button').success()
       soci.log('Login Successful! Token:', response.token)
       soci.storeToken(response.token)
       soci.username = response.username
