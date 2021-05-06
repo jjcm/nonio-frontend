@@ -197,7 +197,7 @@
     --base-text-subtle: var(--z4);
     --base-text-subtle-hover: var(--z2);
     --base-text-bold: var(--z0);
-    --base-text-inverse: var(--z8);
+    --base-text-inverse: var(--z9);
     --brand-background: var(--b1);
     --brand-background-hover: var(--b0);
     --brand-background-bold: var(--b0);
@@ -317,47 +317,69 @@ button:focus {
   z-index: 11;
   pointer-events: none;
 }
-#home svg {
-  color: var(--brand-text);
-}
-#home .other-platforms-illustration {
-  width: 100%;
-  height: 300px;
-  border-radius: 3px;
-  background: var(--base-background-subtle);
-}
 #home #home-container {
+  min-width: 1160px;
+  margin: 0 auto;
+}
+#home #home-container .inner-container {
+  padding: 32px 54px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 36px;
+}
+#home .header-container {
+  background: radial-gradient(farthest-corner at 10% 50%, #1e72d2 30%, #073f80);
+  position: relative;
+  overflow: hidden;
+}
+#home .header-container .page-cut {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0px -4px 8px rgba(7,14,23,0.251));
+}
+#home .header-container img {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  top: 80px;
+  max-width: calc(max(min(100vw - 1000px, 600px), 440px));
+  box-shadow: 0 0 80px #073f80;
+  border-radius: 6px 0 0 6px;
 }
 #home .header {
-  display: flex;
-  align-items: center;
+  color: var(--base-text-inverse);
 }
-#home .header .dash {
-  width: 100%;
-  height: 2px;
-  background: var(--base-text-subtle);
-  margin-left: 20px;
-}
-#home .header h1 {
-  margin: 0;
-  margin-left: 20px;
-  white-space: nowrap;
-  transform: translateY(-2px);
+#home .header .left-block {
+  max-width: 600px;
 }
 #home .header svg {
-  min-width: 200px;
+  opacity: 0.5;
+  width: 100px;
+  margin-bottom: 32px;
+}
+#home .header h1 {
+  font-size: 80px;
+  line-height: 80px;
+  margin-left: -4px;
+}
+#home .header p {
+  font-size: 24px;
+  opacity: 0.8;
+}
+#home h2 {
+  font-weight: bold;
+}
+#home .divider {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #319ef2, #106fb9);
+  margin-bottom: 48px;
 }
 #home .columns {
   display: flex;
 }
-#home .columns .image {
-  width: 100%;
-  height: 200px;
-  border-radius: 3px;
-  background: var(--base-background-subtle);
+#home .columns .divider {
+  width: 100px;
+  margin-bottom: 8px;
 }
 #home .columns .column {
   width: 100%;
@@ -365,6 +387,10 @@ button:focus {
 }
 #home .columns .column:first-child {
   margin-left: 0;
+}
+#home .type-examples {
+  margin: 0 -48px;
+  width: calc(100% + 96px);
 }
 #user {
   min-width: 420px;
