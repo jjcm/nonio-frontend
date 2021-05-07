@@ -66,7 +66,7 @@ export default class SociPostLi extends SociComponent {
         top: 12px;
         right: 12px;
       }
-      #title {
+      ::slotted([slot="title"]) {
         font-size: 16px;
         color: var(--base-text-bold);
         letter-spacing: -0.08px;
@@ -92,7 +92,7 @@ export default class SociPostLi extends SociComponent {
       #tags::-webkit-scrollbar {
         display: none;
       }
-      #comments {
+      ::slotted([slot="comments"]) {
         font-size: 12px;
         color: var(--base-text-subtle);
         letter-spacing: -0.16px;
@@ -203,10 +203,10 @@ export default class SociPostLi extends SociComponent {
         <div id="details">
           <slot name="user"></slot>
           <div id="time"></div>
-          <div id="comments"></div>
+          <slot name="comments"></slot>
         </div>
         <soci-link>
-          <div id="title"></div>
+          <slot name="title"></slot>
         </soci-link>
       </div>
       <slot name="tags"></slot>
@@ -219,14 +219,11 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['post-title', 'score', 'time', 'type', 'comments', 'url']
+    return ['time', 'type', 'url']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
-      case 'post-title':
-        this.select('#title').innerHTML = newValue
-        break
       case 'type':
         this.loadContent(newValue)
         break
@@ -234,9 +231,6 @@ export default class SociPostLi extends SociComponent {
         this._updateTime = this._updateTime.bind(this)
         this._updateTime()
         break
-      case 'score':
-        this.querySelector('soci-tag-group').setAttribute('score', newValue)
-        break;
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
         break;

@@ -73,9 +73,11 @@ export default class SociPostLi extends SociComponent {
     console.log('creating posts')
     let posts = `
       ${data.map((post) => `
-        <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" score=${post.score || 0} comments=${post.commentCount || 0} type=${post.type || 'image'} time=${post.time}>
+        <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" type=${post.type || 'image'} time=${post.time}>
+          <div slot="title">${post.title}</div>
+          <div slot="comments">${post.commentCount || 0}</div>
           <soci-user name="${post.user}" slot="user"></soci-user>
-          <soci-tag-group slot="tags">
+          <soci-tag-group slot="tags" score=${post.score || 0}>
             ${this.sortTags(post.tags).map(tag => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}
           </soci-tag-group>
         </soci-post-li>
