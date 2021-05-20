@@ -871,7 +871,7 @@ soci-route[active] [load-order="tertiary"] {
   transform: translateY(0px);
   opacity: 1;
 }
-soci-route {
+soci-route:not([active]) {
   display: none;
 }
 #new-user #new-user-container {
