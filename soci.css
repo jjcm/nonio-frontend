@@ -317,6 +317,12 @@ button:focus {
   z-index: 11;
   pointer-events: none;
 }
+#home {
+  display: none;
+}
+#home[active] {
+  display: contents;
+}
 #home #home-container {
   min-width: 1160px;
   margin: 0 auto;
@@ -864,6 +870,9 @@ soci-route[active] [load-order="secondary"],
 soci-route[active] [load-order="tertiary"] {
   transform: translateY(0px);
   opacity: 1;
+}
+soci-route {
+  display: none;
 }
 #new-user #new-user-container {
   padding: 24px 36px;

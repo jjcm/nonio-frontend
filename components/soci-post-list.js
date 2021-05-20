@@ -58,9 +58,18 @@ export default class SociPostLi extends SociComponent {
     switch(name){
       case 'data':
         this.toggleAttribute('loaded', false)
+        const LOOP_AMOUNT = 10
         let data = await this.getData(newValue, this.authToken)
-        if(data.posts) this.createPosts(data.posts)
+        let ttotal = 0
+        for(var i = 0; i < LOOP_AMOUNT; i++){
+          const t0 = performance.now()
+          if(data.posts) this.createPosts(data.posts)
+          const t1 = performance.now()
+          ttotal += t1 - t0
+        }
         this.toggleAttribute('loaded', true)
+        console.log(`time to generate: ${ttotal / LOOP_AMOUNT}`)
+        console.log(`time per post: ${ttotal / LOOP_AMOUNT / data.posts.length}`)
         break
       case 'filter':
         // should put an infinite scroll here
