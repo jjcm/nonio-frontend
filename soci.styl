@@ -117,6 +117,20 @@ button
       max-width: calc(max(min(100vw - 1000px, 600px), 440px))
       box-shadow: 0 0 80px #073F80
       border-radius: 6px 0 0 6px
+  .account-actions
+    position: absolute
+    top: 28px
+    right: 54px
+    soci-button
+      margin-left: 4px
+      background: transparent
+      font-weight: 500
+      &:hover
+        background: var(--brand-background)
+    .primary
+      background: var(--brand-background)
+      &:hover
+        filter: brightness(1.1) saturate(0.9)
   .header
     color: var(--base-text-inverse)
     .left-block
