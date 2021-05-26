@@ -2,7 +2,7 @@ import config from './config.js'
 
 let soci = {
   init: () => {
-    soci.checkTokenExpired()
+    console.log(soci.checkTokenExpired())
   },
   get token() {
     return localStorage.getItem('jwt')
@@ -22,7 +22,8 @@ let soci = {
   checkTokenExpired: () => {
     try {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
-      if(expiry < Date.now()) return false
+      console.log(expiry)
+      if(expiry > Date.now() / 1000) return false
       soci.clearToken()
       return true
     }
@@ -115,11 +116,21 @@ let soci = {
       })
       soci.votes = votes
     })
-  }
+  },
+  showRegister() {
+    document.body.toggleAttribute('noauth', false)
+    document.querySelector('soci-sidebar')._createAccount()
+  },
+  showLogin() {
+    document.body.toggleAttribute('noauth', false)
+  },
 }
 
 if(!soci.checkTokenExpired()) {
   soci.loadVotes()
+}
+else {
+  document.body.toggleAttribute('noauth', true)
 }
 
 window.soci = soci

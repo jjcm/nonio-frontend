@@ -8,6 +8,19 @@ body
   font-size: 14px
   &[dragging]
     user-select: none
+  &[noauth]
+    soci-sidebar
+      left: -280px
+      transition: none
+    #pages 
+      margin-left: 0
+      width: 100vw
+      transition: none
+      &:before
+        left: 0
+        opacity: 0
+        transition: none
+        animation: none
 input
 body
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
@@ -79,6 +92,7 @@ button
   width: calc(100vw - 280px)
   position: relative
   margin-left: 280px
+  transition: all 0.2s var(--soci-ease)
   &:before
     content: ''
     position: fixed
@@ -89,6 +103,9 @@ button
     background: linear-gradient(90deg, var(--shadow) 0px, var(--shadow-light) 1px, transparent 4px)
     z-index: 11
     pointer-events: none
+    transition: all 0.2s var(--soci-ease)
+    opacity: 0
+    animation: fade-in 0.2s linear 0.2s forwards
 
 #home
   display: none
@@ -124,7 +141,7 @@ button
     soci-button
       margin-left: 4px
       background: transparent
-      font-weight: 500
+      font-weight: 700
       &:hover
         background: var(--brand-background)
     .primary
@@ -482,6 +499,8 @@ button
 
 
 soci-sidebar
+  left: 0
+  transition: left 0.2s ease
   &[loading]
     opacity: 0
   input:-webkit-autofill,
@@ -604,6 +623,16 @@ soci-route:not([active])
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 #blog
   display: block
   overflow-x: hidden
@@ -612,6 +641,7 @@ soci-route:not([active])
   .loading-block:not(:first-child)
     margin-top: 40px
   
+
 ::-webkit-scrollbar 
   width: 14px
 
