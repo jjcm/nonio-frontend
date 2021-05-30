@@ -10,6 +10,18 @@ let soci = {
   set token(val) {
     localStorage.setItem('jwt', val)
   },
+  get stripe(){
+    if("Stripe" in window) return Stripe
+
+    let stripe = document.createElement('script')
+    stripe.src = 'https://js.stripe.com/v3/'
+    return new Promise(resolve =>{
+      stripe.onload = ()=>{
+        resolve(Stripe)
+      }
+      document.head.appendChild(stripe)
+    })
+  },
   storeToken: (token) => {
     soci.token = token
   },

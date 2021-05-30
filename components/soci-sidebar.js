@@ -541,7 +541,8 @@ export default class SociSidebar extends SociComponent {
     }
   }
 
-  _createAccount(){
+  async _createAccount(){
+    console.log(await soci.stripe)
     this.removeAttribute('noauth')
     this.setAttribute('create', '')
     this.select('#logout').innerHTML = "Login"
