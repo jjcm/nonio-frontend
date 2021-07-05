@@ -67,7 +67,7 @@ export default class SociSidebar extends SociComponent {
 
       section {
         position: relative;
-        transition: all 0.2s var(--soci-ease), opacity 0.4s var(--soci-ease);
+        transition: all var(--anim-duration-med) var(--soci-ease), opacity var(--anim-duration-long) var(--soci-ease);
       }
 
       content section {

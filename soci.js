@@ -136,6 +136,13 @@ let soci = {
   showLogin() {
     document.body.toggleAttribute('noauth', false)
   },
+  setAnimationTimings(){
+    console.log('timings')
+    let root = document.documentElement
+    root.style.setProperty('--anim-duration-short', '0.1s')
+    root.style.setProperty('--anim-duration-med', '0.2s')
+    root.style.setProperty('--anim-duration-long', '0.4s')
+  }
 }
 
 if(!soci.checkTokenExpired()) {
@@ -147,3 +154,4 @@ else {
 
 window.soci = soci
 document.addEventListener('DOMContentLoaded', soci.init)
+window.addEventListener('load', soci.setAnimationTimings)
