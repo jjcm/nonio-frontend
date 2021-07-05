@@ -50,6 +50,9 @@
   --p2: #4e5ab7;
   --p1: #777fda;
   --p0: #acb0ec;
+  --anim-duration-short: 0s;
+  --anim-duration-med: 0s;
+  --anim-duration-long: 0s;
   --soci-ease-in: cubic-bezier(1, 0, 0.85, 1);
   --soci-ease-out: cubic-bezier(0.25, 0, 0, 1);
   --soci-ease: cubic-bezier(0.65, 0, 0.35, 1);
@@ -227,6 +230,21 @@ body {
 body[dragging] {
   user-select: none;
 }
+body[noauth] soci-sidebar {
+  left: -280px;
+  transition: none;
+}
+body[noauth] #pages {
+  margin-left: 0;
+  width: 100vw;
+  transition: none;
+}
+body[noauth] #pages:before {
+  left: 0;
+  opacity: 0;
+  transition: none;
+  animation: none;
+}
 input,
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
@@ -305,6 +323,7 @@ button:focus {
   width: calc(100vw - 280px);
   position: relative;
   margin-left: 280px;
+  transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear;
 }
 #pages:before {
   content: '';
@@ -316,6 +335,9 @@ button:focus {
   background: linear-gradient(90deg, var(--shadow) 0px, var(--shadow-light) 1px, transparent 4px);
   z-index: 11;
   pointer-events: none;
+  transition: all 0.2s var(--soci-ease);
+  opacity: 0;
+  animation: fade-in 0.2s linear 0.2s forwards;
 }
 #home {
   display: none;
@@ -350,6 +372,25 @@ button:focus {
   max-width: calc(max(min(100vw - 1000px, 600px), 440px));
   box-shadow: 0 0 80px #073f80;
   border-radius: 6px 0 0 6px;
+}
+#home .account-actions {
+  position: absolute;
+  top: 28px;
+  right: 54px;
+}
+#home .account-actions soci-button {
+  margin-left: 4px;
+  background: transparent;
+  font-weight: 700;
+}
+#home .account-actions soci-button:hover {
+  background: var(--brand-background);
+}
+#home .account-actions .primary {
+  background: var(--brand-background);
+}
+#home .account-actions .primary:hover {
+  filter: brightness(1.1) saturate(0.9);
 }
 #home .header {
   color: var(--base-text-inverse);
@@ -770,6 +811,10 @@ button:focus {
   flex: 1;
   --tag-height: 30px;
 }
+soci-sidebar {
+  left: 0;
+  transition: left 0.2s ease;
+}
 soci-sidebar[loading] {
   opacity: 0;
 }
@@ -938,6 +983,38 @@ soci-route:not([active]) {
   }
   to {
     transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
