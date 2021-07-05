@@ -272,14 +272,13 @@ export default class SociTagGroup extends SociComponent {
     button.toggleAttribute('active')
     let input = this.select('input')
     input.focus()
-    document.addEventListener('click', this._cancelAddTag)
     document.addEventListener('keydown', this._inputKeyListener)
+    setTimeout(()=>{
+      document.addEventListener('click', this._cancelAddTag)
+    }, 1)
   }
 
   _cancelAddTag(e){
-    let button = e ? e.path[0].closest('#add-tag') : null
-    if(button) return 0
-
     this.select('#add-tag').removeAttribute('active')
     this.select('#add-tag input').value = ''
     document.removeEventListener('click', this._cancelAddTag)
