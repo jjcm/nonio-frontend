@@ -2,7 +2,7 @@ import config from './config.js'
 
 let soci = {
   init: () => {
-    console.log(soci.checkTokenExpired())
+    soci.checkTokenExpired()
   },
   get token() {
     return localStorage.getItem('jwt')
@@ -34,7 +34,6 @@ let soci = {
   checkTokenExpired: () => {
     try {
       let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
-      console.log(expiry)
       if(expiry > Date.now() / 1000) return false
       soci.clearToken()
       return true
@@ -137,7 +136,6 @@ let soci = {
     document.body.toggleAttribute('noauth', false)
   },
   setAnimationTimings(){
-    console.log('timings')
     let root = document.documentElement
     root.style.setProperty('--anim-duration-short', '0.1s')
     root.style.setProperty('--anim-duration-med', '0.2s')
