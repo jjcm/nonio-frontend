@@ -231,8 +231,8 @@ export default class SociPostLi extends SociComponent {
         this.loadContent(newValue)
         break
       case 'time':
-        this._updateTime = this._updateTime.bind(this)
-        this._updateTime()
+        this.updateTime = this.updateTime.bind(this)
+        this.updateTime(newValue, this.select('#time'))
         break
       case 'score':
         this.querySelector('soci-tag-group').setAttribute('score', newValue)
@@ -245,23 +245,6 @@ export default class SociPostLi extends SociComponent {
         break;
 
     }
-  }
-
-  _updateTime() {
-    function setTimeAgo(time, interval, unit){
-      setTimeout(this._updateTime, Math.min(interval * 1000, 2147483647))
-      this.select('#time').innerHTML = Math.floor(time / interval) + unit + ' ago'
-    }
-    setTimeAgo = setTimeAgo.bind(this)
-    let time = this.getAttribute('time')
-    time = Math.floor((Date.now() - parseInt(time)) / 1000)
-    if(time < 60) setTimeAgo(time, 1, 's')
-    else if(time < 3600) setTimeAgo(time, 60, 'min')
-    else if(time < 86400) setTimeAgo(time, 3600, 'h')
-    else if(time < 604800) setTimeAgo(time, 86400, ' days')
-    else if(time < 2629746) setTimeAgo(time, 604800, ' weeks')
-    else if(time < 31556952) setTimeAgo(time, 2629746, ' months')
-    else setTimeAgo(time, 31556952, 'y')
   }
 
   get score(){
