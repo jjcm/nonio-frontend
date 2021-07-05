@@ -67,6 +67,7 @@ export default class SociSidebar extends SociComponent {
 
       section {
         position: relative;
+        transition: all 0.2s var(--soci-ease), opacity 0.4s var(--soci-ease);
       }
 
       content section {
@@ -334,7 +335,7 @@ export default class SociSidebar extends SociComponent {
               </svg>
             </soci-tag-li>
           </section>
-          <section id="subscribed-tags">
+          <section id="subscribed-tags" style="height: 0px; opacity: 0;">
             <h2>Subscribed Tags</h2>
             <tags></tags>
           </section>
@@ -405,11 +406,14 @@ export default class SociSidebar extends SociComponent {
 
   _populateTags(){
     if(this._subscribedTagsLoaded && this._commonTagsLoaded){
-      this._createTags(this._subscribedTags, this.select('#subscribed-tags tags'), true)
-      let filteredTags = this._commonTags.filter(t=>{
+      if(this._subscribedTags.length){
+        this._createTags(this._subscribedTags, this.select('#subscribed-tags tags'), true)
+      }
+      this._toggleSubscribedList(this._subscribedTags.length != 0)
+      this._commonTags = this._commonTags.filter(t=>{
         return this._subscribedTags.indexOf(t) == -1
       })
-      this._createTags(filteredTags, this.select('#tags tags'))
+      this._createTags(this._commonTags, this.select('#tags tags'))
     }
   }
 
@@ -443,6 +447,10 @@ export default class SociSidebar extends SociComponent {
       this.select('#subscribed-tags tags').appendChild(tag)
     }
 
+    if(this._subscribedTags.length == 1){
+      this._toggleSubscribedList(true)
+    }
+
     e.detail.dom.toggleAttribute('load-out', true)
     setTimeout(()=>{
       e.detail.dom.remove()
@@ -450,18 +458,40 @@ export default class SociSidebar extends SociComponent {
   }
 
   _removeSubscribedTag(e){
+    console.log(this._subscribedTags)
+    this._subscribedTags.splice(this._subscribedTags.indexOf(e.detail.tag), 1)
+    console.log(this._subscribedTags)
+
     if(this._commonTags.indexOf(e.detail.tag) == -1){
       let tag = document.createElement('soci-tag-li')
       tag.setAttribute('tag', e.detail.tag)
       tag.toggleAttribute('load-in', true)
       this._commonTags.push(e.detail.tag)
-      this._subscribedTags.splice(this._subscribedTags.indexOf(e.detail.tag), 1)
       this.select('#tags tags').prepend(tag)
     }
     e.detail.dom.toggleAttribute('load-out', true)
+    if(this._subscribedTags.length == 0){
+      this._toggleSubscribedList(false)
+    }
     setTimeout(()=>{
       e.detail.dom.remove()
     }, 200)
+  }
+
+  _toggleSubscribedList(revealed){
+    let list = this.select('#subscribed-tags')
+    list.style.height = list.style.minHeight = revealed ? 0 : list.offsetHeight
+    list.style.opacity = revealed ? 0 : 1;
+    list.style.overflow = 'hidden'
+    setTimeout(()=>{
+      list.style.height = list.style.minHeight = revealed ? 48 + (this._subscribedTags.length * 32) : 0
+      list.style.opacity = revealed ? 1 : 0;
+      if(revealed){
+        setTimeout(()=>{
+          list.style.overflow = list.style.height = list.style.minHeight = list.style.opacity = ''
+        }, 200)
+      }
+    }, 1)
   }
 
   // Account control actions
