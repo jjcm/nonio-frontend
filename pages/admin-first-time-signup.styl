@@ -1,0 +1,80 @@
+#admin-first-time-signup
+  background: var(--base-background-bold)
+  height: 100%
+  &[active]
+    display: block
+  .columns
+    display: flex
+    margin: 40px -20px 0
+    width: calc(100% + 40px)
+  .column
+    border: 1px solid var(--base-background-subtle)
+    border-radius: 4px
+    width: 100%
+    box-shadow: 0 2px 8px var(--shadow)
+    background: var(--base-background)
+    &:first-child
+      margin-right: 10px
+  .title
+    padding: 10px 20px
+    border-bottom: 1px solid var(--base-background-subtle)
+    position: relative
+    p
+      color: var(--base-text-subtle)
+      height: 80px
+    soci-button
+      position: absolute
+      bottom: 20px
+      right: 20px
+  h2
+    color: var(--base-text-bold)
+    margin-bottom: 4px
+  .price
+    font-size: 44px
+    font-weight: bold
+    color: var(--brand-text)
+    span
+      font-size: 14px
+      font-weight: normal
+      color: var(--base-text-subtle)
+  ul
+    list-style: none
+    padding: 0 20px
+  li
+    position: relative
+    line-height: 24px
+    padding-left: 20px
+    &.cant
+      color: var(--base-text-subtle)
+      text-decoration: line-through
+      &:after,
+      &:before
+        content: ''
+        display: block
+        position: absolute
+        width: 10px
+        height: 2px
+        transform: rotate(45deg)
+        left: 0
+        top: calc(50% - 1px)
+        background: var(--error-text)
+
+      &:before
+        transform: rotate(-45deg)
+    &.can
+      &:after,
+      &:before
+        content: ''
+        display: block
+        position: absolute
+        width: 2px
+        background: var(--success-text)
+        height: 5px
+        top: calc(50% - 2px)
+        left: 0
+        transform: rotate(-45deg);
+      &:after
+        height: 9px
+        top: calc(50% - 5px)
+        left: 4px
+        transform: rotate(45deg)

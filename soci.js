@@ -11,13 +11,13 @@ let soci = {
     localStorage.setItem('jwt', val)
   },
   get stripe(){
-    if("Stripe" in window) return Stripe
+    if("Stripe" in window) return Stripe(config.STRIPE_PUBLISHABLE_KEY)
 
     let stripe = document.createElement('script')
     stripe.src = 'https://js.stripe.com/v3/'
     return new Promise(resolve =>{
       stripe.onload = ()=>{
-        resolve(Stripe)
+        resolve(Stripe(config.STRIPE_PUBLISHABLE_KEY))
       }
       document.head.appendChild(stripe)
     })
@@ -128,12 +128,25 @@ let soci = {
       soci.votes = votes
     })
   },
+  animateSidebar() {
+    let pages = document.querySelector('#pages')
+
+    pages.style.transition = 'all 0.2s var(--soci-ease)'
+    setTimeout(()=>{
+      pages.style.transition = ''
+    }, 200)
+  },
   showRegister() {
-    document.body.toggleAttribute('noauth', false)
-    document.querySelector('soci-sidebar')._createAccount()
+    soci.animateSidebar()
+    setTimeout(()=>{
+      document.body.toggleAttribute('noauth', false)
+      document.querySelector('soci-sidebar')._createAccount()
+    }, 1)
   },
   showLogin() {
+    soci.animateSidebar()
     document.body.toggleAttribute('noauth', false)
+    document.querySelector('soci-sidebar').logout()
   },
   setAnimationTimings(){
     let root = document.documentElement

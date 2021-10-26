@@ -152,6 +152,9 @@ export default class SociButton extends SociComponent {
         color: transparent;
         cursor: wait;
       }
+      :host([state="waiting"]:hover) {
+        color: transparent;
+      }
 
       :host([state="waiting"]):before,
       :host([state="waiting"]):after {

@@ -1,4 +1,5 @@
 @require 'soci-tokens'
+@require 'pages/admin-first-time-signup'
 
 body
   margin: 0
@@ -92,7 +93,6 @@ button
   width: calc(100vw - 280px)
   position: relative
   margin-left: 280px
-  transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear
   &:before
     content: ''
     position: fixed
@@ -108,10 +108,12 @@ button
     animation: fade-in 0.2s linear 0.2s forwards
 
 #home
+  transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear
   display: none
   &[active]
     display: contents
   #home-container
+    width: 100%
     min-width: 1160px
     margin: 0 auto
     .inner-container
@@ -599,7 +601,7 @@ soci-route[active]
     transform: translateY(0px)
     opacity: 1
 
-soci-route:not([active])
+soci-route:not([active]):not([activating])
   display: none
 
 #new-user
