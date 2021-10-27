@@ -5,33 +5,38 @@
     p Please pick your account type
 
   .columns(load-order="secondary")
-    .column 
+    .column.supporter
       .title
         h2 Supporter
         p This allows you to contribute back to the creators. You choose your subscription price, and your subscription pool is divided evenly between everything you upvote that month.
-        .price $2-10<span>/mo</span>
-        soci-button(onclick="adminFirstTimeSignup.chooseSupporter()") Choose supporter
-      ul
-        li.can Submit posts
-        li.can Upvote and fund posts
-        li.can Browse and view posts
-        li.can Comment on posts
-        li.can Upvote and downvote comments
+      .payment
+        form#payment-form
+          #card-element
+          #card-element-errors(role="alert")
+          button(type="submit") Subscribe
+          soci-button(async onclick="adminFirstTimeSignup.subscribe()") Subscribe
+      .features
+        .price-container
+          .price $2-10<span>/mo</span>
+          soci-button(onclick="adminFirstTimeSignup.chooseSupporter()") Choose supporter
+        ul
+          li.can Submit posts
+          li.can Upvote and fund posts
+          li.can Browse and view posts
+          li.can Comment on posts
+          li.can Upvote and downvote comments
     .column 
       .title
         h2 Free
         p Everyone starts somewhere. Even if you don't contribute monetarily, you can still shower the creators with praise in the comments!
-        .price $0<span>/mo</span>
-        soci-button(async subtle) Choose free
-      ul
-        li.cant Submit posts
-        li.cant Upvote and fund posts
-        li.can Browse and view posts
-        li.can Comment on posts
-        li.can Upvote and downvote comments
+      .features
+        .price-container
+          .price $0<span>/mo</span>
+          soci-button(async subtle) Choose free
+        ul
+          li.cant Submit posts
+          li.cant Upvote and fund posts
+          li.can Browse and view posts
+          li.can Comment on posts
+          li.can Upvote and downvote comments
     
-  .payment
-    form#payment-form
-      #card-element
-      #card-element-errors(role="alert")
-      button(type="submit") Subscribe

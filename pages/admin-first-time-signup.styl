@@ -7,25 +7,57 @@
     display: flex
     margin: 40px -20px 0
     width: calc(100% + 40px)
+    align-items: flex-start
   .column
     border: 1px solid var(--base-background-subtle)
     border-radius: 4px
     width: 100%
     box-shadow: 0 2px 8px var(--shadow)
     background: var(--base-background)
+    position: relative
     &:first-child
       margin-right: 10px
-  .title
+    &.supporter[active]
+      .features
+        opacity: 0
+        transition: all var(--anim-duration-med) var(--soci-ease)
+        pointer-events: none
+      .payment
+        opacity: 1
+        pointer-events: all
+        user-select: all
+        transform: translateY(0px)
+  .features
+    opacity: 1
+  .payment
+    box-sizing: border-box
+    overflow: hidden
+    position: absolute
+    transition: all var(--anim-duration-med) var(--soci-ease) var(--anim-duration-short)
     padding: 10px 20px
-    border-bottom: 1px solid var(--base-background-subtle)
+    opacity: 0
+    user-select: none
+    pointer-events: none
+    width: 100%
+    transform: translateY(10px)
+  #card-element
+    border-bottom: 2px solid var(--base-background-subtle)
+    height: 38px
+    margin-bottom: 10px
+
+  .price-container
     position: relative
-    p
-      color: var(--base-text-subtle)
-      height: 80px
+    padding: 0 20px 10px
+    border-bottom: 1px solid var(--base-background-subtle)
     soci-button
       position: absolute
       bottom: 20px
       right: 20px
+  .title
+    padding: 10px 20px 0
+    p
+      color: var(--base-text-subtle)
+      height: 80px
   h2
     color: var(--base-text-bold)
     margin-bottom: 4px
