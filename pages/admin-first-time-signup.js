@@ -54,6 +54,7 @@ let adminFirstTimeSignup = {
   },
   chooseSupporter: () => {
     adminFirstTimeSignup.dom.querySelector('.column.supporter').toggleAttribute('active', true)
+    soci.postData('stripe/create-customer')
   },
   subscribe: () => {
     //adminFirstTimeSignup.dom.querySelector('#payment-form').submit()
