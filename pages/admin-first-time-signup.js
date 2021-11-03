@@ -53,8 +53,19 @@ let adminFirstTimeSignup = {
     }
   },
   chooseSupporter: () => {
-    adminFirstTimeSignup.dom.querySelector('.column.supporter').toggleAttribute('active', true)
-    soci.postData('stripe/create-customer')
+    soci.postData('stripe/create-customer').then(result => {
+      if(result === true) {
+        adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button').success()
+        adminFirstTimeSignup.dom.querySelector('.column.supporter').toggleAttribute('active', true)
+        setTimeout(()=>{
+        }, 200)
+
+
+      }
+      else {
+
+      }
+    })
   },
   subscribe: () => {
     //adminFirstTimeSignup.dom.querySelector('#payment-form').submit()
