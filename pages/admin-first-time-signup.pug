@@ -1,8 +1,8 @@
 .content
   script(src="/pages/admin-first-time-signup.js")
   .loading-block(load-order="primary")
-    h1 Thanks for signing up!
-    p Please pick your account type
+    h1 Last step
+    p Thanks for signing up! Please pick your account type:
 
   .columns(load-order="secondary")
     .column.supporter
@@ -10,10 +10,13 @@
         h2 Supporter
         p This allows you to contribute back to the creators. You choose your subscription price, and your subscription pool is divided evenly between everything you upvote that month.
       .payment
-        form#payment-form
+        form#payment-form(style="user-select: none;")
+          h3 Contribution
+          soci-contribution-slider(name="subscriptionAmount")
+          h3 Payment Info
+          input(name="name" placeholder="Name")
           #card-element
           #card-element-errors(role="alert")
-          button(type="submit") Subscribe
           soci-button(async onclick="adminFirstTimeSignup.subscribe()") Subscribe
       .features
         .price-container

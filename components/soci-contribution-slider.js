@@ -13,7 +13,7 @@ export default class SociContributionSlider extends SociComponent {
   css(){
     return `
       :host {
-        margin-bottom: 16px;
+        margin: 18px 0 36px;
         display: block;
       }
 
@@ -47,7 +47,7 @@ export default class SociContributionSlider extends SociComponent {
         display: block;
         position: absolute;
         top: -6px;
-        left: 110px;
+        left: calc(50% - 8px);
         border-radius: 8px;
         cursor: pointer;
         transition: box-shadow 0.1s var(--soci-ease-out);
@@ -131,7 +131,7 @@ export default class SociContributionSlider extends SociComponent {
 
   connectedCallback(){
     this.state = {}
-    this.state.x = 110
+    this.state.x = (this.offsetWidth / 2) - 8
     this.state.xDown = this.state.mouseClientX = 0
     this._contributionHandle = this.select('slider-handle')
     this._contributionAmount = this.select('contribution amount')
@@ -143,21 +143,32 @@ export default class SociContributionSlider extends SociComponent {
   }
 
   get value(){
-    let val = (this._dragOffset - 52) / 18
+    let rect = this.getBoundingClientRect()
+    let val = (this._dragOffset - 58) / ((rect.width - 58) / 9)
     return Math.floor(val + 2)
   }
 
   set value(val){
   }
 
+  _relativeXPos(e){
+    let x = e.clientX
+    let rect = this.getBoundingClientRect()
+    let xMin = rect.left
+    return Math.min(Math.max(x - xMin, 0), rect.width)
+  }
+
   get _dragOffset(){
     let leftOffset = this.state.x - (this.state.xDown - this.state.mouseClientX)
-    leftOffset = Math.min(212, Math.max(52, leftOffset))
+    let rect = this.getBoundingClientRect()
+    leftOffset = Math.min(rect.width, Math.max(58, leftOffset))
     return leftOffset
   }
 
   _mouseDown(e){
-    this.state.xDown = e.clientX
+    console.log('MOUSEDOWN')
+    document.body.toggleAttribute('dragging', true)
+    this.state.xDown = this._relativeXPos(e)
     this._mouseMove = this._mouseMove.bind(this)
     this._mouseUp = this._mouseUp.bind(this)
     document.addEventListener('mousemove', this._mouseMove)
@@ -166,7 +177,7 @@ export default class SociContributionSlider extends SociComponent {
 
   _mouseMove(e){
     document.body.setAttribute('dragging', '')
-    this.state.mouseClientX = e.clientX
+    this.state.mouseClientX = this._relativeXPos(e)
     this._contributionHandle.style.left = this._dragOffset + 'px'
     this._contributionAmount.innerHTML = '$' + (this.value - 1)
     this._totalAmount.innerHTML = `$${this.value}<span>/month</span>`
@@ -188,7 +199,7 @@ export default class SociContributionSlider extends SociComponent {
         message = 'I\'m a philanthropist!!!'
         break;
       case 9: 
-        message = 'Epstein didnt kill himself'
+        message = 'Epstein didn\'t kill himself'
         break;
       case 10: 
         message = '<3 <3 <3'

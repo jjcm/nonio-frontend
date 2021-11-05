@@ -56,21 +56,22 @@ let adminFirstTimeSignup = {
     soci.postData('stripe/create-customer').then(result => {
       if(result === true) {
         adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button').success()
-        adminFirstTimeSignup.dom.querySelector('.column.supporter').toggleAttribute('active', true)
+        let column = adminFirstTimeSignup.dom.querySelector('.column.supporter')
+        column.toggleAttribute('active', true)
+        column.style.height = (column.offsetHeight - 2) + 'px'
         setTimeout(()=>{
-        }, 200)
-
-
+          column.style.height = column.querySelector('.title').offsetHeight + column.querySelector('.payment').offsetHeight
+        }, 1)
       }
       else {
-
+        adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button').error()
       }
     })
   },
   subscribe: () => {
-    //adminFirstTimeSignup.dom.querySelector('#payment-form').submit()
+    //TODO: need to add a call to the backend to get this customer ID
     const customerId = "cus_FJntwBDjM8IFYt"
-    let billingName = "Matthew Smith"
+    let billingName = adminFirstTimeSignup.dom.querySelector('form input[name="name"]').value
     let priceId = "price_1JpOwmH4gvdXgbs5uGPiaLb2"
     adminFirstTimeSignup.stripe.createPaymentMethod({
       type: 'card',

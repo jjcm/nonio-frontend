@@ -1,6 +1,7 @@
 #admin-first-time-signup
   background: var(--base-background-bold)
   height: 100%
+  overflow-y: auto
   &[active]
     display: block
   .columns
@@ -15,6 +16,8 @@
     box-shadow: 0 2px 8px var(--shadow)
     background: var(--base-background)
     position: relative
+    overflow: hidden
+    transition: height 0.2s var(--soci-ease)
     &:first-child
       margin-right: 10px
     &.supporter[active]
@@ -27,6 +30,12 @@
         pointer-events: all
         user-select: all
         transform: translateY(0px)
+  h3
+    font-size: 14px
+    text-transform: uppercase
+    letter-spacing: 1.4px
+    font-weight: normal
+    margin-top: 20px
   .features
     opacity: 1
   .payment
@@ -110,3 +119,6 @@
         top: calc(50% - 5px)
         left: 4px
         transform: rotate(45deg)
+  form 
+    soci-button
+      margin: 24px 0 8px
