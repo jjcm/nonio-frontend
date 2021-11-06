@@ -43,7 +43,6 @@ let adminFirstTimeSignup = {
     //TODO https://stripe.com/docs/billing/subscriptions/fixed-price#create-subscription
   },
   cardError: event => {
-    //changeLoadingStatePrices(false)
     let displayError = document.getElementById('card-element-errors')
     if (event.error) {
       displayError.textContent = event.error.message
@@ -69,8 +68,6 @@ let adminFirstTimeSignup = {
     })
   },
   subscribe: () => {
-    //TODO: need to add a call to the backend to get this customer ID
-    const customerId = "cus_FJntwBDjM8IFYt"
     let billingName = adminFirstTimeSignup.dom.querySelector('form input[name="name"]').value
     let priceId = "price_1JpOwmH4gvdXgbs5uGPiaLb2"
     adminFirstTimeSignup.stripe.createPaymentMethod({
@@ -86,7 +83,6 @@ let adminFirstTimeSignup = {
       }
       else {
         adminFirstTimeSignup.createSubscription({
-          customerId: customerId,
           paymentMethodId: result.paymentMethod.id,
           priceId: priceId
         })
@@ -94,6 +90,7 @@ let adminFirstTimeSignup = {
     })
   },
   createSubscription: ({customerId, paymentMethodId, priceId}) => {
+    let button = adminFirstTimeSignup.dom.querySelector('.subscribe-button')
     return (
       soci.postData('stripe/create-subscription', {
         customerId: customerId,
@@ -128,12 +125,14 @@ let adminFirstTimeSignup = {
       // No more actions required. Provision your service for the user.
       .then((result) => {
         console.log(result)
+        button.success()
       })
       .catch((error) => {
         // An error has happened. Display the failure to the user here.
         // We utilize the HTML element we created.
         console.log('oh fuck')
         console.log(error)
+        button.error()
         //showCardError(error)
       })
     )
