@@ -131,7 +131,6 @@ export default class SociContributionSlider extends SociComponent {
 
   connectedCallback(){
     this.state = {}
-    this.state.x = (this.offsetWidth / 2) - 8
     this.state.xDown = this.state.mouseClientX = 0
     this._contributionHandle = this.select('slider-handle')
     this._contributionAmount = this.select('contribution amount')
@@ -166,9 +165,9 @@ export default class SociContributionSlider extends SociComponent {
   }
 
   _mouseDown(e){
-    console.log('MOUSEDOWN')
     document.body.toggleAttribute('dragging', true)
     this.state.xDown = this._relativeXPos(e)
+    this.state.x = this._contributionHandle.offsetLeft
     this._mouseMove = this._mouseMove.bind(this)
     this._mouseUp = this._mouseUp.bind(this)
     document.addEventListener('mousemove', this._mouseMove)
