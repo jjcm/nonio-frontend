@@ -89,11 +89,11 @@ let adminFirstTimeSignup = {
       }
     })
   },
-  createSubscription: ({customerId, paymentMethodId, priceId}) => {
+  createSubscription: ({paymentMethodId, priceId}) => {
+    console.log(paymentMethodId)
     let button = adminFirstTimeSignup.dom.querySelector('.subscribe-button')
     return (
-      soci.postData('stripe/create-subscription', {
-        customerId: customerId,
+      soci.postData('stripe/subscription/create', {
         paymentMethodId: paymentMethodId,
         priceId: priceId,
       })
