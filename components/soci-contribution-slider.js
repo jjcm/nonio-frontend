@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+const DEFAULT_SUBSCRIPTION_VALUE = 5
 
 export default class SociContributionSlider extends SociComponent {
   static get formAssociated() {
@@ -144,7 +145,7 @@ export default class SociContributionSlider extends SociComponent {
   get value(){
     let rect = this.getBoundingClientRect()
     let val = (this._dragOffset - 58) / ((rect.width - 58) / 9)
-    return Math.floor(val + 2)
+    return Math.floor(val + 2) || DEFAULT_SUBSCRIPTION_VALUE
   }
 
   set value(val){
