@@ -537,13 +537,13 @@ export default class SociSidebar extends SociComponent {
     let form = this.querySelector('[slot="create"] form')
     let button = form.querySelector('soci-button')
     if(!form.reportValidity()) {
-      button.error()
+      setTimeout(()=>{
+        button.error()
+      },1)
       return
     }
 
     let formData = soci.getJSONFromForm(form)
-    formData.subscriptionAmount = form.querySelector('soci-contribution-slider').value
-
     let response = await soci.postData('user/register', formData)
 
     if(response.token){
@@ -554,12 +554,15 @@ export default class SociSidebar extends SociComponent {
       this._loadSubscribedTags()
       this._loadCommonTags()
       setTimeout(()=>{
-        window.history.pushState(null, null, '/#all')
+        window.history.pushState(null, null, '/admin/first-time-signup')
         window.dispatchEvent(new CustomEvent('link'))
         this._populateTags()
         this.select('#logout').innerHTML = "Logout"
         this.toggleAttribute('create')
       }, 400)
+    }
+    else {
+      button.error()
     }
   }
 
