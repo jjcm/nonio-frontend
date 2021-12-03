@@ -126,6 +126,10 @@ let adminFirstTimeSignup = {
       .then((result) => {
         console.log(result)
         button.success()
+        setTimeout(()=>{
+          window.history.pushState(null, null, '/#all')
+          window.dispatchEvent(new CustomEvent('link'))
+        }, 1000)
       })
       .catch((error) => {
         // An error has happened. Display the failure to the user here.
