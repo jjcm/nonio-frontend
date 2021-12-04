@@ -227,25 +227,32 @@ export default class SociButton extends SociComponent {
       if(this.hasAttribute('async'))
         this.wait()
     })
+    this.lastWait = 0
   }
 
   wait(){
     this.setAttribute('state', 'waiting')
+    this.lastWait = new Date().getTime()
   }
 
   success(){
-    this.blur()
-    this.setAttribute('state', 'success')
-    setTimeout(()=>{
-      this.removeAttribute('state')
-    }, 1200)
+    this._changeState('success')
   }
 
   error(){
-    this.blur()
-    this.setAttribute('state', 'error')
+    this._changeState('error')
+  }
+
+  _changeState(state){
     setTimeout(()=>{
-      this.removeAttribute('state')
-    }, 1200)
+      this.blur()
+      let stateTime = new Date().getTime()
+      setTimeout(()=>{
+        this.setAttribute('state', state)
+        setTimeout(()=>{
+          this.removeAttribute('state')
+        }, 1200)
+      }, Math.max(850 - (stateTime - this.lastWait), 0) )
+    }, 1)
   }
 }

@@ -51,6 +51,14 @@ let adminFirstTimeSignup = {
       displayError.textContent = ''
     }
   },
+  chooseFree: () => {
+    let button = adminFirstTimeSignup.dom.querySelector('soci-button.free-button')
+    button?.success()
+    setTimeout(()=>{
+      window.history.pushState(null, null, '/#all')
+      window.dispatchEvent(new CustomEvent('link'))
+    }, 1000)
+  },
   chooseSupporter: () => {
     soci.postData('stripe/create-customer').then(result => {
       if(result === true) {
