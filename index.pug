@@ -41,7 +41,7 @@ html(lang="en")
       include pages/home.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
       include pages/admin-create.pug
-    soci-route#admin-first-time-signup(path="/admin/first-time-signup").admin-page
+    soci-route#admin-first-time-signup(path="/admin/first-time-signup" fresh).admin-page
       include pages/admin-first-time-signup.pug
     soci-route#admin-forgot-password(path="/admin/forgot-password").admin-page
       include pages/admin-forgot-password.pug
