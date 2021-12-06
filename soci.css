@@ -220,6 +220,151 @@
     --shadow-dark: rgba(0,5,5,0.6);
   }
 }
+#admin-first-time-signup {
+  background: var(--base-background-bold);
+  height: 100%;
+  overflow-y: auto;
+}
+#admin-first-time-signup[active] {
+  display: block;
+}
+#admin-first-time-signup .columns {
+  display: flex;
+  margin: 40px -20px 0;
+  width: calc(100% + 40px);
+  align-items: flex-start;
+}
+#admin-first-time-signup .column {
+  border: 1px solid var(--base-background-subtle);
+  border-radius: 4px;
+  width: 100%;
+  box-shadow: 0 2px 8px var(--shadow);
+  background: var(--base-background);
+  position: relative;
+  overflow: hidden;
+  transition: height 0.2s var(--soci-ease);
+}
+#admin-first-time-signup .column:first-child {
+  margin-right: 10px;
+}
+#admin-first-time-signup .column.supporter[active] .features {
+  opacity: 0;
+  transition: all var(--anim-duration-med) var(--soci-ease);
+  pointer-events: none;
+}
+#admin-first-time-signup .column.supporter[active] .payment {
+  opacity: 1;
+  pointer-events: all;
+  user-select: all;
+  transform: translateY(0px);
+}
+#admin-first-time-signup h3 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: normal;
+  margin-top: 20px;
+}
+#admin-first-time-signup .features {
+  opacity: 1;
+}
+#admin-first-time-signup .payment {
+  box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  transition: all var(--anim-duration-med) var(--soci-ease) var(--anim-duration-short);
+  padding: 10px 20px;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  width: 100%;
+  transform: translateY(10px);
+}
+#admin-first-time-signup #card-element {
+  border-bottom: 2px solid var(--base-background-subtle);
+  height: 38px;
+  margin-bottom: 10px;
+}
+#admin-first-time-signup .price-container {
+  position: relative;
+  padding: 0 20px 10px;
+  border-bottom: 1px solid var(--base-background-subtle);
+}
+#admin-first-time-signup .price-container soci-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+#admin-first-time-signup .title {
+  padding: 10px 20px 0;
+}
+#admin-first-time-signup .title p {
+  color: var(--base-text-subtle);
+  height: 80px;
+}
+#admin-first-time-signup h2 {
+  color: var(--base-text-bold);
+  margin-bottom: 4px;
+}
+#admin-first-time-signup .price {
+  font-size: 44px;
+  font-weight: bold;
+  color: var(--brand-text);
+}
+#admin-first-time-signup .price span {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--base-text-subtle);
+}
+#admin-first-time-signup ul {
+  list-style: none;
+  padding: 0 20px;
+}
+#admin-first-time-signup li {
+  position: relative;
+  line-height: 24px;
+  padding-left: 20px;
+}
+#admin-first-time-signup li.cant {
+  color: var(--base-text-subtle);
+  text-decoration: line-through;
+}
+#admin-first-time-signup li.cant:after,
+#admin-first-time-signup li.cant:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  transform: rotate(45deg);
+  left: 0;
+  top: calc(50% - 1px);
+  background: var(--error-text);
+}
+#admin-first-time-signup li.cant:before {
+  transform: rotate(-45deg);
+}
+#admin-first-time-signup li.can:after,
+#admin-first-time-signup li.can:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 2px;
+  background: var(--success-text);
+  height: 5px;
+  top: calc(50% - 2px);
+  left: 0;
+  transform: rotate(-45deg);
+}
+#admin-first-time-signup li.can:after {
+  height: 9px;
+  top: calc(50% - 5px);
+  left: 4px;
+  transform: rotate(45deg);
+}
+#admin-first-time-signup form soci-button {
+  margin: 24px 0 8px;
+}
 body {
   margin: 0;
   display: flex;
@@ -323,7 +468,6 @@ button:focus {
   width: calc(100vw - 280px);
   position: relative;
   margin-left: 280px;
-  transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear;
 }
 #pages:before {
   content: '';
@@ -340,12 +484,14 @@ button:focus {
   animation: fade-in 0.2s linear 0.2s forwards;
 }
 #home {
+  transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear;
   display: none;
 }
 #home[active] {
   display: contents;
 }
 #home #home-container {
+  width: 100%;
   min-width: 1160px;
   margin: 0 auto;
 }
@@ -649,6 +795,9 @@ button:focus {
   border-bottom: 2px solid var(--brand-background);
   outline: 0;
 }
+.admin-page input::placeholder {
+  color: var(--base-text-subtle);
+}
 .admin-page .actions {
   width: 100%;
   justify-content: flex-end;
@@ -916,7 +1065,7 @@ soci-route[active] [load-order="tertiary"] {
   transform: translateY(0px);
   opacity: 1;
 }
-soci-route:not([active]) {
+soci-route:not([active]):not([activating]) {
   display: none;
 }
 #new-user #new-user-container {

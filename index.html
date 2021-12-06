@@ -2,6 +2,7 @@
 <html lang="en">
   <title>Nonio</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg"/>
   <script src="/soci.js" type="module"></script>
   <script src="/lib/elementInternalsPolyfill.js"></script>
@@ -33,15 +34,6 @@
         <input type="email" name="email" placeholder="Email address"/>
         <soci-password tabindex="0" name="password"></soci-password>
         <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
-        <h2>Contribution</h2>
-        <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
-        <h2>Billing</h2>
-        <input type="text" placeholder="Credit Card Name"/>
-        <input type="text" placeholder="Credit Card Number"/>
-        <cc-details>
-          <input type="text" placeholder="Exp. Date"/>
-          <input type="text" placeholder="CCV"/>
-        </cc-details>
         <soci-button async="async" onclick="this.closest('soci-sidebar').register()">Create Account</soci-button>
       </form>
     </div>
@@ -123,6 +115,66 @@
           <p>I have to pay for bandwidth and servers somehow. The choices are either subscription services or ad supported funding. Personally I believe that a subscription services is the lesser of two evils, for a few reasons. The first is around knowing who my customer is. With a subscription service, you are my customer. I tailor all of my experiences to the demands of the user. With an ad supported service you aren't the customer, you are the product. Ad providers are the customer and you have to build a platform to their demands. We see major issues with this model in Youtube, where videos are demonetized because they don't meet the demands of the advertisers. I want nonio to be built with you in mind, not with advertisers demands taking priority.</p>
           <h3>Why do I have to contribute to creators? Can I just pay the $1? </h3>
           <p>Nonio would be nothing without creators. The point of the platform is to fund their creativity. In addition, it means that your vote is worth something. When you're choosing to upvote a post, you're saying that this item is deserving of a slice of your pool of contribution. This means other things you've voted on will get a smaller percentage of your pool as well, so you have to vote with a conscience. A picture of a cat may not be worthy of a percentage of your pool when you've previously voted up a high quality piece of investigative journalism. The hope is that this leads to higher quality content that gets surfaced, rather than surfacing wide-appeal-but-low-effort content like r/all on reddit.</p>
+        </div>
+      </div>
+    </soci-route>
+    <soci-route class="admin-page" id="admin-first-time-signup" path="/admin/first-time-signup" fresh="fresh">
+      <div class="content">
+        <script src="/pages/admin-first-time-signup.js"></script>
+        <div class="loading-block" load-order="primary">
+          <h1>Last step</h1>
+          <p>Thanks for signing up! Please pick your account type:</p>
+        </div>
+        <div class="columns" load-order="secondary">
+          <div class="column supporter">
+            <div class="title">
+              <h2>Supporter</h2>
+              <p>This allows you to contribute back to the creators. You choose your subscription price, and your subscription pool is divided evenly between everything you upvote that month.</p>
+            </div>
+            <div class="payment">
+              <form id="payment-form" style="user-select: none;">
+                <h3>Contribution</h3>
+                <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
+                <h3>Payment Info</h3>
+                <input name="name" placeholder="Name"/>
+                <div id="card-element"></div>
+                <div id="card-element-errors" role="alert"></div>
+                <soci-button class="subscribe-button" async="async" onclick="adminFirstTimeSignup.subscribe()">Subscribe</soci-button>
+              </form>
+            </div>
+            <div class="features">
+              <div class="price-container">
+                <div class="price">$2-10<span>/mo</span></div>
+                <soci-button class="supporter-button" async="async" onclick="adminFirstTimeSignup.chooseSupporter()">Choose supporter</soci-button>
+              </div>
+              <ul>
+                <li class="can">Submit posts</li>
+                <li class="can">Upvote and fund posts</li>
+                <li class="can">Browse and view posts</li>
+                <li class="can">Comment on posts</li>
+                <li class="can">Upvote and downvote comments</li>
+              </ul>
+            </div>
+          </div>
+          <div class="column"> 
+            <div class="title">
+              <h2>Free</h2>
+              <p>Everyone starts somewhere. Even if you don't contribute monetarily, you can still shower the creators with praise in the comments!</p>
+            </div>
+            <div class="features">
+              <div class="price-container">
+                <div class="price">$0<span>/mo</span></div>
+                <soci-button class="free-button" async="async" subtle="subtle" onclick="adminFirstTimeSignup.chooseFree()">Choose free</soci-button>
+              </div>
+              <ul>
+                <li class="cant">Submit posts</li>
+                <li class="cant">Upvote and fund posts</li>
+                <li class="can">Browse and view posts</li>
+                <li class="can">Comment on posts</li>
+                <li class="can">Upvote and downvote comments</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </soci-route>
