@@ -85,7 +85,7 @@ let adminFirstTimeSignup = {
   },
   subscribe: () => {
     let billingName = adminFirstTimeSignup.dom.querySelector('form input[name="name"]').value
-    let priceId = "price_1JpOwmH4gvdXgbs5uGPiaLb2"
+    let price = adminFirstTimeSignup.dom.querySelector('form soci-contribution-slider').value
     adminFirstTimeSignup.stripe.createPaymentMethod({
       type: 'card',
       card: adminFirstTimeSignup.card,
@@ -100,18 +100,18 @@ let adminFirstTimeSignup = {
       else {
         adminFirstTimeSignup.createSubscription({
           paymentMethodId: result.paymentMethod.id,
-          priceId: priceId
+          price: price
         })
       }
     })
   },
-  createSubscription: ({paymentMethodId, priceId}) => {
+  createSubscription: ({paymentMethodId, price}) => {
     console.log(paymentMethodId)
     let button = adminFirstTimeSignup.dom.querySelector('.subscribe-button')
     return (
       soci.postData('stripe/subscription/create', {
         paymentMethodId: paymentMethodId,
-        priceId: priceId,
+        price: price,
       })
       // If the card is declined, display an error to the user.
       .then((result) => {
@@ -126,7 +126,7 @@ let adminFirstTimeSignup = {
       .then((result) => {
         return {
           paymentMethodId: paymentMethodId,
-          priceId: priceId,
+          price: price,
           subscription: result,
         };
       })
