@@ -52,17 +52,25 @@ let adminFirstTimeSignup = {
     }
   },
   chooseFree: () => {
-    let button = adminFirstTimeSignup.dom.querySelector('soci-button.free-button')
-    button?.success()
-    setTimeout(()=>{
-      window.history.pushState(null, null, '/#all')
-      window.dispatchEvent(new CustomEvent('link'))
-    }, 1000)
+    soci.postData('user/choose-free-account').then(result => {
+      let button = adminFirstTimeSignup.dom.querySelector('soci-button.free-button')
+      if(result === true){
+        button?.success()
+        setTimeout(()=>{
+          window.history.pushState(null, null, '/#all')
+          window.dispatchEvent(new CustomEvent('link'))
+        }, 1000)
+      }
+      else {
+        button?.error()
+      }
+    })
   },
   chooseSupporter: () => {
     soci.postData('stripe/create-customer').then(result => {
+      let button = adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button')
       if(result === true) {
-        adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button').success()
+        button?.success()
         let column = adminFirstTimeSignup.dom.querySelector('.column.supporter')
         column.toggleAttribute('active', true)
         column.style.height = (column.offsetHeight - 2) + 'px'
@@ -71,7 +79,7 @@ let adminFirstTimeSignup = {
         }, 1)
       }
       else {
-        adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button').error()
+        button?.error()
       }
     })
   },
