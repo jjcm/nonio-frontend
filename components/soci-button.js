@@ -78,6 +78,36 @@ export default class SociButton extends SociComponent {
         background: var(--base-text-subtle-active);
       }
 
+      :host([danger]) {
+        background: var(--error-background);
+        color: var(--base-text-inverse);
+      }
+
+      :host([danger]:hover) {
+        background: var(--error-background-hover);
+        color: var(--base-text-inverse-hover);
+      }
+
+      :host([danger]:active) {
+        background: var(--error-background-active);
+        color: var(--base-text-inverse-active);
+      }
+      
+      :host([danger]):before,
+      :host([danger]):after {
+        background: var(--base-text-inverse);
+      }
+
+      :host([danger]:hover):before, 
+      :host([danger]:hover):after {
+        background: var(--base-text-inverse-hover);
+      }
+
+      :host([danger]:active):before, 
+      :host([danger]:active):after {
+        background: var(--base-text-inverse-active);
+      }
+
       :host(:focus) {
         outline: none;
       }

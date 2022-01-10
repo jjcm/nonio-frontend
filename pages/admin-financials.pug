@@ -1,30 +1,25 @@
 #admin-financials-container.container
   script(src="/pages/admin-financials.js")
-  .blocks
-    .block.profit(load-order="primary")
-      h2 Post Profit
-      h1 $
-      .actions
-        button withdrawal
-    .block.billing(load-order="secondary")
-      h2 Billing Info
-      p Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.
-      form
-        input(placeholder="Credit Card Name")
-        input(placeholder="Credit Card Number")
-        .cc-details
-          input(placeholder="Exp. Date")
-          input(placeholder="CCV")
-        .actions
-          button save
-          button(class="cancel") cancel
-    .block.bank(load-order="secondary")
-      h2 Withdrawl Location
-      p This is the account that money will be deposited in once you choose to withdrawl your post profit.
-      form.change-password
-        input(placeholder="Bank Name")
-        input(placeholder="Routing No.")
-        input(placeholder="Account No.")
-        .actions
-          button save
-          button(class="cancel") cancel
+  .header(load-order="primary")
+    h1 Your Financials 
+    a(href="#" target="_blank")
+      soci-button View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    p We use Stripe to dispense profit earned from posts. Visit your <a href="#" target="_blank">Stripe dashboard</a> to withdrawl into your bank account.
+  .amounts(load-order="secondary")
+    .blocks
+      .block.profit
+        h2 Pending Profit
+        h1.cash $
+      .block.stripe
+        h2 Stripe Wallet 
+        h1.cash $
+  .subscription(load-order="tertiary")
+    hr
+    .blocks
+      .block
+        h2 Monthly subscription
+        h1.cash $ <span>/mo</span>
+        .button-group
+          soci-button(subtle) Change Subscription Amount
+          soci-button(danger) Cancel Subscription
+    

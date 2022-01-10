@@ -332,16 +332,12 @@ button
       &.description
         min-width: 380px
         flex: 2
-      &.profit
-        min-width: calc(100% - 40px)
-        h2
-          margin-bottom: 0
-        h1
-          font-size: 60px
-          margin: 0
-          color: var(--success-text)
-        .actions
-          justify-content: flex-start
+      h2
+        margin-bottom: 0
+  h1.cash
+    font-size: 60px
+    margin: 0
+    color: var(--success-text)
 
   .cc-details 
     display: flex
@@ -374,6 +370,28 @@ button
   h2
     margin-top: 0
 
+#admin-financials
+  a
+    soci-button
+      position: absolute
+      top: 10px
+      right: 0
+  p
+    margin-bottom: 24px
+  .button-group
+    display: flex
+    soci-button
+      float: none
+  .subscription
+    .cash
+      color: var(--brand-text)
+      margin-bottom: 12px
+      span
+        color: var(--base-text-subtle)
+        font-size: 24px
+        font-weight: 100
+    soci-button
+      margin-right: 6px
 #admin-change-forgotten-password
   .success
     transform: translateY(20px)
@@ -645,6 +663,9 @@ soci-route:not([active]):not([activating])
   .loading-block:not(:first-child)
     margin-top: 40px
   
+hr
+  border: 1px solid var(--base-background-subtle)
+  margin-bottom: 24px
 
 ::-webkit-scrollbar 
   width: 14px
