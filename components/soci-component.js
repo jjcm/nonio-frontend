@@ -128,8 +128,9 @@ export default class SociComponent extends HTMLElement {
       if(secondsAgo < secondsPerUnit[i][1]){
         let unit = secondsPerUnit[i - 1][0]
         let interval = secondsPerUnit[i - 1][1]
-        this._updateTimer = setTimeout(()=>{this.updateTime(time, dom)}, interval * 1000)
         dom.innerHTML = Math.floor(secondsAgo / interval) + unit + ' ago'
+        if(secondsAgo > secondsPerUnit[4][1]) return
+        this._updateTimer = setTimeout(()=>{this.updateTime(time, dom)}, interval * 1000)
         break
       }
     }
