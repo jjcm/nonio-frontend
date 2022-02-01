@@ -164,5 +164,6 @@ else {
 }
 
 window.soci = soci
+window.config = config
 document.addEventListener('DOMContentLoaded', soci.init)
 window.addEventListener('load', soci.setAnimationTimings)

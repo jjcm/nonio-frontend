@@ -2,12 +2,12 @@ let adminFirstTimeSignup = {
   dom: document.currentScript.closest('soci-route'),
   init: () => {
     soci.registerPage(adminFirstTimeSignup)
-    adminFirstTimeSignup.dom.querySelector('form').addEventListener('submit', e => {
-      e.preventDefault()
-    })
   },
   onActivate: () => {
     document.title = "Nonio - Choose Your Account Type"
+    adminFirstTimeSignup.dom.querySelector('form').addEventListener('submit', e => {
+      e.preventDefault()
+    })
     adminFirstTimeSignup.loadStripe()
   },
   onDeactivate: () => {

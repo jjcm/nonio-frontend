@@ -12,7 +12,7 @@ let adminFinancials = {
   },
   checkFinancials: async () => {
     let response = await soci.getData('user/get-financials')
-    adminFinancials.dom.querySelector('.profit h1').innerHTML = adminFinancials.formatCash(response.cash)
+    adminFinancials.dom.querySelector('.profit h1').innerHTML = adminFinancials.formatCash(response.cash || 0)
     adminFinancials.dom.querySelector('.stripe h1').innerHTML = adminFinancials.formatCash(response.stripe_wallet_balance || 0)
     adminFinancials.dom.querySelectorAll('a').forEach(a => a.href = response.stripe_connect_link || "#")
     adminFinancials.dom.querySelector('.header soci-button')?.removeAttribute('state')
@@ -22,6 +22,10 @@ let adminFinancials = {
     cash = Number.parseFloat(cash)
     let formatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'})
     return formatter.format(cash)
+  },
+  showChangeSubscription: async () => {
+    let subscription = await soci.getData('stripe/subscription')
+    console.log(subscription)
   }
 }
 
