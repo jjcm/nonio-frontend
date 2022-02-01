@@ -223,6 +223,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    console.log('attribute')
     switch(name) {
       case 'post-title':
         this.select('#title').innerHTML = newValue

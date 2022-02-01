@@ -70,18 +70,24 @@ export default class SociPostLi extends SociComponent {
   }
 
   async createPosts(data){
-    console.log('creating posts')
-    let posts = `
-      ${data.map((post) => `
-        <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" score=${post.score || 0} comments=${post.commentCount || 0} type=${post.type || 'image'} time=${post.time}>
-          <soci-user name="${post.user}" slot="user"></soci-user>
-          <soci-tag-group slot="tags">
-            ${this.sortTags(post.tags).map(tag => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}
-          </soci-tag-group>
-        </soci-post-li>
-      `).join('')}
-    `
+    this.renderPostLi = this.renderPostLi.bind(this)
+    let numberToRender = Math.ceil(window.innerHeight / 104) // the height of a post li
+    // render only the amount visible on the screen first, and animate them in
+    this.innerHTML = data.splice(0, numberToRender).map(this.renderPostLi).join('')
+    // then once the main batch is done, load in the rest. 
+    setTimeout(()=>{
+      this.innerHTML += data.map(this.renderPostLi).join('')
+    }, 1)
+  }
 
-    this.innerHTML = posts
+  renderPostLi(post){
+    return`
+      <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" score=${post.score || 0} comments=${post.commentCount || 0} type=${post.type || 'image'} time=${post.time}>
+        <soci-user name="${post.user}" slot="user"></soci-user>
+        <soci-tag-group slot="tags">
+          ${this.sortTags(post.tags).map(tag => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}
+        </soci-tag-group>
+      </soci-post-li>
+    `
   }
 }
