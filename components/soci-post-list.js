@@ -76,7 +76,11 @@ export default class SociPostLi extends SociComponent {
     this.innerHTML = data.splice(0, numberToRender).map(this.renderPostLi).join('')
     // then once the main batch is done, load in the rest. 
     setTimeout(()=>{
-      this.innerHTML += data.map(this.renderPostLi).join('')
+      let tempDom = document.createElement('div')
+      tempDom.innerHTML = data.map(this.renderPostLi).join('')
+      Array.from(tempDom.children).forEach(child=>{
+        this.appendChild(child)
+      })
     }, 1)
   }
 

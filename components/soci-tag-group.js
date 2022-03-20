@@ -192,6 +192,7 @@ export default class SociTagGroup extends SociComponent {
     return ['score']
   }
 
+
   connectedCallback(){
     this._cancelAddTag = this._cancelAddTag.bind(this)
     this._inputKeyListener = this._inputKeyListener.bind(this)
@@ -202,6 +203,10 @@ export default class SociTagGroup extends SociComponent {
     score.setAttribute('slot', 'score')
     score.innerHTML = this.score
     this.appendChild(score)
+  }
+
+  disconnectedCallback(){
+    console.log('disconnected')
   }
 
   attributeChangedCallback(name, oldValue, newValue){
