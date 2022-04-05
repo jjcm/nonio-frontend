@@ -9,6 +9,9 @@ window.sociRouter = new SociRouter()
 import SociAvatarUploader from "./soci-avatar-uploader.js"
 window.customElements.define('soci-avatar-uploader', SociAvatarUploader)
 
+import SociBanner from "./soci-banner.js"
+window.customElements.define('soci-banner', SociBanner)
+
 import SociButton from "./soci-button.js"
 window.customElements.define('soci-button', SociButton)
 

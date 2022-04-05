@@ -2,6 +2,9 @@
   script(src="/pages/admin-financials.js")
   .header(load-order="primary")
     h1 Your Financials 
+    soci-banner(type="warning" title="Account setup incomplete") 
+      | Visit your Stripe dashboard to complete your account setup and withdrawl funds.
+
     a(href="#" target="_blank")
       soci-button View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
     p We use Stripe to dispense profit earned from posts. Visit your <a href="#" target="_blank">Stripe dashboard</a> to withdrawl into your bank account.
