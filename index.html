@@ -322,42 +322,36 @@
     <soci-route class="admin-page" id="admin-financials" path="/admin/financials">
       <div class="container" id="admin-financials-container">
         <script src="/pages/admin-financials.js"></script>
-        <div class="blocks">
-          <div class="block profit" load-order="primary">
-            <h2>Post Profit</h2>
-            <h1>$</h1>
-            <div class="actions">
-              <button>withdrawal</button>
+        <div class="header" load-order="primary">
+          <h1>Your Financials </h1>
+          <soci-banner type="warning" title="Account setup incomplete">
+             Visit your Stripe dashboard to complete your account setup and withdrawl funds.</soci-banner><a href="#" target="_blank">
+            <soci-button>View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></soci-button></a>
+          <p>We use Stripe to dispense profit earned from posts. Visit your <a href="#" target="_blank">Stripe dashboard</a> to withdrawl into your bank account.</p>
+        </div>
+        <div class="amounts" load-order="secondary">
+          <div class="blocks">
+            <div class="block profit">
+              <h2>Pending Profit</h2>
+              <h1 class="cash">$</h1>
+            </div>
+            <div class="block stripe">
+              <h2>Stripe Wallet </h2>
+              <h1 class="cash">$</h1>
             </div>
           </div>
-          <div class="block billing" load-order="secondary">
-            <h2>Billing Info</h2>
-            <p>Your subscription fee will first be paid by your post profit. Your card will only be charged the remaining amount, if it exists.</p>
-            <form>
-              <input placeholder="Credit Card Name"/>
-              <input placeholder="Credit Card Number"/>
-              <div class="cc-details">
-                <input placeholder="Exp. Date"/>
-                <input placeholder="CCV"/>
+        </div>
+        <div class="subscription" load-order="tertiary">
+          <hr/>
+          <div class="blocks">
+            <div class="block">
+              <h2>Monthly Subscription</h2>
+              <h1 class="cash">$ <span>/mo</span></h1>
+              <div class="button-group">
+                <soci-button subtle="subtle" onclick="adminFinancials.showChangeSubscription()">Change Subscription Amount</soci-button>
+                <soci-button danger="danger">Cancel Subscription</soci-button>
               </div>
-              <div class="actions">
-                <button>save</button>
-                <button class="cancel">cancel</button>
-              </div>
-            </form>
-          </div>
-          <div class="block bank" load-order="secondary">
-            <h2>Withdrawl Location</h2>
-            <p>This is the account that money will be deposited in once you choose to withdrawl your post profit.</p>
-            <form class="change-password">
-              <input placeholder="Bank Name"/>
-              <input placeholder="Routing No."/>
-              <input placeholder="Account No."/>
-              <div class="actions">
-                <button>save</button>
-                <button class="cancel">cancel</button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

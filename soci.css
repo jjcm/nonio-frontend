@@ -157,6 +157,18 @@
   --error-text-inverse: var(--error-text);
   --error-text-inverse-hover: var(--error-text-inverse);
   --error-text-inverse-active: var(--error-text-inverse);
+  --warning-background: var(--r1);
+  --warning-background-hover: var(--warning-background);
+  --warning-background-active: var(--warning-background);
+  --warning-background-subtle: var(--warning-background);
+  --warning-background-subtle-hover: var(--warning-background-subtle);
+  --warning-background-subtle-active: var(--warning-background-subtle);
+  --warning-background-bold: var(--warning-background);
+  --warning-background-bold-hover: var(--warning-background-bold);
+  --warning-background-bold-active: var(--warning-background-bold);
+  --warning-background-inverse: var(--warning-background);
+  --warning-background-inverse-hover: var(--warning-background-inverse);
+  --warning-background-inverse-active: var(--warning-background-inverse);
 }
 @media (prefers-color-scheme: light) {
   :root {
@@ -184,8 +196,13 @@
     --success-text: var(--g3);
     --success-text-subtle: var(--g1);
     --error-background: var(--r2);
+    --error-background-hover: var(--r1);
     --error-background-subtle: rgba(196,8,8,0.188);
     --error-text: var(--r2);
+    --warning-background: var(--y2);
+    --warning-background-hover: var(--y1);
+    --warning-background-subtle: rgba(235,235,96,0.188);
+    --warning-text: var(--y2);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -213,8 +230,13 @@
     --success-background-subtle: rgba(41,224,142,0.188);
     --success-text: var(--g1);
     --error-background: var(--r1);
+    --error-background-hover: var(--r0);
     --error-background-subtle: rgba(196,8,8,0.188);
     --error-text: var(--r1);
+    --warning-background: var(--y2);
+    --warning-background-hover: var(--y1);
+    --warning-background-subtle: rgba(235,235,96,0.188);
+    --warning-text: var(--y2);
     --shadow-light: rgba(0,5,5,0.25);
     --shadow: rgba(0,5,5,0.8);
     --shadow-dark: rgba(0,5,5,0.6);
@@ -761,19 +783,13 @@ button:focus {
   min-width: 380px;
   flex: 2;
 }
-.admin-page .blocks .block.profit {
-  min-width: calc(100% - 40px);
-}
-.admin-page .blocks .block.profit h2 {
+.admin-page .blocks .block h2 {
   margin-bottom: 0;
 }
-.admin-page .blocks .block.profit h1 {
+.admin-page h1.cash {
   font-size: 60px;
   margin: 0;
   color: var(--success-text);
-}
-.admin-page .blocks .block.profit .actions {
-  justify-content: flex-start;
 }
 .admin-page .cc-details {
   display: flex;
@@ -809,6 +825,32 @@ button:focus {
 }
 .admin-page h2 {
   margin-top: 0;
+}
+#admin-financials a soci-button {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+#admin-financials p {
+  margin-bottom: 24px;
+}
+#admin-financials .button-group {
+  display: flex;
+}
+#admin-financials .button-group soci-button {
+  float: none;
+}
+#admin-financials .subscription .cash {
+  color: var(--brand-text);
+  margin-bottom: 12px;
+}
+#admin-financials .subscription .cash span {
+  color: var(--base-text-subtle);
+  font-size: 24px;
+  font-weight: 100;
+}
+#admin-financials .subscription soci-button {
+  margin-right: 6px;
 }
 #admin-change-forgotten-password .success {
   transform: translateY(20px);
@@ -1080,6 +1122,10 @@ soci-route:not([active]):not([activating]) {
 }
 #admin-create .loading-block:not(:first-child) {
   margin-top: 40px;
+}
+hr {
+  border: 1px solid var(--base-background-subtle);
+  margin-bottom: 24px;
 }
 ::-webkit-scrollbar {
   width: 14px;
