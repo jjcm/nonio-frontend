@@ -356,6 +356,40 @@
         </div>
       </div>
     </soci-route>
+    <soci-route id="privacy-policy" path="info/privacy-policy">
+      <div class="content">
+        <div class="loading-block" load-order="primary">
+          <h1>Privacy Policy</h1>
+          <p>Non.io collects and stores the information provided upon signup. We also store standard nginx logs, which include IP address and browser information. We also store avatars and user submitted content. None of this information is sold or shared with third parties.</p>
+          <h2>Billing Information</h2>
+          <p>All billing information is stored by Stripe. Nonio stores cryptogrpahic hashes of your Stripe subscription and your Stripe account ID. Nonio does not store any credit card information or addresses on file. For personalized payouts not using Stripe, additional contact information may be stored. </p>
+          <h2>Passwords</h2>
+          <p>Nonio stores a cryptographic hash of your password using the bcrypt algorithm. We do not store passwords in plain text.</p>
+          <h2>Tracking</h2>
+          <p>Nonio uses server side logging. We currently do not use frontend tracking, nor is any of your information sent to third parties (with the exception of Stripe for financial data). We don't sell user data, nor do we use ad targetting or tracking.</p>
+          <h2>Account Deletion</h2>
+          <p>Curently there's no account deletion, not by design, I just haven't gotten to it yet. If you want to delete your account, ping me at j@jjcm.org or at @pwnies on Twiter. Account deletion will be best effort when done manually, with this as a goal: </p>
+          <h3>What will be removed:</h3>
+          <ul>
+            <li>User info (email, password, etc)</li>
+            <li>Avatar</li>
+            <li>Submitted posts and related media</li>
+            <li>Stripe metadata</li>
+          </ul>
+          <h3>What won't be removed </h3>
+          <ul> 
+            <li>Server logs</li>
+            <li>Comment content. Comments will be set to "abandoned" and will be disassociated from your username, but the content will remain to preserve discussion.</li>
+          </ul>
+          <h2>Location of Data </h2>
+          <p>Main servers are currently located in the United States. Elements of the site may be cached by edge servers around the world. </p>
+          <h2>Guarantees</h2>
+          <p>Non.io makes no guarantees regarding uptime, payouts, accuracy of monetary transfers, or timeliness. We are very much in startup phase. </p>
+          <h2>Point of Contact</h2>
+          <p>If you need to contact us for any reason, ping Jacob at j@jjcm.org or at @pwnies on Twitter.</p>
+        </div>
+      </div>
+    </soci-route>
     <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
         <script src="/pages/admin-settings.js"></script>

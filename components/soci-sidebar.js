@@ -362,7 +362,7 @@ export default class SociSidebar extends SociComponent {
         </svg>
         <links>
           <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0">About</a>
-          <a href="https://github.com/jjcm/soci/issues/new">Feedback</a>
+          <a href="https://github.com/jjcm/nonio/issues/new">Feedback</a>
           <soci-link id="logout" @click=logout href="/">Logout</soci-link>
         </links>
       </section>
