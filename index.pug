@@ -53,9 +53,11 @@ html(lang="en")
     soci-route#admin-financials(path="/admin/financials").admin-page
       include pages/admin-financials.pug
     soci-route#about(path="/about")
-      include pages/about.pug
+      include pages/about/about.pug
     soci-route#privacy-policy(path="/about/privacy-policy")
-      include pages/privacy-policy.pug
+      include pages/about/privacy-policy.pug
+    soci-route#contact(path="/about/contact")
+      include pages/about/contact.pug
     soci-route#admin-settings(path="/admin/settings").admin-page
       include pages/admin-settings.pug
     soci-route#post(default fresh)
