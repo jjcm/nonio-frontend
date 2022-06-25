@@ -750,6 +750,11 @@ button:focus {
   height: 100%;
   overflow-y: auto;
 }
+.info-page {
+  padding: 28px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
 .admin-page .content {
   padding: 28px 40px;
   max-width: 800px;

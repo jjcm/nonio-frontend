@@ -356,8 +356,20 @@
         </div>
       </div>
     </soci-route>
-    <soci-route id="privacy-policy" path="info/privacy-policy">
-      <div class="content">
+    <soci-route id="about" path="/about">
+      <div class="content info-page">
+        <div class="loading-block" load-order="primary">
+          <h1>About Non.io</h1>
+          <p>Non.io is a personal project of Jacob Miller (aka jjcm or @pwnies on Twitter). You can alos contact me at j@jjcm.org. </p>
+          <h2>Open Source </h2>
+          <p>The site is currently open source. You can find the repos at <a href="https://github.com/jjcm/nonio">github.com/jjcm/nonio</a>. Bug reports can be sent to the issue tracker in that project. </p>
+          <h2>Other Info</h2>
+          <soci-link href="about/privacy-policy"><a>Privacy policy</a></soci-link>
+        </div>
+      </div>
+    </soci-route>
+    <soci-route id="privacy-policy" path="/about/privacy-policy">
+      <div class="content info-page">
         <div class="loading-block" load-order="primary">
           <h1>Privacy Policy</h1>
           <p>Non.io collects and stores the information provided upon signup. We also store standard nginx logs, which include IP address and browser information. We also store avatars and user submitted content. None of this information is sold or shared with third parties.</p>
