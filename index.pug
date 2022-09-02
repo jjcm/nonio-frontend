@@ -39,19 +39,19 @@ html(lang="en")
     soci-route#home(test="both" path="^/$")
       include pages/home.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
-      include pages/admin-create.pug
+      include pages/admin/create.pug
     soci-route#admin-first-time-signup(path="/admin/first-time-signup" fresh).admin-page
-      include pages/admin-first-time-signup.pug
+      include pages/admin/first-time-signup.pug
     soci-route#admin-forgot-password(path="/admin/forgot-password").admin-page
-      include pages/admin-forgot-password.pug
+      include pages/admin/forgot-password.pug
     soci-route#admin-change-forgotten-password(path="/admin/change-forgotten-password").admin-page
-      include pages/admin-change-forgotten-password.pug
+      include pages/admin/change-forgotten-password.pug
     soci-route#user(test="both" path="^/user/" fresh)
       include pages/user.pug
     soci-route#submit(path="/submit")
       include pages/submit.pug
     soci-route#admin-financials(path="/admin/financials").admin-page
-      include pages/admin-financials.pug
+      include pages/admin/financials.pug
     soci-route#about(path="/about")
       include pages/about/about.pug
     soci-route#privacy-policy(path="/about/privacy-policy")
@@ -59,7 +59,7 @@ html(lang="en")
     soci-route#contact(path="/about/contact")
       include pages/about/contact.pug
     soci-route#admin-settings(path="/admin/settings").admin-page
-      include pages/admin-settings.pug
+      include pages/admin/settings.pug
     soci-route#post(default fresh)
       include pages/post.pug
 
