@@ -39,6 +39,12 @@ window.customElements.define('soci-image-uploader', SociImageUploader)
 import SociInput from "./soci-input.js"
 window.customElements.define('soci-input', SociInput)
 
+import SociLedgerLi from "./soci-ledger-li.js"
+window.customElements.define('soci-ledger-li', SociLedgerLi)
+
+import SociLedger from "./soci-ledger.js"
+window.customElements.define('soci-ledger', SociLedger)
+
 import SociLink from "./soci-link.js"
 window.customElements.define('soci-link', SociLink)
 
