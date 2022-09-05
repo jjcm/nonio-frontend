@@ -10,10 +10,13 @@ export default class SociLedgerMonth extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 2px 8px 28px;
+        padding: 8px;
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);
+        border: 1px solid var(--base-text);
+        border-radius: 4px;
+        line-height: 24px;
       }
       :host([loaded]) {
         transform: translateY(0);
@@ -28,6 +31,10 @@ export default class SociLedgerMonth extends SociComponent {
         display: flex;
       }
 
+      soci-icon {
+        margin-right: 8px;
+      }
+
       #total {
         margin-right: 10px; 
       }
@@ -35,16 +42,22 @@ export default class SociLedgerMonth extends SociComponent {
       #number {
         margin-right: 10px;
       }
+
+      #deposits {
+        display: none;
+      }
     `
   }
 
   html(){ return `
     <div id="header">
+      <soci-icon glyph="create"></soci-icon>
+      <div id="date"></div>
       <div id="description"></div>
-      <div id="total"></div>
       <div id="number"></div>
+      <div id="total"></div>
     </div>
-    <slot></slot>
+    <slot id="deposits"></slot>
   `}
 
   static get observedAttributes() {
