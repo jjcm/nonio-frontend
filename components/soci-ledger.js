@@ -65,7 +65,6 @@ export default class SociLedger extends SociComponent {
 
   connectedCallback(){
     performance.mark('ledger-start')
-    console.log('starting creation')
     this.createEntries(this.fakeData)
   }
 
@@ -86,18 +85,15 @@ export default class SociLedger extends SociComponent {
   async createEntries(data){
     let monthsDeposits = []
     let currentMonth = new Date().getMonth()
-    console.log(`current month: ${currentMonth}`)
     data.forEach(entry => {
       let entryMonth = new Date(entry.timestamp).getMonth()
       if(entry.type === 'withdrawl') {
         this.innerHTML += this.renderLedgerLi(entry)
-        console.log('withdrawl found')
       }
       else {
         if(entryMonth === currentMonth){
           monthsDeposits.push(entry)
         } else {
-          console.log(`new month: ${entryMonth}`)
           // append the month's deposits
           let month = document.createElement('soci-ledger-month')
           month.createEntries(monthsDeposits)

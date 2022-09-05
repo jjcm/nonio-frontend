@@ -101,7 +101,6 @@ export default class SociLedgerMonth extends SociComponent {
     let totalDeposits = 0
     data.forEach(entry => {
       totalDeposits += entry.amount
-      console.log(entry.amount)
     })
     this.setAttribute('total', '$' + totalDeposits.toFixed(2))
     this.setAttribute('number', data.length + ' deposits')
