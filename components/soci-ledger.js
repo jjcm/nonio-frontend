@@ -37,9 +37,9 @@ export default class SociLedger extends SociComponent {
     let letters = 'abcdefghijklmnopqrstuvwxyz'
     let time = new Date().getTime()
     let data = []
-    for(let i = 0; i < 10000; i++){
-      let type = Math.random() > 0.05 ? 'deposit' : 'withdrawal'
-      time -= Math.floor(Math.random() * 1000000)
+    for(let i = 0; i < 1000; i++){
+      let type = Math.random() > 0.01 ? 'deposit' : 'withdrawl'
+      time -= Math.floor(Math.random() * 60000000)
       let entry = {
         description: `${type} from ${letters[Math.floor(Math.random() * letters.length)]}${names[Math.floor(Math.random() * names.length)]}`,
         type: type,
@@ -79,18 +79,29 @@ export default class SociLedger extends SociComponent {
   async createEntries(data){
     let monthsDeposits = []
     let currentMonth = new Date().getMonth()
+    console.log(`current month: ${currentMonth}`)
     data.forEach(entry => {
-      if(entry.type === 'withdrawl') 
+      let entryMonth = new Date(entry.timestamp).getMonth()
+      if(entry.type === 'withdrawl') {
         this.innerHTML += this.renderLedgerLi(entry)
+        console.log('withdrawl found')
+      }
       else {
-        if(new Date(entry.timestamp).getMonth() === currentMonth){
+        if(entryMonth === currentMonth){
           monthsDeposits.push(entry)
         } else {
-          this.innerHTML += this.renderLedgerLi(monthsDeposits.reduce((a, b) => a + b.amount, 0))
+          console.log(`new month: ${entryMonth}`)
+          // append the month's deposits
+          let month = document.createElement('soci-ledger-month')
+          month.createEntries(monthsDeposits)
+          this.appendChild(month)
+          // start a new month
+          currentMonth = entryMonth
           monthsDeposits = [entry]
         }
       }
     })
+    /*
     this.renderLedgerLi = this.renderLedgerLi.bind(this)
     let numberToRender = Math.ceil(window.innerHeight / 40) // the height of a post li
     // render only the amount visible on the screen first, and animate them in
@@ -107,6 +118,7 @@ export default class SociLedger extends SociComponent {
       console.log(performance.getEntriesByName('ledger render time')[0].duration)
       console.log('creation over')
     }, 1)
+    */
     this.toggleAttribute('loaded', true)
   }
 

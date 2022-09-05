@@ -23,27 +23,41 @@ export default class SociLedgerMonth extends SociComponent {
       ::slotted(soci-ledger-li){
         margin-top: 8px;
       }
+
+      #header {
+        display: flex;
+      }
+
+      #total {
+        margin-right: 10px; 
+      }
+
+      #number {
+        margin-right: 10px;
+      }
     `
   }
 
   html(){ return `
-    <div id="description"></div>
-    <div id="amount"></div>
+    <div id="header">
+      <div id="description"></div>
+      <div id="total"></div>
+      <div id="number"></div>
+    </div>
     <slot></slot>
   `}
 
-  connectedCallback(){
-    this.createEntries(this.fakeData)
-  }
-
   static get observedAttributes() {
-    return ['amount', 'description']
+    return ['total', 'description', 'number']
   }
 
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
-      case 'amount':
-        this.select('#amount').innerHTML = newValue
+      case 'total':
+        this.select('#total').innerHTML = newValue
+        break
+      case 'number':
+        this.select('#number').innerHTML = newValue
         break
       case 'filter':
         break
@@ -54,16 +68,14 @@ export default class SociLedgerMonth extends SociComponent {
     let totalDeposits = 0
     data.forEach(entry => {
       totalDeposits += entry.amount
+      console.log(entry.amount)
     })
-    this.setAttribute('amount', totalDeposits)
+    this.setAttribute('total', totalDeposits)
+    this.setAttribute('number', data.length)
     this.renderLedgerLi = this.renderLedgerLi.bind(this)
     let numberToRender = Math.ceil(window.innerHeight / 40) // the height of a post li
-    console.log(numberToRender)
     // render only the amount visible on the screen first, and animate them in
-    console.log(data.length)
-    let dommy = data.splice(0, numberToRender).map(this.renderLedgerLi).join('')
-    console.log(dommy)
-    this.innerHTML = dommy
+    this.innerHTML = data.splice(0, numberToRender).map(this.renderLedgerLi).join('')
     // then once the main batch is done, load in the rest. 
     setTimeout(()=>{
       let tempDom = document.createElement('div')

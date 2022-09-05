@@ -42,6 +42,9 @@ window.customElements.define('soci-input', SociInput)
 import SociLedgerLi from "./soci-ledger-li.js"
 window.customElements.define('soci-ledger-li', SociLedgerLi)
 
+import SociLedgerMonth from "./soci-ledger-month.js"
+window.customElements.define('soci-ledger-month', SociLedgerMonth)
+
 import SociLedger from "./soci-ledger.js"
 window.customElements.define('soci-ledger', SociLedger)
 
