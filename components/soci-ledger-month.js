@@ -10,18 +10,21 @@ export default class SociLedgerMonth extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 8px;
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);
-        border: 1px solid var(--base-text);
+        border: 1px solid var(--base-background-subtle);
         border-radius: 4px;
         line-height: 24px;
+        margin-bottom: 4px;
       }
       :host([loaded]) {
         transform: translateY(0);
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+      }
+      :host(:hover) {
+        background: var(--base-background-subtle);
       }
       ::slotted(soci-ledger-li){
         margin-top: 8px;
@@ -29,23 +32,34 @@ export default class SociLedgerMonth extends SociComponent {
 
       #header {
         display: flex;
+        padding: 8px;
+        gap: 8px;
+        white-space: nowrap;
+        cursor: pointer;
       }
 
+      #number,
+      #date,
       soci-icon {
-        margin-right: 8px;
+        color: var(--base-text-subtle);
+      }
+
+      #description {
+        width: 100%;
+        font-weight: bold;
       }
 
       #total {
-        margin-right: 10px; 
-      }
-
-      #number {
-        margin-right: 10px;
+        width: 100px;
+        font-weight: bold;
+        text-align: right;
+        color: var(--success-text);
       }
 
       #deposits {
         display: none;
       }
+
     `
   }
 
@@ -61,7 +75,7 @@ export default class SociLedgerMonth extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['total', 'description', 'number']
+    return ['total', 'description', 'number', 'date']
   }
 
   async attributeChangedCallback(name, oldValue, newValue){
@@ -69,8 +83,14 @@ export default class SociLedgerMonth extends SociComponent {
       case 'total':
         this.select('#total').innerHTML = newValue
         break
+      case 'description':
+        this.select('#description').innerHTML = newValue
+        break
       case 'number':
         this.select('#number').innerHTML = newValue
+        break
+      case 'date':
+        this.select('#date').innerHTML = newValue
         break
       case 'filter':
         break
@@ -83,8 +103,15 @@ export default class SociLedgerMonth extends SociComponent {
       totalDeposits += entry.amount
       console.log(entry.amount)
     })
-    this.setAttribute('total', totalDeposits)
-    this.setAttribute('number', data.length)
+    this.setAttribute('total', '$' + totalDeposits.toFixed(2))
+    this.setAttribute('number', data.length + ' deposits')
+    let date = new Date(data[0].timestamp) 
+    this.setAttribute('date', date.toLocaleString('default', {
+      month: 'numeric',
+      day: 'numeric'
+    }))
+
+    this.setAttribute('description', date.toLocaleString('default', { month: 'long' }) + ' Deposits')
     this.renderLedgerLi = this.renderLedgerLi.bind(this)
     let numberToRender = Math.ceil(window.innerHeight / 40) // the height of a post li
     // render only the amount visible on the screen first, and animate them in

@@ -20,10 +20,6 @@ export default class SociLedger extends SociComponent {
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
-      ::slotted(soci-ledger-li){
-        margin-top: 8px;
-      }
-
     `
   }
 
@@ -40,15 +36,26 @@ export default class SociLedger extends SociComponent {
     for(let i = 0; i < 1000; i++){
       let type = Math.random() > 0.01 ? 'deposit' : 'withdrawl'
       time -= Math.floor(Math.random() * 60000000)
-      let entry = {
-        description: `${type} from ${letters[Math.floor(Math.random() * letters.length)]}${names[Math.floor(Math.random() * names.length)]}`,
-        type: type,
-        amount: Math.floor(Math.random() * 3000) / 1000,
-        timestamp: time
+      let entry = {}
+      if(type == 'deposit'){
+        entry = {
+          description: `${type} from ${letters[Math.floor(Math.random() * letters.length)]}${names[Math.floor(Math.random() * names.length)]}`,
+          type: type,
+          amount: Math.floor(Math.random() * 3000) / 1000,
+          timestamp: time
+        }
+      } else {
+        entry = {
+          description: `Withdrawl to Stripe`,
+          type: type,
+          amount: (Math.ceil(Math.random() * 10) * 10) + '.00',
+          timestamp: time
+        }
       }
 
       data.push(entry)
     }
+    console.log(data)
     return data
   }
 
@@ -123,8 +130,13 @@ export default class SociLedger extends SociComponent {
   }
 
   renderLedgerLi(entry){
+    let date = new Date(entry.timestamp).toLocaleString('default', {
+      month: 'numeric',
+      day: 'numeric'
+    })
     return`
       <soci-ledger-li type="${entry.type}">
+        <div slot="date">${date}</div>
         <div slot="description">${entry.description}</div>
         <div slot="amount">${entry.amount}</div>
       </soci-ledger-li>
