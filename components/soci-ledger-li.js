@@ -28,15 +28,14 @@ export default class SociLedgerLi extends SociComponent {
       }
 
       slot[name="description"] {
-        display: block;
-        padding-right: 12px;
-        margin-right: 12px;
-        width: 100%;
         font-weight: bold;
+        white-space: nowrap;
       }
 
       slot[name="date"] {
+        display: block;
         color: var(--base-text-subtle);
+        width: 100%;
       }
 
       slot[name="amount"] {
@@ -55,8 +54,8 @@ export default class SociLedgerLi extends SociComponent {
 
   html(){ return `
     <soci-icon glyph="create"></soci-icon>
-    <slot name="date"></slot>
     <slot name="description"></slot>
+    <slot name="date"></slot>
     <slot name="amount"></slot>
   `}
 }

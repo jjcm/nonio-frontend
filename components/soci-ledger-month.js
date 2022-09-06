@@ -66,7 +66,6 @@ export default class SociLedgerMonth extends SociComponent {
   html(){ return `
     <div id="header">
       <soci-icon glyph="create"></soci-icon>
-      <div id="date"></div>
       <div id="description"></div>
       <div id="number"></div>
       <div id="total"></div>
@@ -89,9 +88,6 @@ export default class SociLedgerMonth extends SociComponent {
       case 'number':
         this.select('#number').innerHTML = newValue
         break
-      case 'date':
-        this.select('#date').innerHTML = newValue
-        break
       case 'filter':
         break
     }
@@ -103,14 +99,10 @@ export default class SociLedgerMonth extends SociComponent {
       totalDeposits += entry.amount
     })
     this.setAttribute('total', '$' + totalDeposits.toFixed(2))
-    this.setAttribute('number', data.length + ' deposits')
+    this.setAttribute('number', data.length + ' contributions')
     let date = new Date(data[0].timestamp) 
-    this.setAttribute('date', date.toLocaleString('default', {
-      month: 'numeric',
-      day: 'numeric'
-    }))
 
-    this.setAttribute('description', date.toLocaleString('default', { month: 'long' }) + ' Deposits')
+    this.setAttribute('description', date.toLocaleString('default', { month: 'long' }) + ' Contributions')
     this.renderLedgerLi = this.renderLedgerLi.bind(this)
     let numberToRender = Math.ceil(window.innerHeight / 40) // the height of a post li
     // render only the amount visible on the screen first, and animate them in

@@ -12,8 +12,8 @@ let adminFinancials = {
   },
   checkFinancials: async () => {
     let response = await soci.getData('user/get-financials')
-    adminFinancials.dom.querySelector('.profit h1').innerHTML = adminFinancials.formatCash(response.cash || 0)
-    adminFinancials.dom.querySelector('.stripe h1').innerHTML = adminFinancials.formatCash(response.stripe_wallet_balance || 0)
+    adminFinancials.dom.querySelector('.profit h1').innerHTML = adminFinancials.formatCash(response.cash || 53.67)
+    adminFinancials.dom.querySelector('.stripe h1').innerHTML = adminFinancials.formatCash(response.stripe_wallet_balance || 844.33 )
     adminFinancials.dom.querySelectorAll('a').forEach(a => a.href = response.stripe_connect_link || "#")
     adminFinancials.dom.querySelector('.header soci-button')?.removeAttribute('state')
     adminFinancials.dom.querySelector('.subscription .cash').innerHTML = `$${Number.parseFloat(response.subscription_amount || 0)}<span>/mo</span>`
