@@ -120,7 +120,7 @@
     </soci-route>
     <soci-route class="admin-page" id="admin-first-time-signup" path="/admin/first-time-signup" fresh="fresh">
       <div class="content">
-        <script src="/pages/admin-first-time-signup.js"></script>
+        <script src="/pages/admin/first-time-signup.js"></script>
         <div class="loading-block" load-order="primary">
           <h1>Last step</h1>
           <p>Thanks for signing up! Please pick your account type:</p>
@@ -189,7 +189,7 @@
           <soci-button async="async">submit</soci-button>
         </div>
       </div>
-      <script>lazyload('/pages/admin-forgot-password.js', document.currentScript.closest('soci-route'))</script>
+      <script>lazyload('/pages/admin/forgot-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route class="admin-page" id="admin-change-forgotten-password" path="/admin/change-forgotten-password">
       <div class="content">
@@ -209,7 +209,7 @@
           <p>Please use the sidebar to log in.</p>
         </div>
       </div>
-      <script>lazyload('/pages/admin-change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
+      <script>lazyload('/pages/admin/change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh="fresh">
       <div class="sidebar" load-order="primary">
@@ -321,7 +321,7 @@
     </soci-route>
     <soci-route class="admin-page" id="admin-financials" path="/admin/financials">
       <div class="container" id="admin-financials-container">
-        <script src="/pages/admin-financials.js"></script>
+        <script src="/pages/admin/financials.js"></script>
         <div class="header" load-order="primary">
           <h1>Your Financials </h1>
           <soci-banner type="warning" title="Account setup incomplete">
@@ -336,10 +336,21 @@
               <h1 class="cash">$</h1>
             </div>
             <div class="block stripe">
-              <h2>Stripe Wallet </h2>
+              <h2>Total Cash</h2>
               <h1 class="cash">$</h1>
             </div>
+            <div class="block stripe">
+              <h2>Daily Average</h2>
+              <h1 class="cash">$8.16</h1>
+            </div>
+            <div class="block stripe">
+              <h2>Stripe Wallet </h2>
+              <h1 class="cash">$220.00</h1>
+            </div>
           </div>
+        </div>
+        <div class="ledger" load-order="tertiary">
+          <soci-ledger></soci-ledger>
         </div>
         <div class="subscription" load-order="tertiary">
           <hr/>
@@ -418,7 +429,7 @@
     </soci-route>
     <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
-        <script src="/pages/admin-settings.js"></script>
+        <script src="/pages/admin/settings.js"></script>
         <div class="blocks">
           <div class="block avatar" load-order="primary">
             <h2>Avatar</h2>
