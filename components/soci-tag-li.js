@@ -12,6 +12,7 @@ export default class SociTagLi extends SociComponent {
         position: relative;
         display: block;
         overflow: hidden;
+        border-radius: 4px;
       }
 
       :host([active]) a {
@@ -21,12 +22,20 @@ export default class SociTagLi extends SociComponent {
       }
 
       :host([active]) a:hover {
-        background: var(--brand-backgrond-subtle-hover);
+        background: var(--brand-background-subtle-hover);
+      }
+
+      :host(:hover) {
+        box-shadow: 0 0 0 1px inset var(--base-background-subtle);
+      }
+
+      :host([active]:hover) {
+        box-shadow: none;
       }
       
       a {
         display: block;
-        padding-left: 54px;
+        padding-left: 42px;
         text-decoration: none;
         color: var(--base-text);
         position: relative;
@@ -41,7 +50,7 @@ export default class SociTagLi extends SociComponent {
       ::slotted(svg),
       #hash {
         position: absolute;
-        left: 24px;
+        left: 12px;
         top: 8px;
         width: 16px;
         height: 16px;

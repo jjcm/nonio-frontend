@@ -72,19 +72,16 @@ export default class SociSidebar extends SociComponent {
 
       content section {
         border: none;
-      }
-
-      #all-tags {
-        padding-top: 16px;
+        padding: 16px 12px 12px;
       }
 
       #user {
         position: sticky;
         top: 0;
-        background: var(--base-background);
+        background: var(--base-background-subtle);
         z-index: 10;
         height: 40px;
-        box-shadow: 0 0 4px var(--shadow), 0 0 1px var(--shadow);
+        border-bottom: 1px solid var(--base-background-bold);
       }
 
       #user soci-user {
@@ -105,6 +102,7 @@ export default class SociSidebar extends SociComponent {
         width: 20px;
         overflow: hidden;
         transition: width 0.1s var(--soci-ease);
+        background: var(--base-background-subtle-hover);
       }
 
       #user soci-icon {
@@ -217,8 +215,7 @@ export default class SociSidebar extends SociComponent {
       }
 
       #auth h2 {
-        padding-left: 24px;
-        margin-top: 12px;
+        padding-left: 12px;
         line-height: 32px;
       }
 

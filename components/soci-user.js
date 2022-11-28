@@ -16,7 +16,7 @@ export default class SociUser extends SociComponent {
         --font-weight: 300;
         --avatar-size: 16px;
         --line-height: 16px;
-        --spacing: 4px;
+        --spacing: 8px;
       }
 
       div {
