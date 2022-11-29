@@ -56,8 +56,15 @@ export default class SociPostLi extends SociComponent {
         display: flex;
         flex-direction: column;
       }
-      #time {
+      #details {
+        display: flex;
+        gap: 8px;
         font-size: 12px;
+      }
+      #time {
+        color: var(--base-text-subtle);
+      }
+      #comments {
         color: var(--base-text-subtle);
         letter-spacing: -0.16px;
         text-align: right;
@@ -91,17 +98,6 @@ export default class SociPostLi extends SociComponent {
       }
       #tags::-webkit-scrollbar {
         display: none;
-      }
-      #comments {
-        font-size: 12px;
-        color: var(--base-text-subtle);
-        letter-spacing: -0.16px;
-        text-align: right;
-        line-height: 16px;
-        white-space: nowrap;
-        position: absolute;
-        bottom: 12px;
-        right: 12px;
       }
       :host([score="0"]) #score {
         color: var(--base-background-subtle);
@@ -202,6 +198,7 @@ export default class SociPostLi extends SociComponent {
       <div id="top">
         <div id="details">
           <slot name="user"></slot>
+          <div id="votes"></div>
           <div id="time"></div>
           <div id="comments"></div>
         </div>
@@ -235,6 +232,7 @@ export default class SociPostLi extends SociComponent {
         this.updateTime(newValue, this.select('#time'))
         break
       case 'score':
+        this.select('#votes').innerHTML = newValue + ' vote' + (newValue == 1 ? '' : 's')
         this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break;
       case 'comments':

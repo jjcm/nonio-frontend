@@ -65,7 +65,7 @@ export default class SociColumn extends SociComponent {
       filter {
         text-transform: capitalize;
         position: relative;
-        padding: 6px 12px;
+        padding: 0 12px 2px;
         cursor: pointer;
         font-weight: 500;
         font-size: 12px;
@@ -73,6 +73,18 @@ export default class SociColumn extends SociComponent {
         position: relative;
         z-index: 2;
         color: var(--base-text-subtle);
+        border-radius: 3px;
+      }
+
+      sort:before,
+      filter:before {
+        position: absolute;
+        content: ''; 
+        left: 0;
+        top: -10px;
+        height: 40px;
+        width: 100%;
+        background: transparent;
       }
 
       soci-select {
@@ -97,6 +109,7 @@ export default class SociColumn extends SociComponent {
       filter[selected] {
         opacity: 1;
         color: var(--brand-text-bold);
+        background: var(--base-background-subtle);
       }
 
       sort[selected]::after,
@@ -104,7 +117,7 @@ export default class SociColumn extends SociComponent {
         content:'';
         display: block;
         position: absolute;
-        top: 34px;
+        top: 29px;
         left: calc(50% - 8px);
         width: 16px;
         height: 3px;
