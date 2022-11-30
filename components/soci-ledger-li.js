@@ -13,14 +13,14 @@ export default class SociLedgerLi extends SociComponent {
         gap: 8px;
         width: 100%;
         box-sizing: border-box;
-        border: 1px solid var(--base-background-subtle);
+        border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         line-height: 24px;
         margin-bottom: 4px;
       }
 
       :host([type="withdrawl"]) slot[name="amount"] {
-        color: var(--error-text);
+        color: var(--text-danger);
       }
 
       :host([type="withdrawl"]) slot[name="amount"]::before {
@@ -34,7 +34,7 @@ export default class SociLedgerLi extends SociComponent {
 
       slot[name="date"] {
         display: block;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         width: 100%;
       }
 

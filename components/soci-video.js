@@ -96,7 +96,7 @@ export default class SociVideoPlayer extends SociComponent {
     }
     .progress {
       transition: width 0.1s linear;
-      background: var(--brand-background);
+      background: var(--bg-brand);
       width: 0;
     }
     #seek {
@@ -118,7 +118,7 @@ export default class SociVideoPlayer extends SociComponent {
       width: 12px;
       height: 12px;
       transition: all 0.1s linear;
-      background: var(--brand-background);
+      background: var(--bg-brand);
       border-radius: 50%;
       position: absolute;
       top: 5px;

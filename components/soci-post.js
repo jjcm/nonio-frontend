@@ -10,7 +10,7 @@ export default class SociPost extends SociComponent {
     let CONTENT_HEIGHT = 300
     return `
        :host {
-        background: var(--base-background);
+        background: var(--bg);
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -88,7 +88,7 @@ export default class SociPost extends SociComponent {
         box-shadow: 0 -2px 0 0 rgba(0,0,0,0.08);
         display: block;
         position: relative;
-        background: var(--base-background);
+        background: var(--bg);
         z-index: 10;
       }
 
@@ -124,17 +124,17 @@ export default class SociPost extends SociComponent {
       meta-data {
         display: block;
         margin-top: 4px;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       soci-user[username-only] {
         --font-size: 14px;
         --font-weight: 500;
-        color: var(--brand-text);
+        color: var(--text-brand);
       }
 
       soci-user[username-only]:hover {
-        color: var(--brand-text-hover);
+        color: var(--text-brand-hover);
       }
 
        soci-comment-list {
@@ -160,7 +160,7 @@ export default class SociPost extends SociComponent {
 
       ::slotted(soci-quill-view){
         margin: 12px 0;
-        border: 1px solid var(--base-background-subtle);
+        border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         line-height: 1.5;
         display: block;
@@ -250,7 +250,7 @@ export default class SociPost extends SociComponent {
       }
 
       #vote-message span {
-        color: var(--success-text);
+        color: var(--text-success);
         font-size: 11px;
         transform: translateY(-1px);
         animation: load 0.1s var(--soci-ease) forwards;

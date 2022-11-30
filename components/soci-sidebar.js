@@ -47,7 +47,7 @@ export default class SociSidebar extends SociComponent {
         text-transform: uppercase;
         letter-spacing: 1.4px;
         font-weight: normal;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       #auth input {
@@ -78,10 +78,10 @@ export default class SociSidebar extends SociComponent {
       #user {
         position: sticky;
         top: 0;
-        background: var(--base-background-subtle);
+        background: var(--bg-secondary);
         z-index: 10;
         height: 40px;
-        border-bottom: 1px solid var(--base-background-bold);
+        border-bottom: 1px solid var(--bg-bold);
       }
 
       #user soci-user {
@@ -102,7 +102,7 @@ export default class SociSidebar extends SociComponent {
         width: 20px;
         overflow: hidden;
         transition: width 0.1s var(--soci-ease);
-        background: var(--base-background-subtle-hover);
+        background: var(--bg-secondary-hover);
       }
 
       #user soci-icon {
@@ -134,8 +134,8 @@ export default class SociSidebar extends SociComponent {
         bottom: 0;
         box-sizing: border-box;
         width: 280px;
-        color: var(--base-text-subtle);
-        background: var(--base-background);
+        color: var(--text-secondary);
+        background: var(--bg);
         border-top: 2px solid transparent;
         transition: border-top 0.3s var(--soci-ease);
       }
@@ -150,7 +150,7 @@ export default class SociSidebar extends SociComponent {
       #footer a {
         margin-right: 28px;
         text-decoration: none;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       :host([#noauth]) #footer soci-link#logout {
@@ -192,7 +192,7 @@ export default class SociSidebar extends SociComponent {
         display: block;
         margin-top: 32px;
         font-size: 13px;
-        color: var(--brand-text);
+        color: var(--text-brand);
         font-weight: 700;
         letter-spacing: 0.5px;
         opacity: 0.8;
@@ -202,7 +202,7 @@ export default class SociSidebar extends SociComponent {
 
       #noauth #im-stupid {
         margin-top: 12px;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         font-weight: 400;
         opacity: 0.5;
       }
@@ -236,9 +236,9 @@ export default class SociSidebar extends SociComponent {
       input {
         margin: 0 0 8px;
         border: 0;
-        color: var(--base-text);
-        border-bottom: 2px solid var(--base-background-subtle);
-        background: var(--base-background);
+        color: var(--text);
+        border-bottom: 2px solid var(--bg-secondary);
+        background: var(--bg);
         height: 38px;
         font-size: 14px;
         width: 100%;
@@ -246,7 +246,7 @@ export default class SociSidebar extends SociComponent {
 
       input:focus {
         outline: 0;
-        border-bottom: 2px solid var(--brand-background);
+        border-bottom: 2px solid var(--bg-brand);
       }
 
       input[type="email"] {
@@ -264,7 +264,7 @@ export default class SociSidebar extends SociComponent {
 
       @media(max-height: 780px){
         #footer {
-          border-top: 2px solid var(--base-background-subtle);
+          border-top: 2px solid var(--bg-secondary);
         }
       }
 
@@ -273,18 +273,18 @@ export default class SociSidebar extends SociComponent {
       }
 
       ::-webkit-scrollbar-track {
-        background: var(--base-background);
+        background: var(--bg);
       }
 
       /* this is a bad hack to get alpha transparency on the scroll bars */
       ::-webkit-scrollbar-thumb {
-        background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
+        background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
         border-radius: 7px;
-        border: 3px solid var(--base-background);
+        border: 3px solid var(--bg);
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px);
+        background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
       }
     `
   }
@@ -303,32 +303,32 @@ export default class SociSidebar extends SociComponent {
             <soci-tag-li href="/#all" icon="home">
               All posts
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--brand-text)" stroke-width="1.5"/>
-                <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"/>
+                <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
             <soci-tag-li href="/#images">
               Images
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
-                <circle cx="8" cy="9" r="2.25" stroke="var(--brand-text)" stroke-width="1.5"/>
+                <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"/>
               </svg>
             </soci-tag-li>
             <soci-tag-li href="/#videos">
               Videos
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
             <soci-tag-li href="/#blogs">
               Blogs
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--brand-text)" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M5 4H11" stroke="var(--brand-text)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M5 7H11" stroke="var(--brand-text)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M5 10H8.5" stroke="var(--brand-text)" stroke-width="1.5" stroke-linecap="round"/>
+                <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M5 4H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M5 7H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M5 10H8.5" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
             </soci-tag-li>
           </section>

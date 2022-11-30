@@ -28,7 +28,7 @@ export default class SociTagGroup extends SociComponent {
     }
     #add-tag {
       margin-left: 8px;
-      border: 1px solid var(--base-background-subtle);
+      border: 1px solid var(--bg-secondary);
       box-sizing: border-box;
       height: var(--height);
       width: 32px;
@@ -42,7 +42,7 @@ export default class SociTagGroup extends SociComponent {
       position: relative;
     }
     #add-tag:not([active]):hover {
-      background: var(--base-background-hover);
+      background: var(--bg-hover);
     }
     #add-tag input {
       position: absolute;
@@ -54,7 +54,7 @@ export default class SociTagGroup extends SociComponent {
       padding-left: 28px;
       line-height: 18px;
       background: transparent;
-      color: var(--base-text-subtle);
+      color: var(--text-secondary);
     }
     #add-tag svg {
       position: absolute;
@@ -63,8 +63,8 @@ export default class SociTagGroup extends SociComponent {
     #add-tag[active] {
       transition: all 0.1s var(--soci-ease-out);
       width: 150px;
-      background: var(--brand-background-subtle);
-      border: 1px solid var(--brand-background);
+      background: var(--bg-brand-secondary);
+      border: 1px solid var(--bg-brand);
     }
     #add-tag[active] input {
       opacity: 1;
@@ -79,14 +79,14 @@ export default class SociTagGroup extends SociComponent {
       display: none;
       position: absolute;
       left: 58px;
-      border: 1px solid var(--brand-background-subtle);
+      border: 1px solid var(--bg-brand-secondary);
       border-radius: 3px;
       list-style: none;
       padding: 4px 0;
       line-height: 20px;
       top: 10px;
       z-index: 10;
-      background: var(--base-background);
+      background: var(--bg);
       box-shadow: 1px 0 8px var(--shadow-light);
       min-width: 148px;
       overflow: auto;
@@ -103,11 +103,11 @@ export default class SociTagGroup extends SociComponent {
     }
 
     #tag-search li[selected] {
-      background: var(--brand-background-subtle);
+      background: var(--bg-brand-secondary);
     }
 
     #tag-search span {
-      color: var(--base-text);
+      color: var(--text);
       opacity: 0.5;
       pointer-events: none;
     }
@@ -115,7 +115,7 @@ export default class SociTagGroup extends SociComponent {
     #tag-search .count {
       float: right;
       margin-left: 12px;
-      color: var(--base-text);
+      color: var(--text);
       opacity: 0.5;
       pointer-events: none;
     }
@@ -148,20 +148,20 @@ export default class SociTagGroup extends SociComponent {
       font-size: 16px;
       height: calc(var(--height) - 2px);
       line-height: calc(var(--height) - 2px);
-      color: var(--base-text-subtle);
+      color: var(--text-secondary);
       min-width: 36px;
       padding: 0 6px;
       text-align: center;
-      border: 1px solid var(--base-background-subtle);
+      border: 1px solid var(--bg-secondary);
       border-radius: 3px;
       font-weight: 600;
       user-select: none;
     }
 
     :host([upvoted]) ::slotted(div) {
-      color: var(--base-text-inverse);
-      background: var(--brand-background);
-      border-color: var(--brand-background);
+      color: var(--text-inverse);
+      background: var(--bg-brand);
+      border-color: var(--bg-brand);
     }
 
 

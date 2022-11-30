@@ -19,21 +19,21 @@ let adminFirstTimeSignup = {
     adminFirstTimeSignup.card = elements.create('card', {
       style: {
         base: {
-          iconColor: currentStyles.getPropertyValue('--base-text'),
-          color: currentStyles.getPropertyValue('--base-text'),
+          iconColor: currentStyles.getPropertyValue('--text'),
+          color: currentStyles.getPropertyValue('--text'),
           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
           lineHeight: '38px',
           fontSize: '14px',
           ':-webkit-autofill': {
-            color: currentStyles.getPropertyValue('--brand-text')
+            color: currentStyles.getPropertyValue('--text-brand')
           },
           '::placeholder': {
-            color: currentStyles.getPropertyValue('--base-text-subtle')
+            color: currentStyles.getPropertyValue('--text-secondary')
           }
         },
         invalid: {
-          iconColor: currentStyles.getPropertyPriority('--error-text'),
-          color: currentStyles.getPropertyPriority('--error-text')
+          iconColor: currentStyles.getPropertyPriority('--text-danger'),
+          color: currentStyles.getPropertyPriority('--text-danger')
         }
       }
     })

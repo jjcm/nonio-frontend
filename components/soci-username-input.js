@@ -20,9 +20,9 @@ export default class SociUsernameInput extends SociComponent {
     input {
       margin: 0 0 8px;
       border: 0;
-      color: var(--base-text);
-      background: var(--base-background);
-      border-bottom: 2px solid var(--base-background-subtle);
+      color: var(--text);
+      background: var(--bg);
+      border-bottom: 2px solid var(--bg-secondary);
       height: 38px;
       font-size: 14px;
       width: 100%;
@@ -30,7 +30,7 @@ export default class SociUsernameInput extends SociComponent {
 
     :host input:focus {
       outline: 0;
-      border-bottom: 2px solid var(--brand-background);
+      border-bottom: 2px solid var(--bg-brand);
     }
 
     :host(:focus-within) soci-icon {
@@ -45,20 +45,20 @@ export default class SociUsernameInput extends SociComponent {
     }
 
     :host([available="false"]) input:focus {
-      border-bottom: 2px solid var(--error-background);
+      border-bottom: 2px solid var(--bg-danger);
     }
 
     :host([available="false"]) soci-icon {
       display: block;
-      color: var(--error-background);
+      color: var(--bg-danger);
     }
 
     :host([available="true"]) input:focus {
-      border-bottom: 2px solid var(--success-background);
+      border-bottom: 2px solid var(--bg-success);
     }
 
     :host([available="true"]) soci-icon {
-      color: var(--success-background);
+      color: var(--bg-success);
     }
 
     error {
@@ -67,7 +67,7 @@ export default class SociUsernameInput extends SociComponent {
       transition: all 0.2s ease-out;
       line-height: 20px;
       font-size: 11px;
-      color: var(--error-text);
+      color: var(--text-danger);
       position: relative;
       overflow: hidden;
     }

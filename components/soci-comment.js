@@ -33,12 +33,12 @@ export default class SociComment extends SociComponent {
       }
 
       soci-user {
-        color: var(--brand-text);
+        color: var(--text-brand);
       }
 
       .edited,
       time {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         display: inline;
         font-size: 12px;
         line-height: 18px;
@@ -53,7 +53,7 @@ export default class SociComment extends SociComponent {
         width: 4px;
         height: 4px;
         border-radius: 2px;
-        background: var(--base-text-subtle);
+        background: var(--text-secondary);
         position: absolute;
         top: 8px;
         left: -13px;
@@ -82,7 +82,7 @@ export default class SociComment extends SociComponent {
         align-items: center;
         max-width: 900px;
         user-select: none;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       #actions > div {
@@ -119,7 +119,7 @@ export default class SociComment extends SociComponent {
         padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
-        background: var(--base-background-subtle);
+        background: var(--bg-secondary);
         cursor: pointer;
         user-select: none;
         --fill-color: transparent;
@@ -127,14 +127,14 @@ export default class SociComment extends SociComponent {
       }
 
       #upvote soci-icon {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         height: 20px;
         width: 20px;
       }
       
       #upvote:hover {
-        background: var(--base-background-subtle-hover);
-        color: var(--base-text-subtle-hover);
+        background: var(--bg-secondary-hover);
+        color: var(--text-secondary-hover);
       }
 
       #upvote:active {
@@ -142,9 +142,9 @@ export default class SociComment extends SociComponent {
       }
 
       #upvote[upvoted] {
-        background: var(--success-background);
-        color: var(--base-text-inverse);
-        --fill-color: var(--base-text-inverse);
+        background: var(--bg-success);
+        color: var(--text-inverse);
+        --fill-color: var(--text-inverse);
       }
 
       #upvote[upvoted] soci-icon {
@@ -154,23 +154,23 @@ export default class SociComment extends SociComponent {
 
       soci-icon[glyph=downvote] {
         cursor: pointer;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         --fill-color: transparent;
         height: 20px;
         width: 20px;
       }
 
       soci-icon[glyph=downvote]:hover {
-        color: var(--base-text-subtle-hover);
+        color: var(--text-secondary-hover);
       }
       soci-icon[glyph=downvote]:active {
-        color: var(--base-text-subtle-active);
-        --fill-color: var(--base-text-subtle-active);
+        color: var(--text-secondary-active);
+        --fill-color: var(--text-secondary-active);
       }
 
       soci-icon[glyph=downvote][downvoted] {
-        color: var(--error-text);
-        --fill-color: var(--error-text);
+        color: var(--text-danger);
+        --fill-color: var(--text-danger);
       }
 
       #replies {
@@ -203,7 +203,7 @@ export default class SociComment extends SociComponent {
 
       .confirm-controls span:first-child {
         margin-right: 4px;
-        color: var(--error-text);
+        color: var(--text-danger);
       }
 
       :host([expanded]) #replies {
@@ -237,7 +237,7 @@ export default class SociComment extends SociComponent {
       }
 
       soci-input:not([readonly]) {
-        border: 1px solid var(--base-background-subtle);
+        border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         --min-height: 140px;
       }

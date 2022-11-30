@@ -13,7 +13,7 @@ export default class SociLedgerMonth extends SociComponent {
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);
-        border: 1px solid var(--base-background-subtle);
+        border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         line-height: 24px;
         margin-bottom: 4px;
@@ -24,7 +24,7 @@ export default class SociLedgerMonth extends SociComponent {
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
       :host(:hover) {
-        background: var(--base-background-subtle);
+        background: var(--bg-secondary);
       }
       ::slotted(soci-ledger-li){
         margin-top: 8px;
@@ -41,7 +41,7 @@ export default class SociLedgerMonth extends SociComponent {
       #number,
       #date,
       soci-icon {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       #description {
@@ -53,7 +53,7 @@ export default class SociLedgerMonth extends SociComponent {
         width: 100px;
         font-weight: bold;
         text-align: right;
-        color: var(--success-text);
+        color: var(--text-success);
       }
 
       #deposits {

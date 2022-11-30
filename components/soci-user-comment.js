@@ -13,7 +13,7 @@ export default class SociUserComment extends SociComponent {
         padding: 12px;
         margin: 8px 0;
         border-radius: 8px;
-        background: var(--base-background);
+        background: var(--bg);
         box-shadow: 0px 1px 3px var(--shadow);
       }
 
@@ -21,7 +21,7 @@ export default class SociUserComment extends SociComponent {
         display: flex;
         margin-bottom: 8px;
         padding-bottom: 8px;
-        border-bottom: 1px solid var(--base-background-subtle-hover);
+        border-bottom: 1px solid var(--bg-secondary-hover);
       }
 
       img {
@@ -40,7 +40,7 @@ export default class SociUserComment extends SociComponent {
 
       #title {
         font-size: 16px;
-        color: var(--base-text-bold);
+        color: var(--text-bold);
         letter-spacing: -0.08px;
         line-height: 20px;
         width: 100%;

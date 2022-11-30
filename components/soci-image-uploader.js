@@ -15,7 +15,7 @@ export default class SociImageUploader extends SociComponent {
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        border: 2px dashed var(--base-background-subtle);
+        border: 2px dashed var(--bg-secondary);
         box-sizing: border-box;
         border-radius: 8px;
         margin-bottom: 12px;
@@ -26,7 +26,7 @@ export default class SociImageUploader extends SociComponent {
       }
 
       :host([dragover]) {
-        border: 2px dashed var(--success-background);
+        border: 2px dashed var(--bg-success);
         transition: border 0.1s ease-out;
       }
 
@@ -38,7 +38,7 @@ export default class SociImageUploader extends SociComponent {
         left: 0;
         width: 100%;
         height: 100%;
-        background: var(--success-background);
+        background: var(--bg-success);
         opacity: 0;
         transition: opacity 0.2s ease;
         pointer-events: none;
@@ -52,7 +52,7 @@ export default class SociImageUploader extends SociComponent {
 
       div {
         font-weight: 500;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         margin-bottom: 12px;
         mix-blend-mode: multiply;
       }
@@ -60,10 +60,10 @@ export default class SociImageUploader extends SociComponent {
       label {
         border-radius: 4px;
         height: 24px;
-        color: var(--base-text-inverse);
+        color: var(--text-inverse);
         cursor: pointer;
-        background: var(--brand-background);
-        border: 2px solid var(--brand-background);
+        background: var(--bg-brand);
+        border: 2px solid var(--bg-brand);
         padding: 0 6px;
         line-height: 22px;
         text-align: center;
@@ -74,18 +74,18 @@ export default class SociImageUploader extends SociComponent {
         position: relative;
       }
       label:hover {
-        background: var(--brand-background-hover);
-        border-color: var(--brand-background-hover);
+        background: var(--bg-brand-hover);
+        border-color: var(--bg-brand-hover);
       }
       label:active {
-        background: var(--brand-background-active);
-        border-color: var(--brand-background-active);
+        background: var(--bg-brand-active);
+        border-color: var(--bg-brand-active);
       }
       label.uploading {
         height: 8px;
         transition: all 0.1s ease-in-out;
-        background: var(--base-background);
-        border-color: var(--success-background);
+        background: var(--bg);
+        border-color: var(--bg-success);
       }
       label.uploading:after {
         content: '';
@@ -96,7 +96,7 @@ export default class SociImageUploader extends SociComponent {
         height: 8px;
         width: var(--upload-progress);
         transition: width 0.3s ease;
-        background: var(--success-background);
+        background: var(--bg-success);
       }
       :host([preview]) {
         min-height: 0;

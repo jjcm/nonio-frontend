@@ -113,7 +113,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-editor ul[data-checked=true] > li::before,
       .ql-editor ul[data-checked=false] > li::before {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         cursor: pointer;
         pointer-events: all;
       }
@@ -407,7 +407,7 @@ export default class SociInput extends SociComponent {
       .ql-bubble .ql-toolbar button:hover,
       .ql-bubble .ql-toolbar button:focus,
       .ql-bubble .ql-toolbar button.ql-active {
-        color: var(--base-text-subtle-hover);
+        color: var(--text-secondary-hover);
       }
 
       .ql-bubble .ql-toolbar button:hover .ql-fill,
@@ -415,32 +415,32 @@ export default class SociInput extends SociComponent {
       .ql-bubble .ql-toolbar button:hover .ql-stroke.ql-fill,
       .ql-bubble .ql-toolbar button:focus .ql-stroke.ql-fill,
       .ql-bubble .ql-toolbar button.ql-active .ql-stroke.ql-fill {
-        fill: var(--base-text-subtle-hover);
+        fill: var(--text-secondary-hover);
       }
       .ql-bubble .ql-toolbar button:hover .ql-stroke,
       .ql-bubble .ql-toolbar button:focus .ql-stroke,
       .ql-bubble .ql-toolbar button:hover .ql-stroke-miter,
       .ql-bubble .ql-toolbar button:focus .ql-stroke-miter,
       .ql-bubble .ql-toolbar button.ql-active .ql-stroke-miter {
-        stroke: var(--base-text-subtle-hover);
+        stroke: var(--text-secondary-hover);
       }
       .ql-bubble .ql-toolbar button.ql-active .ql-stroke {
-        stroke: var(--brand-text);
+        stroke: var(--text-brand);
       }
       .ql-bubble .ql-toolbar button.ql-active:hover .ql-stroke {
-        stroke: var(--brand-text-hover);
+        stroke: var(--text-brand-hover);
       }
       .ql-bubble .ql-toolbar button.ql-active .ql-fill {
-        fill: var(--brand-text);
+        fill: var(--text-brand);
       }
       .ql-bubble .ql-toolbar button.ql-active:hover .ql-fill {
-        fill: var(--brand-text-hover);
+        fill: var(--text-brand-hover);
       }
       .ql-bubble .ql-toolbar button.ql-active {
-        color: var(--brand-text);
+        color: var(--text-brand);
       }
       .ql-bubble .ql-toolbar button.ql-active:hover {
-        color: var(--brand-text-hover);
+        color: var(--text-brand-hover);
       }
       .ql-bubble {
         box-sizing: border-box;
@@ -477,7 +477,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-bubble .ql-stroke {
         fill: none;
-        stroke: var(--base-text-subtle);
+        stroke: var(--text-secondary);
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 2;
@@ -534,7 +534,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-bubble .ql-editor a {
         text-decoration: underline;
-        color: var(--brand-text);
+        color: var(--text-brand);
       }
       .ql-bubble .ql-editor blockquote {
         border-left: 4px solid #ccc;
@@ -544,7 +544,7 @@ export default class SociInput extends SociComponent {
       }
       .ql-bubble .ql-editor code,
       .ql-bubble .ql-editor pre {
-        background-color: var(--base-background-subtle);
+        background-color: var(--bg-secondary);
         border-radius: 3px;
       }
       .ql-bubble .ql-editor pre {
@@ -572,9 +572,9 @@ export default class SociInput extends SociComponent {
         margin-left: 8px;
       }
       .ql-bubble .ql-tooltip {
-        background-color: var(--base-background-subtle);
+        background-color: var(--bg-secondary);
         border-radius: 3px;
-        color: var(--base-text);
+        color: var(--text);
         box-shadow: 0 1px 1px var(--shadow-light), 0 2px 8px var(--shadow-light);
       }
       .ql-bubble .ql-tooltip-arrow {
@@ -587,11 +587,11 @@ export default class SociInput extends SociComponent {
         position: absolute;
       }
       .ql-bubble .ql-tooltip:not(.ql-flip) .ql-tooltip-arrow {
-        border-bottom: 6px solid var(--base-background-subtle);
+        border-bottom: 6px solid var(--bg-secondary);
         top: -6px;
       }
       .ql-bubble .ql-tooltip.ql-flip .ql-tooltip-arrow {
-        border-top: 6px solid var(--base-background-subtle);
+        border-top: 6px solid var(--bg-secondary);
         bottom: -6px;
       }
       .ql-bubble .ql-tooltip.ql-editing .ql-tooltip-editor {
@@ -606,7 +606,7 @@ export default class SociInput extends SociComponent {
       .ql-bubble .ql-tooltip-editor input[type=text] {
         background: transparent;
         border: none;
-        color: var(--base-text);
+        color: var(--text);
         font-size: 13px;
         height: 100%;
         outline: none;
@@ -620,7 +620,7 @@ export default class SociInput extends SociComponent {
         right: 20px;
       }
       .ql-bubble .ql-tooltip-editor a:before {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         content: "\D7";
         font-size: 16px;
         font-weight: bold;
@@ -630,11 +630,11 @@ export default class SociInput extends SociComponent {
         white-space: nowrap;
       }
       .ql-container.ql-bubble:not(.ql-disabled) a::before {
-        background-color: var(--base-background);
+        background-color: var(--bg);
         border-radius: 15px;
         top: -5px;
         font-size: 12px;
-        color: var(--base-text-inverse);
+        color: var(--text-inverse);
         content: attr(href);
         font-weight: normal;
         overflow: hidden;
@@ -643,7 +643,7 @@ export default class SociInput extends SociComponent {
         z-index: 1;
       }
       .ql-container.ql-bubble:not(.ql-disabled) a::after {
-        border-top: 6px solid var(--base-background);
+        border-top: 6px solid var(--bg);
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
         top: 0;

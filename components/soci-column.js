@@ -15,7 +15,7 @@ export default class SociColumn extends SociComponent {
         box-sizing: border-box;
         width: 100%;
         overflow: hidden;
-        background: var(--base-background-bold);
+        background: var(--bg-bold);
         /* heh */
         min-width: 420px; 
       }
@@ -46,7 +46,7 @@ export default class SociColumn extends SociComponent {
       }
 
       header {
-        background-color: var(--base-background);
+        background-color: var(--bg);
         position: sticky;
         top: 0;
         height: 40px;
@@ -72,7 +72,7 @@ export default class SociColumn extends SociComponent {
         line-height: 18px;
         position: relative;
         z-index: 2;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         border-radius: 3px;
       }
 
@@ -92,7 +92,7 @@ export default class SociColumn extends SociComponent {
         z-index: 2;
         left: 6px;
         --height: 24px;
-        --color: var(--base-text-subtle);
+        --color: var(--text-secondary);
       }
 
       soci-select#filter-select {
@@ -102,14 +102,14 @@ export default class SociColumn extends SociComponent {
 
       sort:hover,
       filter:hover {
-        color: var(--base-text-subtle-hover);
+        color: var(--text-secondary-hover);
       }
 
       sort[selected],
       filter[selected] {
         opacity: 1;
-        color: var(--brand-text-bold);
-        background: var(--base-background-subtle);
+        color: var(--text-brand-bold);
+        background: var(--bg-secondary);
       }
 
       sort[selected]::after,
@@ -122,7 +122,7 @@ export default class SociColumn extends SociComponent {
         width: 16px;
         height: 3px;
         border-radius: 0 0 2px 2px;
-        background: var(--base-background);
+        background: var(--bg);
         box-shadow: 0 1px 1px var(--shadow);
       }
 
@@ -134,8 +134,8 @@ export default class SociColumn extends SociComponent {
         animation: load-in 0.3s var(--soci-ease) forwards;
       }
       svg {
-        background: var(--brand-background);
-        color: var(--base-text-inverse);
+        background: var(--bg-brand);
+        color: var(--text-inverse);
         border-radius: 3px;
         margin-right: 4px;
       }

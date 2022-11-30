@@ -9,7 +9,7 @@ export default class SociPostLi extends SociComponent {
   css(){
     return `
       :host {
-        background: var(--base-background);
+        background: var(--bg);
         margin-bottom: 8px;
         display: flex;
         padding: 12px;
@@ -62,10 +62,10 @@ export default class SociPostLi extends SociComponent {
         font-size: 12px;
       }
       #time {
-        color: var(--base-text-subtle);
+        color: var(--text-tertiary);
       }
       #comments {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         letter-spacing: -0.16px;
         text-align: right;
         line-height: 16px;
@@ -75,7 +75,7 @@ export default class SociPostLi extends SociComponent {
       }
       #title {
         font-size: 16px;
-        color: var(--base-text-bold);
+        color: var(--text-bold);
         letter-spacing: -0.08px;
         line-height: 20px;
         width: 100%;
@@ -100,7 +100,7 @@ export default class SociPostLi extends SociComponent {
         display: none;
       }
       :host([score="0"]) #score {
-        color: var(--base-background-subtle);
+        color: var(--bg-secondary);
       }
 
       :host([expanded]) {

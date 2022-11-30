@@ -12,12 +12,12 @@ export default class SociTag extends SociComponent {
         align-items: center;
         height: 20px;
         border-radius: 3px;
-        background: var(--base-background-subtle);
-        box-shadow: 0 0 0 1px var(--base-background-subtle-hover) inset;
+        background: var(--bg-secondary);
+        box-shadow: 0 0 0 1px var(--bg-secondary-hover) inset;
         font-size: 0.625em;
         line-height: 20px;
         padding-right: 8px;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
         cursor: pointer;
         font-weight: 600;
         user-select: none;
@@ -45,40 +45,40 @@ export default class SociTag extends SociComponent {
         display: inline-flex;
         align-items: center;
         margin-right: 6px;
-        border-right: 1px solid var(--base-background-subtle-hover);
+        border-right: 1px solid var(--bg-secondary-hover);
       }
       #vote:hover {
-        background: var(--base-background-subtle-hover);
-        color: var(--base-text-subtle-hover);
+        background: var(--bg-secondary-hover);
+        color: var(--text-secondary-hover);
       }
       #vote:active {
-        background: var(--brand-background-subtle);
+        background: var(--bg-brand-secondary);
         border-right: 1px solid transparent;
-        --fill-color: var(--base-text);
+        --fill-color: var(--text);
       }
       :host([upvoted]) {
-        --fill-color: var(--base-text-color);
+        --fill-color: var(--text-color);
       }
       :host([upvoted]) #vote {
-        color: var(--brand-text);
+        color: var(--text-brand);
         font-weight: 500;
       }
       :host([upvoted]) #vote:active {
         --fill-color: transparent;
-        background: var(--base-background-subtle-hover);
-        border-right: 1px solid var(--base-background-subtle-hover);
+        background: var(--bg-secondary-hover);
+        border-right: 1px solid var(--bg-secondary-hover);
       }
       :host([tag="nsfw"]) soci-link {
-        color: var(--error-text);
+        color: var(--text-danger);
       }
       :host([tag="nsfw"]) #vote:active {
-        background: var(--error-background-subtle);
+        background: var(--bg-danger-secondary);
       }
       :host([tag="nsfw"][upvoted]) #vote {
-        color: var(--error-text);
+        color: var(--text-danger);
       }
       :host([tag="nsfw"][upvoted]) #vote:active {
-        background: var(--base-background-subtle-hover);
+        background: var(--bg-secondary-hover);
       }
 
     `

@@ -28,7 +28,7 @@
 
 i.e.
 
-    base-text-bold-hover
+    text-bold-hover
 
 ## Rules
 ### Defaults
@@ -36,17 +36,17 @@ Defaults are implicit and aren't needed in the token name:
 
 YES: 
 
-    brand-background-subtle
+    bg-brand-secondary
 
 NO:  
 
-    brand-background-subtle-default
+    bg-brand-secondary-default
 
 ### Undefined tokens
 If a token is undefined, it falls back to the nearest default value
 i.e.
 
-    error-text-bold-hover --> error-text-bold
+    text-danger-bold-hover --> text-danger-bold
 
 # Example
 ![Token Example](/docs/tokens/tokens.png)

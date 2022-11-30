@@ -27,7 +27,7 @@ export default class SociContributionSlider extends SociComponent {
       slider-track {
         height: 4px;
         width: 100%;
-        background: var(--brand-background-subtle);
+        background: var(--bg-brand-secondary);
         display: block;
         position: relative;
       }
@@ -36,15 +36,15 @@ export default class SociContributionSlider extends SociComponent {
         content: '';
         width: 30px;
         height: 4px;
-        background: var(--base-background-subtle);
-        border-right: 2px solid var(--base-background);
+        background: var(--bg-secondary);
+        border-right: 2px solid var(--bg);
         display: block;
       }
 
       slider-handle {
         width: 16px;
         height: 16px;
-        background: var(--brand-background);
+        background: var(--bg-brand);
         display: block;
         position: absolute;
         top: -6px;
@@ -59,7 +59,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       slider-handle:focus:not(:active) {
-        box-shadow: 0 0 0 2px var(--brand-background-bold) inset;
+        box-shadow: 0 0 0 2px var(--bg-brand-bold) inset;
       }
 
       info {
@@ -74,7 +74,7 @@ export default class SociContributionSlider extends SociComponent {
 
       label {
         font-size: 11px;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       server {
@@ -82,7 +82,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       server amount {
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
       contribution {
@@ -92,7 +92,7 @@ export default class SociContributionSlider extends SociComponent {
       }
 
       contribution amount {
-        color: var(--brand-text);
+        color: var(--text-brand);
       }
 
       total {
@@ -102,7 +102,7 @@ export default class SociContributionSlider extends SociComponent {
 
       total span {
         font-weight: 100;
-        color: var(--base-text-subtle);
+        color: var(--text-secondary);
       }
 
     `

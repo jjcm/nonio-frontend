@@ -16,17 +16,17 @@ export default class SociTagLi extends SociComponent {
       }
 
       :host([active]) a {
-        color: var(--brand-text-bold);
+        color: var(--text-brand-bold);
         font-weight: 600;
-        background: var(--brand-background-subtle);
+        background: var(--bg-brand-secondary);
       }
 
       :host([active]) a:hover {
-        background: var(--brand-background-subtle-hover);
+        background: var(--bg-brand-secondary-hover);
       }
 
       :host(:hover) {
-        box-shadow: 0 0 0 1px inset var(--base-background-subtle);
+        box-shadow: 0 0 0 1px inset var(--bg-secondary);
       }
 
       :host([active]:hover) {
@@ -37,14 +37,14 @@ export default class SociTagLi extends SociComponent {
         display: block;
         padding-left: 42px;
         text-decoration: none;
-        color: var(--base-text);
+        color: var(--text);
         position: relative;
         cursor: pointer;
         box-sizing: border-box;
       }
 
       a:hover {
-        background: var(--base-background-hover);
+        background: var(--bg-hover);
       }
 
       ::slotted(svg),
@@ -58,12 +58,12 @@ export default class SociTagLi extends SociComponent {
 
       #hash {
         border-radius: 3px;
-        background: var(--base-background-inverse);
-        color: var(--base-text-inverse);
+        background: var(--bg-inverse);
+        color: var(--text-inverse);
       }
 
       :host([subscribed]) #hash {
-        background: var(--brand-background);
+        background: var(--bg-brand);
       }
 
       #toggleSubscribe {
@@ -82,7 +82,7 @@ export default class SociTagLi extends SociComponent {
       }
 
       #toggleSubscribe:hover {
-        background: var(--base-background-hover);
+        background: var(--bg-hover);
       }
 
       :host([active]) #toggleSubscribe:hover {

@@ -8,7 +8,7 @@ export default class SociRadialProgress extends SociComponent {
   css() { return `
     :host {
       --percent: 0;
-      --filled-color: var(--brand-background);
+      --filled-color: var(--bg-brand);
       --transition-speed: 0.5s;
       position: relative;
       display: block;
@@ -17,7 +17,7 @@ export default class SociRadialProgress extends SociComponent {
       transform: rotate(0deg);
       transition: transform 0.3s ease-out;
       border-radius: 50%;
-      box-shadow: 0 0 0 2px var(--base-background-subtle) inset;
+      box-shadow: 0 0 0 2px var(--bg-secondary) inset;
     }
 
     svg {
@@ -33,13 +33,13 @@ export default class SociRadialProgress extends SociComponent {
     }
 
     path { 
-      stroke: var(--success-background);
+      stroke: var(--bg-success);
       stroke-dashoffset: 69.1;
       transition: stroke-dashoffset 0.3s var(--soci-ease-out);
     }
 
     :host([percent="100"]) svg {
-      stroke: var(--success-text-subtle);
+      stroke: var(--text-success-secondary);
     }
 
     :host([percent="100"]) path {

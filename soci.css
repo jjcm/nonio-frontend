@@ -61,189 +61,189 @@
   --shadow-light: rgba(0,5,5,0.1);
   --shadow: rgba(0,5,5,0.2);
   --shadow-dark: rgba(0,5,5,0.3);
-  --base-background: var(--z0);
-  --base-background-hover: var(--base-background);
-  --base-background-active: var(--base-background);
-  --base-background-subtle: var(--base-background);
-  --base-background-subtle-hover: var(--base-background-subtle);
-  --base-background-subtle-active: var(--base-background-subtle);
-  --base-background-bold: var(--base-background);
-  --base-background-bold-hover: var(--base-background-bold);
-  --base-background-bold-active: var(--base-background-bold);
-  --base-background-inverse: var(--base-background);
-  --base-background-inverse-hover: var(--base-background-inverse);
-  --base-background-inverse-active: var(--base-background-inverse);
-  --base-text: #000;
-  --base-text-hover: var(--base-text);
-  --base-text-active: var(--base-text);
-  --base-text-subtle: var(--base-text);
-  --base-text-subtle-hover: var(--base-text-subtle);
-  --base-text-subtle-active: var(--base-text-subtle);
-  --base-text-bold: var(--base-text);
-  --base-text-bold-hover: var(--base-text-bold);
-  --base-text-bold-active: var(--base-text-bold);
-  --base-text-inverse: var(--base-text);
-  --base-text-inverse-hover: var(--base-text-inverse);
-  --base-text-inverse-active: var(--base-text-inverse);
-  --brand-background: var(--b1);
-  --brand-background-hover: var(--brand-background);
-  --brand-background-active: var(--brand-background);
-  --brand-background-subtle: var(--brand-background);
-  --brand-background-subtle-hover: var(--brand-background-subtle);
-  --brand-background-subtle-active: var(--brand-background-subtle);
-  --brand-background-bold: var(--brand-background);
-  --brand-background-bold-hover: var(--brand-background-bold);
-  --brand-background-bold-active: var(--brand-background-bold);
-  --brand-background-inverse: var(--brand-background);
-  --brand-background-inverse-hover: var(--brand-background-inverse);
-  --brand-background-inverse-active: var(--brand-background-inverse);
-  --brand-text: var(--b3);
-  --brand-text-hover: var(--brand-text);
-  --brand-text-active: var(--brand-text);
-  --brand-text-subtle: var(--brand-text);
-  --brand-text-subtle-hover: var(--brand-text-subtle);
-  --brand-text-subtle-active: var(--brand-text-subtle);
-  --brand-text-bold: var(--brand-text);
-  --brand-text-bold-hover: var(--brand-text-bold);
-  --brand-text-bold-active: var(--brand-text-bold);
-  --brand-text-inverse: var(--brand-text);
-  --brand-text-inverse-hover: var(--brand-text-inverse);
-  --brand-text-inverse-active: var(--brand-text-inverse);
-  --success-background: var(--g1);
-  --success-background-hover: var(--success-background);
-  --success-background-active: var(--success-background);
-  --success-background-subtle: var(--success-background);
-  --success-background-subtle-hover: var(--success-background-subtle);
-  --success-background-subtle-active: var(--success-background-subtle);
-  --success-background-bold: var(--success-background);
-  --success-background-bold-hover: var(--success-background-bold);
-  --success-background-bold-active: var(--success-background-bold);
-  --success-background-inverse: var(--success-background);
-  --success-background-inverse-hover: var(--success-background-inverse);
-  --success-background-inverse-active: var(--success-background-inverse);
-  --success-text: var(--g3);
-  --success-text-hover: var(--success-text);
-  --success-text-active: var(--success-text);
-  --success-text-subtle: var(--success-text);
-  --success-text-subtle-hover: var(--success-text-subtle);
-  --success-text-subtle-active: var(--success-text-subtle);
-  --success-text-bold: var(--success-text);
-  --success-text-bold-hover: var(--success-text-bold);
-  --success-text-bold-active: var(--success-text-bold);
-  --success-text-inverse: var(--success-text);
-  --success-text-inverse-hover: var(--success-text-inverse);
-  --success-text-inverse-active: var(--success-text-inverse);
-  --error-background: var(--r1);
-  --error-background-hover: var(--error-background);
-  --error-background-active: var(--error-background);
-  --error-background-subtle: var(--error-background);
-  --error-background-subtle-hover: var(--error-background-subtle);
-  --error-background-subtle-active: var(--error-background-subtle);
-  --error-background-bold: var(--error-background);
-  --error-background-bold-hover: var(--error-background-bold);
-  --error-background-bold-active: var(--error-background-bold);
-  --error-background-inverse: var(--error-background);
-  --error-background-inverse-hover: var(--error-background-inverse);
-  --error-background-inverse-active: var(--error-background-inverse);
-  --error-text: var(--r3);
-  --error-text-hover: var(--error-text);
-  --error-text-active: var(--error-text);
-  --error-text-subtle: var(--error-text);
-  --error-text-subtle-hover: var(--error-text-subtle);
-  --error-text-subtle-active: var(--error-text-subtle);
-  --error-text-bold: var(--error-text);
-  --error-text-bold-hover: var(--error-text-bold);
-  --error-text-bold-active: var(--error-text-bold);
-  --error-text-inverse: var(--error-text);
-  --error-text-inverse-hover: var(--error-text-inverse);
-  --error-text-inverse-active: var(--error-text-inverse);
-  --warning-background: var(--r1);
-  --warning-background-hover: var(--warning-background);
-  --warning-background-active: var(--warning-background);
-  --warning-background-subtle: var(--warning-background);
-  --warning-background-subtle-hover: var(--warning-background-subtle);
-  --warning-background-subtle-active: var(--warning-background-subtle);
-  --warning-background-bold: var(--warning-background);
-  --warning-background-bold-hover: var(--warning-background-bold);
-  --warning-background-bold-active: var(--warning-background-bold);
-  --warning-background-inverse: var(--warning-background);
-  --warning-background-inverse-hover: var(--warning-background-inverse);
-  --warning-background-inverse-active: var(--warning-background-inverse);
+  --bg: var(--z0);
+  --bg-hover: var(--bg);
+  --bg-active: var(--bg);
+  --bg-secondary: var(--bg);
+  --bg-secondary-hover: var(--bg-secondary);
+  --bg-secondary-active: var(--bg-secondary);
+  --bg-bold: var(--bg);
+  --bg-bold-hover: var(--bg-bold);
+  --bg-bold-active: var(--bg-bold);
+  --bg-inverse: var(--bg);
+  --bg-inverse-hover: var(--bg-inverse);
+  --bg-inverse-active: var(--bg-inverse);
+  --text: #000;
+  --text-hover: var(--text);
+  --text-active: var(--text);
+  --text-secondary: var(--text);
+  --text-secondary-hover: var(--text-secondary);
+  --text-secondary-active: var(--text-secondary);
+  --text-bold: var(--text);
+  --text-bold-hover: var(--text-bold);
+  --text-bold-active: var(--text-bold);
+  --text-inverse: var(--text);
+  --text-inverse-hover: var(--text-inverse);
+  --text-inverse-active: var(--text-inverse);
+  --bg-brand: var(--b1);
+  --bg-brand-hover: var(--bg-brand);
+  --bg-brand-active: var(--bg-brand);
+  --bg-brand-secondary: var(--bg-brand);
+  --bg-brand-secondary-hover: var(--bg-brand-secondary);
+  --bg-brand-secondary-active: var(--bg-brand-secondary);
+  --bg-brand-bold: var(--bg-brand);
+  --bg-brand-bold-hover: var(--bg-brand-bold);
+  --bg-brand-bold-active: var(--bg-brand-bold);
+  --bg-brand-inverse: var(--bg-brand);
+  --bg-brand-inverse-hover: var(--bg-brand-inverse);
+  --bg-brand-inverse-active: var(--bg-brand-inverse);
+  --text-brand: var(--b3);
+  --text-brand-hover: var(--text-brand);
+  --text-brand-active: var(--text-brand);
+  --text-brand-secondary: var(--text-brand);
+  --text-brand-secondary-hover: var(--text-brand-secondary);
+  --text-brand-secondary-active: var(--text-brand-secondary);
+  --text-brand-bold: var(--text-brand);
+  --text-brand-bold-hover: var(--text-brand-bold);
+  --text-brand-bold-active: var(--text-brand-bold);
+  --text-brand-inverse: var(--text-brand);
+  --text-brand-inverse-hover: var(--text-brand-inverse);
+  --text-brand-inverse-active: var(--text-brand-inverse);
+  --bg-success: var(--g1);
+  --bg-success-hover: var(--bg-success);
+  --bg-success-active: var(--bg-success);
+  --bg-success-secondary: var(--bg-success);
+  --bg-success-secondary-hover: var(--bg-success-secondary);
+  --bg-success-secondary-active: var(--bg-success-secondary);
+  --bg-success-bold: var(--bg-success);
+  --bg-success-bold-hover: var(--bg-success-bold);
+  --bg-success-bold-active: var(--bg-success-bold);
+  --bg-success-inverse: var(--bg-success);
+  --bg-success-inverse-hover: var(--bg-success-inverse);
+  --bg-success-inverse-active: var(--bg-success-inverse);
+  --text-success: var(--g3);
+  --text-success-hover: var(--text-success);
+  --text-success-active: var(--text-success);
+  --text-success-secondary: var(--text-success);
+  --text-success-secondary-hover: var(--text-success-secondary);
+  --text-success-secondary-active: var(--text-success-secondary);
+  --text-success-bold: var(--text-success);
+  --text-success-bold-hover: var(--text-success-bold);
+  --text-success-bold-active: var(--text-success-bold);
+  --text-success-inverse: var(--text-success);
+  --text-success-inverse-hover: var(--text-success-inverse);
+  --text-success-inverse-active: var(--text-success-inverse);
+  --bg-danger: var(--r1);
+  --bg-danger-hover: var(--bg-danger);
+  --bg-danger-active: var(--bg-danger);
+  --bg-danger-secondary: var(--bg-danger);
+  --bg-danger-secondary-hover: var(--bg-danger-secondary);
+  --bg-danger-secondary-active: var(--bg-danger-secondary);
+  --bg-danger-bold: var(--bg-danger);
+  --bg-danger-bold-hover: var(--bg-danger-bold);
+  --bg-danger-bold-active: var(--bg-danger-bold);
+  --bg-danger-inverse: var(--bg-danger);
+  --bg-danger-inverse-hover: var(--bg-danger-inverse);
+  --bg-danger-inverse-active: var(--bg-danger-inverse);
+  --text-danger: var(--r3);
+  --text-danger-hover: var(--text-danger);
+  --text-danger-active: var(--text-danger);
+  --text-danger-secondary: var(--text-danger);
+  --text-danger-secondary-hover: var(--text-danger-secondary);
+  --text-danger-secondary-active: var(--text-danger-secondary);
+  --text-danger-bold: var(--text-danger);
+  --text-danger-bold-hover: var(--text-danger-bold);
+  --text-danger-bold-active: var(--text-danger-bold);
+  --text-danger-inverse: var(--text-danger);
+  --text-danger-inverse-hover: var(--text-danger-inverse);
+  --text-danger-inverse-active: var(--text-danger-inverse);
+  --bg-warning: var(--r1);
+  --bg-warning-hover: var(--bg-warning);
+  --bg-warning-active: var(--bg-warning);
+  --bg-warning-secondary: var(--bg-warning);
+  --bg-warning-secondary-hover: var(--bg-warning-secondary);
+  --bg-warning-secondary-active: var(--bg-warning-secondary);
+  --bg-warning-bold: var(--bg-warning);
+  --bg-warning-bold-hover: var(--bg-warning-bold);
+  --bg-warning-bold-active: var(--bg-warning-bold);
+  --bg-warning-inverse: var(--bg-warning);
+  --bg-warning-inverse-hover: var(--bg-warning-inverse);
+  --bg-warning-inverse-active: var(--bg-warning-inverse);
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --base-background: var(--z0);
-    --base-background-hover: var(--z1);
-    --base-background-subtle: var(--z1);
-    --base-background-subtle-hover: var(--z2);
-    --base-background-inverse: var(--z5);
-    --base-background-bold: var(--z1);
-    --base-text: var(--z8);
-    --base-text-subtle: var(--z5);
-    --base-text-subtle-hover: var(--z8);
-    --base-text-bold: var(--z9);
-    --base-text-inverse: var(--z0);
-    --brand-background: var(--b2);
-    --brand-background-hover: var(--b3);
-    --brand-background-bold: var(--b3);
-    --brand-background-subtle: rgba(19,87,160,0.125);
-    --brand-background-subtle-hover: rgba(19,87,160,0.188);
-    --brand-text: var(--b2);
-    --brand-text-hover: var(--b3);
-    --brand-text-bold: var(--b3);
-    --success-background: var(--g2);
-    --success-background-subtle: rgba(41,224,142,0.188);
-    --success-text: var(--g3);
-    --success-text-subtle: var(--g1);
-    --error-background: var(--r2);
-    --error-background-hover: var(--r1);
-    --error-background-subtle: rgba(196,8,8,0.188);
-    --error-text: var(--r2);
-    --warning-background: var(--y2);
-    --warning-background-hover: var(--y1);
-    --warning-background-subtle: rgba(235,235,96,0.188);
-    --warning-text: var(--y2);
+    --bg: var(--z0);
+    --bg-hover: var(--z1);
+    --bg-secondary: var(--z1);
+    --bg-secondary-hover: var(--z2);
+    --bg-inverse: var(--z5);
+    --bg-bold: var(--z1);
+    --text: var(--z8);
+    --text-secondary: var(--z5);
+    --text-secondary-hover: var(--z8);
+    --text-bold: var(--z9);
+    --text-inverse: var(--z0);
+    --bg-brand: var(--b2);
+    --bg-brand-hover: var(--b3);
+    --bg-brand-bold: var(--b3);
+    --bg-brand-secondary: rgba(19,87,160,0.125);
+    --bg-brand-secondary-hover: rgba(19,87,160,0.188);
+    --text-brand: var(--b2);
+    --text-brand-hover: var(--b3);
+    --text-brand-bold: var(--b3);
+    --bg-success: var(--g2);
+    --bg-success-secondary: rgba(41,224,142,0.188);
+    --text-success: var(--g3);
+    --text-success-secondary: var(--g1);
+    --bg-danger: var(--r2);
+    --bg-danger-hover: var(--r1);
+    --bg-danger-secondary: rgba(196,8,8,0.188);
+    --text-danger: var(--r2);
+    --bg-warning: var(--y2);
+    --bg-warning-hover: var(--y1);
+    --bg-warning-secondary: rgba(235,235,96,0.188);
+    --text-warning: var(--y2);
   }
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --base-background: var(--z8);
-    --base-background-hover: var(--z7);
-    --base-background-subtle: var(--z7);
-    --base-background-subtle-hover: var(--z6);
-    --base-background-inverse: var(--z3);
-    --base-background-bold: var(--z9);
-    --base-text: var(--z2);
-    --base-text-subtle: var(--z4);
-    --base-text-subtle-hover: var(--z2);
-    --base-text-bold: var(--z0);
-    --base-text-inverse: var(--z9);
-    --brand-background: var(--b1);
-    --brand-background-hover: var(--b0);
-    --brand-background-bold: var(--b0);
-    --brand-background-subtle: rgba(19,87,160,0.188);
-    --brand-background-subtle-hover: rgba(19,87,160,0.251);
-    --brand-text: var(--b1);
-    --brand-text-hover: var(--b0);
-    --brand-text-bold: var(--b0);
-    --success-background: var(--g1);
-    --success-background-subtle: rgba(41,224,142,0.188);
-    --success-text: var(--g1);
-    --error-background: var(--r1);
-    --error-background-hover: var(--r0);
-    --error-background-subtle: rgba(196,8,8,0.188);
-    --error-text: var(--r1);
-    --warning-background: var(--y2);
-    --warning-background-hover: var(--y1);
-    --warning-background-subtle: rgba(235,235,96,0.188);
-    --warning-text: var(--y2);
+    --bg: var(--z8);
+    --bg-hover: var(--z7);
+    --bg-secondary: var(--z7);
+    --bg-secondary-hover: var(--z6);
+    --bg-inverse: var(--z3);
+    --bg-bold: var(--z9);
+    --text: var(--z2);
+    --text-secondary: var(--z4);
+    --text-secondary-hover: var(--z2);
+    --text-bold: var(--z0);
+    --text-inverse: var(--z9);
+    --bg-brand: var(--b1);
+    --bg-brand-hover: var(--b0);
+    --bg-brand-bold: var(--b0);
+    --bg-brand-secondary: rgba(19,87,160,0.188);
+    --bg-brand-secondary-hover: rgba(19,87,160,0.251);
+    --text-brand: var(--b1);
+    --text-brand-hover: var(--b0);
+    --text-brand-bold: var(--b0);
+    --bg-success: var(--g1);
+    --bg-success-secondary: rgba(41,224,142,0.188);
+    --text-success: var(--g1);
+    --bg-danger: var(--r1);
+    --bg-danger-hover: var(--r0);
+    --bg-danger-secondary: rgba(196,8,8,0.188);
+    --text-danger: var(--r1);
+    --bg-warning: var(--y2);
+    --bg-warning-hover: var(--y1);
+    --bg-warning-secondary: rgba(235,235,96,0.188);
+    --text-warning: var(--y2);
     --shadow-light: rgba(0,5,5,0.25);
     --shadow: rgba(0,5,5,0.8);
     --shadow-dark: rgba(0,5,5,0.6);
   }
 }
 #admin-first-time-signup {
-  background: var(--base-background-bold);
+  background: var(--bg-bold);
   height: 100%;
   overflow-y: auto;
 }
@@ -257,11 +257,11 @@
   align-items: flex-start;
 }
 #admin-first-time-signup .column {
-  border: 1px solid var(--base-background-subtle);
+  border: 1px solid var(--bg-secondary);
   border-radius: 4px;
   width: 100%;
   box-shadow: 0 2px 8px var(--shadow);
-  background: var(--base-background);
+  background: var(--bg);
   position: relative;
   overflow: hidden;
   transition: height 0.2s var(--soci-ease);
@@ -303,14 +303,14 @@
   transform: translateY(10px);
 }
 #admin-first-time-signup #card-element {
-  border-bottom: 2px solid var(--base-background-subtle);
+  border-bottom: 2px solid var(--bg-secondary);
   height: 38px;
   margin-bottom: 10px;
 }
 #admin-first-time-signup .price-container {
   position: relative;
   padding: 0 20px 10px;
-  border-bottom: 1px solid var(--base-background-subtle);
+  border-bottom: 1px solid var(--bg-secondary);
 }
 #admin-first-time-signup .price-container soci-button {
   position: absolute;
@@ -321,22 +321,22 @@
   padding: 10px 20px 0;
 }
 #admin-first-time-signup .title p {
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
   height: 80px;
 }
 #admin-first-time-signup h2 {
-  color: var(--base-text-bold);
+  color: var(--text-bold);
   margin-bottom: 4px;
 }
 #admin-first-time-signup .price {
   font-size: 44px;
   font-weight: bold;
-  color: var(--brand-text);
+  color: var(--text-brand);
 }
 #admin-first-time-signup .price span {
   font-size: 14px;
   font-weight: normal;
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
 }
 #admin-first-time-signup ul {
   list-style: none;
@@ -348,7 +348,7 @@
   padding-left: 20px;
 }
 #admin-first-time-signup li.cant {
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
   text-decoration: line-through;
 }
 #admin-first-time-signup li.cant:after,
@@ -361,7 +361,7 @@
   transform: rotate(45deg);
   left: 0;
   top: calc(50% - 1px);
-  background: var(--error-text);
+  background: var(--text-danger);
 }
 #admin-first-time-signup li.cant:before {
   transform: rotate(-45deg);
@@ -372,7 +372,7 @@
   display: block;
   position: absolute;
   width: 2px;
-  background: var(--success-text);
+  background: var(--text-success);
   height: 5px;
   top: calc(50% - 2px);
   left: 0;
@@ -390,7 +390,7 @@
 body {
   margin: 0;
   display: flex;
-  background: var(--base-background);
+  background: var(--bg);
   scrollbar-width: none;
   font-size: 14px;
 }
@@ -415,12 +415,12 @@ body[noauth] #pages:before {
 input,
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-  color: var(--base-text);
+  color: var(--text);
 }
 input:-internal-autofill-selected,
 input:-webkit-autofill {
-  background: var(--base-background) !important;
-  color: var(--base-text);
+  background: var(--bg) !important;
+  color: var(--text);
 }
 h1:first-child {
   margin-top: 0;
@@ -450,40 +450,40 @@ p + h3 {
   margin-top: 1em;
 }
 a {
-  color: var(--brand-text);
+  color: var(--text-brand);
   text-decoration: none;
 }
 a:hover {
-  color: var(--brand-text-hover);
+  color: var(--text-brand-hover);
 }
 button {
   border: 0;
   border-radius: 3px;
-  background: var(--brand-background);
+  background: var(--bg-brand);
   height: 20px;
-  color: var(--base-text-inverse);
+  color: var(--text-inverse);
   padding: 0 8px;
   font-size: 12px;
   margin-right: 4px;
   cursor: pointer;
 }
 button.cancel {
-  background: var(--base-background-subtle);
-  color: var(--base-text-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
 }
 button.cancel:hover {
-  background: var(--base-background-subtle-hover);
-  color: var(--base-text-subtle-hover);
+  background: var(--bg-secondary-hover);
+  color: var(--text-secondary-hover);
 }
 button:hover {
-  background: var(--brand-background-hover);
+  background: var(--bg-brand-hover);
 }
 button:active {
   filter: brightness(0.9);
   outline: 0;
 }
 button:focus {
-  outline: var(--brand-background-bold) auto 2px;
+  outline: var(--bg-brand-bold) auto 2px;
 }
 #pages {
   height: 100vh;
@@ -552,16 +552,16 @@ button:focus {
   font-weight: 700;
 }
 #home .account-actions soci-button:hover {
-  background: var(--brand-background);
+  background: var(--bg-brand);
 }
 #home .account-actions .primary {
-  background: var(--brand-background);
+  background: var(--bg-brand);
 }
 #home .account-actions .primary:hover {
   filter: brightness(1.1) saturate(0.9);
 }
 #home .header {
-  color: var(--base-text-inverse);
+  color: var(--text-inverse);
 }
 #home .header .left-block {
   max-width: 600px;
@@ -616,7 +616,7 @@ button:focus {
 }
 #user .sidebar {
   padding: 30px 46px 30px 50px;
-  border-right: 4px solid var(--base-background);
+  border-right: 4px solid var(--bg);
   box-sizing: border-box;
   overflow-y: auto;
   width: 400px;
@@ -644,7 +644,7 @@ button:focus {
   top: 1.5px;
 }
 #user .stats {
-  border: 1px solid var(--base-background-subtle);
+  border: 1px solid var(--bg-secondary);
   border-radius: 8px;
 }
 #user .stats .stat {
@@ -677,7 +677,7 @@ button:focus {
   display: block;
   width: 220px;
   height: 220px;
-  background: var(--base-background-subtle);
+  background: var(--bg-secondary);
   border-radius: 50%;
   margin: 0 auto 8px;
 }
@@ -687,12 +687,12 @@ button:focus {
 }
 #user .content {
   width: 100%;
-  background: var(--base-background-bold);
+  background: var(--bg-bold);
   height: 100vh;
   overflow: hidden;
 }
 #user .content header {
-  background-color: var(--base-background);
+  background-color: var(--bg);
   position: sticky;
   top: 0;
   height: 41px;
@@ -722,16 +722,16 @@ button:focus {
   line-height: 18px;
   position: relative;
   z-index: 2;
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
 }
 #user .content header .type:hover,
 #user .content header .sort:hover {
-  color: var(--base-text-subtle-hover);
+  color: var(--text-secondary-hover);
 }
 #user .content header .type[selected],
 #user .content header .sort[selected] {
   opacity: 1;
-  color: var(--brand-text-bold);
+  color: var(--text-brand-bold);
 }
 #user .content header .type[selected]::after,
 #user .content header .sort[selected]::after {
@@ -743,7 +743,7 @@ button:focus {
   width: 16px;
   height: 3px;
   border-radius: 0 0 2px 2px;
-  background: var(--base-background);
+  background: var(--bg);
   box-shadow: 0 1px 1px var(--shadow);
 }
 #user .content .inner-content {
@@ -764,7 +764,7 @@ button:focus {
   padding: 24px 50px;
 }
 .admin-page soci-input {
-  border: 1px solid var(--base-background-subtle);
+  border: 1px solid var(--bg-secondary);
   border-radius: 3px;
   --min-height: 240px;
 }
@@ -794,7 +794,7 @@ button:focus {
 .admin-page h1.cash {
   font-size: 60px;
   margin: 0;
-  color: var(--success-text);
+  color: var(--text-success);
 }
 .admin-page .cc-details {
   display: flex;
@@ -806,18 +806,18 @@ button:focus {
 .admin-page input {
   margin: 0 0 8px;
   border: 0;
-  border-bottom: 2px solid var(--base-background-subtle);
-  background: var(--base-background);
+  border-bottom: 2px solid var(--bg-secondary);
+  background: var(--bg);
   height: 38px;
   font-size: 14px;
   width: 100%;
 }
 .admin-page input:focus {
-  border-bottom: 2px solid var(--brand-background);
+  border-bottom: 2px solid var(--bg-brand);
   outline: 0;
 }
 .admin-page input::placeholder {
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
 }
 .admin-page .actions {
   width: 100%;
@@ -846,11 +846,11 @@ button:focus {
   float: none;
 }
 #admin-financials .subscription .cash {
-  color: var(--brand-text);
+  color: var(--text-brand);
   margin-bottom: 12px;
 }
 #admin-financials .subscription .cash span {
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
   font-size: 24px;
   font-weight: 100;
 }
@@ -974,22 +974,22 @@ button:focus {
 #submit-container button {
   border-radius: 14px;
   height: 28px;
-  color: var(--base-text-inverse);
+  color: var(--text-inverse);
   cursor: pointer;
-  background: var(--brand-background);
+  background: var(--bg-brand);
   border: none;
   padding: 0 8px;
   outline: none;
   min-width: 100px;
 }
 #submit-container button:hover {
-  background: var(--brand-background-hover);
+  background: var(--bg-brand-hover);
 }
 #submit-container button:active {
   filter: brightness(0.9);
 }
 #submit-container soci-input {
-  border: 2px solid var(--base-background-subtle);
+  border: 2px solid var(--bg-secondary);
   border-radius: 8px;
 }
 #submit-container h2 {
@@ -1020,10 +1020,10 @@ soci-sidebar input:-webkit-autofill:hover,
 soci-sidebar input {
   margin: 0 0 8px;
   border: 0;
-  border-bottom: 2px solid var(--base-background-subtle);
-  background: var(--base-background) !important;
-  -webkit-text-fill-color: var(--base-text);
-  -webkit-box-shadow: 0 0 0 30px var(--base-background) inset;
+  border-bottom: 2px solid var(--bg-secondary);
+  background: var(--bg) !important;
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
   height: 38px;
   font-size: 14px;
   width: 100%;
@@ -1037,14 +1037,14 @@ soci-sidebar input:focus,
 soci-sidebar input:active {
   box-shadow: none;
   outline: none;
-  border-bottom: 2px solid var(--brand-background);
+  border-bottom: 2px solid var(--bg-brand);
 }
 soci-sidebar h2 {
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
   font-weight: normal;
-  color: var(--base-text-subtle);
+  color: var(--text-secondary);
 }
 soci-sidebar button {
   margin-top: 8px;
@@ -1055,8 +1055,8 @@ soci-sidebar button {
   width: 100%;
   text-align: center;
   font-weight: 600;
-  border: 1px solid var(--base-background-subtle);
-  background: var(--base-background);
+  border: 1px solid var(--bg-secondary);
+  background: var(--bg);
   cursor: pointer;
   position: relative;
 }
@@ -1069,8 +1069,8 @@ soci-sidebar button svg {
   display: none;
 }
 soci-sidebar button:hover {
-  border: 1px solid var(--base-background-subtle-hover);
-  background: var(--base-background-hover);
+  border: 1px solid var(--bg-secondary-hover);
+  background: var(--bg-hover);
 }
 soci-sidebar button[waiting] svg {
   display: block;
@@ -1129,22 +1129,22 @@ soci-route:not([active]):not([activating]) {
   margin-top: 40px;
 }
 hr {
-  border: 1px solid var(--base-background-subtle);
+  border: 1px solid var(--bg-secondary);
   margin-bottom: 24px;
 }
 ::-webkit-scrollbar {
   width: 14px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--base-background-bold);
+  background: var(--bg-bold);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
+  background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
   border-radius: 7px;
-  border: 3px solid var(--base-background-bold);
+  border: 3px solid var(--bg-bold);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px);
+  background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
 }
 @-moz-keyframes load-in {
   from {

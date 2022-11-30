@@ -18,18 +18,18 @@ export default class SociImageViewer extends SociComponent {
     }
 
     ::-webkit-scrollbar-track {
-      background: var(--base-background-bold);
+      background: var(--bg-bold);
     }
 
     /* this is a bad hack to get alpha transparency on the scroll bars */
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(90deg, var(--base-text-subtle) -1500px, transparent 1000px);
+      background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
       border-radius: 7px;
-      border: 3px solid var(--base-background-bold);
+      border: 3px solid var(--bg-bold);
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(90deg, var(--base-text-subtle-hover) -1500px, transparent 1000px);
+      background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
     }
     #image {
       max-width: min(var(--media-width), 100%);

@@ -27,7 +27,7 @@ export default class SociLedger extends SociComponent {
         margin-bottom: 16px;
         border-radius: 4px;
         overflow: hidden;
-        border: 1px solid var(--base-background-subtle);
+        border: 1px solid var(--bg-secondary);
       }
 
       #line {
@@ -42,8 +42,8 @@ export default class SociLedger extends SociComponent {
         stroke-dasharray: 4000;
         stroke-dashoffset: 4000;
         animation: line-in 2.25s var(--soci-ease) forwards;
-        stroke: var(--success-text);
-        fill: var(--brand-text);
+        stroke: var(--text-success);
+        fill: var(--text-brand);
       }
       @keyframes line-in {
         from {

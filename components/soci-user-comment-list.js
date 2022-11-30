@@ -29,7 +29,7 @@ export default class SociCommentList extends SociComponent {
         padding: 12px 20px;
         margin: 8px 0;
         border-radius: 8px;
-        background: var(--base-background);
+        background: var(--bg);
         box-shadow: 0px 1px 3px var(--shadow);
       }
     `

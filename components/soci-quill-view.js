@@ -136,7 +136,7 @@ export default class SociQuillView extends HTMLElement {
     catch(e) {
       console.error(e)
       console.log(ops)
-      this.innerHTML = "<error style='color: var(--error-text);'>Error: Malformed content</error>"
+      this.innerHTML = "<error style='color: var(--text-danger);'>Error: Malformed content</error>"
     }
   }
 

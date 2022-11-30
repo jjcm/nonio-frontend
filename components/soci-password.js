@@ -20,7 +20,7 @@ export default class SociPassword extends SociComponent {
     svg {
       display: none;
       fill: none;
-      stroke: var(--base-background-subtle);
+      stroke: var(--bg-secondary);
       stroke-width: 2px;
       stroke-dasharray: 69.1px;
       stroke-dashoffset: calc(69.1px * (1 - var(--entropy-percent)));
@@ -54,7 +54,7 @@ export default class SociPassword extends SociComponent {
 
     :host([valid]) svg {
       transition: none;
-      stroke: var(--success-text-subtle);
+      stroke: var(--text-success-secondary);
     }
 
     :host([valid]) path {
@@ -62,7 +62,7 @@ export default class SociPassword extends SociComponent {
     }
 
     :host([valid]) ::slotted(input:focus) {
-      border-bottom: 2px solid var(--success-text-subtle) !important;
+      border-bottom: 2px solid var(--text-success-secondary) !important;
     }
   `}
 

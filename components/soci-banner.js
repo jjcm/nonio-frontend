@@ -8,12 +8,12 @@ export default class SociBanner extends SociComponent {
   css(){
     return `
       :host {
-        --banner-bg: var(--warning-background);
-        --banner-stroke: var(--warning-background);
+        --banner-bg: var(--bg-warning);
+        --banner-stroke: var(--bg-warning);
         padding: 8px 16px 8px 54px;
         display: inline-block;
         background: var(--banner-bg);
-        color: var(--base-text-inverse);
+        color: var(--text-inverse);
         border-radius: 4px;
         border: 1px solid var(--banner-stroke);
         margin-bottom: 12px;
