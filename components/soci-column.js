@@ -18,6 +18,13 @@ export default class SociColumn extends SociComponent {
         background: var(--bg-bold);
         /* heh */
         min-width: 420px; 
+        container-type: inline-size;
+      }
+
+      @container {
+        * {
+          color: red;
+        }
       }
       
       separator {
@@ -185,6 +192,27 @@ export default class SociColumn extends SociComponent {
           opacity: 1;
         }
       }
+
+      #menu {
+        display: none;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+
+      #menu:hover {
+        background-color: var(--bg-secondary);
+      }
+
+      @media (max-width: 768px) {
+        header #menu {
+          display: block;
+        }
+
+        header soci-select {
+          left: 36px;
+        }
+
+      }
     `
   }
 
@@ -193,6 +221,7 @@ export default class SociColumn extends SociComponent {
       <scroll-container>
         <content>
           <header>
+            <soci-icon id="menu" glyph="menu"></soci-icon>
             <soci-select id="sort-select">
               <soci-option value="popular">Popular</soci-option>
               <soci-option slot="selected" value="new">New</soci-option>

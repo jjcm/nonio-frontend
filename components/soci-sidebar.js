@@ -26,7 +26,7 @@ export default class SociSidebar extends SociComponent {
       }
 
       :host([noauth]) #auth {
-        left: 280px;
+        left: -100%;
       }
 
       :host([create]) #create {
@@ -35,7 +35,7 @@ export default class SociSidebar extends SociComponent {
 
       :host([create]) #auth,
       :host([create]) #noauth {
-        left: 280px;
+        left: 100%;
       }
 
       :host([dragging]) {
@@ -133,7 +133,7 @@ export default class SociSidebar extends SociComponent {
         position: fixed;
         bottom: 0;
         box-sizing: border-box;
-        width: 280px;
+        width: 100%;
         color: var(--text-secondary);
         background: var(--bg);
         border-top: 2px solid transparent;
@@ -169,7 +169,7 @@ export default class SociSidebar extends SociComponent {
         display: block;
         top: 0;
         left: 0;
-        width: 280px;
+        width: 100%;
         box-sizing: border-box;
         transition: left 0.2s ease-in-out;
       }
@@ -177,7 +177,7 @@ export default class SociSidebar extends SociComponent {
       #create,
       #noauth {
         padding: 24px 22px 20px;
-        left: -280px;
+        left: -100%;
       }
 
       #noauth svg {
@@ -285,6 +285,15 @@ export default class SociSidebar extends SociComponent {
 
       ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
+      }
+
+      @media (max-width: 768px) {
+        :host([overlay]) {
+          background: var(--bg);
+          z-index: 1;
+          left: 0 !important;
+          width: 100%;
+        }
       }
     `
   }

@@ -683,3 +683,14 @@ hr
 
 ::-webkit-scrollbar-thumb:hover
   background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px)
+
+@media (max-width: 768px) 
+  soci-sidebar 
+    left: -100%
+
+  #pages 
+    margin-left: 0
+    width: 100%
+
+  #pages::before 
+    display: none
