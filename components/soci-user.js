@@ -13,7 +13,7 @@ export default class SociUser extends SociComponent {
         color: var(--text);
         cursor: pointer;
         --font-size: 12px;
-        --font-weight: 300;
+        --font-weight: 400;
         --avatar-size: 16px;
         --line-height: 16px;
         --spacing: 8px;

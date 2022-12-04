@@ -8,68 +8,50 @@ export default class SociTabGroup extends SociComponent {
   css(){
     return `
       tabs {
-        --tab-padding: 40px;
         display: flex;
         color: var(--text);
-        padding-top: 8px;
+        padding-top: 4px;
         margin-bottom: 10px;
         user-select: none;
-        background: linear-gradient(0deg, var(--shadow-dark) 0px, var(--shadow-light) 1px, transparent 30px);
-        padding-left: var(--tab-padding);
-        padding-right: var(--tab-padding);
-        margin: 0 calc(-1 * var(--tab-padding));
         position: relative;
       }
-      tabs:before,
-      tabs:after {
-        content: '';
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        background: linear-gradient(90deg, var(--bg), transparent);
-        display: block;
-        width: var(--tab-padding);
-        height: 30px;
-      }
-      tabs:after {
-        left: auto;
-        right: 0px;
-        background: linear-gradient(270deg, var(--bg), transparent);
-      }
+
       tab {
         display: block;
-        margin-right: 32px;
-        font-weight: 500;
-        position: relative;
-        cursor: pointer;
         padding: 8px;
+        text-transform: capitalize;
+        position: relative;
+        padding: 0 12px 2px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        position: relative;
+        z-index: 2;
+        color: var(--text-secondary);
+        border-radius: 3px;
+        margin-right: 8px;
       }
-      tab:first-child {
-        padding-left: 0;
+
+      tab:before {
+        position: absolute;
+        content: ''; 
+        left: 0;
+        top: -10px;
+        height: 40px;
+        width: 100%;
+        background: transparent;
       }
       tab:hover {
         color: var(--text-hover);
       }
       tab[active] {
-        color: var(--text-brand);
+        opacity: 1;
+        color: var(--text-brand-bold);
+        background: var(--bg-secondary);
       }
       tab[active]:hover {
         color: var(--text-brand-hover);
-      }
-      tab[active]:after{
-        content: '';
-        height: 3px;
-        width: 16px;
-        background-color: var(--bg);
-        display: block;
-        position: absolute;
-        bottom: 0;
-        border-radius: 3px 3px 0 0;
-        left: calc(50% - 8px);
-        box-shadow: 0 -1px 1px rgba(0,0,0,0.1);
-      }
-      tab[active]:first-child:after {
-        left: calc(50% - 12px);
       }
     ` 
   }

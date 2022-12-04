@@ -11,7 +11,7 @@ export default class SociPostLi extends SociComponent {
       :host {
         background: var(--bg);
         margin-bottom: 8px;
-        display: flex;
+        display: block;
         padding: 12px;
         border-radius: 8px;
         box-shadow: 0px 1px 3px var(--shadow);
@@ -50,7 +50,6 @@ export default class SociPostLi extends SociComponent {
         display: flex;
         flex-direction: column;
         padding-left: 8px;
-        flex: 1;
       }
       #top {
         display: flex;
@@ -60,8 +59,15 @@ export default class SociPostLi extends SociComponent {
         display: flex;
         gap: 8px;
         font-size: 12px;
+        white-space: nowrap;
       }
       #time {
+        color: var(--text-tertiary);
+      }
+      #votes:before, #time:before {
+        content: '•';
+        display: inline-block;
+        margin-right: 1ch;
         color: var(--text-tertiary);
       }
       #comments {
@@ -99,6 +105,11 @@ export default class SociPostLi extends SociComponent {
       #tags::-webkit-scrollbar {
         display: none;
       }
+
+      slot[name="tags"] {
+        display: inline-block;
+      }
+
       :host([score="0"]) #score {
         color: var(--bg-secondary);
       }
@@ -141,12 +152,18 @@ export default class SociPostLi extends SociComponent {
       :host([expanded]) #time,
       :host([expanded]) #comments {
         position: static;
-        margin-left: 18px;
+        color: var(--text-secondary);
       }
 
+      :host([expanded]) #comments:before {
+        content: '•';
+        display: inline-block;
+        margin-right: 1ch;
+        color: var(--text-tertiary);
+      }
       :host([expanded]) slot[name="tags"] {
         margin-bottom: 12px;
-        display: block;
+        display: inline-block;
         opacity: 0;
         animation: load-in 0.2s var(--soci-ease) 0.14s forwards;
         z-index: 1;
@@ -233,7 +250,7 @@ export default class SociPostLi extends SociComponent {
         break
       case 'score':
         this.select('#votes').innerHTML = newValue + ' vote' + (newValue == 1 ? '' : 's')
-        this.querySelector('soci-tag-group').setAttribute('score', newValue)
+        //this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break;
       case 'comments':
         this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')

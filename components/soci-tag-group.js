@@ -6,28 +6,31 @@ export default class SociTagGroup extends SociComponent {
   }
 
   css(){ return `
+    @import "/soci-tokens.styl";
     :host {
       --height: 20px;
       --tag-font-size: 10px;
-      display: flex;
+      --bg-secondar: var(--bg-secondary);
+      display: inline-flex;
       line-height: var(--height);
       align-items: center;
       position: relative;
+      max-width: 100%;
     }
     #tags {
       overflow: hidden;
-      overflow-x: auto;
       height: var(--height);
       line-height: 16px;
       border-radius: 3px;
       scrollbar-width: none;
-      margin-left: 3px;
+    }
+    #tags slot {
+      display: inline-flex;
     }
     :host::-webkit-scrollbar {
       display: none;
     }
     #add-tag {
-      margin-left: 8px;
       border: 1px solid var(--bg-secondary);
       box-sizing: border-box;
       height: var(--height);
@@ -38,8 +41,16 @@ export default class SociTagGroup extends SociComponent {
       display: inline-flex;
       align-items: center;
       cursor: pointer;
-      overflow: hidden;
       position: relative;
+    }
+    #add-tag:before {
+      content: '';
+      width: 4px;
+      position: absolute;
+      left: -5px;
+      top: 0;
+      height: var(--height);
+      background: linear-gradient(90deg, transparent 0%, var(--bg) 100%);
     }
     #add-tag:not([active]):hover {
       background: var(--bg-hover);
@@ -78,7 +89,7 @@ export default class SociTagGroup extends SociComponent {
     #tag-search {
       display: none;
       position: absolute;
-      left: 58px;
+      right: 0;
       border: 1px solid var(--bg-brand-secondary);
       border-radius: 3px;
       list-style: none;
@@ -156,6 +167,7 @@ export default class SociTagGroup extends SociComponent {
       border-radius: 3px;
       font-weight: 600;
       user-select: none;
+      margin-right: 3px;
     }
 
     :host([upvoted]) ::slotted(div) {
@@ -170,6 +182,7 @@ export default class SociTagGroup extends SociComponent {
   html(){ return `
     <slot name="score"></slot>
     <ul id="tag-search" @mousemove=_tagSearchHover @click=addTag></ul>
+    <div id="tags"><slot></slot></div>
     <div id="add-tag" @click=_addTagClick>
       <input type="text"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -185,7 +198,6 @@ export default class SociTagGroup extends SociComponent {
       </g>
       </svg>
     </div>
-    <div id="tags"><slot></slot></div>
   `}
 
   static get observedAttributes() {
@@ -199,10 +211,6 @@ export default class SociTagGroup extends SociComponent {
     this.addEventListener('vote', this._tagVoted)
     this.toggleAttribute('upvoted', this.querySelectorAll('soci-tag[upvoted]').length)
 
-    let score = document.createElement('div')
-    score.setAttribute('slot', 'score')
-    score.innerHTML = this.score
-    this.appendChild(score)
   }
 
   disconnectedCallback(){
@@ -212,7 +220,13 @@ export default class SociTagGroup extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score'){
       let score = this.querySelector('[slot="score"]')
-      if(score) score.innerHTML = `${newValue}`
+      if(!score){
+        score = document.createElement('div')
+        score.setAttribute('slot', 'score')
+        score.innerHTML = this.score
+        this.appendChild(score)
+      }
+      score.innerHTML = `${newValue}`
 
     }
   }
