@@ -221,7 +221,7 @@ export default class SociColumn extends SociComponent {
       <scroll-container>
         <content>
           <header>
-            <soci-icon id="menu" glyph="menu"></soci-icon>
+            <soci-icon id="menu" glyph="menu" @click=_menuClick></soci-icon>
             <soci-select id="sort-select">
               <soci-option value="popular">Popular</soci-option>
               <soci-option slot="selected" value="new">New</soci-option>
@@ -412,5 +412,9 @@ export default class SociColumn extends SociComponent {
   _filterChanged(){
     let filter = this.select('#filter-select').value
     this._visuallyFilter(filter)
+  }
+
+  _menuClick(){
+    document.querySelector('soci-sidebar').toggleAttribute('overlay', true)
   }
 }

@@ -294,6 +294,10 @@ export default class SociSidebar extends SociComponent {
           left: 0 !important;
           width: 100%;
         }
+
+        #footer links {
+          display: none;
+        }
       }
     `
   }
@@ -433,6 +437,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   activateTag(tag){
+    this.toggleAttribute('overlay', false)
     this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
     if(tag.match(/all|images|videos|blogs/)){
       this.select(`soci-tag-li[href="/#${tag}"]`)?.toggleAttribute('active', true)
