@@ -79,6 +79,10 @@ export default class SociPostLi extends SociComponent {
         top: 12px;
         right: 12px;
       }
+      #time svg,
+      #comments svg {
+        display: none;
+      }
       #title {
         font-size: 16px;
         color: var(--text-bold);
@@ -194,6 +198,49 @@ export default class SociPostLi extends SociComponent {
         }
       }
 
+      @media (max-width: 768px) {
+        :host {
+          display: flex;
+          flex-direction: column;
+          padding-top: 36px;
+        }
+        img {
+          width: 100%;
+          height: 200px;
+          margin-bottom: 8px;
+        }
+        #time,
+        #comments {
+          position: static;
+          display: inline-flex;
+          color: var(--text-tertiary);
+        }
+        #time svg,
+        #comments svg {
+          display: inline-block;
+          margin-right: 4px;
+        }
+        #time suffix,
+        #comments suffix {
+          display: none;
+        }
+        content {
+          padding-left: 0;
+        }
+        #details {
+          position: absolute;
+          top: 8px;
+          width: calc(100% - 24px);
+        }
+        #votes:before, #time:before {
+          display: none;
+        }
+        slot[name="user"] {
+          width: 100%;
+          display: inline-block;
+        }
+      }
+
     `
   }
 
@@ -216,8 +263,20 @@ export default class SociPostLi extends SociComponent {
         <div id="details">
           <slot name="user"></slot>
           <div id="votes"></div>
-          <div id="time"></div>
-          <div id="comments"></div>
+          <div id="time">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5.5"/>
+              <path d="M7.5 5V8.5H10" stroke-linecap="round"/>
+            </svg>
+            <span></span>
+            <suffix> ago</suffix>
+          </div>
+          <div id="comments">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/>
+            </svg>
+            <span></span>
+          </div>
         </div>
         <soci-link>
           <div id="title"></div>
@@ -246,14 +305,14 @@ export default class SociPostLi extends SociComponent {
         break
       case 'time':
         this.updateTime = this.updateTime.bind(this)
-        this.updateTime(newValue, this.select('#time'))
+        this.updateTime(newValue, this.select('#time span'))
         break
       case 'score':
         this.select('#votes').innerHTML = newValue + ' vote' + (newValue == 1 ? '' : 's')
         //this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break;
       case 'comments':
-        this.select('#comments').innerHTML = newValue + (newValue == 1 ? ' comment' : ' comments')
+        this.select('#comments span').innerHTML = `${newValue}<suffix> comment${(newValue == 1 ? '' : 's')}</suffix>`
         break;
       case 'url':
         this.select('soci-link').setAttribute('href', '/' + newValue)

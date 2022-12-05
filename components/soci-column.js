@@ -16,8 +16,6 @@ export default class SociColumn extends SociComponent {
         width: 100%;
         overflow: hidden;
         background: var(--bg-bold);
-        /* heh */
-        min-width: 420px; 
         container-type: inline-size;
       }
 
