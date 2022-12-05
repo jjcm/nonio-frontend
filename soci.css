@@ -73,12 +73,13 @@
   --bg-inverse: var(--bg);
   --bg-inverse-hover: var(--bg-inverse);
   --bg-inverse-active: var(--bg-inverse);
-  --text: #000;
+  --text: var(--z8);
   --text-hover: var(--text);
   --text-active: var(--text);
   --text-secondary: var(--text);
   --text-secondary-hover: var(--text-secondary);
   --text-secondary-active: var(--text-secondary);
+  --text-tertiary: var(--text-secondary);
   --text-bold: var(--text);
   --text-bold-hover: var(--text-bold);
   --text-bold-active: var(--text-bold);
@@ -181,6 +182,7 @@
     --text: var(--z8);
     --text-secondary: var(--z5);
     --text-secondary-hover: var(--z8);
+    --text-tertiary: var(--z4);
     --text-bold: var(--z9);
     --text-inverse: var(--z0);
     --bg-brand: var(--b2);
@@ -216,6 +218,7 @@
     --text: var(--z2);
     --text-secondary: var(--z4);
     --text-secondary-hover: var(--z2);
+    --text-tertiary: var(--z5);
     --text-bold: var(--z0);
     --text-inverse: var(--z9);
     --bg-brand: var(--b1);
@@ -928,9 +931,6 @@ button:focus {
 #submit-container soci-button {
   margin-top: 8px;
 }
-#submit-container soci-tab {
-  padding-top: 32px;
-}
 #submit-container label {
   cursor: inherit;
 }
@@ -1145,6 +1145,18 @@ hr {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
+}
+@media (max-width: 768px) {
+  soci-sidebar {
+    left: -100%;
+  }
+  #pages {
+    margin-left: 0;
+    width: 100%;
+  }
+  #pages::before {
+    display: none;
+  }
 }
 @-moz-keyframes load-in {
   from {
