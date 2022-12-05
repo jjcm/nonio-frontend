@@ -1010,6 +1010,8 @@ button:focus {
 soci-sidebar {
   left: 0;
   transition: left 0.2s ease;
+  z-index: 3;
+  background: var(--bg);
 }
 soci-sidebar[loading] {
   opacity: 0;
@@ -1147,7 +1149,7 @@ hr {
   background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
 }
 @media (max-width: 768px) {
-  soci-sidebar {
+  soci-sidebar:not([noauth]) {
     left: -100%;
   }
   #pages {
