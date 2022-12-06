@@ -207,7 +207,7 @@ export default class SociPostLi extends SociComponent {
         img {
           width: 100%;
           height: 200px;
-          margin-bottom: 8px;
+          margin-bottom: 12px;
         }
         #time,
         #comments {
@@ -238,6 +238,10 @@ export default class SociPostLi extends SociComponent {
         slot[name="user"] {
           width: 100%;
           display: inline-block;
+        }
+        #title {
+          margin-top: 0;
+          margin-bottom: 12px;
         }
       }
 
