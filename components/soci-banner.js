@@ -8,12 +8,13 @@ export default class SociBanner extends SociComponent {
   css(){
     return `
       :host {
-        --banner-bg: var(--bg-warning);
-        --banner-stroke: var(--bg-warning);
-        padding: 8px 16px 8px 54px;
-        display: inline-block;
+        --banner-bg: var(--bg-secondary);
+        --banner-stroke: var(--border);
+        --banner-text: var(--text);
+        padding: 8px 16px;
+        display: flex;
         background: var(--banner-bg);
-        color: var(--text-inverse);
+        color: var(--banner-text);
         border-radius: 4px;
         border: 1px solid var(--banner-stroke);
         margin-bottom: 12px;
@@ -22,32 +23,58 @@ export default class SociBanner extends SociComponent {
         box-sizing: border-box;
       }
 
+      :host([type="info"]) {
+        --banner-bg: var(--bg-brand-secondary);
+        --banner-stroke: var(--bg-brand-secondary);
+      }
+
+      :host([type="success"]) {
+        --banner-bg: var(--bg-success);
+        --banner-stroke: var(--bg-success);
+        --banner-text: var(--text-inverse);
+      }
+
+      :host([type="warning"]) {
+        --banner-bg: var(--bg-warning);
+        --banner-stroke: var(--bg-warning);
+        --banner-text: var(--text-inverse);
+      }
+
       #title {
         font-weight: 600;
       }
 
       soci-icon {
-        position: absolute;
-        top: calc(50% - 12px);
-        left: 16px;
+        display: none;
+        margin-top: 4px;
+        margin-right: 16px;
+      }
+
+      :host([type]) soci-icon {
+        display: block;
       }
     `
   }
 
   html(){ return `
-    <soci-icon glyph="warning"></soci-icon>
-    <div id="title"></div>
-    <slot></slot>
+    <soci-icon></soci-icon>
+    <div id="content">
+      <div id="title"></div>
+      <slot></slot>
+    </div>
   `}
 
   static get observedAttributes() {
-    return ['title']
+    return ['title', 'type']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'title':
         this.select('#title').innerHTML = newValue
+        break
+      case 'type':
+        this.select('soci-icon').setAttribute('glyph', newValue)
         break
     }
   }

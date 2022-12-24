@@ -133,7 +133,7 @@ export default class SociSidebar extends SociComponent {
         position: fixed;
         bottom: 0;
         box-sizing: border-box;
-        width: 100%;
+        width: 280px;
         color: var(--text-secondary);
         background: var(--bg);
         border-top: 2px solid transparent;

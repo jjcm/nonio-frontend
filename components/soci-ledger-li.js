@@ -19,11 +19,11 @@ export default class SociLedgerLi extends SociComponent {
         margin-bottom: 4px;
       }
 
-      :host([type="withdrawl"]) slot[name="amount"] {
+      :host([type="withdrawal"]) slot[name="amount"] {
         color: var(--text-danger);
       }
 
-      :host([type="withdrawl"]) slot[name="amount"]::before {
+      :host([type="withdrawal"]) slot[name="amount"]::before {
         content: "-$";
       }
 

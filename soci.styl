@@ -380,22 +380,56 @@ button
       position: absolute
       top: 10px
       right: 0
+      margin-right: 0
   p
     margin-bottom: 24px
   .button-group
     display: flex
     soci-button
       float: none
-  .subscription
+      margin-right: 6px
+  .cash
+    margin-bottom: 12px
+  #financial-subscription
     .cash
       color: var(--text-brand)
-      margin-bottom: 12px
       span
         color: var(--text-secondary)
         font-size: 24px
         font-weight: 100
-    soci-button
-      margin-right: 6px
+  soci-modal soci-user
+    display: inline-block
+    --font-size: 14px
+    --avatar-size: 14px
+    --line-height: 14px
+    --spacing: 6px
+    transform: translateY(2px)
+  soci-modal p 
+    margin-bottom: 12px
+  table
+    text-align: left
+    vertical-align: top
+    width: calc(100% + 2px)
+    margin-left: -1px
+    border-radius: 4px
+    margin-bottom: 12px
+    font-size: 16px
+    border-spacing: 0
+    padding: 0
+    background: var(--bg-secondary)
+    th, td
+      padding: 8px 12px
+    th
+      border-bottom: 1px solid var(--bg)
+    td:not(:last-child), th:not(:last-child)
+      border-right: 1px solid var(--bg)
+  soci-input
+    --min-height: 100px
+    margin-bottom: 12px
+    width: calc(100% + 2px)
+    margin-left: -1px
+  soci-button
+    margin-right: 0
 #admin-change-forgotten-password
   .success
     transform: translateY(20px)

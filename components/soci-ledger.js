@@ -10,7 +10,7 @@ export default class SociLedger extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 2px 8px 28px;
+        padding: 2px 0 28px;
         box-sizing: border-box;
         opacity: 1;
         transform: translateY(12px);
@@ -77,7 +77,7 @@ export default class SociLedger extends SociComponent {
     let amountModifier = 5000
 
     for(let i = 0; i < 2000; i++){
-      let type = Math.random() > 0.005 ? 'deposit' : 'withdrawl'
+      let type = Math.random() > 0.005 ? 'deposit' : 'withdrawal'
       time -= Math.floor(Math.random() * 60000000)
       let entry = {}
 
@@ -92,7 +92,7 @@ export default class SociLedger extends SociComponent {
         }
       } else {
         entry = {
-          description: `Withdrawl to Stripe`,
+          description: `withdrawal to Stripe`,
           type: type,
           amount: (Math.ceil(Math.random() * 10) * 10) + '.00',
           timestamp: time
@@ -111,11 +111,11 @@ export default class SociLedger extends SociComponent {
     let time = new Date().getTime()
     let data = []
     for(let i = 0; i < 100; i++){
-      let type = 'withdrawl'
+      let type = 'withdrawal'
       time -= Math.floor(Math.random() * 60000000)
       let entry = {}
       entry = {
-        description: `Withdrawl to Stripe`,
+        description: `withdrawal to Stripe`,
         type: type,
         amount: (Math.ceil(Math.random() * 10) * 10) + '.00',
         timestamp: time
@@ -142,6 +142,10 @@ export default class SociLedger extends SociComponent {
     this.renderGraph()
   }
 
+  disconnectedCallback(){
+    this.innerHTML = ''
+  }
+
   async attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'data':
@@ -166,7 +170,7 @@ export default class SociLedger extends SociComponent {
     let currentMonth = new Date().getMonth()
     data.forEach(entry => {
       let entryMonth = new Date(entry.timestamp).getMonth()
-      if(entry.type === 'withdrawl') {
+      if(entry.type === 'withdrawal') {
         this.innerHTML += this.renderLedgerLi(entry)
       }
       else {
