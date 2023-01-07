@@ -36,6 +36,9 @@ window.customElements.define('soci-image', SociImage)
 import SociImageUploader from "./soci-image-uploader.js"
 window.customElements.define('soci-image-uploader', SociImageUploader)
 
+import SociHTMLPage from "./soci-html-page.js"
+window.customElements.define('soci-html-page', SociHTMLPage)
+
 import SociInput from "./soci-input.js"
 window.customElements.define('soci-input', SociInput)
 
