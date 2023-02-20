@@ -15,7 +15,7 @@ export default class SociComponent extends HTMLElement {
     }
 
 
-    this.shadowRoot.querySelectorAll('*').forEach(el=> {
+    this.shadowRoot?.querySelectorAll('*').forEach(el=> {
       Array.from(el.attributes).forEach(attr => {
         const prefix = attr.name.charAt(0)
         if(prefix == '@'){

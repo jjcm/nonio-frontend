@@ -21,15 +21,15 @@ export default class SociHTMLPage extends SociComponent {
   `}
 
   html(){ return `
-    <iframe src="/lib/demo-uploadable-page.pug"></iframe>
+    <iframe id="page"></iframe>
   `}
 
   static get observedAttributes() {
-    return ['url']
+    return ['src']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'url') this.url = newValue
+    if(name == 'src') this.src = newValue
   }
 
   connectedCallback(){
@@ -37,31 +37,31 @@ export default class SociHTMLPage extends SociComponent {
     this._resizeObserver = new ResizeObserver(this._checkZoomable)
     this._resizeObserver.observe(this)
     */
-    this.resizeEvent = this.resizeEvent.bind(this)
-    document.addEventListener('iframeSizeEvent', this.resizeEvent, false)
+    const channel = new MessageChannel()
+    this.select('iframe').addEventListener('load', () => {
+      channel.port1.onmessage = (e) => {
+        if(e.data.height)
+          this.select('iframe').style.height = e.data.height + 'px'
+      }
+
+      this.select('iframe').contentWindow.postMessage('resize observer initialization', '*', [channel.port2])
+    })
   }
 
   disconnectedCallback(){
-    this._resizeObserver.unobserve(this)
+    //this._resizeObserver.unobserve(this)
     document.removeEventListener('iframeSizeEvent', this.resizeEvent, false)
   }
 
-  resizeEvent(e){
-    let height = e.detail.height
-    this.select('iframe').style.height = height + 'px'
-  }
-
-  get url(){
+  get src(){
     return this.getAttribute('url')
   }
 
-  set url(val){
-    return 0
-    if(this.getAttribute('url') != val){
-      this.setAttribute('url', val)
+  set src(val){
+    if(this.getAttribute('src') != val){
+      this.setAttribute('src', val)
       return
     }
-    let iframe = this.select('iframe')
-    iframe.src = val
+    this.select('#page').src = config.HTML_HOST + '/' + val
   }
 }

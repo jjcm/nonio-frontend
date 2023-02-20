@@ -27,6 +27,12 @@ window.customElements.define('soci-contribution-slider', SociContributionSlider)
 import SociCommentList from "./soci-comment-list.js"
 window.customElements.define('soci-comment-list', SociCommentList)
 
+import SociHTMLPage from "./soci-html-page.js"
+window.customElements.define('soci-html-page', SociHTMLPage)
+
+import SociHTMLUploader from "./soci-html-uploader.js"
+window.customElements.define('soci-html-uploader', SociHTMLUploader)
+
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 
@@ -35,9 +41,6 @@ window.customElements.define('soci-image', SociImage)
 
 import SociImageUploader from "./soci-image-uploader.js"
 window.customElements.define('soci-image-uploader', SociImageUploader)
-
-import SociHTMLPage from "./soci-html-page.js"
-window.customElements.define('soci-html-page', SociHTMLPage)
 
 import SociInput from "./soci-input.js"
 window.customElements.define('soci-input', SociInput)

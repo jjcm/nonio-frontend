@@ -74,6 +74,20 @@ export default class SociRouter extends SociComponent {
     if(fresh) this.innerHTML = this.domCopy
     else this._attachChildren()
 
+    // TODO
+    // Hypothesis: we could dynamically load tags and match them to files, potentially speeding up first page load time. 
+    // Definitely would need to be benchmarked to see if this works. 
+    /*
+    this.innerHTML.match(/<soci-(\w+)[^>]*>/g).forEach(tag => {
+      let name = tag.match(/<soci-(\w+)[^>]*>/)[1]
+      console.log(name)
+      import(`./soci-${name}.js`).then(module => {
+        window.customElements.define(`soci-${name}`, module.default)
+      })
+
+    })
+    */
+
     // Very briefly add the activating class, followed immediately by the active
     // class. This allows us to bind animation transitions easily for page loads.
     this.setAttribute('activating', '')
