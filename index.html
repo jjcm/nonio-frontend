@@ -64,6 +64,8 @@
           </svg><img src="/lib/images/tag-example.png" loading="lazy"/>
         </div>
         <div class="inner-container" load-order="secondary">
+          <soci-foo></soci-foo>
+          <soci-html-page src="/temp/html-329773643/"></soci-html-page>
           <div class="columns">
             <div class="column">
               <h2>Choose your own subscription</h2>
@@ -277,37 +279,42 @@
     <soci-route id="submit" path="/submit">
       <div id="submit-container">
         <form action="#">
-          <div class="load-group" load-order="primary">
+          <div class="load-group centered-container" id="submit-header" load-order="primary">
             <input type="text" name="title" placeholder="Enter title" required="required"/>
             <soci-url-input name="url" required="required" tabindex="0"></soci-url-input>
           </div>
           <div class="load-group" load-order="secondary">
             <soci-tab-group>
-              <soci-tab name="Image" default="default">
-                <soci-image-uploader></soci-image-uploader>
-                <h2>Description</h2>
-                <soci-input placeholder="Enter description" name="description"></soci-input>
-              </soci-tab>
-              <soci-tab name="Video">
-                <soci-video-uploader></soci-video-uploader>
-                <h2>Description</h2>
-                <soci-input placeholder="Enter description" name="description"></soci-input>
-              </soci-tab>
-              <soci-tab name="Audio">
-                <soci-file-drop type="audio"></soci-file-drop>
-                <h2>Description</h2>
-                <soci-input placeholder="Enter description" name="description"></soci-input>
-              </soci-tab>
-              <soci-tab name="Blog">
-                <soci-input placeholder="Write your best" name="description"></soci-input>
-              </soci-tab>
+              <div class="centered-container">
+                <soci-tab name="Image" default="default">
+                  <soci-image-uploader></soci-image-uploader>
+                  <h2>Description</h2>
+                  <soci-input placeholder="Enter description" name="description"></soci-input>
+                </soci-tab>
+                <soci-tab name="Video">
+                  <soci-video-uploader></soci-video-uploader>
+                  <h2>Description</h2>
+                  <soci-input placeholder="Enter description" name="description"></soci-input>
+                </soci-tab>
+                <soci-tab name="Audio">
+                  <soci-file-drop type="audio"></soci-file-drop>
+                  <h2>Description</h2>
+                  <soci-input placeholder="Enter description" name="description"></soci-input>
+                </soci-tab>
+                <soci-tab name="Blog">
+                  <soci-input placeholder="Write your best" name="description"></soci-input>
+                </soci-tab>
+              </div>
               <soci-tab name="HTML">
-                <soci-file-drop type="html"></soci-file-drop>
-                <soci-input placeholder="Enter description" name="description"></soci-input>
+                <soci-html-uploader></soci-html-uploader>
+                <div class="centered-container">
+                  <h2>Description</h2>
+                  <soci-input placeholder="Enter description" name="description"></soci-input>
+                </div>
               </soci-tab>
             </soci-tab-group>
           </div>
-          <div class="load-group" load-order="tertiary">
+          <div class="load-group centered-container" id="submit-actions" load-order="tertiary">
             <soci-button async="async">submit</soci-button>
           </div>
         </form>
@@ -324,38 +331,22 @@
         <script src="/pages/admin/financials.js"></script>
         <div class="header" load-order="primary">
           <h1>Your Financials </h1>
-          <soci-banner type="warning" title="Account setup incomplete">
-             Visit your Stripe dashboard to complete your account setup and withdrawal funds.</soci-banner><a href="#" target="_blank">
+          <soci-banner type="info" title="Auto-withdrawal enabled">
+             Funds in your wallet will auto-deposit into your Stripe Connect account at the end of each month. </soci-banner>
+          <p>There are currently two ways to withdrawal money from your wallet. You can set up Stripe Connect to automatically deposit funds into your bank account at the end of each month, or you can initiate a manual withdrawal at any time. </p><a href="#" target="_blank">
             <soci-button>View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></soci-button></a>
-          <p>We use Stripe to dispense profit earned from posts. Visit your <a href="#" target="_blank">Stripe dashboard</a> to withdrawal into your bank account.</p>
         </div>
         <div class="amounts" load-order="secondary">
           <div class="blocks">
-            <div class="block profit">
-              <h2>Pending Profit</h2>
+            <div class="block" id="financial-wallet">
+              <h2>Wallet</h2>
               <h1 class="cash">$</h1>
+              <div class="button-group">
+                <soci-button subtle="subtle" onclick="adminFinancials.openWithdrawalModal()">Withdrawal</soci-button>
+                <soci-button danger="danger" onclick="adminFinancials.showChangeSubscription()">Disable auto-withdrawal</soci-button>
+              </div>
             </div>
-            <div class="block stripe">
-              <h2>Total Cash</h2>
-              <h1 class="cash">$</h1>
-            </div>
-            <div class="block stripe">
-              <h2>Daily Average</h2>
-              <h1 class="cash">$8.16</h1>
-            </div>
-            <div class="block stripe">
-              <h2>Stripe Wallet </h2>
-              <h1 class="cash">$220.00</h1>
-            </div>
-          </div>
-        </div>
-        <div class="ledger" load-order="tertiary">
-          <soci-ledger></soci-ledger>
-        </div>
-        <div class="subscription" load-order="tertiary">
-          <hr/>
-          <div class="blocks">
-            <div class="block">
+            <div class="block" id="financial-subscription">
               <h2>Monthly Subscription</h2>
               <h1 class="cash">$ <span>/mo</span></h1>
               <div class="button-group">
@@ -365,6 +356,31 @@
             </div>
           </div>
         </div>
+        <div class="ledger" load-order="tertiary">
+          <soci-ledger></soci-ledger>
+        </div>
+        <soci-modal title="Manual Withdrawal" id="withdrawal-modal">
+          <div class="modal-body">
+            <p>This is a manual process right now and may take up to 5 business days to complete. The good news is I ( <soci-user name="jjcm"></soci-user> ) will aim to support pretty much any type of withdrawal you need. List the platform you'd prefer and the details of how to send the cash below.</p>
+            <p>Here are some of the ways I can transfer:</p>
+            <table>
+              <tr>
+                <th>USA</th>
+                <th>AUS</th>
+                <th>International</th>
+              </tr>
+              <tr>
+                <td>Venmo<br/>Cash App<br/>Paypal</td>
+                <td>PayID</td>
+                <td>
+                   Bitcoin<br/>Ethereum</td>
+              </tr>
+            </table>
+            <p>If you need another way, just ask and I'll see what we can do.</p>
+            <soci-input placeholder="Enter platform and details here"></soci-input>
+            <soci-button async="async" onclick="adminFinancials.requestManualWithdrawal()">Request Withdrawal</soci-button>
+          </div>
+        </soci-modal>
       </div>
     </soci-route>
     <soci-route id="about" path="/about">
