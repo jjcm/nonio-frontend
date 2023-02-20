@@ -167,7 +167,6 @@ export default class SociHTMLUploader extends SociComponent {
     )
 
     this.select("#file").addEventListener('change', this.upload.bind(this))
-    this.encode = this.encode.bind(this)
   }
 
   _dragenter(e){
@@ -220,7 +219,6 @@ export default class SociHTMLUploader extends SociComponent {
         console.log(request.response)
         this.fileUrl = request.response
         this.select('soci-html-page').setAttribute('src', 'temp/' + request.response)
-        //this.encode(request.response)
       }, 400)
     })
 
