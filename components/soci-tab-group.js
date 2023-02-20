@@ -7,6 +7,10 @@ export default class SociTabGroup extends SociComponent {
 
   css(){
     return `
+      :host {
+        --max-width: 920px;
+      }
+
       tabs {
         display: flex;
         color: var(--text);
@@ -14,6 +18,8 @@ export default class SociTabGroup extends SociComponent {
         margin-bottom: 10px;
         user-select: none;
         position: relative;
+        max-width: var(--max-width);
+        margin: 0 auto;
       }
 
       tab {

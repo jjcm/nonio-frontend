@@ -21,6 +21,8 @@ export default class SociHTMLUploader extends SociComponent {
         margin-bottom: 12px;
         position: relative;
         transition: border 0.2s ease;
+        max-width: 920px;
+        margin: 0 auto;
 
         --upload-progress: 0%;
       }
@@ -112,10 +114,17 @@ export default class SociHTMLUploader extends SociComponent {
       }
       :host([state="preview"]) {
         min-height: 0;
-        border-color: transparent;
         transition: all 0.2s ease-in-out;
+        border-radius: 0px;
         overflow: hidden;
+        max-width: 100%;
+        border: 0;
+        border-top: 1px solid var(--bg-secondary);
+        border-bottom: 1px solid var(--bg-secondary);
+        padding: 24px 0;
+        background: var(--bg-bold);
       }
+
       :host([state="preview"]):before {
         opacity: 0;
         transition: all 0.2s ease-in-out;
@@ -209,6 +218,7 @@ export default class SociHTMLUploader extends SociComponent {
       setTimeout(()=>{
         this.setAttribute('state', 'preview')
         console.log(request.response)
+        this.fileUrl = request.response
         this.select('soci-html-page').setAttribute('src', 'temp/' + request.response)
         //this.encode(request.response)
       }, 400)
@@ -224,58 +234,7 @@ export default class SociHTMLUploader extends SociComponent {
     request.send(data)
   }
 
-  async encode(filename){
-    this.fileUrl = filename.slice(0, -4)
-    let protocol = config.HTML_HOST.match(/^https/) ? 'wss' : 'ws'
-    let server = config.HTML_HOST.replace(/(^\w+:|^)\/\//, '')
-    var conn = new WebSocket(`${protocol}://${server}/encode?file=${filename}`);
-    conn.addEventListener('close', e => {
-      let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
-      this.select('video').setAttribute('src', `${config.HTML_HOST}/${filename.slice(0, -4)}${previewResolution}.mp4`)
-      setTimeout(()=> {
-        this.setAttribute('state', 'preview')
-      }, 500)
-    })
-    conn.addEventListener('message', e => {
-      let message = e.data.split(':')
-      if(message[0] == 'resolution'){
-        let resolution = message[1].split('x')
-        this.videoWidth = parseInt(resolution[0])
-        this.videoHeight = parseInt(resolution[1])
-        resolution = Math.max(this.videoWidth, this.videoHeight)
-        this.equivalentResolution = '480p'
-        let resolutionBreakpoints = {
-          "480p": 0,
-          "720p": 1067,
-          "1080p": 1600,
-          "1440p": 2240,
-          "2160p": 3200,
-          "4320p": 5760
-        }
-        for(let res in resolutionBreakpoints) {
-          if(resolution > resolutionBreakpoints[res]) {
-            this.equivalentResolution = res
-            this.select(`[resolution="${res}"]`)?.toggleAttribute('disabled', false)
-          }
-        }
-        let fidelity = this.select(`[resolution="${this.equivalentResolution}"] .resolution`)
-        fidelity.innerHTML += '<span>source</span>'
-      }
-      else if(message[0].match(/source|480p|720p|1080p|1440p|4k/)){
-        let resolution = message[0] == 'source' ? this.equivalentResolution : message[0]
-        let progress = this.select(`[resolution="${resolution}"] soci-radial-progress`)
-        progress.toggleAttribute('waiting', false)
-        if(progress) {
-          progress.percent = message[1]
-        }
-      }
-    })
-  }
-
-  time = 0
-
   async move(url){
-    let UPLOAD_HOST = this.type == 'image' ? config.IMAGE_HOST : config.HTML_HOST
     return new Promise((resolve, reject) => {
       if(this.fileUrl == url) resolve(url)
 
@@ -305,7 +264,7 @@ export default class SociHTMLUploader extends SociComponent {
         })
       })
 
-      request.open('post', UPLOAD_HOST + '/move')
+      request.open('post', config.HTML_HOST + '/move')
       request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
       request.send(data)
     })

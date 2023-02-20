@@ -477,9 +477,6 @@ button
         margin-left: -416px
 
 #submit-container
-  max-width: 920px
-  padding: 24px 40px
-  margin: 0 auto
   box-sizing: border-box
   h1, h2
     margin: 0
@@ -490,6 +487,10 @@ button
     margin-top: 8px
   label
     cursor: inherit
+  .centered-container
+    max-width: 920px
+    margin: 0 auto
+    padding: 0 40px
   input
     text-decoration: inherit
     font-weight: bold
@@ -516,6 +517,15 @@ button
     position: absolute
     right: 2px
 
+  #submit-header,
+  #submit-actions
+    max-width: 920px
+    margin: 0 auto
+  #submit-header
+    padding: 24px 40px
+
+
+
   soci-tab
     soci-input
       width: 100%
@@ -523,6 +533,11 @@ button
     &[name="Blog"]
       soci-input
         --min-height: 550px
+    &[name="HTML"]
+      max-width: 100%
+      soci-input
+        max-width: 920px
+        margin: 0 auto
   button
     border-radius: 14px
     height: 28px

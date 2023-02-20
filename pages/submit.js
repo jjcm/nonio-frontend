@@ -23,6 +23,7 @@ let submit = {
     if(submit.form.reportValidity()){
       let data = new FormData(submit.form)
       let type = submit.dom.querySelector('soci-tab[active]').getAttribute('name').toLowerCase()
+      console.log(type)
       let fileUploader = submit.dom.querySelector(`soci-${type}-uploader`)
       if(fileUploader){
         let newPath = await fileUploader.move(data.get('url'))

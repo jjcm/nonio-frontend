@@ -1,35 +1,38 @@
 #submit-container
   form(action="#")
-    .load-group(load-order="primary")
+    #submit-header.load-group(load-order="primary").centered-container
       input(type="text" name="title" placeholder="Enter title" required)
       soci-url-input(name="url" required tabindex=0)
     
     .load-group(load-order="secondary")
       soci-tab-group
-        soci-tab(name="Image" default)
-          soci-image-uploader
-          h2 Description
-          soci-input(placeholder="Enter description" name="description")
+        .centered-container
+          soci-tab(name="Image" default)
+            soci-image-uploader
+            h2 Description
+            soci-input(placeholder="Enter description" name="description")
 
-        soci-tab(name="Video")
-          soci-video-uploader
-          h2 Description
-          soci-input(placeholder="Enter description" name="description")
-            
-        soci-tab(name="Audio")
-          soci-file-drop(type="audio")
-          h2 Description
-          soci-input(placeholder="Enter description" name="description")
+          soci-tab(name="Video")
+            soci-video-uploader
+            h2 Description
+            soci-input(placeholder="Enter description" name="description")
+              
+          soci-tab(name="Audio")
+            soci-file-drop(type="audio")
+            h2 Description
+            soci-input(placeholder="Enter description" name="description")
 
-        soci-tab(name="Blog")
-          soci-input(placeholder="Write your best" name="description")
+          soci-tab(name="Blog")
+            soci-input(placeholder="Write your best" name="description")
 
         soci-tab(name="HTML")
           soci-html-uploader
-          soci-input(placeholder="Enter description" name="description")
+          .centered-container
+            h2 Description
+            soci-input(placeholder="Enter description" name="description")
     
 
-    .load-group(load-order="tertiary")
+    #submit-actions.load-group(load-order="tertiary").centered-container
       soci-button(async) submit
 
 script.

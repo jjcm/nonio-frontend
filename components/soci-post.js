@@ -237,6 +237,11 @@ export default class SociPost extends SociComponent {
         transition: all 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease);
       }
 
+      :host([type="html"]) #media-container {
+        background: var(--bg-bold);
+      }
+
+
       slot[name="comments"] {
         display: block;
         opacity: 0;
@@ -270,7 +275,8 @@ export default class SociPost extends SociComponent {
     `
   }
 
-  html(){ return `
+  html(){ 
+    return `
     <div id="media-container"></div>
     <content>
       <div id="details-container">
@@ -418,6 +424,10 @@ export default class SociPost extends SociComponent {
           </div>
         `
         this.select('soci-video').url = this.url
+        break
+      case 'html':
+        this.setAttribute('type', 'html')
+        this.select('#media-container').innerHTML = `<soci-html-page src="${this.getAttribute('url')}"></soci-html-page>`
         break
     }
   }
