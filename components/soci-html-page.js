@@ -33,10 +33,6 @@ export default class SociHTMLPage extends SociComponent {
   }
 
   connectedCallback(){
-    /*
-    this._resizeObserver = new ResizeObserver(this._checkZoomable)
-    this._resizeObserver.observe(this)
-    */
     const channel = new MessageChannel()
     this.select('iframe').addEventListener('load', () => {
       channel.port1.onmessage = (e) => {
@@ -46,11 +42,6 @@ export default class SociHTMLPage extends SociComponent {
 
       this.select('iframe').contentWindow.postMessage('resize observer initialization', '*', [channel.port2])
     })
-  }
-
-  disconnectedCallback(){
-    //this._resizeObserver.unobserve(this)
-    document.removeEventListener('iframeSizeEvent', this.resizeEvent, false)
   }
 
   get src(){
