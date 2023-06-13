@@ -6,6 +6,7 @@ let tags = {
   onActivate: () => {
     tags.dom.innerHTML = ''
     let urlTags = window.location.hash.split('+').map(tag => tag.replace('#',''))
+    if(urlTags[0] == '') urlTags = ['all']
     let activeTags = Array.from(tags.dom.querySelectorAll('soci-column')).map(c => c.getAttribute('tag'))
     if(urlTags.toString() != activeTags.toString()){
       tags.dom.innerHTML = ''

@@ -34,10 +34,8 @@ html(lang="en")
         soci-button(async onclick="this.closest('soci-sidebar').register()") Create Account
     tags(slot="tags")
   #pages
-    soci-route#tags(test="both" path="^/#" fresh)
+    soci-route#tags(test="both" path="(^/#)|(^/$)" fresh)
       include pages/tags.pug
-    soci-route#home(test="both" path="^/$")
-      include pages/home.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
       include pages/admin/create.pug
     soci-route#admin-first-time-signup(path="/admin/first-time-signup" fresh).admin-page

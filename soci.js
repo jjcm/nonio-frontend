@@ -160,7 +160,7 @@ if(!soci.checkTokenExpired()) {
   soci.loadVotes()
 }
 else {
-  document.body.toggleAttribute('noauth', true)
+  //document.body.toggleAttribute('noauth', true)
 }
 
 window.soci = soci
