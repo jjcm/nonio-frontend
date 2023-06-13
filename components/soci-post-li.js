@@ -18,6 +18,7 @@ export default class SociPostLi extends SociComponent {
         box-sizing: border-box;
         opacity: 1;
         position: relative;
+        overflow: hidden;
       }
       img {
         display: none;
