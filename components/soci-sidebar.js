@@ -509,6 +509,7 @@ export default class SociSidebar extends SociComponent {
     let form = this.querySelector('[slot="login"] form')
     let button = form.querySelector('soci-button')
     //todo - remove this override later
+    let loginData = soci.getJSONFromForm(form)
     if (loginData.email == 'hackernews') { loginData.email = 'j+hn@jjcm.org'}
     else {
 
@@ -520,7 +521,7 @@ export default class SociSidebar extends SociComponent {
 	    }
     }
 
-    soci.postData('user/login', soci.getJSONFromForm(form)).then(response => {
+    soci.postData('user/login', loginData).then(response => {
       if(response.token){
         soci.log('Login Successful! Token:', response.token)
         soci.storeToken(response.token)
