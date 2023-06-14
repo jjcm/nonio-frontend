@@ -347,6 +347,15 @@ export default class SociTagGroup extends SociComponent {
             input.value = input.value + '-'
         }, 1)
       case '#':
+      case '=':
+      case '<':
+      case '>':
+      case '"':
+      case "'":
+      case ".":
+      case "/":
+      case "|":
+      case "\\":
       case 'Shift':
         e.preventDefault()
         return
