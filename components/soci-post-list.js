@@ -25,27 +25,19 @@ export default class SociPostLi extends SociComponent {
       }
 
       :host([filter="images"]) ::slotted(soci-post-li:not([type="image"])){
-        max-height: 0;
-        opacity: 0;
-        margin-bottom: -32px;
+        display:none;
       }
 
       :host([filter="videos"]) ::slotted(soci-post-li:not([type="video"])){
-        max-height: 0;
-        opacity: 0;
-        margin-bottom: -32px;
+        display:none;
       }
 
       :host([filter="audio"]) ::slotted(soci-post-li:not([type="audio"])){
-        max-height: 0;
-        opacity: 0;
-        margin-bottom: -32px;
+        display:none;
       }
 
       :host([filter="blogs"]) ::slotted(soci-post-li:not([type="blog"])){
-        max-height: 0;
-        opacity: 0;
-        margin-bottom: -32px;
+        display:none;
       }
     `
   }
