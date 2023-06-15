@@ -416,11 +416,6 @@ export default class SociPost extends SociComponent {
         this.select('#media-container').innerHTML = `
           <div id="video" class="media">
             <soci-video></soci-video>
-            <picture>
-              <source>
-              <source>
-              <img class="bg" />
-            </picture>
           </div>
         `
         this.select('soci-video').url = this.url
