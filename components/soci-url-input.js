@@ -93,7 +93,7 @@ export default class SociUrlInput extends SociComponent {
     this._keyDownTimer = null
     this._error = null
 
-    this._input.addEventListener('keydown', this._onKeyDown.bind(this))
+    this._input.addEventListener('keydown', this.checkUrlValidity.bind(this))
     this._input.addEventListener('change', this._onChange.bind(this))
     this.addEventListener('focus', this._onFocus.bind(this))
 
@@ -121,7 +121,7 @@ export default class SociUrlInput extends SociComponent {
     this._internals.setFormValue(this.value)
   }
 
-  _onKeyDown() {
+  checkUrlValidity() {
     this.removeAttribute('available')
     this._statusIcon.glyph = ''
     clearTimeout(this._keyDownTimer)

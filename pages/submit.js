@@ -11,6 +11,8 @@ let submit = {
     let title = submit.dom.querySelector('input[name="title"]')
     title.setCustomValidity("A title is required.")
     title.addEventListener('input', submit.checkTitleValidity)
+    title.addEventListener('input', submit.populateUrl)
+    title.addEventListener('blur', submit.checkUrl)
     title.focus()
 
     submit.submitButton = submit.dom.querySelector('soci-button')
@@ -18,6 +20,18 @@ let submit = {
   },
   checkTitleValidity(e) {
     e.target.setCustomValidity(e.target.value.length ? '' : "A title is required.")
+  },
+  populateUrl(e){
+    setTimeout(()=>{
+      let title = e.target.value.replace(/[^a-zA-Z0-9\-\. ]/gi, '')
+      title = title.replace(/ /g, '-')
+
+      submit.dom.querySelector('soci-url-input').value = title
+    }, 1)
+  },
+  checkUrl(e){
+    if(e.target.value.length > 0)
+      submit.dom.querySelector('soci-url-input').checkUrlValidity()
   },
   async submit(e) {
     if(submit.form.reportValidity()){
