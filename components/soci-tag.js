@@ -24,6 +24,7 @@ export default class SociTag extends SociComponent {
         //transition: background 0.1s var(--soci-ease-out);
         margin-right: 6px;
         overflow: hidden;
+        white-space: nowrap;
         --fill-color: none;
       }
       soci-link:hover {

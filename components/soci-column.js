@@ -221,8 +221,8 @@ export default class SociColumn extends SociComponent {
           <header>
             <soci-icon id="menu" glyph="menu" @click=_menuClick></soci-icon>
             <soci-select id="sort-select">
-              <soci-option value="popular">Popular</soci-option>
-              <soci-option slot="selected" value="new">New</soci-option>
+              <soci-option slot="selected" value="popular">Popular</soci-option>
+              <soci-option value="new">New</soci-option>
               <soci-option value="day">Top - Day</soci-option>
               <soci-option value="week">Top - Week</soci-option>
               <soci-option value="month">Top - Month</soci-option>
@@ -230,8 +230,8 @@ export default class SociColumn extends SociComponent {
               <soci-option value="all">Top - All Time</soci-option>
             </soci-select>
             <sorts @click=_sortBarClick>
-              <sort>popular</sort>
-              <sort selected>new</sort>
+              <sort selected>popular</sort>
+              <sort>new</sort>
               <sort>week</sort>
               <sort>month</sort>
               <sort>year</sort>
@@ -279,7 +279,7 @@ export default class SociColumn extends SociComponent {
     posts.setAttribute('slot', 'posts')
     posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
-    this.sortPosts('new')
+    this.sortPosts('popular')
   }
 
   disconnectedCallback(){
