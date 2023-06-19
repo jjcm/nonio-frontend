@@ -118,7 +118,7 @@ export default class SociButton extends SociComponent {
 
       :host([state="error"]) {
         background: var(--bg-danger);
-        color: transparent;
+        color: transparent !important;
         animation: error 0.3s var(--soci-ease);
       }
 
@@ -210,8 +210,8 @@ export default class SociButton extends SociComponent {
       }
 
       :host([state="success"]) {
-        background: var(--bg-success);
-        color: transparent;
+        background: var(--bg-success) !important;
+        color: transparent !important;
         animation: success 0.2s var(--soci-ease);
       }
 

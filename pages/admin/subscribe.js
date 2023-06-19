@@ -1,22 +1,22 @@
-let adminFirstTimeSignup = {
+let adminSubscribe = {
   dom: document.currentScript.closest('soci-route'),
   init: () => {
-    soci.registerPage(adminFirstTimeSignup)
+    soci.registerPage(adminSubscribe)
   },
   onActivate: () => {
     document.title = "Nonio - Choose Your Account Type"
-    adminFirstTimeSignup.dom.querySelector('form').addEventListener('submit', e => {
+    adminSubscribe.dom.querySelector('form').addEventListener('submit', e => {
       e.preventDefault()
     })
-    adminFirstTimeSignup.loadStripe()
+    adminSubscribe.loadStripe()
   },
   onDeactivate: () => {
   },
   loadStripe: async () => {
-    adminFirstTimeSignup.stripe = await soci.stripe
-    let elements = adminFirstTimeSignup.stripe.elements()
+    adminSubscribe.stripe = await soci.stripe
+    let elements = adminSubscribe.stripe.elements()
     let currentStyles = getComputedStyle(document.documentElement)
-    adminFirstTimeSignup.card = elements.create('card', {
+    adminSubscribe.card = elements.create('card', {
       style: {
         base: {
           iconColor: currentStyles.getPropertyValue('--text'),
@@ -37,8 +37,8 @@ let adminFirstTimeSignup = {
         }
       }
     })
-    adminFirstTimeSignup.card.on('change', adminFirstTimeSignup.cardError)
-    adminFirstTimeSignup.card.mount('#admin-first-time-signup #card-element')
+    adminSubscribe.card.on('change', adminSubscribe.cardError)
+    adminSubscribe.card.mount('#admin-subscribe #card-element')
 
     //TODO https://stripe.com/docs/billing/subscriptions/fixed-price#create-subscription
   },
@@ -53,7 +53,7 @@ let adminFirstTimeSignup = {
   },
   chooseFree: () => {
     soci.postData('user/choose-free-account').then(result => {
-      let button = adminFirstTimeSignup.dom.querySelector('soci-button.free-button')
+      let button = adminSubscribe.dom.querySelector('soci-button.free-button')
       if(result === true){
         button?.success()
         setTimeout(()=>{
@@ -68,10 +68,10 @@ let adminFirstTimeSignup = {
   },
   chooseSupporter: () => {
     soci.postData('stripe/create-customer').then(result => {
-      let button = adminFirstTimeSignup.dom.querySelector('soci-button.supporter-button')
+      let button = adminSubscribe.dom.querySelector('soci-button.supporter-button')
       if(result === true) {
         button?.success()
-        let column = adminFirstTimeSignup.dom.querySelector('.column.supporter')
+        let column = adminSubscribe.dom.querySelector('.column.supporter')
         column.toggleAttribute('active', true)
         column.style.height = (column.offsetHeight - 2) + 'px'
         setTimeout(()=>{
@@ -84,21 +84,21 @@ let adminFirstTimeSignup = {
     })
   },
   subscribe: () => {
-    let billingName = adminFirstTimeSignup.dom.querySelector('form input[name="name"]').value
-    let price = adminFirstTimeSignup.dom.querySelector('form soci-contribution-slider').value
-    adminFirstTimeSignup.stripe.createPaymentMethod({
+    let billingName = adminSubscribe.dom.querySelector('form input[name="name"]').value
+    let price = adminSubscribe.dom.querySelector('form soci-contribution-slider').value
+    adminSubscribe.stripe.createPaymentMethod({
       type: 'card',
-      card: adminFirstTimeSignup.card,
+      card: adminSubscribe.card,
       billing_details: {
         name: billingName,
       },
     })
     .then(result => {
       if(result.error){
-        adminFirstTimeSignup.cardError(result)
+        adminSubscribe.cardError(result)
       }
       else {
-        adminFirstTimeSignup.createSubscription({
+        adminSubscribe.createSubscription({
           paymentMethodId: result.paymentMethod.id,
           price: price
         })
@@ -107,7 +107,7 @@ let adminFirstTimeSignup = {
   },
   createSubscription: ({paymentMethodId, price}) => {
     console.log(paymentMethodId)
-    let button = adminFirstTimeSignup.dom.querySelector('.subscribe-button')
+    let button = adminSubscribe.dom.querySelector('.subscribe-button')
     return (
       soci.postData('stripe/subscription/create', {
         paymentMethodId: paymentMethodId,
@@ -150,7 +150,6 @@ let adminFirstTimeSignup = {
       .catch((error) => {
         // An error has happened. Display the failure to the user here.
         // We utilize the HTML element we created.
-        console.log('oh fuck')
         console.log(error)
         button.error()
         //showCardError(error)
@@ -159,4 +158,4 @@ let adminFirstTimeSignup = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', adminFirstTimeSignup.init)
+document.addEventListener('DOMContentLoaded', adminSubscribe.init)

@@ -1,8 +1,8 @@
 .content
-  script(src="/pages/admin/first-time-signup.js")
+  script(src="/pages/admin/subscribe.js")
   .loading-block(load-order="primary")
-    h1 Last step
-    p Thanks for signing up! Please pick your account type:
+    h1 Subscription
+    p Please pick your account type:
 
   .columns(load-order="secondary")
     .column.supporter
@@ -17,11 +17,11 @@
           input(name="name" placeholder="Name")
           #card-element
           #card-element-errors(role="alert")
-          soci-button.subscribe-button(async onclick="adminFirstTimeSignup.subscribe()") Subscribe
+          soci-button.subscribe-button(async onclick="adminSubscribe.subscribe()") Subscribe
       .features
         .price-container
           .price $2-10<span>/mo</span>
-          soci-button.supporter-button(async onclick="adminFirstTimeSignup.chooseSupporter()") Choose supporter
+          soci-button.supporter-button(async onclick="adminSubscribe.chooseSupporter()") Choose supporter
         ul
           li.can Submit posts
           li.can Upvote and fund posts
@@ -35,7 +35,7 @@
       .features
         .price-container
           .price $0<span>/mo</span>
-          soci-button.free-button(async subtle onclick="adminFirstTimeSignup.chooseFree()") Choose free
+          soci-button.free-button(async subtle onclick="adminSubscribe.chooseFree()") Choose free
         ul
           li.cant Submit posts
           li.cant Upvote and fund posts

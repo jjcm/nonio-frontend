@@ -570,7 +570,7 @@ export default class SociSidebar extends SociComponent {
       this._loadSubscribedTags()
       this._loadCommonTags()
       setTimeout(()=>{
-        window.history.pushState(null, null, '/admin/first-time-signup')
+        window.history.pushState(null, null, '/admin/subscribe')
         window.dispatchEvent(new CustomEvent('link'))
         this._populateTags()
         this.select('#logout').innerHTML = "Logout"
