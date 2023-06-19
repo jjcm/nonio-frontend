@@ -169,7 +169,7 @@ export default class SociUrlInput extends SociComponent {
         message = available.error
       }
       else {
-        message = 'URL is not available. Please choose a better one for your dumb meme.'
+        message = 'URL is not available. Please choose a better one for your lovely meme.'
       }
       this.setURLError(message)
     }
