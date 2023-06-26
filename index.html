@@ -1,9 +1,9 @@
-
+<!DOCTYPE html>
 <html lang="en">
   <title>Nonio</title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg"/>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg">
   <script src="/soci.js" type="module"></script>
   <script src="/lib/elementInternalsPolyfill.js"></script>
   <script src="/components/soci-components.js" type="module"></script>
@@ -18,29 +18,29 @@
       })
     }
   </script>
-  <link rel="stylesheet" href="/soci.css"/>
-  <soci-sidebar loading="loading">
+  <link rel="stylesheet" href="/soci.css">
+  <soci-sidebar loading>
     <div slot="login">
       <form>
-        <input type="email" name="email" placeholder="Email address" autocomplete="email"/>
+        <input type="email" name="email" placeholder="Email address" autocomplete="email">
         <soci-password name="password"></soci-password>
-        <soci-button async="async" onclick="this.closest('soci-sidebar').login()">login</soci-button>
+        <soci-button async onclick="this.closest('soci-sidebar').login()">login</soci-button>
       </form>
     </div>
     <div slot="create">
       <form>
         <h2>Essentials</h2>
         <soci-username-input name="username" tabindex="0"></soci-username-input>
-        <input type="email" name="email" placeholder="Email address"/>
+        <input type="email" name="email" placeholder="Email address">
         <soci-password tabindex="0" name="password"></soci-password>
         <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
-        <soci-button async="async" onclick="this.closest('soci-sidebar').register()">Create Account</soci-button>
+        <soci-button async onclick="this.closest('soci-sidebar').register()">Create Account</soci-button>
       </form>
     </div>
     <tags slot="tags"></tags>
   </soci-sidebar>
   <div id="pages">
-    <soci-route id="tags" test="both" path="(^/#)|(^/$)" fresh="fresh">
+    <soci-route id="tags" test="both" path="(^/#)|(^/$)" fresh>
       <script>lazyload('/pages/tags.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route class="admin-page" id="admin-create" path="/admin/create-account">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </soci-route>
-    <soci-route class="admin-page" id="admin-subscribe" path="/admin/subscribe" fresh="fresh">
+    <soci-route class="admin-page" id="admin-subscribe" path="/admin/subscribe" fresh>
       <div class="content">
         <script src="/pages/admin/subscribe.js"></script>
         <div class="loading-block" load-order="primary">
@@ -88,16 +88,16 @@
                 <h3>Contribution</h3>
                 <soci-contribution-slider name="subscriptionAmount"></soci-contribution-slider>
                 <h3>Payment Info</h3>
-                <input name="name" placeholder="Name"/>
+                <input name="name" placeholder="Name">
                 <div id="card-element"></div>
                 <div id="card-element-errors" role="alert"></div>
-                <soci-button class="subscribe-button" async="async" onclick="adminSubscribe.subscribe()">Subscribe</soci-button>
+                <soci-button class="subscribe-button" async onclick="adminSubscribe.subscribe()">Subscribe</soci-button>
               </form>
             </div>
             <div class="features">
               <div class="price-container">
                 <div class="price">$2-10<span>/mo</span></div>
-                <soci-button class="supporter-button" async="async" onclick="adminSubscribe.chooseSupporter()">Choose supporter</soci-button>
+                <soci-button class="supporter-button" async onclick="adminSubscribe.chooseSupporter()">Choose supporter</soci-button>
               </div>
               <ul>
                 <li class="can">Submit posts</li>
@@ -116,7 +116,7 @@
             <div class="features">
               <div class="price-container">
                 <div class="price">$0<span>/mo</span></div>
-                <soci-button class="free-button" async="async" subtle="subtle" onclick="adminSubscribe.chooseFree()">Choose free</soci-button>
+                <soci-button class="free-button" async subtle onclick="adminSubscribe.chooseFree()">Choose free</soci-button>
               </div>
               <ul>
                 <li class="cant">Submit posts</li>
@@ -134,11 +134,11 @@
       <div class="content">
         <div class="loading-block" load-order="primary">
           <h1>We all forget sometimes &lt;3</h1>
-          <p>Enter your email below. If it exists, we'll send you an email with a password reset link.</p><br/>
+          <p>Enter your email below. If it exists, we'll send you an email with a password reset link.</p><br>
         </div>
         <div class="loading-block" load-order="secondary">
-          <input type="text" placeholder="email"/>
-          <soci-button async="async">submit</soci-button>
+          <input type="text" placeholder="email">
+          <soci-button async>submit</soci-button>
         </div>
       </div>
       <script>lazyload('/pages/admin/forgot-password.js', document.currentScript.closest('soci-route'))</script>
@@ -147,13 +147,13 @@
       <div class="content">
         <div class="loading-block" load-order="primary">
           <h1>Change forgotten password</h1>
-          <p>Enter your new password below. This link expires one hour after generation.</p><br/>
+          <p>Enter your new password below. This link expires one hour after generation.</p><br>
         </div>
         <div class="loading-block" load-order="secondary">
           <form>
             <soci-password name="newPassword" placeholder="New password"></soci-password>
             <soci-password name="confirmPassword" match="newPassword" placeholder="Confirm new password"></soci-password>
-            <soci-button async="async">submit</soci-button>
+            <soci-button async>submit</soci-button>
           </form>
         </div>
         <div class="success" load-order="primary">
@@ -163,16 +163,16 @@
       </div>
       <script>lazyload('/pages/admin/change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
-    <soci-route id="user" test="both" path="^/user/" fresh="fresh">
+    <soci-route id="user" test="both" path="^/user/" fresh>
       <div class="sidebar" load-order="primary">
         <div class="hero">
-          <soci-user size="large" avatar-only="avatar-only"></soci-user>
-          <soci-user size="large" username-only="username-only"></soci-user>
+          <soci-user size="large" avatar-only></soci-user>
+          <soci-user size="large" username-only></soci-user>
           <soci-quill-view class="description" value="description"></soci-quill-view>
         </div>
         <div class="self-actions">
           <soci-link href="/admin/settings">
-            <soci-button subtle="subtle">
+            <soci-button subtle>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7 2.5L1.5 8C0.767767 8.73223 0.767767 9.76777 1.5 10.5C2.23223 11.2322 3.26777 11.2322 4 10.5L9.5 5L10.75 1.25L7 2.5Z" stroke="currentColor"></path>
                 <path d="M2 7.5L4.5 10" stroke="currentColor"></path>
@@ -181,7 +181,7 @@
             </soci-button>
           </soci-link>
           <soci-link href="/admin/financials">
-            <soci-button subtle="subtle">
+            <soci-button subtle>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.5 2.9V4.5H2.5V2.9C2.5 1.57452 3.61929 0.5 5 0.5C6.38071 0.5 7.5 1.57452 7.5 2.9Z" stroke="currentColor"></path>
                 <rect x="0.5" y="4.5" width="9" height="7" rx="1.5" stroke="currentColor"></rect>
@@ -212,11 +212,11 @@
       <div class="content" load-order="secondary">
         <header>
           <div class="sorts">
-            <div class="sort" selected="selected">Top</div>
+            <div class="sort" selected>Top</div>
             <div class="sort">New</div>
           </div>
           <div class="types">
-            <div class="type" selected="selected">Posts</div>
+            <div class="type" selected>Posts</div>
             <div class="type">Comments</div>
           </div>
         </header>
@@ -230,13 +230,13 @@
       <div id="submit-container">
         <form action="#">
           <div class="load-group centered-container" id="submit-header" load-order="primary">
-            <input type="text" name="title" placeholder="Enter title" required="required"/>
-            <soci-url-input name="url" required="required" tabindex="0"></soci-url-input>
+            <input type="text" name="title" placeholder="Enter title" required>
+            <soci-url-input name="url" required tabindex="0"></soci-url-input>
           </div>
           <div class="load-group" load-order="secondary">
             <soci-tab-group>
               <div class="centered-container">
-                <soci-tab name="Image" default="default">
+                <soci-tab name="Image" default>
                   <soci-image-uploader></soci-image-uploader>
                   <h2>Description</h2>
                   <soci-input placeholder="Enter description" name="description"></soci-input>
@@ -266,7 +266,7 @@
             </soci-tab-group>
           </div>
           <div class="load-group centered-container" id="submit-actions" load-order="tertiary">
-            <soci-button async="async">submit</soci-button>
+            <soci-button async>submit</soci-button>
           </div>
         </form>
       </div>
@@ -310,7 +310,7 @@
           </div>
         </div>
         <div class="ledger" load-order="tertiary">
-          <hr/>
+          <hr>
           <h2>TODO - everything below this is fake</h2>
           <soci-ledger></soci-ledger>
         </div>
@@ -325,15 +325,15 @@
                 <th>International</th>
               </tr>
               <tr>
-                <td>Venmo<br/>Cash App<br/>Paypal</td>
+                <td>Venmo<br>Cash App<br>Paypal</td>
                 <td>PayID</td>
                 <td>
-                   Bitcoin<br/>Ethereum</td>
+                   Bitcoin<br>Ethereum</td>
               </tr>
             </table>
             <p>If you need another way, just ask and I'll see what we can do.</p>
             <soci-input placeholder="Enter platform and details here"></soci-input>
-            <soci-button async="async" onclick="adminFinancials.requestManualWithdrawal()">Request Withdrawal</soci-button>
+            <soci-button async onclick="adminFinancials.requestManualWithdrawal()">Request Withdrawal</soci-button>
           </div>
         </soci-modal>
       </div>
@@ -410,8 +410,8 @@
             <h2>Description</h2>
             <soci-input placeholder="Enter description"></soci-input>
             <div class="actions">
-              <soci-button async="async">submit</soci-button>
-              <soci-button subtle="subtle">cancel</soci-button>
+              <soci-button async>submit</soci-button>
+              <soci-button subtle>cancel</soci-button>
             </div>
           </div>
           <div class="block password" load-order="tertiary">
@@ -421,15 +421,15 @@
               <soci-password name="newPassword" placeholder="New password"></soci-password>
               <soci-password name="confirmPassword" match="newPassword" placeholder="Confirm new password"></soci-password>
               <div class="actions">
-                <soci-button async="async">submit</soci-button>
-                <soci-button subtle="subtle">cancel</soci-button>
+                <soci-button async>submit</soci-button>
+                <soci-button subtle>cancel</soci-button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </soci-route>
-    <soci-route id="post" default="default" fresh="fresh">
+    <soci-route id="post" default fresh>
       <script src="/pages/post.js"></script>
       <soci-post>
         <soci-tag-group slot="tags" size="large"></soci-tag-group>

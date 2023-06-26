@@ -116,7 +116,7 @@ var handler = {
         handler.error(req, res, err)
       }
       else {
-        var html = pug.render(data)
+        var html = pug.render(data, {doctype: 'html'})
         res.writeHead(200, { 'Content-Type' : 'text/html' })
         res.end(html, 'utf-8')
       }
