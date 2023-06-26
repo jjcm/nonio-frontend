@@ -464,6 +464,9 @@ export default class SociComment extends SociComponent {
       })
     }
     else {
+      this.postData('/comment/remove-vote', {
+        id: parseInt(this.getAttribute('comment-id')),
+      })
       this.score--
     }
   }
@@ -481,6 +484,9 @@ export default class SociComment extends SociComponent {
       })
     }
     else {
+      this.postData('/comment/remove-vote', {
+        id: parseInt(this.getAttribute('comment-id')),
+      })
       this.score++
     }
   }
