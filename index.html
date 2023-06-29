@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg"/>
   <script src="/soci.js" type="module"></script>
-  <script src="/lib/elementInternalsPolyfill.js"></script>
   <script src="/components/soci-components.js" type="module"></script>
   <script>
     let lazyload = (path, parent) => {
@@ -19,6 +18,7 @@
     }
   </script>
   <link rel="stylesheet" href="/soci.css"/>
+  <link rel="stylesheet" href="/lib/quillStyle.css"/>
   <soci-sidebar loading="loading">
     <div slot="login">
       <form>
@@ -437,5 +437,5 @@
       </soci-post>
     </soci-route>
   </div>
-  <script>lazyload('/lib/quill.min.js')</script>
+  <script>lazyload('/lib/quill.min.js')</script><script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 </html>

@@ -70,12 +70,12 @@ export default class SociCommentList extends SociComponent {
         box-sizing: border-box;
         margin: 0 auto;
       }
-      comment-input[active] soci-input {
-        --min-height: 200px;
+      comment-input[active] ::slotted(soci-input) {
+        --min-height: 200px !important;
         margin-bottom: 8px;
       }
       ::slotted(soci-input) {
-        --min-height: 200px;
+        --min-height: 82px !important;
         margin-bottom: 8px;
         border: 1px solid var(--bg-secondary);
         border-radius: 4px;
@@ -127,7 +127,7 @@ export default class SociCommentList extends SociComponent {
     let commentInput = document.createElement('soci-input')
     commentInput.setAttribute('placeholder', 'Enter comment')
     commentInput.setAttribute('slot', 'comment-input')
-    commentInput.addEventListener('focus', this._onFocus.bind(this))
+    commentInput.addEventListener('focusin', this._onFocus.bind(this))
     this.appendChild(commentInput)
   }
 
@@ -145,13 +145,13 @@ export default class SociCommentList extends SociComponent {
 
   _onFocus(){
     this.select('comment-input').toggleAttribute('active', true)
-    this.select('soci-input').toggleAttribute('active', true)
+    this.querySelector('soci-input').toggleAttribute('active', true)
   }
 
   cancelComment(){
-    this.select('soci-input').clear()
+    this.querySelector('soci-input').clear()
     this.select('comment-input').toggleAttribute('active', false)
-    this.select('soci-input').toggleAttribute('active', false)
+    this.querySelector('soci-input').toggleAttribute('active', false)
   }
 
   _filter(e){
@@ -199,7 +199,7 @@ export default class SociCommentList extends SociComponent {
   }
 
   addComment(){
-    let value = this.select('soci-input').value
+    let value = this.querySelector('soci-input').value
     this.postData('/comment/create', {
       post: this.url,
       content: value
