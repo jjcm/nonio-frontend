@@ -70,12 +70,12 @@
         </div>
       </div>
     </soci-route>
-    <soci-route class="admin-page" id="admin-first-time-signup" path="/admin/first-time-signup" fresh="fresh">
+    <soci-route class="admin-page" id="admin-subscribe" path="/admin/subscribe" fresh="fresh">
       <div class="content">
-        <script src="/pages/admin/first-time-signup.js"></script>
+        <script src="/pages/admin/subscribe.js"></script>
         <div class="loading-block" load-order="primary">
-          <h1>Last step</h1>
-          <p>Thanks for signing up! Please pick your account type:</p>
+          <h1>Subscription</h1>
+          <p>Please pick your account type:</p>
         </div>
         <div class="columns" load-order="secondary">
           <div class="column supporter">
@@ -91,13 +91,13 @@
                 <input name="name" placeholder="Name"/>
                 <div id="card-element"></div>
                 <div id="card-element-errors" role="alert"></div>
-                <soci-button class="subscribe-button" async="async" onclick="adminFirstTimeSignup.subscribe()">Subscribe</soci-button>
+                <soci-button class="subscribe-button" async="async" onclick="adminSubscribe.subscribe()">Subscribe</soci-button>
               </form>
             </div>
             <div class="features">
               <div class="price-container">
                 <div class="price">$2-10<span>/mo</span></div>
-                <soci-button class="supporter-button" async="async" onclick="adminFirstTimeSignup.chooseSupporter()">Choose supporter</soci-button>
+                <soci-button class="supporter-button" async="async" onclick="adminSubscribe.chooseSupporter()">Choose supporter</soci-button>
               </div>
               <ul>
                 <li class="can">Submit posts</li>
@@ -116,7 +116,7 @@
             <div class="features">
               <div class="price-container">
                 <div class="price">$0<span>/mo</span></div>
-                <soci-button class="free-button" async="async" subtle="subtle" onclick="adminFirstTimeSignup.chooseFree()">Choose free</soci-button>
+                <soci-button class="free-button" async="async" subtle="subtle" onclick="adminSubscribe.chooseFree()">Choose free</soci-button>
               </div>
               <ul>
                 <li class="cant">Submit posts</li>
@@ -282,32 +282,36 @@
         <script src="/pages/admin/financials.js"></script>
         <div class="header" load-order="primary">
           <h1>Your Financials </h1>
-          <soci-banner type="info" title="Auto-withdrawal enabled">
+          <soci-banner type="info" title="Auto-withdrawal enabled" style="display: none;">
              Funds in your wallet will auto-deposit into your Stripe Connect account at the end of each month. </soci-banner>
-          <p>There are currently two ways to withdrawal money from your wallet. You can set up Stripe Connect to automatically deposit funds into your bank account at the end of each month, or you can initiate a manual withdrawal at any time. </p><a href="#" target="_blank">
-            <soci-button>View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></soci-button></a>
+          <p>There are currently two ways to withdrawal money from your wallet. You can set up Stripe Connect to automatically deposit funds into your bank account at the end of each month, or you can email me at j@jjcm.org to manually withdrawal funds. I'll try and support whatever platforms I can to send money. </p>
+          <!--a(href="#" target="_blank")soci-button.dashboard-link View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          -->
         </div>
         <div class="amounts" load-order="secondary">
           <div class="blocks">
             <div class="block" id="financial-wallet">
               <h2>Wallet</h2>
               <h1 class="cash">$</h1>
-              <div class="button-group">
-                <soci-button subtle="subtle" onclick="adminFinancials.openWithdrawalModal()">Withdrawal</soci-button>
-                <soci-button danger="danger" onclick="adminFinancials.showChangeSubscription()">Disable auto-withdrawal</soci-button>
+              <div class="button-group"><a href="#" target="_blank">
+                  <soci-button>View Stripe Dashboard <svg style="margin-left: 2px" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 1.5H0.5V8.5H7.5V5.5M4 5L8.5 0.5M8.5 0.5H5.5M8.5 0.5V3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></soci-button></a>
+                <!-- soci-button(subtle onclick="adminFinancials.openWithdrawalModal()") Withdrawal-->
+                <!-- soci-button(danger onclick="adminFinancials.showChangeSubscription()") Disable auto-withdrawal-->
               </div>
             </div>
             <div class="block" id="financial-subscription">
               <h2>Monthly Subscription</h2>
               <h1 class="cash">$ <span>/mo</span></h1>
               <div class="button-group">
-                <soci-button subtle="subtle" onclick="adminFinancials.showChangeSubscription()">Change Subscription Amount</soci-button>
-                <soci-button danger="danger">Cancel Subscription</soci-button>
+                <!-- soci-button(subtle onclick="adminFinancials.showChangeSubscription()") Change Subscription Amount-->
+                <!--soci-button.cancel-sub-button(danger onclick="adminFinancials.cancelSubscription()") Cancel Subscription-->
               </div>
             </div>
           </div>
         </div>
         <div class="ledger" load-order="tertiary">
+          <hr/>
+          <h2>TODO - everything below this is fake</h2>
           <soci-ledger></soci-ledger>
         </div>
         <soci-modal title="Manual Withdrawal" id="withdrawal-modal">
