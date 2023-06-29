@@ -129,7 +129,6 @@ export default class SociPassword extends SociComponent {
 
   _onKeyDown() {
     setTimeout(()=>{
-      console.log('keydown')
       this.checkValidity()
       this._internals.setFormValue(this.value)
     }, 1)
@@ -195,7 +194,6 @@ export default class SociPassword extends SociComponent {
   //checkValidity() { return this._internals.checkValidity() }
   reportValidity() {return this._internals.reportValidity() }
   checkValidity(){
-    console.log('check validity')
     if(!this.checkEntropy()){
       this._updateValidity('Not strong enough. Add complexity until the circle fills.')
     }

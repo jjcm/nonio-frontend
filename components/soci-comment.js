@@ -175,8 +175,6 @@ export default class SociComment extends SociComponent {
 
       #replies {
         position: relative;
-        overflow: hidden;
-        height: 0;
         height: auto;
       }
 
@@ -217,12 +215,14 @@ export default class SociComment extends SociComponent {
         border: 1px solid transparent;
         transition: height 0.1s ease-out;
         margin-top: 0;
+        pointer-events: none;
       }
 
       #comment-edit.active,
       #comment-reply.active {
         height: auto;
         margin-top: 10px;
+        pointer-events: all;
       }
 
       .active actions {
@@ -249,7 +249,7 @@ export default class SociComment extends SociComponent {
         position: absolute;
         margin: 0;
         opacity: 0;
-        transform: translateY(-32px);
+        transform: translateY(-8px);
       }
     `
   }
@@ -499,13 +499,12 @@ export default class SociComment extends SociComponent {
       parent: parseInt(this.getAttribute('comment-id'))
     }).then(res=>{
       if(res.id){
+        // TODO - fix the animation here. Should animate smoothly.
         //this.select('#submit').success()
         let comment = document.createElement('soci-comment')
         comment = comment.factory(res.user, 0, 0, Date.now(), res.id, res.content)
         comment.prependToElement(this)
-        setTimeout(() => {
-          this._cancelReply()
-        }, 50)
+        this._cancelReply()
       }
       else {
         //this.select('#submit').error()
