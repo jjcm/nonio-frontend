@@ -27,6 +27,9 @@ window.customElements.define('soci-contribution-slider', SociContributionSlider)
 import SociCommentList from "./soci-comment-list.js"
 window.customElements.define('soci-comment-list', SociCommentList)
 
+import SociEditor from "./soci-editor.js"
+window.customElements.define('soci-editor', SociEditor)
+
 import SociHTMLPage from "./soci-html-page.js"
 window.customElements.define('soci-html-page', SociHTMLPage)
 

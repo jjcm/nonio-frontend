@@ -62,9 +62,6 @@ export default class SociCommentList extends SociComponent {
       }
       soci-input {
         --min-height: 82px;
-        border: 1px solid var(--bg-secondary);
-        border-radius: 4px;
-        margin: 2px auto 20px;
       }
       comment-input {
         display: block;
@@ -76,6 +73,13 @@ export default class SociCommentList extends SociComponent {
       comment-input[active] soci-input {
         --min-height: 200px;
         margin-bottom: 8px;
+      }
+      ::slotted(soci-input) {
+        --min-height: 200px;
+        margin-bottom: 8px;
+        border: 1px solid var(--bg-secondary);
+        border-radius: 4px;
+        margin: 2px auto 20px;
       }
       button-container {
         display: block;
@@ -107,7 +111,7 @@ export default class SociCommentList extends SociComponent {
         </filtering>
       </controls>
       <comment-input>
-        <soci-input @focus=_onFocus ></soci-input>
+        <slot name="comment-input"></slot>
         <button-container>
           <soci-button @click=cancelComment subtle>cancel</soci-button>
           <soci-button id="submit" @click=addComment async>submit</soci-button>
@@ -117,6 +121,14 @@ export default class SociCommentList extends SociComponent {
         <slot></slot>
       </content>
     `
+  }
+
+  connectedCallback(){
+    let commentInput = document.createElement('soci-input')
+    commentInput.setAttribute('placeholder', 'Enter comment')
+    commentInput.setAttribute('slot', 'comment-input')
+    commentInput.addEventListener('focus', this._onFocus.bind(this))
+    this.appendChild(commentInput)
   }
 
   static get observedAttributes() {

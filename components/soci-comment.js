@@ -214,7 +214,6 @@ export default class SociComment extends SociComponent {
       #comment-reply {
         height: 0px;
         position: relative;
-        overflow: hidden;
         border: 1px solid transparent;
         transition: height 0.1s ease-out;
         margin-top: 0;
@@ -227,7 +226,7 @@ export default class SociComment extends SociComponent {
       }
 
       .active actions {
-        margin: 4px 0 8px;
+        margin: 4px 0 -8px;
         display: flex;
         justify-content: flex-end;
       }
@@ -236,10 +235,10 @@ export default class SociComment extends SociComponent {
         margin-right: 0;
       }
 
-      soci-input:not([readonly]) {
+      ::slotted(soci-input:not([readonly])) {
         border: 1px solid var(--bg-secondary);
         border-radius: 4px;
-        --min-height: 140px;
+        --min-height: 140px !important;
       }
 
       :host(:not([self])) .user-control {
@@ -402,9 +401,14 @@ export default class SociComment extends SociComponent {
   }
 
   _reply(){
+    let replyInput = document.createElement('soci-input')
+    replyInput.setAttribute('placeholder', 'Enter reply')
+    replyInput.setAttribute('slot', 'reply')
+    this.appendChild(replyInput)
+
     let replyContainer = this.select('#comment-reply')
     replyContainer.innerHTML = `
-      <soci-input placeholder="Enter reply"></soci-input>
+      <slot name="reply"></slot>
       <actions>
         <soci-button>submit</soci-button>
         <soci-button subtle>cancel</soci-button>
@@ -413,9 +417,11 @@ export default class SociComment extends SociComponent {
     replyContainer.querySelector('soci-button[subtle]').addEventListener('click', this._cancelReply.bind(this))
     replyContainer.classList.add('active')
     replyContainer.style.height = '172px'
+    replyContainer.style.overflow = 'hidden'
     setTimeout(()=>{
       replyContainer.style.height = ''
-      replyContainer.querySelector('soci-input')?.focus()
+      replyContainer.style.overflow = ''
+      this.querySelector('soci-input')?.focus()
     }, 100)
 
     this.select('#actions').style.display = 'none'
@@ -427,6 +433,7 @@ export default class SociComment extends SociComponent {
     replyContainer.innerHTML = ''
     replyContainer.classList.remove('active')
     this.select('#actions').style.display = ''
+    this.querySelector('soci-input').remove()
   }
 
   _toggleReplies(e){
@@ -488,7 +495,7 @@ export default class SociComment extends SociComponent {
   _submitReply(){
     this.postData('/comment/create', {
       post: this.url,
-      content: this.select('soci-input').value,
+      content: this.querySelector('soci-input').value,
       parent: parseInt(this.getAttribute('comment-id'))
     }).then(res=>{
       if(res.id){
@@ -498,7 +505,7 @@ export default class SociComment extends SociComponent {
         comment.prependToElement(this)
         setTimeout(() => {
           this._cancelReply()
-        }, 100)
+        }, 50)
       }
       else {
         //this.select('#submit').error()
@@ -544,53 +551,45 @@ export default class SociComment extends SociComponent {
   }
 
   _edit(){
+    let editInput = document.createElement('soci-input')
+    editInput.setAttribute('placeholder', 'Enter comment')
+    editInput.setAttribute('slot', 'edit')
+    this.appendChild(editInput)
+    editInput.value = this.querySelector('soci-quill-view').value
+
     this.style.minHeight = this.offsetHeight
-    let height = this.style.height = this.offsetHeight
     this.select('#comment').style.display = 'none'
     let editContainer = this.select('#comment-edit')
     editContainer.innerHTML = `
-      <soci-input placeholder="Enter comment" subtle></soci-input>
+      <slot name="edit"></slot>
       <actions>
         <soci-button async>save</soci-button>
         <soci-button subtle>cancel</soci-button>
       </actions>`
     editContainer.querySelector('soci-button').addEventListener('click', this._submitEdit.bind(this))
     editContainer.querySelector('soci-button[subtle]').addEventListener('click', this._cancelEdit.bind(this))
-    editContainer.querySelector('soci-input').value = this.querySelector('soci-quill-view').value
     editContainer.classList.add('active')
-    editContainer.style.height = '172px'
-    let input = editContainer.querySelector('soci-input')
+    let input = this.querySelector('soci-input')
     setTimeout(()=>{
       input?.toggleAttribute('subtle', false)
-      this.style.height = (height + 43) + 'px'
-    },1)
-    setTimeout(()=>{
-      editContainer.style.height = ''
       input?.focus()
       input?.setSelection(Number.MAX_SAFE_INTEGER)
-      this.style.height = ''
-    }, 100)
+    }, 1)
 
     this.select('#actions').style.display = 'none'
   }
 
   _cancelEdit(){
-    let height = this.style.height = this.offsetHeight
     this.select('#comment').style.display = ''
     let editContainer = this.select('#comment-edit')
     editContainer.innerHTML = ''
     editContainer.classList.remove('active')
     this.select('#actions').style.display = ''
-    setTimeout(()=>{
-      this.style.height = (height - 43) + 'px'
-      setTimeout(()=>{
-        this.style.height = ''
-      }, 100)
-    },1)
+    this.querySelector('soci-input').remove()
   }
 
   _submitEdit(){
-    let content = this.select('#comment-edit soci-input').value
+    let content = this.querySelector('soci-input').value
     this.postData('/comment/edit', {
       id: parseInt(this.getAttribute('comment-id')),
       content: content
@@ -599,7 +598,7 @@ export default class SociComment extends SociComponent {
       setTimeout(()=>{
         this.querySelector('soci-quill-view').value = content
         this._cancelEdit()
-      }, 400)
+      }, 1400)
     })
   }
 }

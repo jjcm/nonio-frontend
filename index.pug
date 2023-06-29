@@ -4,7 +4,6 @@ html(lang="en")
   meta(name="viewport" content="width=device-width, initial-scale=1")
   link(rel="icon" type="image/svg+xml" href="/lib/favicon.svg")
   script(src="/soci.js" type="module")
-  script(src="/lib/elementInternalsPolyfill.js")
   script(src="/components/soci-components.js" type="module")
   script.
     let lazyload = (path, parent) => {
@@ -17,6 +16,7 @@ html(lang="en")
       })
     }
   link(rel="stylesheet" href="/soci.styl")
+  link(rel="stylesheet" href="/lib/quillStyle.css")
 
   soci-sidebar(loading)
     div(slot="login")
@@ -64,3 +64,7 @@ html(lang="en")
 
   script.
     lazyload('/lib/quill.min.js')
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+
+
+
