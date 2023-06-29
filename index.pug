@@ -4,6 +4,7 @@ html(lang="en")
   meta(name="viewport" content="width=device-width, initial-scale=1")
   link(rel="icon" type="image/svg+xml" href="/lib/favicon.svg")
   script(src="/soci.js" type="module")
+  script(src="/lib/elementInternalsPolyfill.js")
   script(src="/components/soci-components.js" type="module")
   script.
     let lazyload = (path, parent) => {
@@ -38,8 +39,8 @@ html(lang="en")
       include pages/tags.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
       include pages/admin/create.pug
-    soci-route#admin-subscribe(path="/admin/subscribe" fresh).admin-page
-      include pages/admin/subscribe.pug
+    soci-route#admin-first-time-signup(path="/admin/first-time-signup" fresh).admin-page
+      include pages/admin/first-time-signup.pug
     soci-route#admin-forgot-password(path="/admin/forgot-password").admin-page
       include pages/admin/forgot-password.pug
     soci-route#admin-change-forgotten-password(path="/admin/change-forgotten-password").admin-page
