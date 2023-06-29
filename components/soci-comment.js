@@ -598,7 +598,7 @@ export default class SociComment extends SociComponent {
       setTimeout(()=>{
         this.querySelector('soci-quill-view').value = content
         this._cancelEdit()
-      }, 1400)
+      }, 1000)
     })
   }
 }
