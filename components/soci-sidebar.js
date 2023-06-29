@@ -508,18 +508,23 @@ export default class SociSidebar extends SociComponent {
   async login(){
     let form = this.querySelector('[slot="login"] form')
     let button = form.querySelector('soci-button')
+
+    this.querySelector('[slot="login"] soci-password')?.checkValidity()
     //todo - remove this override later
     let loginData = soci.getJSONFromForm(form)
+    console.log(loginData)
     if (loginData.email == 'hackernews') { loginData.email = 'j+hn@jjcm.org'}
     else {
 
 	    if(!form.reportValidity()) {
+        console.log('form invalid')
 	      setTimeout(()=>{
           button?.error()
 	      }, 1)
 	      return
 	    }
     }
+
 
     soci.postData('user/login', loginData).then(response => {
       if(response.token){

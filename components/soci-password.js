@@ -90,6 +90,7 @@ export default class SociPassword extends SociComponent {
     this.addEventListener('blur', this._onBlur)
     this.appendChild(this.field)
     this.setAttribute('tabindex', 0)
+    this._internals.setFormValue(this.value)
   }
 
   static get observedAttributes() {
@@ -128,17 +129,8 @@ export default class SociPassword extends SociComponent {
 
   _onKeyDown() {
     setTimeout(()=>{
-      if(!this.checkEntropy()){
-        this._updateValidity('Not strong enough. Add complexity until the circle fills.')
-      }
-      else if(!this.checkMatch()){
-        this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity("Passwords do not match.")
-        this._updateValidity('Passwords do not match.')
-      }
-      else {
-        this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity()
-        this._updateValidity()
-      }
+      console.log('keydown')
+      this.checkValidity()
       this._internals.setFormValue(this.value)
     }, 1)
   }
@@ -200,6 +192,22 @@ export default class SociPassword extends SociComponent {
   get validationMessage() {return this._internals.validationMessage }
   get willValidate() {return this._internals.willValidate }
 
-  checkValidity() { return this._internals.checkValidity() }
+  //checkValidity() { return this._internals.checkValidity() }
   reportValidity() {return this._internals.reportValidity() }
+  checkValidity(){
+    console.log('check validity')
+    if(!this.checkEntropy()){
+      this._updateValidity('Not strong enough. Add complexity until the circle fills.')
+    }
+    else if(!this.checkMatch()){
+      this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity("Passwords do not match.")
+      this._updateValidity('Passwords do not match.')
+    }
+    else {
+      this.closest('form')?.querySelector(`soci-password[name="${this.getAttribute('match')}"]`)?._updateValidity()
+      this._updateValidity()
+    }
+    return this._internals.checkValidity()
+  }
+
 }
