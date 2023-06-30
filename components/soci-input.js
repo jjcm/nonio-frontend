@@ -21,6 +21,9 @@ export default class SociInput extends HTMLElement {
   }
 
   setUpQuill(){
+    let container = this.querySelector('.quill-editor-container')
+    if(container.getRootNode().tagName != undefined) return;
+
     let readOnly = this.hasAttribute('readonly')
     let opts = readOnly ? 
       { 
@@ -37,7 +40,7 @@ export default class SociInput extends HTMLElement {
       }
     if(this._quillInitialized) return 0
     this._quillInitialized = true
-    this.editor = new Quill(this.querySelector('.quill-editor-container'), opts)
+    this.editor = new Quill(container, opts)
 
     this.editor.on('text-change', ()=>{
       this._internals.setFormValue(this.value)
@@ -62,7 +65,8 @@ export default class SociInput extends HTMLElement {
   }
 
   set value(val){
-    this.editor.setContents(JSON.parse(val))
+    if(!val) return
+    this.editor?.setContents(JSON.parse(val))
     this._internals.setFormValue(val)
   }
 

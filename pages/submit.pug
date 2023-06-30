@@ -7,7 +7,12 @@
     .load-group(load-order="secondary")
       soci-tab-group
         .centered-container
-          soci-tab(name="Image" default)
+          soci-tab(name="Link" default)
+            soci-link-input
+            h2 Description
+            soci-input(placeholder="Enter description" name="description")
+
+          soci-tab(name="Image")
             soci-image-uploader
             h2 Description
             soci-input(placeholder="Enter description" name="description")
@@ -17,7 +22,7 @@
             h2 Description
             soci-input(placeholder="Enter description" name="description")
               
-          soci-tab(name="Audio")
+          //soci-tab(name="Audio")
             soci-file-drop(type="audio")
             h2 Description
             soci-input(placeholder="Enter description" name="description")

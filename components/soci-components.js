@@ -57,6 +57,9 @@ window.customElements.define('soci-ledger', SociLedger)
 import SociLink from "./soci-link.js"
 window.customElements.define('soci-link', SociLink)
 
+import SociLinkInput from "./soci-link-input.js"
+window.customElements.define('soci-link-input', SociLinkInput)
+
 import SociModal from "./soci-modal.js"
 window.customElements.define('soci-modal', SociModal)
 
