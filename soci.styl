@@ -516,6 +516,16 @@ button
     pointer-events: none
     position: absolute
     right: 2px
+  
+  .preview
+    overflow: hidden
+    height: 0
+    margin: 0 -20px
+    padding: 0 20px
+    transition: all 0.1s var(--soci-ease)
+    &.active
+      height: 168px
+      margin-bottom: -8px
 
   #submit-header,
   #submit-actions

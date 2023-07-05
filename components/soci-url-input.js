@@ -98,6 +98,7 @@ export default class SociUrlInput extends SociComponent {
     this.addEventListener('focus', this._onFocus.bind(this))
 
     this._internals.setValidity({customError: true}, 'Submissions require a url')
+    this.manuallySet = false
   }
 
   checkValidity() {
@@ -115,6 +116,7 @@ export default class SociUrlInput extends SociComponent {
 
   _onFocus(e) {
     this._input.focus()
+    this.manuallySet = true
   }
 
   _onChange(e) {

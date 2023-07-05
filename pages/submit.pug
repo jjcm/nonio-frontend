@@ -8,7 +8,14 @@
       soci-tab-group
         .centered-container
           soci-tab(name="Link" default)
-            soci-link-input
+            soci-link-input(name="link")
+
+            .preview
+              h2 Preview 
+              soci-post-li(score="0" time="now")
+                soci-user(self slot="user")
+                soci-tag-group(slot="tags")
+
             h2 Description
             soci-input(placeholder="Enter description" name="description")
 

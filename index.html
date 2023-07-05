@@ -237,7 +237,19 @@
           <div class="load-group" load-order="secondary">
             <soci-tab-group>
               <div class="centered-container">
-                <soci-tab name="Image" default="default">
+                <soci-tab name="Link" default="default">
+                  <soci-link-input name="link"></soci-link-input>
+                  <div class="preview">
+                    <h2>Preview </h2>
+                    <soci-post-li score="0" time="now">
+                      <soci-user self="self" slot="user"></soci-user>
+                      <soci-tag-group slot="tags"></soci-tag-group>
+                    </soci-post-li>
+                  </div>
+                  <h2>Description</h2>
+                  <soci-input placeholder="Enter description" name="description"></soci-input>
+                </soci-tab>
+                <soci-tab name="Image">
                   <soci-image-uploader></soci-image-uploader>
                   <h2>Description</h2>
                   <soci-input placeholder="Enter description" name="description"></soci-input>
@@ -247,11 +259,12 @@
                   <h2>Description</h2>
                   <soci-input placeholder="Enter description" name="description"></soci-input>
                 </soci-tab>
-                <soci-tab name="Audio">
-                  <soci-file-drop type="audio"></soci-file-drop>
-                  <h2>Description</h2>
-                  <soci-input placeholder="Enter description" name="description"></soci-input>
-                </soci-tab>
+                <!--soci-tab(name="Audio")
+                soci-file-drop(type="audio")
+                h2 Description
+                soci-input(placeholder="Enter description" name="description")
+                
+                -->
                 <soci-tab name="Blog">
                   <soci-input placeholder="Write your best" name="description"></soci-input>
                 </soci-tab>
@@ -438,5 +451,5 @@
       </soci-post>
     </soci-route>
   </div>
-  <script>lazyload('/lib/quill.min.js')</script><script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script>lazyload('/lib/quill.min.js')</script>
 </html>

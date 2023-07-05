@@ -78,7 +78,7 @@ export default class SociPostLi extends SociComponent {
 
   renderPostLi(post){
     return`
-      <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" score=${post.score || 0} comments=${post.commentCount || 0} type=${post.type || 'image'} time=${post.time}>
+      <soci-post-li post-title="${post.title}" url="${post.url}" post-id="${post.ID}" score=${post.score || 0} comments=${post.commentCount || 0} type=${post.type || 'image'} time=${post.time} ${post.link ? `link=${post.link}` : ''}>
         <soci-user name="${post.user}" slot="user"></soci-user>
         <soci-tag-group slot="tags">
           ${this.sortTags(post.tags).map(tag => `<soci-tag tag="${tag.tag}" score="${tag.score}" tag-id="${tag.tagID}" ${soci.votes[post.ID]?.includes(tag.tagID) ? 'upvoted':''}></soci-tag>`).join('')}

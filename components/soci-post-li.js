@@ -18,7 +18,14 @@ export default class SociPostLi extends SociComponent {
         box-sizing: border-box;
         opacity: 1;
         position: relative;
+        min-height: 96px;
       }
+
+      :host(.no-image) slot[name="thumbnail"] {
+        display: none;
+      }
+
+      ::slotted(img),
       img {
         display: none;
         width: 96px;
@@ -28,6 +35,7 @@ export default class SociPostLi extends SociComponent {
         cursor: zoom-in;
         float: left;
       }
+      ::slotted(img[src]),
       img[src] {
         display: block;
       }
@@ -60,11 +68,17 @@ export default class SociPostLi extends SociComponent {
         gap: 8px;
         font-size: 12px;
         white-space: nowrap;
+        flex-wrap: wrap;
       }
+      #domain,
       #time {
         color: var(--text-tertiary);
       }
-      #votes:before, #time:before {
+      :host([time="now"]) #time suffix {
+        display: none;
+      }
+
+      #metadata-link > div:before {
         content: '•';
         display: inline-block;
         margin-right: 1ch;
@@ -73,22 +87,27 @@ export default class SociPostLi extends SociComponent {
       #comments {
         color: var(--text-secondary);
         letter-spacing: -0.16px;
-        text-align: right;
         line-height: 16px;
-        position: absolute;
-        top: 12px;
-        right: 12px;
       }
       #time svg,
       #comments svg {
         display: none;
       }
-      #title {
+
+      #domain {
+        display: none;
+        pointer-events: none;
+      }
+
+      :host([type="link"]) #domain {
+        display: block;
+      }
+
+      .title {
         font-size: 16px;
         color: var(--text-bold);
         letter-spacing: -0.08px;
         line-height: 20px;
-        width: 100%;
         max-height: 72px;
         font-weight: 600;
         margin-bottom: 8px;
@@ -128,6 +147,7 @@ export default class SociPostLi extends SociComponent {
         margin-right: 12px;
       }
 
+      #metadata-link,
       picture {
         display: contents;
       }
@@ -159,12 +179,6 @@ export default class SociPostLi extends SociComponent {
         color: var(--text-secondary);
       }
 
-      :host([expanded]) #comments:before {
-        content: '•';
-        display: inline-block;
-        margin-right: 1ch;
-        color: var(--text-tertiary);
-      }
       :host([expanded]) slot[name="tags"] {
         margin-bottom: 12px;
         display: inline-block;
@@ -186,6 +200,29 @@ export default class SociPostLi extends SociComponent {
         overflow: hidden;
       }
 
+      #external-link {
+        color: var(--text);
+        display: none;
+      }
+
+      #external-link:visited {
+        color: var(--text-secondary);
+      }
+
+      #external-link svg {
+        margin-left: 4px;
+        margin-top: 6px;
+        color: var(--text-tertiary);
+      }
+
+      :host([type="link"]) #external-link {
+        display: flex;
+      }
+
+      :host([type="link"]) #internal-link {
+        display: none;
+      }
+
       @keyframes load-in {
         from {
           transform: translateY(4px);
@@ -202,12 +239,12 @@ export default class SociPostLi extends SociComponent {
         :host {
           display: flex;
           flex-direction: column;
-          padding-top: 36px;
+          padding-top: 28px;
         }
         img {
           width: 100%;
           height: 200px;
-          margin-bottom: 12px;
+          margin-top: 4px;
         }
         #time,
         #comments {
@@ -231,9 +268,20 @@ export default class SociPostLi extends SociComponent {
           position: absolute;
           top: 8px;
           width: calc(100% - 24px);
+          flex-wrap: nowrap;
         }
-        #votes:before, #time:before {
+        #metadata-link > div:before {
           display: none;
+        }
+        #metadata-link > div {
+          order: 1;
+        }
+        #metadata-link #domain {
+          order: 0;
+        }
+        #domain:after {
+          content: "•";
+          margin-left: 1ch;
         }
         slot[name="user"] {
           width: 100%;
@@ -249,11 +297,13 @@ export default class SociPostLi extends SociComponent {
   }
 
   html(){ return `
-    <picture id="thumbnail">
-      <source class="heic">
-      <source class="webp">
-      <img @click=expand />
-    </picture>
+    <slot name="thumbnail">
+      <picture id="thumbnail">
+        <source class="heic">
+        <source class="webp">
+        <img @click=expand />
+      </picture>
+    </slot>
     <div id="preview">
       <picture>
         <source class="heic">
@@ -266,25 +316,19 @@ export default class SociPostLi extends SociComponent {
       <div id="top">
         <div id="details">
           <slot name="user"></slot>
-          <div id="votes"></div>
-          <div id="time">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="8" cy="8" r="5.5"/>
-              <path d="M7.5 5V8.5H10" stroke-linecap="round"/>
-            </svg>
-            <span></span>
-            <suffix> ago</suffix>
-          </div>
-          <div id="comments">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/>
-            </svg>
-            <span></span>
-          </div>
+          <soci-link id="metadata-link">
+            <div id="votes"></div>
+            <div id="comments"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/></svg><span></span></div>
+            <div id="time"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.5"/><path d="M7.5 5V8.5H10" stroke-linecap="round"/></svg><span></span><suffix> ago</suffix></div>
+            <div id="domain"></div>
+          </soci-link>
         </div>
-        <soci-link>
-          <div id="title"></div>
+        <soci-link id="internal-link">
+          <div class="title"></div>
         </soci-link>
+        <a id="external-link">
+          <div class="title"></div>
+        </a>
       </div>
       <slot name="tags"></slot>
       <slot name="description"></slot>
@@ -296,18 +340,25 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['post-title', 'score', 'time', 'type', 'comments', 'url']
+    return ['post-title', 'score', 'time', 'type', 'comments', 'url', 'link']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'post-title':
-        this.select('#title').innerHTML = newValue
+        this.select('#internal-link .title').innerHTML = newValue
+        this.select('#external-link .title').innerHTML = newValue
         break
       case 'type':
         this.loadContent(newValue)
         break
+      case 'link':
+        let link = this.select('#external-link')
+        link.setAttribute('href', newValue)
+        this.select('#domain').innerHTML = link.hostname.replace('www.', '')
+        break
       case 'time':
+        if(newValue == "now") return this.select('#time span').innerHTML = "just now"
         this.updateTime = this.updateTime.bind(this)
         this.updateTime(newValue, this.select('#time span'))
         break
@@ -319,7 +370,8 @@ export default class SociPostLi extends SociComponent {
         this.select('#comments span').innerHTML = `${newValue}<suffix> comment${(newValue == 1 ? '' : 's')}</suffix>`
         break;
       case 'url':
-        this.select('soci-link').setAttribute('href', '/' + newValue)
+        this.select('#metadata-link').setAttribute('href', '/' + newValue)
+        this.select('#internal-link').setAttribute('href', '/' + newValue)
         break;
 
     }
@@ -373,15 +425,19 @@ export default class SociPostLi extends SociComponent {
   }
 
   _setImageSource(container, host){
-    container.querySelector('img').src = `${host}/${this.url}.webp`
+    let img = container.querySelector('img')
+    img.src = `${host}/${this.url}.webp`
+    img.onerror = () => {
+      this.classList.toggle('no-image', true)
+    }
     container.querySelector('.heic').src = `${host}/${this.url}.heic`
     container.querySelector('.webp').src = `${host}/${this.url}.webp`
   }
 
   loadContent(type) {
-    let host = ''
     switch(type){
       case 'image':
+      case 'link':
         this._setImageSource(this.select('#thumbnail'), config.THUMBNAIL_HOST)
         break
     }

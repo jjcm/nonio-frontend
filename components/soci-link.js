@@ -18,6 +18,7 @@ export default class SociLink extends SociComponent {
     a {
       text-decoration: inherit;
       color: inherit;
+      display: contents;
     }
   `}
 

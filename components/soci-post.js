@@ -27,6 +27,15 @@ export default class SociPost extends SociComponent {
         opacity: 1;
       }
 
+
+      #external-link {
+        color: var(--text);
+      }
+
+      #external-link:visited {
+        color: var(--text-secondary);
+      }
+
       #media-container {
         --media-height: calc(100vh - 100px);
         --media-width: 100%;
@@ -167,51 +176,6 @@ export default class SociPost extends SociComponent {
         padding: 8px;
       }
 
-      :host([type="blog"]) slot[name="description"] {
-        transform: translateY(25px);
-      }
-
-      :host([type="blog"]) slot[name="description"] {
-        padding: 32px 0 64px;
-        border: 0;
-      }
-
-      :host([type="blog"]) #image {
-        display: none;
-      }
-
-      :host([type="blog"]) content {
-        padding-top: 60px;
-      }
-
-      :host([type="blog"]) title-container {
-        padding-left: 0;
-        margin-bottom: 8px;
-        opacity: 0;
-      }
-
-      :host([type="blog"]) title-container h1 {
-        font-size: 32px;
-        line-height: 40px;
-        margin-bottom: 8px;
-      }
-
-      :host([type="blog"]) soci-user[avatar-only] {
-        float: left;
-        position: static;
-        transform: translateY(2px);
-      }
-
-      :host([type="blog"]) meta-data {
-        padding-left: 60px;
-        margin-top: 8px;
-      }
-
-      :host([type="blog"]) slot[name="tags"] {
-        padding-left: 60px;
-        display: block;
-      }
-
       slot[name="tags"] {
         opacity: 0;
         transform: translateY(20px);
@@ -282,7 +246,7 @@ export default class SociPost extends SociComponent {
       <div id="details-container">
         <div id="details">
           <title-container>
-            <h1></h1>
+            <a id="external-link"><h1></h1></a>
             <soci-user avatar-only></soci-user>
             <meta-data>
               by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
@@ -297,7 +261,7 @@ export default class SociPost extends SociComponent {
   `}
 
   static get observedAttributes() {
-    return ['post-title', 'score', 'time', 'user', 'thumbnail', 'type', 'comments', 'url']
+    return ['post-title', 'score', 'time', 'user', 'thumbnail', 'comments', 'url', 'link']
   }
 
   connectedCallback(){
@@ -348,6 +312,7 @@ export default class SociPost extends SociComponent {
             this.renderDescription(post[key])
             break
           case 'type':
+            this.setAttribute(key, post[key])
             this.loadContent(post[key])
             break
           case 'tags':
@@ -356,6 +321,9 @@ export default class SociPost extends SociComponent {
             break
           case 'url':
             this.setMeta('url', post[key])
+            break
+          case 'link':
+            if(post[key] != '') this.select('#external-link').setAttribute('href', post[key])
             break
           case 'width':
             if(parseInt(post[key]) != 0) 
@@ -387,30 +355,16 @@ export default class SociPost extends SociComponent {
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
     document.head.querySelector(`meta[property="og:image"]`)?.remove()
     switch(type){
+      case 'link':
+        // test if thumbnail exists, if so populate the image
+        let test = document.createElement('img')
+        test.src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+        test.onload = () => {
+          this.setImage()
+        }
+        break
       case 'image':
-        this.setMeta('image', `${config.IMAGE_HOST}/${this.url}.webp`)
-        this.select('#media-container').innerHTML = `
-          <soci-image url="${this.url}"></soci-image>
-          <div id="image" class="media" style="display: none">
-            <picture>
-              <source>
-              <source>
-              <img/>
-            </picture>
-            <picture>
-              <source>
-              <source>
-              <img class="bg" />
-            </picture>
-          </div>
-        `
-        this.select('#media-container #image').addEventListener('click', this._zoomImage)
-        this.select('#image img').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
-        this.select('#image img.bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
-        setTimeout(()=>{
-          this.select('#image img').src = `${config.IMAGE_HOST}/${this.url}.webp`
-          this.select('#image source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
-        },1)
+        this.setImage()
         break
       case 'video':
         this.select('#media-container').innerHTML = `
@@ -425,6 +379,37 @@ export default class SociPost extends SociComponent {
         this.select('#media-container').innerHTML = `<soci-html-page src="${this.getAttribute('url')}"></soci-html-page>`
         break
     }
+  }
+
+  setImage(){
+    this.setMeta('image', `${config.IMAGE_HOST}/${this.url}.webp`)
+    this.select('#media-container').innerHTML = `
+      <soci-image url="${this.url}"></soci-image>
+      <div id="image" class="media" style="display: none">
+        <picture>
+          <source>
+          <source>
+          <img/>
+        </picture>
+        <picture>
+          <source>
+          <source>
+          <img class="bg" />
+        </picture>
+      </div>
+    `
+    this.select('#media-container #image').addEventListener('click', this._zoomImage)
+    let img = this.select('#image img')
+    img.src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+    img.onerror = () => {
+      console.log('image load error')
+    }
+
+    this.select('#image img.bg').src = `${config.THUMBNAIL_HOST}/${this.url}.webp`
+    setTimeout(()=>{
+      this.select('#image img').src = `${config.IMAGE_HOST}/${this.url}.webp`
+      this.select('#image source').srcset = `${config.IMAGE_HOST}/${this.url}.webp`
+    },1)
   }
 
   setMeta(property, value){

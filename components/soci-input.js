@@ -59,6 +59,10 @@ export default class SociInput extends HTMLElement {
     this.editor.setSelection(val)
   }
 
+  setText(val) {
+    this.editor.setText(val)
+  }
+
   renderOpsToHTML(val){
     if(val) this.value = val
     return this.querySelector('.ql-editor').innerHTML

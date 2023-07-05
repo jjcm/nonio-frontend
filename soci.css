@@ -1019,6 +1019,17 @@ button:focus {
   position: absolute;
   right: 2px;
 }
+#submit-container .preview {
+  overflow: hidden;
+  height: 0;
+  margin: 0 -20px;
+  padding: 0 20px;
+  transition: all 0.1s var(--soci-ease);
+}
+#submit-container .preview.active {
+  height: 168px;
+  margin-bottom: -8px;
+}
 #submit-container #submit-header,
 #submit-container #submit-actions {
   max-width: 920px;

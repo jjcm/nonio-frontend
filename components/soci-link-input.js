@@ -89,8 +89,9 @@ export default class SociLinkInput extends SociComponent {
     this._keyDownTimer = null
     this._error = null
 
-    this._input.addEventListener('keydown', this.checkUrlValidity.bind(this))
-    this._input.addEventListener('change', this._onChange.bind(this))
+    //this._input.addEventListener('keydown', this.checkUrlValidity.bind(this))
+    //this._input.addEventListener('change', this._onChange.bind(this))
+    this._input.addEventListener('input', this._onInput.bind(this))
     this.addEventListener('focus', this._onFocus.bind(this))
 
     this._internals.setValidity({customError: true}, 'Submissions require a url')
@@ -113,8 +114,9 @@ export default class SociLinkInput extends SociComponent {
     this._input.focus()
   }
 
-  _onChange(e) {
+  _onInput(e) {
     this._internals.setFormValue(this.value)
+    this.checkUrlValidity()
   }
 
   checkUrlValidity() {
@@ -145,7 +147,6 @@ export default class SociLinkInput extends SociComponent {
   testURL() {
     try {
       new URL(this.value)
-      console.log('valid url')
       return true
     }
     catch(e) {
@@ -160,26 +161,76 @@ export default class SociLinkInput extends SociComponent {
     this._internals.setValidity({customError: true}, message)
   }
 
+
   async checkURL(){
     this._statusIcon.glyph = 'spinner'
 
-    let url = this.value
-    let available = await fetch(`${config.API_HOST}/post/url-is-available/${url}`)
-    if(this._keyDownTimer || this._error) return 0
-    if(await available.json() === true){
+    let url = this._input.value
+    this.postData('/post/parse-external-url', {
+      url: url
+    }).then(res=>{
+      console.log(res)
+      this.fire('url-metadata', res)
       this._statusIcon.glyph = 'success'
       this.setAttribute('available', true)
-    }
-    else {
-      let message = ''
-      if(available.error){
-        message = available.error
-      }
-      else {
-        message = 'URL is not available. Please choose a better one for your lovely meme.'
-      }
-      this.setURLError(message)
-    }
 
+      if(res.image) {
+        this.fetchThumbnail()
+      }
+    })
+    return
+  }
+
+  fetchThumbnail() {
+    let data = new FormData()
+    let request = new XMLHttpRequest()
+
+    data.append('url', this.closest('form').querySelector('soci-url-input').value)
+    data.append('link', this._input.value)
+
+    request.addEventListener('load', e => {
+      console.log(request.response)
+      this.imageUrl = request.response
+    })
+
+    request.open('post', config.IMAGE_HOST + '/fetch-og-image') 
+    request.setRequestHeader('Authorization', 'Bearer ' + soci.token)
+    request.send(data)
+  }
+
+  async move(url){
+    return new Promise((resolve, reject) => {
+      if(this.fileUrl == url) resolve(url)
+
+      let data = new FormData()
+      let request = new XMLHttpRequest()
+
+      data.append('oldUrl', this.imageUrl)
+      data.append('url', url)
+
+      request.addEventListener('load', e => {
+        if(request.status >= 200 && request.status < 300) {
+          this.fileUrl = request.response
+          resolve(request.response)
+        }
+        else {
+          reject({
+            status: request.status,
+            statusText: request.statusText
+          })
+        }
+      })
+
+      request.addEventListener('error', e => {
+        reject({
+          status: e.status,
+          statusText: request.statusText
+        })
+      })
+
+      request.open('post', config.IMAGE_HOST + '/move')
+      request.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
+      request.send(data)
+    })
   }
 }

@@ -213,10 +213,6 @@ export default class SociTagGroup extends SociComponent {
 
   }
 
-  disconnectedCallback(){
-    console.log('disconnected')
-  }
-
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'score'){
       let score = this.querySelector('[slot="score"]')
@@ -392,7 +388,6 @@ export default class SociTagGroup extends SociComponent {
     dom.innerHTML = (!match ? createLi : '') + tagsLis
     this._currentlySelectedTag = dom.querySelector('[selected]')
     if(search.length) {
-      console.log('stayin open')
       if(!this._tagSearchOpen) this._openTagSearch()
     }
     else this._closeTagSearch()
