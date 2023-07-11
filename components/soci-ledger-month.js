@@ -23,12 +23,6 @@ export default class SociLedgerMonth extends SociComponent {
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
-      :host(:hover) {
-        background: var(--bg-secondary);
-      }
-      ::slotted(soci-ledger-li){
-        margin-top: 8px;
-      }
 
       #header {
         display: flex;
@@ -36,6 +30,9 @@ export default class SociLedgerMonth extends SociComponent {
         gap: 8px;
         white-space: nowrap;
         cursor: pointer;
+      }
+      #header:hover {
+        background: var(--bg-secondary);
       }
 
       #number,
@@ -58,13 +55,22 @@ export default class SociLedgerMonth extends SociComponent {
 
       #deposits {
         display: none;
+        padding-left: 32px;
+      }
+
+      :host(.open) #deposits {
+        display: block;
+      }
+
+      ::slotted(soci-ledger-li) {
+        border: 0;
       }
 
     `
   }
 
   html(){ return `
-    <div id="header">
+    <div id="header" @click=_toggleContributions>
       <soci-icon glyph="create"></soci-icon>
       <div id="description"></div>
       <div id="number"></div>
@@ -100,7 +106,7 @@ export default class SociLedgerMonth extends SociComponent {
     })
     this.setAttribute('total', '$' + totalDeposits.toFixed(2))
     this.setAttribute('number', data.length + ' contributions')
-    let date = new Date(data[0].timestamp) 
+    let date = new Date(data[0].createdAt) 
 
     this.setAttribute('description', date.toLocaleString('default', { month: 'long' }) + ' Contributions')
     this.renderLedgerLi = this.renderLedgerLi.bind(this)
@@ -125,5 +131,14 @@ export default class SociLedgerMonth extends SociComponent {
         <div slot="amount">${entry.amount}</div>
       </soci-ledger-li>
     `
+  }
+
+  _toggleContributions(){
+    if(this.classList.toggle('open')) {
+      this.select('#header soci-icon').setAttribute('glyph', 'remove')
+    }
+    else {
+      this.select('#header soci-icon').setAttribute('glyph', 'create')
+    }
   }
 }

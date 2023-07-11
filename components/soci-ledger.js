@@ -69,111 +69,21 @@ export default class SociLedger extends SociComponent {
   `}
 
 
-  get fakeData(){
-    let names = ['smith', 'johnson', 'ezra', 'gartner', 'blake', 'archbold', 'mroz', 'xue', 'miller', 'jones', 'williams', 'brown', 'davis', 'miller', 'wilson', 'moore', 'taylor', 'anderson', 'thomas', 'jackson', 'white', 'harris', 'martin', 'thompson', 'garcia', 'martinez', 'robinson', 'clark', 'rodriguez', 'lewis', 'lee', 'walker', 'hall', 'allen', 'young', 'hernandez', 'king', 'wright', 'lopez', 'hill', 'scott', 'green', 'adams', 'baker', 'gonzalez', 'nelson', 'carter', 'mitchell', 'perez', 'roberts', 'turner', 'phillips', 'campbell', 'parker', 'evans', 'edwards', 'collins', 'stewart', 'sanchez', 'morris', 'rogers', 'reed', 'cook', 'morgan', 'bell', 'murphy', 'bailey', 'rivera', 'cooper', 'richardson', 'cox', 'howard', 'ward', 'torres', 'peterson', 'gray', 'ramirez', 'james', 'watson', 'brooks', 'kelly', 'sanders', 'price', 'bennett', 'wood', 'barnes', 'ross', 'henderson', 'coleman', 'jenkins', 'perry', 'powell', 'long', 'patterson', 'hughes', 'flores', 'washington', 'butler', 'simmons', 'foster', 'gonzales', 'bryant', 'alexander', 'russell', 'griffin', 'diaz', 'hayes']
-    let letters = 'abcdefghijklmnopqrstuvwxyz'
-    let time = new Date().getTime()
-    let data = []
-    let amountModifier = 5000
-
-    for(let i = 0; i < 2000; i++){
-      let type = Math.random() > 0.005 ? 'deposit' : 'withdrawal'
-      time -= Math.floor(Math.random() * 60000000)
-      let entry = {}
-
-      amountModifier -= 2
-
-      if(type == 'deposit'){
-        entry = {
-          description: `${type} from ${letters[Math.floor(Math.random() * letters.length)]}${names[Math.floor(Math.random() * names.length)]}`,
-          type: type,
-          amount: Math.floor(Math.random() * amountModifier) / 1000,
-          timestamp: time
-        }
-      } else {
-        entry = {
-          description: `withdrawal to Stripe`,
-          type: type,
-          amount: (Math.ceil(Math.random() * 10) * 10) + '.00',
-          timestamp: time
-        }
-      }
-
-      data.push(entry)
-    }
-    console.log(data)
-    return data
-  }
-
-  get perfData(){
-    let names = ['smith', 'johnson', 'ezra', 'gartner', 'blake', 'archbold', 'mroz', 'xue', 'miller', 'jones', 'williams', 'brown', 'davis', 'miller', 'wilson', 'moore', 'taylor', 'anderson', 'thomas', 'jackson', 'white', 'harris', 'martin', 'thompson', 'garcia', 'martinez', 'robinson', 'clark', 'rodriguez', 'lewis', 'lee', 'walker', 'hall', 'allen', 'young', 'hernandez', 'king', 'wright', 'lopez', 'hill', 'scott', 'green', 'adams', 'baker', 'gonzalez', 'nelson', 'carter', 'mitchell', 'perez', 'roberts', 'turner', 'phillips', 'campbell', 'parker', 'evans', 'edwards', 'collins', 'stewart', 'sanchez', 'morris', 'rogers', 'reed', 'cook', 'morgan', 'bell', 'murphy', 'bailey', 'rivera', 'cooper', 'richardson', 'cox', 'howard', 'ward', 'torres', 'peterson', 'gray', 'ramirez', 'james', 'watson', 'brooks', 'kelly', 'sanders', 'price', 'bennett', 'wood', 'barnes', 'ross', 'henderson', 'coleman', 'jenkins', 'perry', 'powell', 'long', 'patterson', 'hughes', 'flores', 'washington', 'butler', 'simmons', 'foster', 'gonzales', 'bryant', 'alexander', 'russell', 'griffin', 'diaz', 'hayes']
-    let letters = 'abcdefghijklmnopqrstuvwxyz'
-    let time = new Date().getTime()
-    let data = []
-    for(let i = 0; i < 100; i++){
-      let type = 'withdrawal'
-      time -= Math.floor(Math.random() * 60000000)
-      let entry = {}
-      entry = {
-        description: `withdrawal to Stripe`,
-        type: type,
-        amount: (Math.ceil(Math.random() * 10) * 10) + '.00',
-        timestamp: time
-      }
-
-      data.push(entry)
-    }
-    console.log(data)
-    return data
-  }
-
-  static get observedAttributes() {
-    return ['data', 'timespan', 'filter']
-  }
-
   async connectedCallback(){
-    performance.mark('ledger-start')
-    //this.createEntries(this.perfData)
-    let perf = this.fakeData
-    let rendered = await this.createEntries(perf)
-    performance.mark('ledger-end')
-    performance.measure('ledger render time', 'ledger-start', 'ledger-end')
-    console.log(performance.getEntriesByName('ledger render time')[0].duration)
+    let ledgerData = await this.getData('/user/get-financial-ledger', this.authToken)
+    await this.createEntries(ledgerData)
     this.renderGraph()
-
-    this.getData('/user/get-financial-ledger', this.authToken).then(data => {
-      console.log(data)
-    })
   }
 
   disconnectedCallback(){
     this.innerHTML = ''
   }
 
-  async attributeChangedCallback(name, oldValue, newValue){
-    switch(name){
-      case 'data':
-        this.toggleAttribute('loaded', false)
-        let data = await this.getData(newValue, this.authToken)
-        if(data.posts) {
-          let rendered = await this.createEntries(data.posts)
-          performance.mark('ledger-end')
-          performance.measure('ledger render time', 'ledger-start', 'ledger-end')
-          console.log(performance.getEntriesByName('ledger render time')[0].duration)
-        }
-        this.toggleAttribute('loaded', true)
-        break
-      case 'filter':
-        
-        break
-    }
-  }
-
   async createEntries(data){
     let monthsDeposits = []
     let currentMonth = new Date().getMonth()
     data.forEach(entry => {
-      let entryMonth = new Date(entry.timestamp).getMonth()
+      let entryMonth = new Date(entry.createdAt).getMonth()
       if(entry.type === 'withdrawal') {
         this.innerHTML += this.renderLedgerLi(entry)
       }
@@ -182,41 +92,28 @@ export default class SociLedger extends SociComponent {
           monthsDeposits.push(entry)
         } else {
           // append the month's deposits
-          let month = document.createElement('soci-ledger-month')
-          month.createEntries(monthsDeposits)
-          this.appendChild(month)
+          this.createMonth(monthsDeposits)
           // start a new month
           currentMonth = entryMonth
           monthsDeposits = [entry]
         }
       }
     })
-    /*
-    this.renderLedgerLi = this.renderLedgerLi.bind(this)
-    let numberToRender = Math.ceil(window.innerHeight / 40) // the height of a post li
-    // render only the amount visible on the screen first, and animate them in
-    this.innerHTML = data.splice(0, numberToRender).map(this.renderLedgerLi).join('')
-    // then once the main batch is done, load in the rest. 
-    setTimeout(()=>{
-      let tempDom = document.createElement('div')
-      tempDom.innerHTML = data.map(this.renderLedgerLi).join('')
-      Array.from(tempDom.children).forEach(child=>{
-        this.appendChild(child)
-      })
-      performance.mark('ledger-end')
-      performance.measure('ledger render time', 'ledger-start', 'ledger-end')
-      console.log(performance.getEntriesByName('ledger render time')[0].duration)
-      console.log('creation over')
-    }, 1)
-    */
+    this.createMonth(monthsDeposits)
     setTimeout(()=>{
       this.toggleAttribute('loaded', true)
     }, 1)
     return true
   }
 
+  createMonth(monthsDeposits){
+    let month = document.createElement('soci-ledger-month')
+    month.createEntries(monthsDeposits)
+    this.appendChild(month)
+  }
+
   renderLedgerLi(entry){
-    let date = new Date(entry.timestamp).toLocaleString('default', {
+    let date = new Date(entry.createdAt).toLocaleString('default', {
       month: 'numeric',
       day: 'numeric'
     })
@@ -251,6 +148,5 @@ export default class SociLedger extends SociComponent {
     })
 
     this.select('#line').setAttribute('points', polyString)
-    console.log(polyString)
   }
 }

@@ -13,11 +13,24 @@ export default class SociLedgerLi extends SociComponent {
         gap: 8px;
         width: 100%;
         box-sizing: border-box;
-        border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         line-height: 24px;
         margin-bottom: 4px;
       }
+
+      :host([type="withdrawal"]) {
+        border: 1px solid var(--bg-secondary);
+      }
+
+      soci-icon {
+        display: none;
+      }
+
+      :host([type="withdrawal"]) soci-icon {
+        display: block;
+        transform: scale(0.8);
+      }
+
 
       :host([type="withdrawal"]) slot[name="amount"] {
         color: var(--text-danger);
@@ -28,8 +41,11 @@ export default class SociLedgerLi extends SociComponent {
       }
 
       slot[name="description"] {
-        font-weight: bold;
         white-space: nowrap;
+      }
+
+      :host([type="withdrawal"]) slot[name="description"] {
+        font-weight: bold;
       }
 
       slot[name="date"] {
@@ -53,7 +69,7 @@ export default class SociLedgerLi extends SociComponent {
   }
 
   html(){ return `
-    <soci-icon glyph="create"></soci-icon>
+    <soci-icon glyph="downvote"></soci-icon>
     <slot name="description"></slot>
     <slot name="date"></slot>
     <slot name="amount"></slot>
