@@ -45,6 +45,8 @@ html(lang="en")
       include pages/admin/forgot-password.pug
     soci-route#admin-change-forgotten-password(path="/admin/change-forgotten-password").admin-page
       include pages/admin/change-forgotten-password.pug
+    soci-route#admin-mod-tools(path="/admin/mod-tools").admin-page
+      include pages/admin/mod-tools.pug
     soci-route#user(test="both" path="^/user/" fresh)
       include pages/user.pug
     soci-route#submit(path="/submit")

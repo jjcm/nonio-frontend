@@ -143,12 +143,19 @@ export default class SociContributionSlider extends SociComponent {
   }
 
   get value(){
-    let rect = this.getBoundingClientRect()
-    let val = (this._dragOffset - 58) / ((rect.width - 58) / 9)
-    return Math.floor(val + 2) || DEFAULT_SUBSCRIPTION_VALUE
+    return this._value
   }
 
   set value(val){
+    if(val < 2) val = 2
+    if(val > 10) val = 10
+    this._value = val
+  }
+
+  _computeDraggedValue(){
+    let rect = this.getBoundingClientRect()
+    let val = (this._dragOffset - 58) / ((rect.width - 58) / 9)
+    return Math.floor(val + 2) || DEFAULT_SUBSCRIPTION_VALUE
   }
 
   _relativeXPos(e){
@@ -179,6 +186,7 @@ export default class SociContributionSlider extends SociComponent {
     document.body.setAttribute('dragging', '')
     this.state.mouseClientX = this._relativeXPos(e)
     this._contributionHandle.style.left = this._dragOffset + 'px'
+    this.value = this._computeDraggedValue()
     this._contributionAmount.innerHTML = '$' + (this.value - 1)
     this._totalAmount.innerHTML = `$${this.value}<span>/month</span>`
     let message = ''

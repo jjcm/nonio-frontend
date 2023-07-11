@@ -140,6 +140,10 @@ export default class SociLedger extends SociComponent {
     performance.measure('ledger render time', 'ledger-start', 'ledger-end')
     console.log(performance.getEntriesByName('ledger render time')[0].duration)
     this.renderGraph()
+
+    this.getData('/user/get-financial-ledger', this.authToken).then(data => {
+      console.log(data)
+    })
   }
 
   disconnectedCallback(){
