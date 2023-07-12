@@ -164,6 +164,20 @@
       </div>
       <script>lazyload('/pages/admin/change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
+    <soci-route class="admin-page" id="admin-mod-tools" path="/admin/mod-tools">
+      <div class="container" id="admin-mod-tools">
+        <div class="header" load-order="primary">
+          <h1>Moderation Tools</h1>
+        </div>
+        <div class="tool" load-order="secondary">
+          <h2>Upcoming payouts</h2>
+          <div class="upcoming-payouts"></div>
+          <h2>Past payouts</h2>
+          <div class="past-payouts"></div>
+        </div>
+        <lazyload /pages/admin/mod-tools.js="/pages/admin/mod-tools.js" document.currentScript.closest('soci-route')="document.currentScript.closest('soci-route')"></lazyload>
+      </div>
+    </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh="fresh">
       <div class="sidebar" load-order="primary">
         <div class="hero">
@@ -325,7 +339,7 @@
         </div>
         <div class="ledger" load-order="tertiary">
           <hr/>
-          <h2>TODO - everything below this is fake</h2>
+          <h2>Beta - everything below is still in development, but should be accurate</h2>
           <soci-ledger></soci-ledger>
         </div>
         <soci-modal title="Manual Withdrawal" id="withdrawal-modal">
