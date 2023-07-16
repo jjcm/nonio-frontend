@@ -296,13 +296,8 @@ export default class SociSidebar extends SociComponent {
           left: 0 !important;
         }
 
-        #footer links {
-          display: none;
-        }
-
         #footer {
-          position: absolute;
-          bottom: -8px;
+          display: none;
         }
       }
     `
