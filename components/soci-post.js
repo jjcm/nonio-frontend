@@ -19,7 +19,6 @@ export default class SociPost extends SociComponent {
         width: 100%;
         height: 100%;
         overflow-x: hidden;
-        min-width: 420px;
         opacity: 0;
       }
 
