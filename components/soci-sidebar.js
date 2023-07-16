@@ -11,7 +11,7 @@ export default class SociSidebar extends SociComponent {
         width: 280px;
         min-width: 280px;
         display: block;
-        height: 100vh;
+        height: 100dvh;
         overflow: auto;
         overflow-x: hidden;
         position: fixed;

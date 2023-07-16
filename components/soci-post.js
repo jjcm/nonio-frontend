@@ -17,7 +17,7 @@ export default class SociPost extends SociComponent {
         z-index: 10;
         transition: opacity 0.1s var(--soci-ease);
         width: 100%;
-        height: 100%;
+        height: 100dvh;
         overflow-x: hidden;
         opacity: 0;
       }
