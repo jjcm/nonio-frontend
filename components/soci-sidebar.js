@@ -290,10 +290,14 @@ export default class SociSidebar extends SociComponent {
       @media (max-width: 768px) {
         :host {
           width: 100%;
+          display: none;
         }
         :host([overlay]) {
           background: var(--bg);
           left: 0 !important;
+        }
+        panel {
+          height: 100%;
         }
 
         #footer {
