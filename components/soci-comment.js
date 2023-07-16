@@ -251,6 +251,13 @@ export default class SociComment extends SociComponent {
         opacity: 0;
         transform: translateY(-8px);
       }
+
+      @media (max-width: 768px) {
+        #actions {
+          font-size: 13px;
+          line-height: 24px;
+        }
+      }
     `
   }
 

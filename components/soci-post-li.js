@@ -241,10 +241,25 @@ export default class SociPostLi extends SociComponent {
           flex-direction: column;
           padding-top: 28px;
         }
+        :host([expanded]) {
+          height: auto;
+        }
+        :host([expanded]) img {
+          max-width: 100%;
+          margin-right: 0;
+        }
+        :host([expanded]) #details,
+        :host([expanded]) #title {
+          animation: none;
+          opacity: 1;
+        }
         img {
           width: 100%;
           height: 200px;
           margin-top: 4px;
+        }
+        #preview img {
+          transform: translateY(16px);
         }
         #time,
         #comments {
@@ -395,6 +410,7 @@ export default class SociPostLi extends SociComponent {
     let thumbnail = this.select('#thumbnail img')
     let preview = this.select('#preview img')
     if(this.hasAttribute('expanded')){
+      //TODO - this only works for desktop. Mobile this logic is a bit funky
       thumbnail.style.height = preview.style.height = '376px'
       thumbnail.style.width = preview.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
       let description = document.createElement('soci-quill-view')
