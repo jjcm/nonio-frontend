@@ -64,8 +64,8 @@ export default class SociLedgerMonth extends SociComponent {
 
       ::slotted(soci-ledger-li) {
         border: 0;
+        animation: load-down 0.15s var(--soci-ease);
       }
-
     `
   }
 

@@ -694,6 +694,18 @@ soci-route:not([active]):not([activating])
   }
 }
 
+@keyframes load-down {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

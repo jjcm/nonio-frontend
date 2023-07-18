@@ -1264,6 +1264,46 @@ hr {
     opacity: 1;
   }
 }
+@-moz-keyframes load-down {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes load-down {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@-o-keyframes load-down {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+@keyframes load-down {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
 @-moz-keyframes fade-in {
   from {
     opacity: 0;
