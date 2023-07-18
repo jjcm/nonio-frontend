@@ -71,8 +71,9 @@ export default class SociLedger extends SociComponent {
 
   async connectedCallback(){
     let ledgerData = await this.getData('/user/get-financial-ledger', this.authToken)
+    ledgerData = this._dedupeEntries(ledgerData)
     await this.createEntries(ledgerData)
-    this.renderGraph()
+    this.renderGraph(ledgerData)
   }
 
   disconnectedCallback(){
@@ -106,24 +107,28 @@ export default class SociLedger extends SociComponent {
     return true
   }
 
-  createMonth(monthsDeposits){
-    let dedupedMonthsDeposits = []
+  _dedupeEntries(entries){
+    let dedupedDeposits = []
     let prevEntry = null
-    monthsDeposits.forEach(entry => {
+    entries.forEach(entry => {
       if(prevEntry && prevEntry.description === entry.description){
         prevEntry.amount = parseFloat(prevEntry.amount) + parseFloat(entry.amount)
         prevEntry.count++
       } else {
-        dedupedMonthsDeposits.push(entry)
+        dedupedDeposits.push(entry)
         prevEntry = entry
         prevEntry.count = 1
       }
     })
-    dedupedMonthsDeposits.map(entry => {
+    dedupedDeposits.map(entry => {
       entry.description = `${entry.count} ${entry.description.replace('deposit', `vote${entry.count > 1 ? 's' : ''}`)}`
     })
+    return dedupedDeposits
+  }
+
+  createMonth(monthsDeposits){
     let month = document.createElement('soci-ledger-month')
-    month.createEntries(dedupedMonthsDeposits)
+    month.createEntries(monthsDeposits)
     this.appendChild(month)
   }
 
@@ -141,25 +146,26 @@ export default class SociLedger extends SociComponent {
     `
   }
 
-  renderGraph(){
-    let amounts = []
-    let maxAmount = 0
-    Array.from(this.querySelectorAll('soci-ledger-month')).forEach(month => {
-      let amount = parseFloat(month.getAttribute('total').substring(1))
-      maxAmount = Math.max(maxAmount, amount)
-      amounts.push(amount)
+  renderGraph(ledger){
+    if(ledger.length < 2) return
+    let startDate = new Date(ledger[0].createdAt)
+    let endDate = new Date(ledger[ledger.length - 1].createdAt)
+    let timeBetween = endDate.getTime() - startDate.getTime()
+
+    let sum = 0
+    ledger.forEach(entry => {
+      sum += entry.amount
     })
 
-    amounts.reverse()
     let polyString = ''
-    let distance = 1000 / (amounts.length - 1)
-    let offset = 0
-    amounts.forEach((a, i) => {
-      let height = 190 - (a / maxAmount * 170)
+    let amount = 0
+    ledger.forEach((entry, i) => {
+      let time = new Date(entry.createdAt).getTime() - startDate.getTime()
+      amount += entry.amount
+      let height = 190 - (amount / sum * 170)
       if(i == 0) polyString += `-10 ${height} `
-      polyString += `${offset} ${height} `
-      if(i == amounts.length - 1) polyString += ` 1010 ${height} 1010 210 -10 210`
-      offset += distance
+      polyString += `${1000 * time / timeBetween} ${height} `
+      if(i == ledger.length - 1) polyString += ` 1010 ${height} 1010 210 -10 210`
     })
 
     this.select('#line').setAttribute('points', polyString)
