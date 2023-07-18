@@ -62,7 +62,7 @@ export default class SociLedger extends SociComponent {
   html(){ return `
     <h3>Profit Over Time</h3>
     <svg id="graph-svg" viewBox="0 0 1000 200" preserveAspectRatio="none">
-      <polyline id="line" fill="transparent" stroke-width="2" points="0,0 1000,0" />
+      <polyline vector-effect="non-scaling-stroke" id="line" fill="transparent" stroke-width="2" points="0,0 1000,0" />
     </svg>
     <h3>Recent Transactions</h3>
     <slot></slot>
@@ -107,8 +107,23 @@ export default class SociLedger extends SociComponent {
   }
 
   createMonth(monthsDeposits){
+    let dedupedMonthsDeposits = []
+    let prevEntry = null
+    monthsDeposits.forEach(entry => {
+      if(prevEntry && prevEntry.description === entry.description){
+        prevEntry.amount = parseFloat(prevEntry.amount) + parseFloat(entry.amount)
+        prevEntry.count++
+      } else {
+        dedupedMonthsDeposits.push(entry)
+        prevEntry = entry
+        prevEntry.count = 1
+      }
+    })
+    dedupedMonthsDeposits.map(entry => {
+      entry.description = `${entry.count} ${entry.description.replace('deposit', `vote${entry.count > 1 ? 's' : ''}`)}`
+    })
     let month = document.createElement('soci-ledger-month')
-    month.createEntries(monthsDeposits)
+    month.createEntries(dedupedMonthsDeposits)
     this.appendChild(month)
   }
 
