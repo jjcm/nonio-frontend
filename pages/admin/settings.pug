@@ -1,5 +1,8 @@
 #admin-settings-container.container
   script(src="/pages/admin/settings.js")
+  soci-modal(title="Image too small" id="avatar-size-modal")
+    .modal-body
+      p Avatars must be a minimum of 240px on both sides.
   .blocks
     .block.avatar(load-order="primary")
       h2 Avatar
