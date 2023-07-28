@@ -517,7 +517,6 @@ export default class SociSidebar extends SociComponent {
     this.querySelector('[slot="login"] soci-password')?.checkValidity()
     //todo - remove this override later
     let loginData = soci.getJSONFromForm(form)
-    console.log(loginData)
     if (loginData.email == 'hackernews') { loginData.email = 'j+hn@jjcm.org'}
     else {
 
