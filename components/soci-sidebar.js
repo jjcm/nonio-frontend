@@ -163,7 +163,7 @@ export default class SociSidebar extends SociComponent {
 
       panel {
         position: absolute;
-        height: calc(100% - 88px);
+        height: calc(100% - 97px);
         overflow-y: auto;
         overflow-x: hidden;
         display: block;
