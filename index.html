@@ -427,6 +427,11 @@
     <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
         <script src="/pages/admin/settings.js"></script>
+        <soci-modal title="Image too small" id="avatar-size-modal">
+          <div class="modal-body">
+            <p>Avatars must be a minimum of 240px on both sides.</p>
+          </div>
+        </soci-modal>
         <div class="blocks">
           <div class="block avatar" load-order="primary">
             <h2>Avatar</h2>
