@@ -125,6 +125,10 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   _onKeyDown() {
+    if (this._lastInputValue === this._input.value) return
+
+    this._lastInputValue = this._input.value
+
     this.removeAttribute('available')
     this._statusIcon.glyph = ''
     clearTimeout(this._keyDownTimer)
@@ -135,7 +139,7 @@ export default class SociUsernameInput extends SociComponent {
       }
       else if(this.value == '') {
         this._error = true
-        this.setURLError("Username kinda necessary")
+        this.setURLError("Username is kinda necessary")
       }
       else {
         this._error = false
@@ -150,6 +154,13 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   setUsernameError(message) {
+    this._statusIcon.glyph = 'error'
+    this.setAttribute('available', false)
+    this.select('error').innerHTML = message
+    this._internals.setValidity({customError: true}, message)
+  }
+
+  setURLError(message) {
     this._statusIcon.glyph = 'error'
     this.setAttribute('available', false)
     this.select('error').innerHTML = message
@@ -173,7 +184,7 @@ export default class SociUsernameInput extends SociComponent {
       }
       else {
         let messages = [
-          'Choose a better one for your dumb meme account.',
+          'Choose a better one for your lovely meme account.',
           'Choose a better one to post your Bob Ross paintings.',
           'It was probably a bad one anyway.',
           'Maybe try "juggaloboi95" instead?',
