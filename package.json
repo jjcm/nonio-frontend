@@ -23,5 +23,8 @@
     "prerender-node": "^3.2.5",
     "pug": "^3.0.1",
     "stylus": "^0.54.8"
+  },
+  "devDependencies": {
+    "pug-cli": "^1.0.0-alpha6"
   }
 }
