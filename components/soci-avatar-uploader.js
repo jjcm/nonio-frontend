@@ -253,6 +253,7 @@ export default class SociFileDrop extends SociComponent {
     reader.addEventListener('loadend', ()=>{
       if(Math.min(preview.naturalWidth, preview.naturalHeight) < this._MINIMUMSIZE){
         this.log("File too small. Avatars must be a minimum of 240px on both sides.", "error")
+        document.querySelector("#avatar-size-modal")?.activate()
         return 0
       }
       this.toggleAttribute('cropping', true)
