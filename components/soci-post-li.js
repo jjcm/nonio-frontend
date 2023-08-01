@@ -131,6 +131,7 @@ export default class SociPostLi extends SociComponent {
 
       slot[name="tags"] {
         display: inline-block;
+        overflow: hidden;
       }
 
       :host([score="0"]) #score {

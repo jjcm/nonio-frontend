@@ -14,7 +14,7 @@ export default class SociButton extends SociComponent {
         background: var(--bg-brand);
         height: 20px;
         min-height: 20px;
-        line-height: 18px;
+        line-height: 20px;
         color: var(--text-inverse);
         padding: 0 8px;
         font-size: 12px;

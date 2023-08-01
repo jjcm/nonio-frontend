@@ -6,11 +6,9 @@ export default class SociTagGroup extends SociComponent {
   }
 
   css(){ return `
-    @import "/soci-tokens.styl";
     :host {
       --height: 20px;
       --tag-font-size: 10px;
-      --bg-secondar: var(--bg-secondary);
       display: inline-flex;
       line-height: var(--height);
       align-items: center;
