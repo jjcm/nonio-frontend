@@ -52,7 +52,7 @@ export default class SociCommentList extends SociComponent {
     let comments = await this.getData(path, this.authToken)
     comments = comments.comments
 
-    comments.forEach(comment => {
+    comments?.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')
       newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.edited, comment.post, comment.post_title)
       this.appendChild(newComment)
@@ -63,7 +63,7 @@ export default class SociCommentList extends SociComponent {
     let votes = await this.getData(path.replace(/^\/comments/, '/comment-votes'), this.authToken)
     votes = votes.commentVotes
 
-    votes.forEach(vote => {
+    votes?.forEach(vote => {
       let comment = this.querySelector(`soci-comment[comment-id="${vote.comment_id}`)
       comment.showVote(vote.upvote)
     })

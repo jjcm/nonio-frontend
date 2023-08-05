@@ -177,6 +177,56 @@
         <lazyload /pages/admin/mod-tools.js document.currentScript.closest('soci-route')></lazyload>
       </div>
     </soci-route>
+    <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
+      <div class="container" id="admin-settings-container">
+        <script src="/pages/admin/settings.js"></script>
+        <soci-modal title="Image too small" id="avatar-size-modal">
+          <div class="modal-body">
+            <p>Avatars must be a minimum of 240px on both sides.</p>
+          </div>
+        </soci-modal>
+        <div class="blocks">
+          <div class="block avatar" load-order="primary">
+            <h2>Avatar</h2>
+            <soci-avatar-uploader></soci-avatar-uploader>
+          </div>
+          <div class="block description" load-order="secondary">
+            <h2>Description</h2>
+            <soci-input placeholder="Enter description"></soci-input>
+            <div class="actions">
+              <soci-button async>submit</soci-button>
+              <soci-button subtle>cancel</soci-button>
+            </div>
+          </div>
+          <div class="block password" load-order="tertiary">
+            <h2>Change Password</h2>
+            <form>
+              <soci-password name="oldPassword" placeholder="Old password"></soci-password>
+              <soci-password name="newPassword" placeholder="New password"></soci-password>
+              <soci-password name="confirmPassword" match="newPassword" placeholder="Confirm new password"></soci-password>
+              <div class="actions">
+                <soci-button async>submit</soci-button>
+                <soci-button subtle>cancel</soci-button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </soci-route>
+    <soci-route id="notifications" path="/notifications">
+      <div class="content">
+        <header load-order="primary">
+          <div class="types">
+            <div class="type" selected>Unread</div>
+            <div class="type">All notifications</div>
+          </div>
+        </header>
+        <div class="inner-content" load-order="secondary">
+          <soci-user-comment-list data="/notifications"></soci-user-comment-list>
+        </div>
+      </div>
+      <script src="/pages/notifications.js"></script>
+    </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh>
       <div class="sidebar" load-order="primary">
         <div class="hero">
@@ -421,42 +471,6 @@
             <li>Twiter: <a href="https://twitter.com/pwnies">@pwnies</a></li>
             <li>Nonio: <soci-link href="/user/jjcm"><a>jjcm</a></soci-link></li>
           </ul>
-        </div>
-      </div>
-    </soci-route>
-    <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
-      <div class="container" id="admin-settings-container">
-        <script src="/pages/admin/settings.js"></script>
-        <soci-modal title="Image too small" id="avatar-size-modal">
-          <div class="modal-body">
-            <p>Avatars must be a minimum of 240px on both sides.</p>
-          </div>
-        </soci-modal>
-        <div class="blocks">
-          <div class="block avatar" load-order="primary">
-            <h2>Avatar</h2>
-            <soci-avatar-uploader></soci-avatar-uploader>
-          </div>
-          <div class="block description" load-order="secondary">
-            <h2>Description</h2>
-            <soci-input placeholder="Enter description"></soci-input>
-            <div class="actions">
-              <soci-button async>submit</soci-button>
-              <soci-button subtle>cancel</soci-button>
-            </div>
-          </div>
-          <div class="block password" load-order="tertiary">
-            <h2>Change Password</h2>
-            <form>
-              <soci-password name="oldPassword" placeholder="Old password"></soci-password>
-              <soci-password name="newPassword" placeholder="New password"></soci-password>
-              <soci-password name="confirmPassword" match="newPassword" placeholder="Confirm new password"></soci-password>
-              <div class="actions">
-                <soci-button async>submit</soci-button>
-                <soci-button subtle>cancel</soci-button>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
     </soci-route>

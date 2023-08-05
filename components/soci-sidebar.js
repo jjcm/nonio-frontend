@@ -116,11 +116,11 @@ export default class SociSidebar extends SociComponent {
         overflow: hidden;
       }
 
-      #messages {
+      #notifications {
         color: var(--text-danger);
       }
 
-      #messages:hover {
+      #notifications:hover {
         color: var(--text-danger-hover);
       }
 
@@ -330,8 +330,8 @@ export default class SociSidebar extends SociComponent {
         <section id="user">
           <soci-user self></soci-user>
           <div id="user-actions">
-            <soci-link href="/messages" fresh>
-              <soci-button id="messages" subtle><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 16C16.7761 16 17 15.7761 17 15.5V8.5C17 8.22386 16.7761 8 16.5 8H7.5C7.22494 8 7.00175 8.22211 7.00001 8.49677C7 8.49784 7 8.49892 7 8.5L7 9.5C7 9.49981 7 9.50019 7 9.5V15.5C7 15.7761 7.22386 16 7.5 16H16.5ZM9 10L11.2929 12.2929C11.6834 12.6834 12.3166 12.6834 12.7071 12.2929L15 10V14H9V10Z" fill="currentColor"/></svg><span>2</span></soci-button>
+            <soci-link href="/notifications" fresh>
+              <soci-button id="notifications" subtle><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 16C16.7761 16 17 15.7761 17 15.5V8.5C17 8.22386 16.7761 8 16.5 8H7.5C7.22494 8 7.00175 8.22211 7.00001 8.49677C7 8.49784 7 8.49892 7 8.5L7 9.5C7 9.49981 7 9.50019 7 9.5V15.5C7 15.7761 7.22386 16 7.5 16H16.5ZM9 10L11.2929 12.2929C11.6834 12.6834 12.3166 12.6834 12.7071 12.2929L15 10V14H9V10Z" fill="currentColor"/></svg><span>2</span></soci-button>
             </soci-link>
             <soci-link href="/submit" fresh>
               <soci-button id="submit" subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>

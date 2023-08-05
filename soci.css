@@ -206,7 +206,8 @@
     --bg-danger: var(--r2);
     --bg-danger-hover: var(--r3);
     --bg-danger-secondary: rgba(196,8,8,0.188);
-    --text-danger: var(--r3);
+    --text-danger: var(--r2);
+    --text-danger-hover: var(--r3);
     --bg-warning: var(--y2);
     --bg-warning-hover: var(--y1);
     --bg-warning-secondary: rgba(235,235,96,0.188);
@@ -245,6 +246,7 @@
     --bg-danger-hover: var(--r0);
     --bg-danger-secondary: rgba(196,8,8,0.188);
     --text-danger: var(--r1);
+    --text-danger-hover: var(--r0);
     --bg-warning: var(--y2);
     --bg-warning-hover: var(--y1);
     --bg-warning-secondary: rgba(235,235,96,0.188);
@@ -514,8 +516,6 @@ button:focus {
   z-index: 11;
   pointer-events: none;
   transition: all 0.2s var(--soci-ease);
-  opacity: 0;
-  animation: fade-in 0.2s linear 0.2s forwards;
 }
 #home {
   transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear;
@@ -697,17 +697,19 @@ button:focus {
   margin-bottom: 8px;
   display: block;
 }
-#user .content {
+#user .content,
+#notifications .content {
   width: 100%;
   background: var(--bg-bold);
   height: 100dvh;
   overflow: hidden;
 }
-#user .content header {
+#user .content header,
+#notifications .content header {
   background-color: var(--bg);
   position: sticky;
   top: 0;
-  height: 41px;
+  height: 40px;
   width: 100%;
   z-index: 2;
   display: block;
@@ -720,11 +722,15 @@ button:focus {
   user-select: none;
 }
 #user .content header .types,
-#user .content header .sorts {
+#notifications .content header .types,
+#user .content header .sorts,
+#notifications .content header .sorts {
   display: flex;
 }
 #user .content header .type,
-#user .content header .sort {
+#notifications .content header .type,
+#user .content header .sort,
+#notifications .content header .sort {
   text-transform: capitalize;
   position: relative;
   padding: 6px 12px;
@@ -737,16 +743,22 @@ button:focus {
   color: var(--text-secondary);
 }
 #user .content header .type:hover,
-#user .content header .sort:hover {
+#notifications .content header .type:hover,
+#user .content header .sort:hover,
+#notifications .content header .sort:hover {
   color: var(--text-secondary-hover);
 }
 #user .content header .type[selected],
-#user .content header .sort[selected] {
+#notifications .content header .type[selected],
+#user .content header .sort[selected],
+#notifications .content header .sort[selected] {
   opacity: 1;
   color: var(--text-brand-bold);
 }
 #user .content header .type[selected]::after,
-#user .content header .sort[selected]::after {
+#notifications .content header .type[selected]::after,
+#user .content header .sort[selected]::after,
+#notifications .content header .sort[selected]::after {
   content: '';
   display: block;
   position: absolute;
@@ -758,7 +770,8 @@ button:focus {
   background: var(--bg);
   box-shadow: 0 1px 1px var(--shadow);
 }
-#user .content .inner-content {
+#user .content .inner-content,
+#notifications .content .inner-content {
   height: 100%;
   overflow-y: auto;
 }

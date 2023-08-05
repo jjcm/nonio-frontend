@@ -47,6 +47,10 @@ html(lang="en")
       include pages/admin/change-forgotten-password.pug
     soci-route#admin-mod-tools(path="/admin/mod-tools").admin-page
       include pages/admin/mod-tools.pug
+    soci-route#admin-settings(path="/admin/settings").admin-page
+      include pages/admin/settings.pug
+    soci-route#notifications(path="/notifications")
+      include pages/notifications.pug
     soci-route#user(test="both" path="^/user/" fresh)
       include pages/user.pug
     soci-route#submit(path="/submit")
@@ -59,8 +63,6 @@ html(lang="en")
       include pages/about/privacy-policy.pug
     soci-route#contact(path="/about/contact")
       include pages/about/contact.pug
-    soci-route#admin-settings(path="/admin/settings").admin-page
-      include pages/admin/settings.pug
     soci-route#post(default fresh)
       include pages/post.pug
 

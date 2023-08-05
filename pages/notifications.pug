@@ -1,0 +1,10 @@
+.content
+  header(load-order="primary")
+    .types
+      .type(selected) Unread
+      .type All notifications
+
+  .inner-content(load-order="secondary")
+    soci-user-comment-list(data="/notifications")
+
+script(src="/pages/notifications.js")
