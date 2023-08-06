@@ -50,7 +50,9 @@ export default class SociCommentList extends SociComponent {
   async renderComments(path){
     this.toggleAttribute('loaded', false)
     let comments = await this.getData(path, this.authToken)
-    comments = comments.comments
+    console.log(comments)
+    comments = comments.comments || comments.notifications
+    console.log(comments)
 
     comments?.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')

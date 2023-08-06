@@ -35,6 +35,7 @@ export default class SociUser extends SociComponent {
         font-size: var(--font-size);
         font-weight: var(--font-weight);
         line-height: var(--line-height);
+        height: var(--line-height);
         letter-spacing: -0.16px;
         margin-left: var(--spacing);
         user-select: none;
@@ -57,7 +58,7 @@ export default class SociUser extends SociComponent {
         --avatar-size: 20px;
         --font-size: 12px;
         --font-weight: normal;
-        --line-height: 18px;
+        --line-height: 20px;
         --spacing: 6px;
       }
 

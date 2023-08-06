@@ -518,6 +518,8 @@ export default class SociComment extends SociComponent {
         comment = comment.factory(res.user, 0, 0, Date.now(), res.id, res.content)
         comment.prependToElement(this)
         this._cancelReply()
+
+        this.fire('activitychange')
       }
       else {
         //this.select('#submit').error()

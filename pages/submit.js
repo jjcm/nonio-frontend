@@ -70,6 +70,7 @@ let submit = {
           submit.submitButton.success()
           window.history.pushState(null, null, e.url)
           window.dispatchEvent(new HashChangeEvent('hashchange'))
+          document.dispatchEvent(new CustomEvent('activitychange'))
         }
         else {
           submit.submitButton.error()

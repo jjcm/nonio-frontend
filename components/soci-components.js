@@ -63,6 +63,9 @@ window.customElements.define('soci-link-input', SociLinkInput)
 import SociModal from "./soci-modal.js"
 window.customElements.define('soci-modal', SociModal)
 
+import SociNotificationBadge from "./soci-notification-badge.js"
+window.customElements.define('soci-notification-badge', SociNotificationBadge)
+
 import SociQuillView from "./soci-quill-view.js"
 window.customElements.define('soci-quill-view', SociQuillView)
 
