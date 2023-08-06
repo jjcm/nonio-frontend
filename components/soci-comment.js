@@ -9,6 +9,8 @@ export default class SociComment extends SociComponent {
     return `
       :host {
         --border-color: transparent
+        --upvote-bg: var(--bg-secondary);
+        --upvote-bg-hover: var(--bg-secondary-hover);
         margin-top: 4px;
         display: block;
         position: relative;
@@ -119,7 +121,7 @@ export default class SociComment extends SociComponent {
         padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
-        background: var(--bg-secondary);
+        background: var(--upvote-bg);
         cursor: pointer;
         user-select: none;
         --fill-color: transparent;
@@ -133,7 +135,7 @@ export default class SociComment extends SociComponent {
       }
       
       #upvote:hover {
-        background: var(--bg-secondary-hover);
+        background: var(--upvote-bg-hover);
         color: var(--text-secondary-hover);
       }
 

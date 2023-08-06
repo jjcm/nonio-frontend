@@ -185,6 +185,12 @@ export default class SociCommentList extends SociComponent {
     let votes = await this.getData('/comment-votes?post=' + url, this.authToken)
     votes = votes.commentVotes
 
+    comments.sort((a,b)=>{
+      if(b.lineage_score = a.lineage_score) return a.parent - b.parent
+      else return b.lineage_score - a.lineage_score
+    })
+
+
     comments.forEach(comment => {
       let newComment = document.createElement('soci-comment')
       newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.edited)

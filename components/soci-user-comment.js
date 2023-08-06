@@ -36,6 +36,7 @@ export default class SociUserComment extends SociComponent {
       .container {
         display: flex;
         align-items: center;
+        width: 100%;
       }
 
       #title {
@@ -51,6 +52,23 @@ export default class SociUserComment extends SociComponent {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+      ::slotted(soci-comment) {
+        padding-left: 4px;
+        border-radius: 4px;
+        transition: padding 0.2s ease;
+      }
+      ::slotted(soci-comment) {
+        padding-left: 4px;
+        border-radius: 4px;
+        transition: padding 0.1s var(--soci-ease);
+      }
+
+      :host([unread]) ::slotted(soci-comment) {
+        padding: 8px 12px;
+        background: var(--bg-brand-secondary);
+        --upvote-bg: var(--bg-elevation-tint);
+        --upvote-bg-hover: var(--bg-elevation-tint-hover);
       }
     `
   }
@@ -84,10 +102,24 @@ export default class SociUserComment extends SociComponent {
     }
   }
 
-  factory(user, score, lineageScore, date, id, content, edited, postUrl, postTitle){
+  connectedCallback(){
+    this.addEventListener('click', e => {
+      if(this.hasAttribute('unread')){
+        this.toggleAttribute('unread', false)
+        this.postData('/notification/mark-read', {id: parseInt(this.getAttribute('notification-id'))}).then(response => {
+          if(response) {
+            this.fire('activitychange')
+          }
+        })
+      }
+    })
+  }
+
+  factory(user, score, lineageScore, date, id, content, edited, postUrl, postTitle, unread){
     let userComment = document.createElement('soci-user-comment')
     userComment.setAttribute('url', postUrl)
     userComment.setAttribute('post-title', postTitle)
+    userComment.toggleAttribute('unread', unread)
 
     let comment = document.createElement('soci-comment')
     comment = comment.factory(user, score, lineageScore, date, id, content, edited)

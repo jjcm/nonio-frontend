@@ -70,11 +70,11 @@ export default class SociColumn extends SociComponent {
       filter {
         text-transform: capitalize;
         position: relative;
-        padding: 0 12px 2px;
+        padding: 0 12px;
         cursor: pointer;
         font-weight: 500;
         font-size: 12px;
-        line-height: 18px;
+        line-height: 20px;
         position: relative;
         z-index: 2;
         color: var(--text-secondary);
@@ -172,11 +172,11 @@ export default class SociColumn extends SociComponent {
       }
 
       sorts {
-        left: 8px;
+        left: 10px;
       }
 
       filters {
-        right: 8px;
+        right: 10px;
       }
 
       @keyframes load-in {

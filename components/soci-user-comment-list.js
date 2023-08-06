@@ -50,13 +50,13 @@ export default class SociCommentList extends SociComponent {
   async renderComments(path){
     this.toggleAttribute('loaded', false)
     let comments = await this.getData(path, this.authToken)
-    console.log(comments)
     comments = comments.comments || comments.notifications
-    console.log(comments)
 
     comments?.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')
-      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.id, comment.content, comment.edited, comment.post, comment.post_title)
+      let unread = comment.read == undefined ? undefined : !comment.read
+      newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.comment_id || comment.id, comment.content, comment.edited, comment.post, comment.post_title, unread)
+      if(path.includes('notifications')) newComment.setAttribute('notification-id', comment.id)
       this.appendChild(newComment)
     })
 

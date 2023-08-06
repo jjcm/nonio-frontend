@@ -30,6 +30,10 @@ export default class SociNotificationBadge extends SociComponent {
         transition: all var(--transition-time) ease;
       }
 
+      :host(:hover) {
+        color: var(--text-secondary-hover);
+      }
+
       :host([loaded]) {
         --transition-time: 0.2s;
       }
@@ -111,6 +115,7 @@ export default class SociNotificationBadge extends SociComponent {
   async checkNotifications(){
     if(this.nextCheck) clearTimeout(this.nextCheck)
     let count = await this.getData('/notifications/unread-count', this.authToken)
+    soci.notificationCount = count
     if(count == 0) this.removeAttribute('count')
     else this.setAttribute('count', count)
     this.nextCheck = setTimeout(this.checkNotifications.bind(this), this.exponentialBackoff)
