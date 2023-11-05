@@ -548,6 +548,7 @@ export default class SociSidebar extends SociComponent {
         soci.log('Login Successful! Token:', response.token)
         soci.storeToken(response.token)
         soci.username = response.username
+        this.fire('login')
         button?.success()
         setTimeout(()=>{
           this.toggleAttribute('noauth')

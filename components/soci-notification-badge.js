@@ -92,10 +92,13 @@ export default class SociNotificationBadge extends SociComponent {
   async connectedCallback(){
     // Start checking every 10s
     this.exponentialBackoff = 10000
-    await this.checkNotifications()
-    setTimeout(() => {
-      this.toggleAttribute('loaded', true)
-    }, 100)
+
+    if(this.authToken) {
+      await this.checkNotifications()
+      setTimeout(() => {
+        this.toggleAttribute('loaded', true)
+      }, 100)
+    }
 
     // Triggers when you switch tabs back to nonio 
     document.addEventListener('visibilitychange', () => {
@@ -110,11 +113,17 @@ export default class SociNotificationBadge extends SociComponent {
       this.checkNotifications()
       this.exponentialBackoff = 10000
     })
+
+    document.addEventListener('login', () => {
+      this.checkNotifications()
+      this.exponentialBackoff = 10000
+    })
   }
 
   async checkNotifications(){
     if(this.nextCheck) clearTimeout(this.nextCheck)
     let count = await this.getData('/notifications/unread-count', this.authToken)
+    if(count == "Authorization required") return null
     soci.notificationCount = count
     if(count == 0) this.removeAttribute('count')
     else this.setAttribute('count', count)
