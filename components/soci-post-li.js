@@ -86,8 +86,6 @@ export default class SociPostLi extends SociComponent {
       }
       #comments {
         color: var(--text-secondary);
-        letter-spacing: -0.16px;
-        line-height: 16px;
       }
       #time svg,
       #comments svg {

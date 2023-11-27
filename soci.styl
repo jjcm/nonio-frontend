@@ -41,7 +41,8 @@ h1, h2, h3
   margin-bottom: 0.5em
 
 h1 
-  font-size: 2em;
+  font-size: 32px;
+  font-weight: normal;
 
 h2 
   font-size: 1.5em
@@ -366,7 +367,7 @@ button
   input 
     margin: 0 0 8px
     border: 0
-    border-bottom: 2px solid var(--bg-secondary)
+    border-bottom: 2px solid var(--border)
     background: var(--bg)
     height: 38px
     font-size: 14px
@@ -375,7 +376,7 @@ button
       border-bottom: 2px solid var(--bg-brand)
       outline: 0
     &::placeholder 
-      color: var(--text-secondary)
+      color: var(--text-tertiary)
 
   .actions
     width: 100%
@@ -491,6 +492,8 @@ button
 
 #submit-container
   box-sizing: border-box
+  background: var(--bg-bold)
+  height: 100%
   h1, h2
     margin: 0
     padding-left: 2px
@@ -507,45 +510,53 @@ button
   input
     text-decoration: inherit
     font-weight: bold
-    border: none
     outline: none
-    padding: 0
+    box-sizing: border-box
+    border-radius: 8px
+    padding: 0 8px
+    height: 32px
+    line-height: 28px
     font-size: 14px
     width: 100%
     background: transparent
-    color: inherit
+    border: 1px solid var(--border)
     &::placeholder 
       font-weight: normal
-      text-transform: none;
+      font-style: italic
       opacity: 0.5
       font-size: 14px
-    &[name="title"]
-      &::placeholder 
-        font-size: 32px
-      font-size: 32px
-      margin-bottom: 24px
-      padding-left: 2px
   soci-icon
     pointer-events: none
     position: absolute
     right: 2px
   
+  label
+    font-weight: 600
+    margin: 20px 0 4px
+    display: block
+    padding-left: 4px
+  
   .preview
     overflow: hidden
-    height: 0
-    margin: 0 -20px
+    margin: 0 -20px 
     padding: 0 20px
     transition: all 0.1s var(--soci-ease)
-    &.active
-      height: 168px
-      margin-bottom: -8px
+  .thumbnail-placeholder
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 96px
+    height: 72px
+    border: 2px dashed var(--border)
+    border-radius: 3px
+    float: left
 
   #submit-header,
   #submit-actions
     max-width: 920px
     margin: 0 auto
   #submit-header
-    padding: 24px 40px
+    padding-top: 24px
 
 
 
@@ -563,8 +574,9 @@ button
         margin: 0 auto
   
   soci-input
-    border: 2px solid var(--bg-secondary)
+    border: 1px solid var(--border)
     border-radius: 8px
+    height: 90px
 
   h2
     font-weight: 500
@@ -593,7 +605,7 @@ soci-sidebar
   input
     margin: 0 0 8px
     border: 0
-    border-bottom: 2px solid var(--bg-secondary)
+    border-bottom: 2px solid var(--border)
     background: var(--bg) !important
     -webkit-text-fill-color: var(--text)
     -webkit-box-shadow: 0 0 0 30px var(--bg) inset;

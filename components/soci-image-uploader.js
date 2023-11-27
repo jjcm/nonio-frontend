@@ -10,12 +10,12 @@ export default class SociImageUploader extends SociComponent {
     return `
       :host {
         width: 100%;
-        min-height: 240px;
+        min-height: 110px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        border: 2px dashed var(--bg-secondary);
+        border: 1px dashed var(--border);
         box-sizing: border-box;
         border-radius: 8px;
         margin-bottom: 12px;

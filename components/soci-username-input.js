@@ -22,7 +22,7 @@ export default class SociUsernameInput extends SociComponent {
       border: 0;
       color: var(--text);
       background: var(--bg);
-      border-bottom: 2px solid var(--bg-secondary);
+      border-bottom: 2px solid var(--border);
       height: 38px;
       font-size: 14px;
       width: 100%;

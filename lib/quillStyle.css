@@ -815,8 +815,9 @@ soci-input[subtle]{
   padding-left: 15em;
 }
 .ql-editor.ql-blank::before {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   content: attr(data-placeholder);
+  opacity: 0.5;
   font-style: italic;
   left: 15px;
   pointer-events: none;

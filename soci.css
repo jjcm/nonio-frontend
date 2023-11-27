@@ -325,14 +325,14 @@
   transform: translateY(10px);
 }
 #admin-subscribe #card-element {
-  border-bottom: 2px solid var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
   height: 38px;
   margin-bottom: 10px;
 }
 #admin-subscribe .price-container {
   position: relative;
   padding: 0 20px 10px;
-  border-bottom: 1px solid var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
 }
 #admin-subscribe .price-container soci-button {
   position: absolute;
@@ -853,7 +853,7 @@ button:focus {
 .admin-page input {
   margin: 0 0 8px;
   border: 0;
-  border-bottom: 2px solid var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
   background: var(--bg);
   height: 38px;
   font-size: 14px;
@@ -1088,7 +1088,7 @@ button:focus {
   margin: 0 auto;
 }
 #submit-container soci-input {
-  border: 2px solid var(--bg-secondary);
+  border: 2px solid var(--border);
   border-radius: 8px;
 }
 #submit-container h2 {
@@ -1121,7 +1121,7 @@ soci-sidebar input:-webkit-autofill:hover,
 soci-sidebar input {
   margin: 0 0 8px;
   border: 0;
-  border-bottom: 2px solid var(--bg-secondary);
+  border-bottom: 2px solid var(--border);
   background: var(--bg) !important;
   -webkit-text-fill-color: var(--text);
   -webkit-box-shadow: 0 0 0 30px var(--bg) inset;

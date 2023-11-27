@@ -19,7 +19,7 @@ export default class SociUrlInput extends SociComponent {
       height: 32px;
       min-width: 540px;
       line-height: 28px;
-      border: 2px solid var(--bg-secondary);
+      border: 1px solid var(--border);
       box-sizing: border-box;
       width: 100%;
       font-size: 14px;
@@ -53,7 +53,7 @@ export default class SociUrlInput extends SociComponent {
       font-weight: normal;
       text-transform: none;
       opacity: 0.5;
-      font-size: 14px;
+      font-style: italic;
     }
     :host([available="false"]) {
       border: 2px solid var(--bg-danger);
