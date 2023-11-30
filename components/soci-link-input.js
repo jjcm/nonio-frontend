@@ -25,14 +25,15 @@ export default class SociLinkInput extends SociComponent {
       font-size: 14px;
       padding: 0 8px;
       border-radius: 8px;
-      transition: none;
+      margin-bottom: 20px;
+      transition: margin-bottom 0.1s var(--soci-ease);
     }
     :host(:focus) {
       outline: 0;
     }
     :host([available="true"]) {
       background: var(--bg-success);
-      border: 2px solid var(--bg-success);
+      border: 1px solid var(--bg-success);
       color: var(--text-inverse);
       cursor: pointer;
       transition: all 0.1s ease-in-out, color 0s ease-in-out;
@@ -56,7 +57,8 @@ export default class SociLinkInput extends SociComponent {
       font-size: 14px;
     }
     :host([available="false"]) {
-      border: 2px solid var(--bg-danger);
+      border: 1px solid var(--bg-danger);
+      margin-bottom: 32px;
     }
     soci-icon {
       pointer-events: none;
@@ -77,7 +79,7 @@ export default class SociLinkInput extends SociComponent {
   `}
 
   html() { return `
-    <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
+    <input id="url" type="text" placeholder="post-url" spellcheck="false" autocomplete="url"/>
     <soci-icon></soci-icon>
     <error></error>
   `}
@@ -120,7 +122,6 @@ export default class SociLinkInput extends SociComponent {
   }
 
   checkUrlValidity() {
-    this.removeAttribute('available')
     this._statusIcon.glyph = ''
     clearTimeout(this._keyDownTimer)
     setTimeout(()=>{
@@ -133,6 +134,7 @@ export default class SociLinkInput extends SociComponent {
         this.setURLError("URL can't be empty")
       }
       else {
+        this.removeAttribute('available')
         this._error = false
         this._internals.setValidity({})
         this.select('error').innerHTML = ''

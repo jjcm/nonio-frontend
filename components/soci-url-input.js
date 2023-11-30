@@ -26,13 +26,15 @@ export default class SociUrlInput extends SociComponent {
       padding: 0 8px;
       border-radius: 8px;
       transition: none;
+      margin-bottom: 20px;
+      transition: margin-bottom 0.1s var(--soci-ease);
     }
     :host(:focus) {
       outline: 0;
     }
     :host([available="true"]) {
       background: var(--bg-success);
-      border: 2px solid var(--bg-success);
+      border: 1px solid var(--bg-success);
       color: var(--text-inverse);
       cursor: pointer;
       transition: all 0.1s ease-in-out, color 0s ease-in-out;
@@ -56,7 +58,8 @@ export default class SociUrlInput extends SociComponent {
       font-style: italic;
     }
     :host([available="false"]) {
-      border: 2px solid var(--bg-danger);
+      border: 1px solid var(--bg-danger);
+      margin-bottom: 32px;
     }
     soci-icon {
       pointer-events: none;
@@ -65,11 +68,12 @@ export default class SociUrlInput extends SociComponent {
     }
     :host([available="false"]) soci-icon {
       color: var(--bg-danger);
+
     }
     error {
       position: absolute;
       left: 2px;
-      bottom: -20px;
+      bottom: -18px;
       color: var(--text-danger);
       height: 20px;
       font-size: 12px;
@@ -81,7 +85,7 @@ export default class SociUrlInput extends SociComponent {
 
   html() { return `
     <label for="path">${config.HOST}/</label>
-    <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
+    <input id="path" type="text" placeholder="post-url" spellcheck="false" autocomplete="one-time-code"/>
     <soci-icon></soci-icon>
     <error></error>
   `}
