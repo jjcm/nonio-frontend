@@ -650,12 +650,9 @@ button:focus {
   display: block;
   width: 100%;
 }
-#user .sidebar soci-link:first-child {
-  margin-right: 6px;
-}
 #user .sidebar soci-button {
   width: 100%;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
   float: none;
 }
 #user .sidebar soci-button svg {
@@ -666,6 +663,7 @@ button:focus {
 #user .stats {
   border: 1px solid var(--bg-secondary);
   border-radius: 8px;
+  margin-bottom: 16px;
 }
 #user .stats .stat {
   display: flex;
@@ -680,10 +678,13 @@ button:focus {
   flex: 1;
   text-align: right;
 }
-#user .self-actions {
+#user .self-actions,
+#user .admin-actions {
   display: none;
+  gap: 8px;
 }
-#user .self-actions[active] {
+#user .self-actions[active],
+#user .admin-actions[active] {
   display: flex;
 }
 #user .hero {
