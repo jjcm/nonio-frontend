@@ -33,6 +33,10 @@
       label Comment Karma
       .value(value="comment_karma")
 
+  .admin-actions
+    soci-button.nuke-user(danger async onclick="user.nuke()") <strong>nuke user</strong>
+    soci-button(danger) ban user
+
 
 
 .content(load-order="secondary")

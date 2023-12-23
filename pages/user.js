@@ -16,6 +16,9 @@ let user = {
     if(username == soci.username){
       user.showPersonalControls()
     }
+    else if(soci.roles.includes('admin')){
+      user.showAdminControls()
+    }
 
     let myPosts = document.querySelector('#user soci-post-list')
     myPosts.setAttribute('data', `/posts?user=${username}`)
@@ -44,6 +47,9 @@ let user = {
   showPersonalControls: () => {
     user.dom.querySelector('.self-actions').toggleAttribute('active', true)
   },
+  showAdminControls: () => {
+    user.dom.querySelector('.admin-actions').toggleAttribute('active', true)
+  },
   checkInfo: async () => {
     let username = document.location.pathname.slice(6)
     let response = await soci.getData(`users/${username}`)
@@ -53,7 +59,24 @@ let user = {
       if(property == 'description') dom.value = response[property]
       else dom.innerHTML = response[property]
     }
-  }
+  },
+  nuke: async () => {
+    let button = user.dom.querySelector('soci-button.nuke-user')
+    if(confirm('Are you sure you want to nuke this user? This will delete all their posts and comments.')) {
+      let username = document.location.pathname.slice(6)
+      let response = await soci.postData(`admin/nuke`, {username: username})
+      console.log(response)
+      if(response === true) {
+        button?.success()
+        setTimeout(() => {
+          document.location.href = '/'
+        }, 1500)
+      }
+      else {
+        button?.error()
+      }
+    }
+  },
 }
 
 user.dom.querySelector('soci-post-list').addEventListener('tabactivate', e=>{

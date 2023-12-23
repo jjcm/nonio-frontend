@@ -202,11 +202,9 @@ button
     soci-link
       display: block
       width: 100%
-      &:first-child
-        margin-right: 6px
     soci-button
       width: 100%
-      margin-bottom: 16px
+      margin: 0 0 16px 0
       float: none
       svg
         margin-right: 4px
@@ -215,6 +213,7 @@ button
   .stats
     border: 1px solid var(--bg-secondary)
     border-radius: 8px
+    margin-bottom: 16px
     .stat
       display: flex
       border-bottom: inherit
@@ -226,8 +225,10 @@ button
       flex: 1
       text-align: right
 
-  .self-actions 
+  .self-actions,
+  .admin-actions 
     display: none
+    gap: 8px
     &[active]
       display: flex
   .hero

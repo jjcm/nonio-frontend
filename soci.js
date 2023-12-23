@@ -10,6 +10,14 @@ let soci = {
   set token(val) {
     localStorage.setItem('jwt', val)
   },
+  get roles() {
+    let roles = localStorage.getItem('roles')
+    if(!roles) return []
+    return roles.split(',')
+  },
+  set roles(val) {
+    localStorage.setItem('roles', val)
+  },
   get stripe(){
     if("Stripe" in window) return Stripe(config.STRIPE_PUBLISHABLE_KEY)
 
@@ -29,7 +37,7 @@ let soci = {
 
   },
   clearToken: () => {
-    localStorage.removeItem('jwt')
+    localStorage.clear()
   },
   checkTokenExpired: () => {
     try {
