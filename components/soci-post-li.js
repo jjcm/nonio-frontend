@@ -69,6 +69,7 @@ export default class SociPostLi extends SociComponent {
         font-size: 12px;
         white-space: nowrap;
         flex-wrap: wrap;
+        padding-top: 1px;
       }
       #domain,
       #time {
@@ -108,8 +109,8 @@ export default class SociPostLi extends SociComponent {
         line-height: 20px;
         max-height: 72px;
         font-weight: 600;
-        margin-bottom: 8px;
-        margin-top: 8px;
+        margin-bottom: 9px;
+        margin-top: 6px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -129,7 +130,7 @@ export default class SociPostLi extends SociComponent {
 
       slot[name="tags"] {
         display: inline-block;
-        overflow: hidden;
+        height: 20px;
       }
 
       :host([score="0"]) #score {

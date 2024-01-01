@@ -97,6 +97,7 @@ let submit = {
       let img = previewLi.querySelector('img') || document.createElement('img')
       img.src = e.detail.image
       img.setAttribute('slot', 'thumbnail')
+      previewLi.querySelector('[slot="thumbnail"]')?.remove()
       previewLi.appendChild(img)
     }
     if(title.value == '' || e.detail.image) {
