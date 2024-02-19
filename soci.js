@@ -37,7 +37,7 @@ let soci = {
     })
   },
   refreshAccessToken: () => {
-    soci.postData('user/refreshAccessToken', {refreshToken: soci.refreshToken}).then(res=>{
+    soci.postData('user/refresh-access-token', {refreshToken: soci.refreshToken}).then(res=>{
       soci.accessToken = res.accessToken
       soci.refreshToken = res.refreshToken
     })
