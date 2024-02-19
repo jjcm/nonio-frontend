@@ -544,9 +544,10 @@ export default class SociSidebar extends SociComponent {
 
 
     soci.postData('user/login', loginData).then(response => {
-      if(response.token){
-        soci.log('Login Successful! Token:', response.token)
-        soci.storeToken(response.token)
+      if(response.accessToken){
+        soci.log('Login Successful! Token:', response.accessToken)
+        soci.accessToken = response.accessToken
+        soci.refreshToken = response.refreshToken
         soci.username = response.username
         soci.roles = response.roles
         this.fire('login')
@@ -586,10 +587,10 @@ export default class SociSidebar extends SociComponent {
     let formData = soci.getJSONFromForm(form)
     let response = await soci.postData('user/register', formData)
 
-    if(response.token){
+    if(response.accessToken){
       button.success()
-      soci.log('Login Successful! Token:', response.token)
-      soci.storeToken(response.token)
+      soci.log('Login Successful! Token:', response.accessToken)
+      soci.accessToken = response.accessToken
       soci.username = response.username
       this._loadSubscribedTags()
       this._loadCommonTags()

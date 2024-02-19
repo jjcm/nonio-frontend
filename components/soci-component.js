@@ -97,7 +97,7 @@ export default class SociComponent extends HTMLElement {
   }
 
   get authToken(){
-    let token = localStorage.getItem('jwt')
+    let token = localStorage.getItem('accessToken')
     if(!token) return false
     try {
       let expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)

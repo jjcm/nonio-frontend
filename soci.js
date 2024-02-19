@@ -4,11 +4,17 @@ let soci = {
   init: () => {
     soci.checkTokenExpired()
   },
-  get token() {
-    return localStorage.getItem('jwt')
+  get accessToken() {
+    return localStorage.getItem('accessToken')
   },
-  set token(val) {
-    localStorage.setItem('jwt', val)
+  set accessToken(val) {
+    localStorage.setItem('accessToken', val)
+  },
+  get refreshToken() {
+    return localStorage.getItem('refreshToken')
+  },
+  set refreshToken(val) {
+    localStorage.setItem('refreshToken', val)
   },
   get roles() {
     let roles = localStorage.getItem('roles')
@@ -30,19 +36,27 @@ let soci = {
       document.head.appendChild(stripe)
     })
   },
-  storeToken: (token) => {
-    soci.token = token
-  },
-  refreshToken: () => {
-
+  refreshAccessToken: () => {
+    soci.postData('user/refreshAccessToken', {refreshToken: soci.refreshToken}).then(res=>{
+      soci.accessToken = res.accessToken
+      soci.refreshToken = res.refreshToken
+    })
   },
   clearToken: () => {
     localStorage.clear()
   },
   checkTokenExpired: () => {
     try {
-      let expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
+      let expiry = parseInt(JSON.parse(atob(soci.accessToken.split('.')[1])).expiresAt)
+      // if the token is not expired, return false
       if(expiry > Date.now() / 1000) return false
+
+      // if the token is expired, try and refresh it
+      expiry = parseInt(JSON.parse(atob(soci.refreshToken.split('.')[1])).expiresAt)
+      if(expiry > Date.now() / 1000) {
+        soci.refreshAccessToken()
+        return false
+      }
       soci.clearToken()
       return true
     }
@@ -79,7 +93,7 @@ let soci = {
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + soci.token
+        'Authorization': 'Bearer ' + soci.accessToken
       },
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // no-referrer, *client
@@ -96,8 +110,8 @@ let soci = {
     */
 
     let options = {}
-    if(soci.token) options.headers = { 
-      Authorization: 'Bearer ' + soci.token
+    if(soci.accessToken) options.headers = { 
+      Authorization: 'Bearer ' + soci.accessToken
     }
 
     const response = await fetch(`${config.API_HOST}/${url}`, options)
