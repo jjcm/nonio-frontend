@@ -163,20 +163,7 @@
       </div>
       <script>lazyload('/pages/admin/change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
-    <soci-route class="admin-page" id="admin-mod-tools" path="/admin/mod-tools">
-      <div class="container" id="admin-mod-tools">
-        <div class="header" load-order="primary">
-          <h1>Moderation Tools</h1>
-        </div>
-        <div class="tool" load-order="secondary">
-          <h2>Upcoming payouts</h2>
-          <div class="upcoming-payouts"></div>
-          <h2>Past payouts</h2>
-          <div class="past-payouts"></div>
-        </div>
-        <lazyload /pages/admin/mod-tools.js document.currentScript.closest('soci-route')></lazyload>
-      </div>
-    </soci-route>
+    <soci-route class="admin-page" id="admin-mod-tools" path="/admin/mod-tools"></soci-route>
     <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
         <script src="/pages/admin/settings.js"></script>
