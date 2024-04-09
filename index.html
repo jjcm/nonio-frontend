@@ -163,20 +163,7 @@
       </div>
       <script>lazyload('/pages/admin/change-forgotten-password.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
-    <soci-route class="admin-page" id="admin-mod-tools" path="/admin/mod-tools">
-      <div class="container" id="admin-mod-tools">
-        <div class="header" load-order="primary">
-          <h1>Moderation Tools</h1>
-        </div>
-        <div class="tool" load-order="secondary">
-          <h2>Upcoming payouts</h2>
-          <div class="upcoming-payouts"></div>
-          <h2>Past payouts</h2>
-          <div class="past-payouts"></div>
-        </div>
-        <lazyload /pages/admin/mod-tools.js document.currentScript.closest('soci-route')></lazyload>
-      </div>
-    </soci-route>
+    <soci-route class="admin-page" id="admin-mod-tools" path="/admin/mod-tools"></soci-route>
     <soci-route class="admin-page" id="admin-settings" path="/admin/settings">
       <div class="container" id="admin-settings-container">
         <script src="/pages/admin/settings.js"></script>
@@ -292,53 +279,44 @@
       <div id="submit-container">
         <form action="#">
           <div class="load-group centered-container" id="submit-header" load-order="primary">
-            <input type="text" name="title" placeholder="Enter title" required>
-            <soci-url-input name="url" required tabindex="0"></soci-url-input>
-          </div>
-          <div class="load-group" load-order="secondary">
+            <h1>Submit a post</h1>
             <soci-tab-group>
-              <div class="centered-container">
-                <soci-tab name="Link" default>
-                  <soci-link-input name="link"></soci-link-input>
-                  <div class="preview">
-                    <h2>Preview </h2>
-                    <soci-post-li score="0" time="now">
-                      <soci-user self slot="user"></soci-user>
-                      <soci-tag-group slot="tags"></soci-tag-group>
-                    </soci-post-li>
-                  </div>
-                  <h2>Description</h2>
-                  <soci-input placeholder="Enter description" name="description"></soci-input>
-                </soci-tab>
-                <soci-tab name="Image">
-                  <soci-image-uploader></soci-image-uploader>
-                  <h2>Description</h2>
-                  <soci-input placeholder="Enter description" name="description"></soci-input>
-                </soci-tab>
-                <soci-tab name="Video">
-                  <soci-video-uploader></soci-video-uploader>
-                  <h2>Description</h2>
-                  <soci-input placeholder="Enter description" name="description"></soci-input>
-                </soci-tab>
-                <!--soci-tab(name="Audio")
-                soci-file-drop(type="audio")
-                h2 Description
-                soci-input(placeholder="Enter description" name="description")
-                
-                -->
-                <soci-tab name="Blog">
-                  <soci-input placeholder="Write your best" name="description"></soci-input>
-                </soci-tab>
-              </div>
+              <soci-tab name="Link" default></soci-tab>
+              <soci-tab name="Image"></soci-tab>
+              <soci-tab name="Video"></soci-tab>
+              <soci-tab name="Blog"></soci-tab>
               <soci-tab name="HTML">
-                <soci-html-uploader></soci-html-uploader>
                 <p style="max-width: 920px; margin: 12px auto;">[alpha] This will allow you to upload html to the site as a post. The content is presented in an iframe. If you want the iframe to be sized according to the frontend page, include this script in your html: <a href="https://html.non.io/nonio-embedded-page.js">https://html.non.io/nonio-embedded-page.js</a>. Feel free to test it, but note that I will be deleting posts that are simple alert tests.</p>
-                <div class="centered-container">
-                  <h2>Description</h2>
-                  <soci-input placeholder="Enter description" name="description"></soci-input>
-                </div>
               </soci-tab>
             </soci-tab-group>
+            <div class="preview">
+              <soci-post-li score="0" time="now" comments="0" post-title="Title placeholder">
+                <soci-user self slot="user"></soci-user>
+                <soci-tag-group slot="tags"></soci-tag-group>
+                <div class="thumbnail-placeholder" slot="thumbnail"><svg width="49" height="16" viewBox="0 0 49 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.5 5.50207C11.5 6.0555 11.0514 6.50414 10.4979 6.50414C9.94449 6.50414 9.49585 6.0555 9.49585 5.50207C9.49585 4.94864 9.94449 4.5 10.4979 4.5C11.0514 4.5 11.5 4.94864 11.5 5.50207ZM2 4.5C2 3.11929 3.11929 2 4.5 2H11.5C12.8807 2 14 3.11929 14 4.5V11.5C14 12.8807 12.8807 14 11.5 14H4.5C3.11929 14 2 12.8807 2 11.5V4.5ZM4.5 3C3.67157 3 3 3.67157 3 4.5V11.5C3 11.7316 3.05248 11.9509 3.1462 12.1467L6.79796 8.49499C7.46185 7.8311 8.53823 7.8311 9.20212 8.49499L12.8538 12.1467C12.9475 11.9509 13 11.7316 13 11.5V4.5C13 3.67157 12.3284 3 11.5 3H4.5ZM12.1467 12.8538L8.49501 9.2021C8.22164 8.92873 7.77843 8.92873 7.50506 9.2021L3.85333 12.8538C4.04914 12.9475 4.26844 13 4.5 13H11.5C11.7316 13 11.9509 12.9475 12.1467 12.8538Z" fill="currentColor"/>
+<path d="M26.6719 3.125L24.0938 12.7031H23.25L25.8281 3.125H26.6719Z" fill="currentColor"/>
+<path d="M39.5 5.82056V10.1794C39.5 10.4293 39.7736 10.5828 39.9869 10.4525L43.246 8.46076C43.5906 8.2502 43.5906 7.74977 43.246 7.53921L39.9869 5.54751C39.7736 5.4172 39.5 5.57067 39.5 5.82056ZM37.5 3C36.1193 3 35 4.11929 35 5.5V10.5C35 11.8807 36.1193 13 37.5 13H44.5C45.8807 13 47 11.8807 47 10.5V5.5C47 4.11929 45.8807 3 44.5 3H37.5ZM36 5.5C36 4.67157 36.6716 4 37.5 4H44.5C45.3284 4 46 4.67157 46 5.5V10.5C46 11.3284 45.3284 12 44.5 12H37.5C36.6716 12 36 11.3284 36 10.5V5.5Z" fill="currentColor"/>
+</svg>
+                </div>
+              </soci-post-li>
+            </div>
+          </div>
+          <div class="load-group centered-container" load-order="secondary">
+            <label>Media</label>
+            <soci-image-uploader></soci-image-uploader>
+            <!--soci-video-uploader-->
+            <!--soci-html-uploader-->
+            <label>Link</label>
+            <soci-link-input name="link"></soci-link-input>
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Enter title" required>
+            <label>Content (optional)</label>
+            <soci-input placeholder="Something relevant about the post, perhaps a summary." name="description"></soci-input>
+            <label>URL</label>
+            <soci-url-input name="url" required tabindex="0"></soci-url-input>
+            <label>Tags</label>
+            <soci-tag-group></soci-tag-group>
           </div>
           <div class="load-group centered-container" id="submit-actions" load-order="tertiary">
             <soci-button async>submit</soci-button>
