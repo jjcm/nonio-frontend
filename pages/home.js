@@ -6,10 +6,10 @@ let home = {
   onActivate: () => {
     document.title = "Nonio - A platform for creators"
     let accountActions = home.dom.querySelector('.account-actions')
-    if(soci.token){
+    if(soci.accessToken){
       let expiry = 0
       try {
-        expiry = parseInt(JSON.parse(atob(soci.token.split('.')[1])).expiresAt)
+        expiry = parseInt(JSON.parse(atob(soci.accessToken.split('.')[1])).expiresAt)
       }
       catch {
       }
