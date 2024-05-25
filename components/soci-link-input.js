@@ -194,7 +194,7 @@ export default class SociLinkInput extends SociComponent {
     })
 
     request.open('post', config.IMAGE_HOST + '/fetch-og-image') 
-    request.setRequestHeader('Authorization', 'Bearer ' + soci.token)
+    request.setRequestHeader('Authorization', 'Bearer ' + soci.accessToken)
     request.send(data)
   }
 
