@@ -67,13 +67,18 @@ export default class SociPostLi extends SociComponent {
     // render only the amount visible on the screen first, and animate them in
     this.innerHTML = data.splice(0, numberToRender).map(this.renderPostLi).join('')
     // then once the main batch is done, load in the rest. 
-    setTimeout(()=>{
-      let tempDom = document.createElement('div')
-      tempDom.innerHTML = data.map(this.renderPostLi).join('')
-      Array.from(tempDom.children).forEach(child=>{
-        this.appendChild(child)
+    const renderNextPost = (remainingPosts) => {
+      if (remainingPosts.length === 0) return
+
+      requestIdleCallback(() => {
+        let tempDom = document.createElement('div')
+        tempDom.innerHTML = this.renderPostLi(remainingPosts[0])
+        this.appendChild(tempDom.firstElementChild)
+        renderNextPost(remainingPosts.slice(1))
       })
-    }, 1)
+    }
+
+    renderNextPost(data)
   }
 
   renderPostLi(post){

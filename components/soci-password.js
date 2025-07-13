@@ -1,6 +1,8 @@
 import SociComponent from './soci-component.js'
 
 export default class SociPassword extends SociComponent {
+  _initialRender = false
+
   static get formAssociated() {
     return true
   }
@@ -98,6 +100,8 @@ export default class SociPassword extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    if(!this._initialRender) return
+
     switch(name){
       case 'placeholder':
         this.field?.setAttribute('placeholder', newValue)

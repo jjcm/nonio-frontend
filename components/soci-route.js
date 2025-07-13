@@ -40,25 +40,6 @@ export default class SociRouter extends SociComponent {
     }
   }
 
-  static get observedAttributes() {
-    return ['path', 'active', 'script']
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    switch(name){
-      case "path":
-        this.path = new RegExp(newValue)
-        break
-      case "script":
-        fetch(newValue).then(res => res.text()).then(script => {
-          let options = eval(script)
-          if(options.onActivate) this.addEventListener('routeactivate', options.onActivate)
-          if(options.onDeactivate) this.addEventListener('routedeactivate', options.onDeactivate)
-          if(this.active) options.onActivate()
-        })
-    }
-  }
-
   get active() {
     return this.hasAttribute('active')
   }

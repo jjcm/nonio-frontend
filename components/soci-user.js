@@ -2,6 +2,8 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociUser extends SociComponent {
+  initialRender = false
+
   constructor() {
     super()
     this._imageFolder = '/thumbnail/'
@@ -91,11 +93,15 @@ export default class SociUser extends SociComponent {
     `
   }
 
-  html(){ return `
-    <soci-link>
+  html(){ 
+    this.initialRender = true
+    let name = this.hasAttribute('self') ? soci.username : this.getAttribute('name')
+
+    return `
+    <soci-link ${name ? `href="/user/${name}"` : ''}>
       <div>
-      <picture></picture>
-      <username></username>
+      <picture>${this._setImages(name)}</picture>
+      <username>${name}</username>
       </div>
     </soci-link>
   `}
@@ -112,25 +118,23 @@ export default class SociUser extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['name', 'op', 'self', 'size']
+    return ['name', 'self']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    if(!this.initialRender) return
+
     switch(name) {
       case 'name':
         this.select('username').innerHTML = newValue
         this.select('soci-link').setAttribute('href', `/user/${newValue}`)
-        this._setImages(newValue)
+        this.select('picture').innerHTML = this._setImages(newValue)
         this.toggleAttribute('self', newValue == soci.username) 
         break
       case 'self':
         if(newValue != null){
           this._updateUser()
         }
-        break
-      case 'size':
-        if(newValue == 'large') this._imageFolder = '/'
-        else this._imageFolder = '/thumbnail/'
     }
   }
 
@@ -141,14 +145,14 @@ export default class SociUser extends SociComponent {
   }
 
   _updateAvatar(){
-    if(this.hasAttribute('self'))
-      this._setImages(soci.username, true)
+    if(this.hasAttribute('self')){
+      this.select('picture').innerHTML = this._setImages(soci.username, true)
+    }
   }
 
   _setImages(path, force = false){
     let cacheBuster = force ? `?${Date.now()}` : ''
-    let picture = this.select('picture')
     let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}${this._imageFolder}${path}.${format}${cacheBuster}" />`).join('')
-    picture.innerHTML = (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
+    return (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
   }
 }

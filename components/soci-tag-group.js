@@ -182,7 +182,7 @@ export default class SociTagGroup extends SociComponent {
     <ul id="tag-search" @mousemove=_tagSearchHover @click=addTag></ul>
     <div id="tags"><slot></slot></div>
     <div id="add-tag" @click=_addTagClick>
-      <input type="text"></input>
+      <input type="text" autocomplete="off" name="tag"></input>
       <svg width="16px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="icon/tags" transform="translate(-4.000000, -5.000000)">
@@ -198,31 +198,12 @@ export default class SociTagGroup extends SociComponent {
     </div>
   `}
 
-  static get observedAttributes() {
-    return ['score']
-  }
-
-
   connectedCallback(){
     this._cancelAddTag = this._cancelAddTag.bind(this)
     this._inputKeyListener = this._inputKeyListener.bind(this)
     this.addEventListener('vote', this._tagVoted)
     this.toggleAttribute('upvoted', this.querySelectorAll('soci-tag[upvoted]').length)
 
-  }
-
-  attributeChangedCallback(name, oldValue, newValue){
-    if(name == 'score'){
-      let score = this.querySelector('[slot="score"]')
-      if(!score){
-        score = document.createElement('div')
-        score.setAttribute('slot', 'score')
-        score.innerHTML = this.score
-        this.appendChild(score)
-      }
-      score.innerHTML = `${newValue}`
-
-    }
   }
 
   get url(){

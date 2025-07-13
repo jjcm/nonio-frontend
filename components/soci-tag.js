@@ -1,6 +1,8 @@
 import SociComponent from './soci-component.js'
 
 export default class SociTag extends SociComponent {
+  initialRender = false
+
   constructor() {
     super()
   }
@@ -85,29 +87,32 @@ export default class SociTag extends SociComponent {
     `
   }
 
-  html(){ return `
-    <div id="vote" @click=vote >
-      <soci-icon glyph="upvote"></soci-icon>
-      <score></score>
-    </div>
-    <soci-link></soci-link>
-  `}
-
   static get observedAttributes() {
-    return ['color', 'name', 'upvoted', 'score', 'tag']
+    return ['score', 'tag']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    if(!this.initialRender) return
+
     switch(name){
       case 'score':
         this.select('score').innerHTML = newValue
         break
       case 'tag':
-        let link = this.select('soci-link')
-        link.setAttribute('href', '/#' + newValue)
-        link.innerHTML = newValue
+        this.select('soci-link').innerHTML = newValue
     }
   }
+
+  html(){ 
+    this.initialRender = true
+
+    return `
+    <div id="vote" @click=vote >
+      <soci-icon glyph="upvote"></soci-icon>
+      <score>${this.getAttribute('score')}</score>
+    </div>
+    <soci-link>${this.getAttribute('tag')}</soci-link>
+  `}
 
   get score(){
     return parseInt(this.getAttribute('score')) || 0
@@ -115,6 +120,7 @@ export default class SociTag extends SociComponent {
 
   set score(val){
     this.setAttribute('score', val)
+    this.select('score').innerHTML = val
   }
 
   get tag(){
@@ -123,13 +129,14 @@ export default class SociTag extends SociComponent {
 
   set tag(val){
     this.setAttribute('tag', val)
+    this.select('soci-link').innerHTML = val
   }
   
   vote(e){
     e?.preventDefault()
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
-    this.setAttribute('score', score + (upvoted ? 1 : -1))
+    this.score = score + (upvoted ? 1 : -1)
     this.fire('vote', {
       dom: this,
       tag: this.tag,

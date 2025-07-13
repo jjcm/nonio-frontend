@@ -287,12 +287,13 @@ export default class SociColumn extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['tag', 'color', 'filter', 'sort']
+    return ['tag', 'filter', 'sort']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'sort':
+        console.log('sort changed', newValue)
         this.sortPosts(newValue)
         break
       case 'filter':
@@ -305,7 +306,7 @@ export default class SociColumn extends SociComponent {
         this.updateTitle()
         document.querySelector('soci-sidebar').activateTag(newValue)
         if(newValue.match(/all|images|videos|blogs/)) this.setAttribute('filter', newValue)
-        this.sortPosts('new')
+        //this.sortPosts()
         break
       case 'subscribers':
         let subs = newValue || 0
@@ -363,7 +364,9 @@ export default class SociColumn extends SociComponent {
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
     this._updateBar(this.select('sorts'), sort)
-    this.querySelector('soci-post-list')?.setAttribute('data', '/posts' + paramString)
+    let postList = this.querySelector('soci-post-list')
+    if(postList?.getAttribute('data') == '/posts' + paramString) return
+    postList?.setAttribute('data', '/posts' + paramString)
   }
 
   filterPosts(filter){

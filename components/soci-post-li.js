@@ -2,6 +2,8 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociPostLi extends SociComponent {
+  _initialRender = false
+
   constructor() {
     super()
   }
@@ -312,7 +314,14 @@ export default class SociPostLi extends SociComponent {
     `
   }
 
-  html(){ return `
+  html(){ 
+    this._initialRender = true
+    const title = this.getAttribute('post-title')
+    const link = this.getAttribute('link')
+    const score = this.getAttribute('score')
+    const comments = this.getAttribute('comments')
+
+    return `
     <slot name="thumbnail">
       <picture id="thumbnail">
         <source class="heic">
@@ -333,17 +342,17 @@ export default class SociPostLi extends SociComponent {
         <div id="details">
           <slot name="user"></slot>
           <soci-link id="metadata-link">
-            <div id="votes"></div>
-            <div id="comments"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/></svg><span></span></div>
+            <div id="votes">${score} vote${score == 1 ? '' : 's'}</div>
+            <div id="comments"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/></svg><span>${comments} comment${comments == 1 ? '' : 's'}</span></div>
             <div id="time"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.5"/><path d="M7.5 5V8.5H10" stroke-linecap="round"/></svg><span></span><suffix> ago</suffix></div>
-            <div id="domain"></div>
+            <div id="domain">${link?.replace(/^(?:https?:\/\/)?(?:www\.)?([^\/]+).*$/, '$1')}</div>
           </soci-link>
         </div>
         <soci-link id="internal-link">
-          <div class="title"></div>
+          <div class="title">${title}</div>
         </soci-link>
-        <a id="external-link">
-          <div class="title"></div>
+        <a id="external-link" href="${this.getAttribute('link')}">
+          <div class="title">${title}</div>
         </a>
       </div>
       <slot name="tags"></slot>
@@ -360,6 +369,15 @@ export default class SociPostLi extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    if(!this._initialRender) {
+      if(name == 'time') {
+        if(newValue == "now") return this.select('#time span').innerHTML = "just now"
+        this.updateTime = this.updateTime.bind(this)
+        this.updateTime(newValue, this.select('#time span'))
+      }
+      return
+    }
+
     switch(name) {
       case 'post-title':
         this.select('#internal-link .title').innerHTML = newValue
@@ -380,7 +398,6 @@ export default class SociPostLi extends SociComponent {
         break
       case 'score':
         this.select('#votes').innerHTML = newValue + ' vote' + (newValue == 1 ? '' : 's')
-        //this.querySelector('soci-tag-group').setAttribute('score', newValue)
         break;
       case 'comments':
         this.select('#comments span').innerHTML = `${newValue}<suffix> comment${(newValue == 1 ? '' : 's')}</suffix>`
