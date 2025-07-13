@@ -152,7 +152,7 @@ export default class SociUser extends SociComponent {
 
   _setImages(path, force = false){
     let cacheBuster = force ? `?${Date.now()}` : ''
-    let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}${this._imageFolder}${path}.${format}${cacheBuster}" />`).join('')
+    let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}${this._imageFolder ? this._imageFolder : '/thumbnail/'}${path}.${format}${cacheBuster}" />`).join('')
     return (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
   }
 }
