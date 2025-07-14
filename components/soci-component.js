@@ -119,7 +119,9 @@ export default class SociComponent extends HTMLElement {
       ['d', 86400],
       ['w', 604800],
       ['mo', 2629746],
-      ['y', 31556952]
+      ['y', 31556952],
+      ['decade', 315569520],
+      ['century', 3155695200]
     ]
 
     const secondsAgo = Math.floor((Date.now() - parseInt(time)) / 1000) + 1

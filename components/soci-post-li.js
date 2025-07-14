@@ -321,7 +321,6 @@ export default class SociPostLi extends SociComponent {
     const score = this.getAttribute('score')
     const comments = this.getAttribute('comments')
     const url = this.getAttribute('url')
-    console.log('url', url)
 
     return `
     <slot name="thumbnail">
@@ -364,6 +363,13 @@ export default class SociPostLi extends SociComponent {
 
   connectedCallback(){
     this.addEventListener('scoreChanged', this._scoreChanged)
+    this.loadContent(this.getAttribute('type'))
+    const time = this.getAttribute('time')
+    if(time == 'now') this.select('#time span').innerHTML = "just now"
+    else {
+      this.updateTime = this.updateTime.bind(this)
+      this.updateTime(time, this.select('#time span'))
+    }
   }
 
   static get observedAttributes() {
@@ -371,14 +377,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(!this._initialRender) {
-      if(name == 'time') {
-        if(newValue == "now") return this.select('#time span').innerHTML = "just now"
-        this.updateTime = this.updateTime.bind(this)
-        this.updateTime(newValue, this.select('#time span'))
-      }
-      return
-    }
+    if(!this._initialRender) return
 
     switch(name) {
       case 'post-title':
