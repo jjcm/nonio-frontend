@@ -78,7 +78,7 @@ export default class SociUsernameInput extends SociComponent {
   `}
 
   html() { return `
-    <input id="path" type="text" placeholder="Username" spellcheck="false"/>
+    <input id="username" type="text" autocomplete="username" placeholder="Username" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
   `}

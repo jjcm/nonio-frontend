@@ -29,15 +29,18 @@ export default class SociTab extends SociComponent {
   }
 
   activate(){
-    if(this.hasAttribute('active')) return 0
+    if(this.hasAttribute('active')) return Promise.resolve()
     this.innerHTML = this.dataset.tabData
     this.dataset.tabData = ''
     this.setAttribute('activating', '')
-    setTimeout(()=>{
-      this.removeAttribute('activating')
-      this.setAttribute('active', '')
-      this.fire('tabactivate')
-    }, 1)
+    return new Promise(resolve => {
+      setTimeout(()=>{
+        this.removeAttribute('activating')
+        this.setAttribute('active', '')
+        this.fire('tabactivate')
+        resolve()
+      }, 1)
+    })
   }
 
   deactivate(){

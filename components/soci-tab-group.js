@@ -85,12 +85,20 @@ export default class SociTabGroup extends SociComponent {
     `
   }
 
-  _tabClick(e){
+  async _tabClick(e){
     let tab = e.target
     if(tab.tagName != 'TAB') return 0
     let name = tab.innerText
     let tabs = Array.from(this.querySelectorAll('soci-tab'))
-    tabs.forEach(tab=>tab[tab.getAttribute('name') == name ? 'activate' : 'deactivate']())
+    const targetTab = tabs.find(t => t.getAttribute('name') == name)
+    if (targetTab) {
+      await targetTab.activate()
+    }
+    tabs.forEach(t => {
+      if (t.getAttribute('name') != name) {
+        t.deactivate()
+      }
+    })
   }
 
   _tabActivated(e){
@@ -99,5 +107,24 @@ export default class SociTabGroup extends SociComponent {
 
     let name = e.target.getAttribute('name')
     this.select(`tab[name=${name}]`).setAttribute('active', '')
+  }
+
+  async activateTab(tabName){
+    const tabs = Array.from(this.querySelectorAll('soci-tab'))
+    const targetTab = tabs.find(tab => tab.getAttribute('name') === tabName)
+    
+    if (!targetTab) {
+      throw new Error(`Tab "${tabName}" not found`)
+    }
+
+    // Deactivate all other tabs
+    tabs.forEach(tab => {
+      if (tab.getAttribute('name') !== tabName) {
+        tab.deactivate()
+      }
+    })
+
+    // Activate the target tab and wait for it to complete
+    await targetTab.activate()
   }
 }

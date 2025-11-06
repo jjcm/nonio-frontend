@@ -80,8 +80,8 @@ export default class SociUrlInput extends SociComponent {
   `}
 
   html() { return `
-    <label for="path">${config.HOST}/</label>
-    <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
+    <label for="url-path">${config.HOST}/</label>
+    <input id="url-path" type="text" placeholder="post-url" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
   `}

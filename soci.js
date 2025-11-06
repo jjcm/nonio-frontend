@@ -175,6 +175,126 @@ let soci = {
     root.style.setProperty('--anim-duration-short', '0.1s')
     root.style.setProperty('--anim-duration-med', '0.2s')
     root.style.setProperty('--anim-duration-long', '0.4s')
+  },
+  handlePaste(e) {
+    const clipboardData = e.clipboardData || window.clipboardData
+    if (!clipboardData) return
+
+    // Check for image first
+    const items = Array.from(clipboardData.items)
+    const imageItem = items.find(item => item.type.indexOf('image') !== -1)
+
+    if (imageItem) {
+      e.preventDefault()
+      const file = imageItem.getAsFile()
+      if (file) {
+        soci.navigateToSubmit({ type: 'Image', value: file })
+        return
+      }
+    }
+
+    // If not an image, check if paste is text and only proceed if not in an input etc.
+    const text = clipboardData.getData('text/plain')
+    if (text) {
+      const target = e.target
+      const activeElement = document.activeElement
+
+      // Check if target is a standard input element
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return
+      }
+
+      // Check if the active/focused element is an input (covers shadow DOM inputs)
+      if (activeElement) {
+        if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.isContentEditable) {
+          return
+        }
+
+        // Check if active element is a custom input component
+        if (activeElement.tagName && activeElement.tagName.startsWith('SOCI-') && 
+            (activeElement.tagName.includes('INPUT') || activeElement.tagName.includes('EDITOR'))) {
+          return
+        }
+      }
+
+      // Check if target is inside a shadow root of a custom input component
+      const root = target.getRootNode ? target.getRootNode() : target.ownerDocument
+      if (root && root.host) {
+        const host = root.host
+        if (host.tagName && host.tagName.startsWith('SOCI-') && 
+            (host.tagName.includes('INPUT') || host.tagName.includes('EDITOR'))) {
+          return
+        }
+      }
+
+      const trimmedText = text.trim()
+      // Simple URL detection - check if it looks like a URL
+      try {
+        const url = new URL(trimmedText)
+        // Only handle http/https URLs
+        if (url.protocol === 'http:' || url.protocol === 'https:') {
+          e.preventDefault()
+          soci.navigateToSubmit({ type: 'Link', value: trimmedText })
+          return
+        }
+      } catch (e) {
+        // Not a valid URL, ignore
+      }
+    }
+  },
+  navigateToSubmit(data) {
+    const { type, value } = data
+    const submitRoute = document.querySelector('soci-route#submit')
+    const isOnSubmitPage = submitRoute && submitRoute.active && window.location.pathname === '/submit'
+    
+    const setupContent = async () => {
+      const tabGroup = submitRoute.querySelector('soci-tab-group')
+      if (!tabGroup) return
+
+      await tabGroup.activateTab(type)
+
+      let component = type === 'Image'
+        ? submitRoute.querySelector('soci-image-uploader')
+        : type === 'Link'
+        ? submitRoute.querySelector('soci-link-input')
+        : null;
+      
+      if (type === 'Image') {
+        const fileInput = component.shadowRoot.querySelector('input#file')
+        if (fileInput) {
+          // Use DataTransfer to create a FileList
+          const dataTransfer = new DataTransfer()
+          dataTransfer.items.add(value)
+          fileInput.files = dataTransfer.files
+          
+          // Trigger the change event to start upload
+          const changeEvent = new Event('change', { bubbles: true })
+          fileInput.dispatchEvent(changeEvent)
+        }
+      } else if (type === 'Link') {
+        // Set the URL in the link input
+        component.value = value
+        // Trigger input event to validate
+        const input = component.shadowRoot.querySelector('input')
+        if (input) {
+          const inputEvent = new Event('input', { bubbles: true })
+          input.dispatchEvent(inputEvent)
+        }
+      }
+    }
+
+    // If already on submit page, set up content directly
+    if (isOnSubmitPage) {
+      setupContent()
+    }
+    else {
+      window.history.pushState(null, null, '/submit')
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+      
+      submitRoute.addEventListener('routeactivate', () => {
+        setupContent()
+      }, { once: true })
+    }
   }
 }
 
@@ -189,3 +309,4 @@ window.soci = soci
 window.config = config
 document.addEventListener('DOMContentLoaded', soci.init)
 window.addEventListener('load', soci.setAnimationTimings)
+document.addEventListener('paste', soci.handlePaste)

@@ -77,7 +77,7 @@ export default class SociLinkInput extends SociComponent {
   `}
 
   html() { return `
-    <input id="path" type="text" placeholder="post-url" spellcheck="false"/>
+    <input type="text" placeholder="post-url" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
   `}
@@ -169,7 +169,6 @@ export default class SociLinkInput extends SociComponent {
     this.postData('/post/parse-external-url', {
       url: url
     }).then(res=>{
-      console.log(res)
       this.fire('url-metadata', res)
       this._statusIcon.glyph = 'success'
       this.setAttribute('available', true)

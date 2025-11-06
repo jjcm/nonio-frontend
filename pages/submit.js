@@ -82,7 +82,6 @@ let submit = {
     }
   },
   setLinkMetadata(e) {
-    console.log(e.detail)
     let previewLi = submit.dom.querySelector('soci-post-li')
     previewLi.setAttribute('post-title', '&nbsp;')
     let title = submit.dom.querySelector('input[name="title"]')
