@@ -8,7 +8,6 @@ let notifications = {
     let container = notifications.dom.querySelector('.inner-content')
     if(!soci.notificationCount) {
       notifications.dom.querySelectorAll('.type').forEach(tab => {
-        console.log(tab)
         tab.toggleAttribute('selected', tab.innerHTML != "Unread")
       })
     }

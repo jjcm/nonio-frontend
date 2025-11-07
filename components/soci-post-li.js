@@ -40,6 +40,7 @@ export default class SociPostLi extends SociComponent {
       ::slotted(img[src]),
       img[src] {
         display: block;
+        margin-right: 8px;
       }
 
       #preview {
@@ -59,7 +60,6 @@ export default class SociPostLi extends SociComponent {
       content {
         display: flex;
         flex-direction: column;
-        padding-left: 8px;
       }
       #top {
         display: flex;
@@ -71,6 +71,7 @@ export default class SociPostLi extends SociComponent {
         font-size: 12px;
         white-space: nowrap;
         flex-wrap: wrap;
+        height: 16px;
       }
       #domain,
       #time {
@@ -118,22 +119,11 @@ export default class SociPostLi extends SociComponent {
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      #tags {
-        margin-left: 8px;
-        overflow: hidden;
-        overflow-x: auto;
-        height: 20px;
-        line-height: 16px;
-        border-radius: 10px;
-        scrollbar-width: none;
-      }
-      #tags::-webkit-scrollbar {
-        display: none;
-      }
 
       slot[name="tags"] {
         display: inline-block;
         overflow: hidden;
+        height: 20px;
       }
 
       :host([score="0"]) #score {
@@ -147,7 +137,7 @@ export default class SociPostLi extends SociComponent {
       :host([expanded]) img {
         transition: all 0.1s var(--soci-ease);
         max-width: calc(100% - 280px);
-        margin-right: 12px;
+        margin-right: 16px;
       }
 
       #metadata-link,

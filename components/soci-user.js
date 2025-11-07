@@ -122,7 +122,6 @@ export default class SociUser extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(!this.initialRender) return
 
     switch(name) {
       case 'name':
@@ -151,6 +150,7 @@ export default class SociUser extends SociComponent {
   }
 
   _setImages(path, force = false){
+    if(!path) return ''
     let cacheBuster = force ? `?${Date.now()}` : ''
     let formats = ['webp', 'heic'].map(format=>`<source srcset="${config.AVATAR_HOST}${this._imageFolder ? this._imageFolder : '/thumbnail/'}${path}.${format}${cacheBuster}" />`).join('')
     return (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
