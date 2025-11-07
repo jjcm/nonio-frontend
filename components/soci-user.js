@@ -19,6 +19,7 @@ export default class SociUser extends SociComponent {
         --avatar-size: 16px;
         --line-height: 16px;
         --spacing: 8px;
+        height: var(--line-height);
       }
 
       div {
@@ -44,6 +45,10 @@ export default class SociUser extends SociComponent {
         color: inherit;
         display: block;
         border-radius: 3px;
+      }
+
+      soci-link {
+        height: var(--line-height);
       }
 
       :host([op]) username {
