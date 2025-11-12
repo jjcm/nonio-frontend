@@ -135,8 +135,6 @@ export default class SociVideoUploader extends SociComponent {
         display: none;
       }
       #encoding {
-        /* heh */
-        width: 420px;
         display: none;
       }
       :host([state="encoding"]) #encoding {
@@ -144,35 +142,6 @@ export default class SociVideoUploader extends SociComponent {
       }
       :host([state="encoding"]) #uploading {
         display: none;
-      }
-      columns {
-        display: flex;
-      }
-      column {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-      .fidelity {
-        line-height: 24px;
-        width: 152px;
-        display: flex;
-        margin-bottom: 8px;
-        transition: opacity 0.3s var(--soci-ease);
-      }
-      .fidelity[disabled] {
-        opacity: 0.3;
-      }
-      .fidelity span {
-        color: var(--text-brand);
-        font-size: 11px;
-        position: relative;
-        top: -4px;
-        left: 6px;
-      }
-      soci-radial-progress {
-        margin-right: 10px;
       }
 
     `
@@ -186,37 +155,7 @@ export default class SociVideoUploader extends SociComponent {
     <video id="preview" muted autoplay controls loop></video>
     </div>
     <div id="encoding">
-      <div class="info">encoding video...</div>
-      <columns>
-        <column>
-          <div class="fidelity" resolution="4320p" disabled>
-            <soci-radial-progress percent="0"></soci-radial-progress>
-            <div class="resolution">8k or higher</div>
-          </div>
-          <div class="fidelity" resolution="2160p" disabled>
-            <soci-radial-progress percent="0" ></soci-radial-progress>
-            <div class="resolution">2160p</div>
-          </div>
-          <div class="fidelity" resolution="1440p" disabled>
-            <soci-radial-progress percent="0" ></soci-radial-progress>
-            <div class="resolution">1440p</div>
-          </div>
-        </column>
-        <column>
-          <div class="fidelity" resolution="1080p" disabled>
-            <soci-radial-progress percent="0" waiting></soci-radial-progress>
-            <div class="resolution">1080p</div>
-          </div>
-          <div class="fidelity" resolution="720p" disabled>
-            <soci-radial-progress percent="0" ></soci-radial-progress>
-            <div class="resolution">720p</div>
-          </div>
-          <div class="fidelity" resolution="480p" disabled>
-            <soci-radial-progress percent="0" waiting></soci-radial-progress>
-            <div class="resolution">480p</div>
-          </div>
-        </column>
-      </columns>
+      <soci-encoding-progress></soci-encoding-progress>
     </div>
   `}
 
@@ -270,8 +209,13 @@ export default class SociVideoUploader extends SociComponent {
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
 
     request.addEventListener('load', e => {
+      this.fileUrl = request.response.slice(0, -4)
+      // Set fileUrl immediately so move() can work
+      // Start encoding and show the encoding progress UI
+      // User can still submit while encoding is in progress
+      this.setAttribute('state', 'encoding')
+      // Start encoding
       setTimeout(()=>{
-        this.setAttribute('state', 'encoding')
         this.encode(request.response)
       }, 400)
     })
@@ -287,13 +231,25 @@ export default class SociVideoUploader extends SociComponent {
   }
 
   async encode(filename){
-    this.fileUrl = filename.slice(0, -4)
     let protocol = config.VIDEO_HOST.match(/^https/) ? 'wss' : 'ws'
     let server = config.VIDEO_HOST.replace(/(^\w+:|^)\/\//, '')
     var conn = new WebSocket(`${protocol}://${server}/encode?file=${filename}`);
+    
+    // Helper to get encoding progress component
+    const getEncodingProgress = () => {
+      return this.select('soci-encoding-progress')
+    }
+    
     conn.addEventListener('close', e => {
-      let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
-      this.select('video').setAttribute('src', `${config.VIDEO_HOST}/${filename.slice(0, -4)}${previewResolution}.mp4`)
+      // Encoding complete - update video source if we have resolution info
+      if(this.equivalentResolution) {
+        let previewResolution = this.equivalentResolution.match(/480p|720p/) ? '' : '-720p'
+        let video = this.select('#preview')
+        if(video) {
+          video.setAttribute('src', `${config.VIDEO_HOST}/${filename.slice(0, -4)}${previewResolution}.mp4`)
+        }
+      }
+      // Switch to preview state to show the video
       setTimeout(()=> {
         this.setAttribute('state', 'preview')
       }, 500)
@@ -306,29 +262,18 @@ export default class SociVideoUploader extends SociComponent {
         this.videoHeight = parseInt(resolution[1])
         resolution = Math.max(this.videoWidth, this.videoHeight)
         this.equivalentResolution = '480p'
-        let resolutionBreakpoints = {
-          "480p": 0,
-          "720p": 1067,
-          "1080p": 1600,
-          "1440p": 2240,
-          "2160p": 3200,
-          "4320p": 5760
+        
+        // Update encoding progress component
+        const encodingProgress = getEncodingProgress()
+        if(encodingProgress) {
+          encodingProgress.setResolution(this.videoWidth, this.videoHeight)
         }
-        for(let res in resolutionBreakpoints) {
-          if(resolution > resolutionBreakpoints[res]) {
-            this.equivalentResolution = res
-            this.select(`[resolution="${res}"]`)?.toggleAttribute('disabled', false)
-          }
-        }
-        let fidelity = this.select(`[resolution="${this.equivalentResolution}"] .resolution`)
-        fidelity.innerHTML += '<span>source</span>'
       }
       else if(message[0].match(/source|480p|720p|1080p|1440p|4k/)){
-        let resolution = message[0] == 'source' ? this.equivalentResolution : message[0]
-        let progress = this.select(`[resolution="${resolution}"] soci-radial-progress`)
-        progress.toggleAttribute('waiting', false)
-        if(progress) {
-          progress.percent = message[1]
+        // Update progress in encoding progress component
+        const encodingProgress = getEncodingProgress()
+        if(encodingProgress) {
+          encodingProgress.updateProgress(message[0], message[1])
         }
       }
     })

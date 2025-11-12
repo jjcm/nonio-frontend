@@ -114,6 +114,7 @@ export default class SociUsernameInput extends SociComponent {
   _onFocus(e) {
     if(e.currentTarget == this) this._input.focus()
     this.setAttribute('tabindex', -1)
+    console.log('focus')
   }
 
   _onBlur(e) {

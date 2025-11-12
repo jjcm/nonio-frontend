@@ -126,3 +126,6 @@ window.customElements.define('soci-video', SociVideo)
 
 import SociVideoUploader from "./soci-video-uploader.js"
 window.customElements.define('soci-video-uploader', SociVideoUploader)
+
+import SociEncodingProgress from "./soci-encoding-progress.js"
+window.customElements.define('soci-encoding-progress', SociEncodingProgress)
