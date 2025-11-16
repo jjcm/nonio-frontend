@@ -36,6 +36,7 @@ export default class SociLink extends SociComponent {
   }
 
   localLink(e){
+    console.log('localLink', e)
     e.preventDefault()
     let link = e.currentTarget
     window.history.pushState(null, null, link.href)

@@ -10,20 +10,30 @@ export default class SociTagGroup extends SociComponent {
       --height: 20px;
       --tag-font-size: 10px;
       display: inline-flex;
-      line-height: var(--height);
       align-items: center;
       position: relative;
       max-width: 100%;
+      height: var(--height);
+      vertical-align: top;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     #tags {
       overflow: hidden;
       height: var(--height);
-      line-height: 16px;
+      line-height: var(--height);
       border-radius: 3px;
       scrollbar-width: none;
+      display: inline-block;
+      vertical-align: top;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     #tags slot {
       display: inline-flex;
+      vertical-align: top;
     }
     :host::-webkit-scrollbar {
       display: none;
@@ -132,10 +142,6 @@ export default class SociTagGroup extends SociComponent {
     :host([size="large"]) {
       --height: 20px;
       --tag-font-size: 14px;
-    }
-
-    :host([size="large"]) #tags {
-      margin-left: 4px;
     }
 
     :host([size="large"]) #arrow {
@@ -251,7 +257,7 @@ export default class SociTagGroup extends SociComponent {
         soci.votes[res.postID]?.push(res.tagID)
     })
 
-    if(this.childNodes[0].nodeType == 3) this.childNodes[0].remove()
+    if(this.childNodes[0]?.nodeType == 3) this.childNodes[0].remove()
     this.innerHTML = `<soci-tag tag="${tagName}" score="1" upvoted></soci-tag>` + this.innerHTML
     this._tagVoted({detail:{upvoted: true}})
     this.select('#add-tag input').value = ''
