@@ -234,6 +234,7 @@ export default class SociPost extends SociComponent {
           opacity: 1;
         }
       }
+
     `
   }
 
@@ -304,6 +305,9 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.toggleAttribute('loaded', false)
     this.getData('/posts/' + url).then(post => {
+      // Store isEncoding before processing other fields
+      let isEncoding = false
+      
       for(let key in post) {
         switch(key){
           case 'content':
@@ -311,7 +315,6 @@ export default class SociPost extends SociComponent {
             break
           case 'type':
             this.setAttribute(key, post[key])
-            this.loadContent(post[key])
             break
           case 'tags':
             this.setAttribute(key, post[key].map(tag=>tag.tag).join(','))
@@ -338,18 +341,28 @@ export default class SociPost extends SociComponent {
           case 'ID':
             this.setAttribute('post-id', post[key])
             break
+          case 'isEncoding':
+            isEncoding = post[key]
+            this.setAttribute('is-encoding', post[key] ? 'true' : 'false')
+            break
           default:
             this.setAttribute(key, post[key])
             break
         }
       }
+      
+      // Load content after all attributes are set, checking isEncoding
+      if(post.type) {
+        this.loadContent(post.type, isEncoding)
+      }
+      
       setTimeout(()=>{
         this.toggleAttribute('loaded', true)
       }, 100)
     })
   }
 
-  loadContent(type) {
+  loadContent(type, isEncoding = false) {
     this.querySelector('soci-tag-group')?.setAttribute('format', type)
     document.head.querySelector(`meta[property="og:image"]`)?.remove()
     switch(type){
@@ -365,12 +378,39 @@ export default class SociPost extends SociComponent {
         this.setImage()
         break
       case 'video':
-        this.select('#media-container').innerHTML = `
-          <div id="video" class="media">
-            <soci-video></soci-video>
-          </div>
-        `
-        this.select('soci-video').url = this.url
+        // Check if video is still encoding
+        // If isEncoding parameter is explicitly passed (not undefined), use it
+        // Otherwise fall back to attribute
+        const encoding = isEncoding !== undefined ? isEncoding : (this.getAttribute('is-encoding') === 'true')
+        console.log('[SociPost] loadContent video, encoding:', encoding, 'isEncoding param:', isEncoding, 'attribute:', this.getAttribute('is-encoding'))
+        if(encoding) {
+          // Only show encoding progress if we don't already have a video element
+          const existingVideo = this.select('#video')
+          const existingProgress = this.select('soci-encoding-progress')
+          console.log('[SociPost] Existing video element:', existingVideo, 'Existing progress:', existingProgress)
+          if(!existingVideo) {
+            console.log('[SociPost] No video element, showing encoding progress')
+            this.showEncodingProgress()
+          } else {
+            console.log('[SociPost] Video element already exists, not showing encoding progress')
+          }
+        } else {
+          console.log('[SociPost] Encoding complete, loading video')
+          // Close any existing encoding WebSocket connection
+          if(this._encodingWebSocket) {
+            console.log('[SociPost] Closing existing WebSocket connection')
+            this._encodingWebSocket.close()
+            this._encodingWebSocket = null
+          }
+          // Clear any encoding progress widget
+          this.select('#media-container').innerHTML = ''
+          this.select('#media-container').innerHTML = `
+            <div id="video" class="media">
+              <soci-video></soci-video>
+            </div>
+          `
+          this.select('soci-video').url = this.url
+        }
         break
       case 'html':
         this.setAttribute('type', 'html')
@@ -451,5 +491,138 @@ export default class SociPost extends SociComponent {
     else {
       this.select('meta-data #vote-message')?.remove()
     }
+  }
+
+  showEncodingProgress(){
+    console.log('[SociPost] showEncodingProgress called')
+    // Don't show encoding progress if we already have it displayed
+    const existing = this.select('soci-encoding-progress')
+    if(existing) {
+      console.log('[SociPost] Encoding progress already displayed, skipping')
+      return
+    }
+    
+    console.log('[SociPost] Creating encoding progress widget')
+    // Use the reusable encoding progress component
+    this.select('#media-container').innerHTML = `<soci-encoding-progress></soci-encoding-progress>`
+    
+    // Connect to WebSocket for real-time encoding progress
+    this.connectToEncodingProgress()
+  }
+
+  connectToEncodingProgress(){
+    console.log('[SociPost] connectToEncodingProgress called, url:', this.url)
+    // Don't create multiple connections
+    if(this._encodingWebSocket) {
+      console.log('[SociPost] WebSocket already exists, skipping connection')
+      return
+    }
+    
+    let protocol = config.VIDEO_HOST.match(/^https/) ? 'wss' : 'ws'
+    let server = config.VIDEO_HOST.replace(/(^\w+:|^)\/\//, '')
+    const encodingProgress = this.select('soci-encoding-progress')
+    console.log('[SociPost] Encoding progress element:', encodingProgress)
+    
+    const wsUrl = `${protocol}://${server}/encode?url=${this.url}`
+    console.log('[SociPost] Connecting to WebSocket:', wsUrl)
+    // Connect using the post URL instead of temp filename
+    this._encodingWebSocket = new WebSocket(wsUrl)
+    const conn = this._encodingWebSocket
+    
+    conn.addEventListener('open', e => {
+      console.log('[SociPost] WebSocket connection opened')
+    })
+    
+    conn.addEventListener('close', e => {
+      console.log('[SociPost] WebSocket connection closed, code:', e.code, 'reason:', e.reason)
+      this._encodingWebSocket = null
+      
+      // Check if the close was due to an error (like "No encoding session found")
+      // If so, encoding is definitely complete
+      const wasError = e.code === 1006 || e.reason?.includes('Error')
+      
+      // Encoding complete - reload the post content
+      // Add a small delay to ensure backend has updated isEncoding status
+      console.log('[SociPost] Waiting 500ms before checking encoding status...')
+      setTimeout(() => {
+        console.log('[SociPost] Checking post encoding status...')
+        this.getData('/posts/' + this.url).then(post => {
+          console.log('[SociPost] Post data received, isEncoding:', post.isEncoding)
+          // If encoding is false OR we got an error from WebSocket, load the video
+          if(!post.isEncoding || wasError) {
+            console.log('[SociPost] Encoding complete, clearing widget and loading video')
+            // Clear the encoding progress widget before loading video
+            this.select('#media-container').innerHTML = ''
+            // Explicitly pass false to prevent checking attribute
+            this.loadContent('video', false)
+          } else {
+            console.log('[SociPost] Post still encoding, not loading video yet')
+          }
+        }).catch(err => {
+          console.error('[SociPost] Error fetching post data:', err)
+          // If request fails, still try to load content
+          console.log('[SociPost] Loading video anyway due to error')
+          this.select('#media-container').innerHTML = ''
+          // Explicitly pass false to prevent checking attribute
+          this.loadContent('video', false)
+        })
+      }, 500)
+    })
+    
+    conn.addEventListener('message', e => {
+      console.log('[SociPost] WebSocket message received:', e.data)
+      let message = e.data.split(':')
+      if(message[0] == 'resolution'){
+        let resolution = message[1].split('x')
+        const width = parseInt(resolution[0])
+        const height = parseInt(resolution[1])
+        console.log('[SociPost] Resolution message:', width, 'x', height)
+        
+        // Update encoding progress component
+        if(encodingProgress) {
+          encodingProgress.setResolution(width, height)
+        } else {
+          console.warn('[SociPost] Encoding progress element not found when updating resolution')
+        }
+      }
+      else if(message[0].match(/source|480p|720p|1080p|1440p|4k/)){
+        console.log('[SociPost] Progress update:', message[0], '=', message[1])
+        // Update progress in encoding progress component
+        if(encodingProgress) {
+          encodingProgress.updateProgress(message[0], message[1])
+        } else {
+          console.warn('[SociPost] Encoding progress element not found when updating progress')
+        }
+      } else {
+        console.log('[SociPost] Unknown message type:', message[0])
+      }
+    })
+    
+    conn.addEventListener('error', e => {
+      console.error('[SociPost] WebSocket error:', e)
+      this._encodingWebSocket = null
+      // Fallback to polling if WebSocket fails
+      this.checkEncodingStatus()
+    })
+  }
+
+  checkEncodingStatus(){
+    // Fallback polling method if WebSocket fails
+    const checkInterval = setInterval(() => {
+      this.getData('/posts/' + this.url).then(post => {
+        if(!post.isEncoding) {
+          // Encoding is complete, reload the post content
+          clearInterval(checkInterval)
+          this.loadContent('video', false)
+        }
+      }).catch(() => {
+        clearInterval(checkInterval)
+      })
+    }, 2000) // Check every 2 seconds
+
+    // Stop checking after 5 minutes to avoid infinite polling
+    setTimeout(() => {
+      clearInterval(checkInterval)
+    }, 300000)
   }
 }
