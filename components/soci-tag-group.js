@@ -226,6 +226,7 @@ export default class SociTagGroup extends SociComponent {
   addTag(){
     let input = this.select('#add-tag input')
     let tagName = input.value
+    console.log(tagName)
     // Check if this tag already exists on the post
     let existingTag = Array.from(this.querySelectorAll('soci-tag')).find(tag=>tag.getAttribute('tag')==tagName)
     if(existingTag){
@@ -245,16 +246,13 @@ export default class SociTagGroup extends SociComponent {
       post: url,
       tag: tagName
     }).then(res => {
+      console.log(res)
       if(res.postID && res.tagID)
         soci.votes[res.postID]?.push(res.tagID)
     })
 
-    let newTag = document.createElement('soci-tag')
-    newTag.setAttribute('tag', tagName)
-    newTag.setAttribute('score', 1)
-    newTag.toggleAttribute('upvoted')
     if(this.childNodes[0].nodeType == 3) this.childNodes[0].remove()
-    this.prepend(newTag)
+    this.innerHTML = `<soci-tag tag="${tagName}" score="1" upvoted></soci-tag>` + this.innerHTML
     this._tagVoted({detail:{upvoted: true}})
     this.select('#add-tag input').value = ''
     this._closeTagSearch()
