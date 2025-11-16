@@ -99,6 +99,7 @@ export default class SociTag extends SociComponent {
         this.select('score').innerHTML = newValue
         break
       case 'tag':
+        console.log('tag', newValue)
         this.select('soci-link').innerHTML = newValue
     }
   }
@@ -111,7 +112,7 @@ export default class SociTag extends SociComponent {
       <soci-icon glyph="upvote"></soci-icon>
       <score>${this.getAttribute('score')}</score>
     </div>
-    <soci-link>${this.getAttribute('tag')}</soci-link>
+    <soci-link href="/#${this.getAttribute('tag')}">${this.getAttribute('tag')}</soci-link>
   `}
 
   get score(){
@@ -129,7 +130,7 @@ export default class SociTag extends SociComponent {
 
   set tag(val){
     this.setAttribute('tag', val)
-    this.select('soci-link').innerHTML = val
+    this.select('soci-link').href = '#' + val
   }
   
   vote(e){

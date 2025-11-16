@@ -35,10 +35,19 @@ export default class SociLink extends SociComponent {
     if(name == 'href') this.shadowRoot.querySelector('a').href = newValue
   }
 
+  set href(val){
+    this.setAttribute('href', val)
+  }
+
+  get href(){
+    return this.getAttribute('href')
+  }
+
   localLink(e){
     console.log('localLink', e)
     e.preventDefault()
     let link = e.currentTarget
+    console.log('link', link)
     window.history.pushState(null, null, link.href)
     window.dispatchEvent(new CustomEvent('link', {detail: link.hasAttribute('fresh') ? 'fresh' : ''}))
   }
