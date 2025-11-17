@@ -238,6 +238,14 @@ export default class SociPost extends SociComponent {
         display: inline-block;
       }
 
+      #error {
+        color: var(--text-danger);
+        font-size: 16px;
+        text-align: center;
+        margin-top: 40px;
+        animation: load 0.2s var(--soci-ease) forwards;
+      }
+
       @keyframes load {
         from {
           transform: translateY(4px);
@@ -321,6 +329,11 @@ export default class SociPost extends SociComponent {
   loadPost(url) {
     this.toggleAttribute('loaded', false)
     this.getData('/posts/' + url).then(post => {
+      if(post.error) {
+        this.select('#details-container').innerHTML = `<div id="error">${post.error}</div>`
+        this.style.opacity = 1
+        return
+      }
       // Store isEncoding before processing other fields
       let isEncoding = false
       
