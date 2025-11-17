@@ -133,6 +133,20 @@ export default class SociPost extends SociComponent {
         margin-top: 4px;
         color: var(--text-secondary);
       }
+      meta-data > *:not(:first-child):before,
+      #delete:before {
+        content: '•';
+        display: inline-block;
+        margin: 0 1ch 0 0.5ch;
+        color: var(--text-tertiary);
+      }
+      #delete {
+        color: var(--text-tertiary);
+      }
+      #delete span:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
 
       soci-user[username-only] {
         --font-size: 14px;
@@ -248,7 +262,8 @@ export default class SociPost extends SociComponent {
             <a id="external-link"><h1></h1></a>
             <soci-user avatar-only></soci-user>
             <meta-data>
-              by <soci-user username-only></soci-user> &nbsp;|&nbsp; <time></time>
+              by <soci-user username-only></soci-user> <time></time>
+              <div id="delete" style="display: none;" @click=deletePost><span>delete</span></div>
             </meta-data>
           </title-container>
           <slot name="tags"></slot>
@@ -291,6 +306,7 @@ export default class SociPost extends SociComponent {
         break
       case 'user':
         this.selectAll('soci-user').forEach(user => user.setAttribute('name', newValue))
+        this._checkDeletePermission()
         break
       case 'score':
         this.querySelector('soci-tag-group').setAttribute('score', newValue)
@@ -358,8 +374,35 @@ export default class SociPost extends SociComponent {
       
       setTimeout(()=>{
         this.toggleAttribute('loaded', true)
+        this._checkDeletePermission()
       }, 100)
     })
+  }
+
+  _checkDeletePermission(){
+    const author = this.select('soci-user')?.getAttribute('name')
+    console.log(author)
+    
+    if(author == soci.username || soci.roles.includes('admin')) {
+      this.select('#delete').style.display = 'inline'
+    }
+  }
+
+  async deletePost(e){
+    let dom = this.select('#delete')
+    switch(e.target.innerHTML){
+      case 'delete':
+        dom.innerHTML = `are you sure? <span style="color: var(--text-danger);">confirm delete</span> | <span>cancel</span>`
+        break
+      case 'confirm delete':
+        await soci.postData('post/delete', { url: this.getAttribute('url') })
+        window.location.href = '/'
+        window.history.pushState(null, null, '/')
+        break
+      case 'cancel':
+        dom.innerHTML = `<span>delete</span>`
+        break
+    }
   }
 
   loadContent(type, isEncoding = false) {

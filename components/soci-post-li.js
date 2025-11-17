@@ -81,11 +81,19 @@ export default class SociPostLi extends SociComponent {
         display: none;
       }
 
-      #metadata-link > div:before {
+      #metadata-link > div:before,
+      #delete:before {
         content: '•';
         display: inline-block;
         margin-right: 1ch;
         color: var(--text-tertiary);
+      }
+      #delete {
+        color: var(--text-tertiary);
+      }
+      #delete span:hover {
+        text-decoration: underline;
+        cursor: pointer;
       }
       #comments {
         color: var(--text-secondary);
@@ -337,6 +345,7 @@ export default class SociPostLi extends SociComponent {
             <div id="time"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.5"/><path d="M7.5 5V8.5H10" stroke-linecap="round"/></svg><span></span><suffix> ago</suffix></div>
             <div id="domain">${link?.replace(/^(?:https?:\/\/)?(?:www\.)?([^\/]+).*$/, '$1')}</div>
           </soci-link>
+          <div id="delete" style="display: none;" @click=deletePost><span>delete</span></div>
         </div>
         <soci-link id="internal-link" ${url ? `href="/${url}"` : ''}>
           <div class="title">${title}</div>
@@ -358,6 +367,31 @@ export default class SociPostLi extends SociComponent {
     else {
       this.updateTime = this.updateTime.bind(this)
       this.updateTime(time, this.select('#time span'))
+    }
+    this._checkDeletePermission()
+  }
+
+  _checkDeletePermission(){
+    const author = this.querySelector('soci-user')?.getAttribute('name')
+    
+    if(author == soci.username || soci.roles.includes('admin')) {
+      this.select('#delete').style.display = 'inline'
+    }
+  }
+
+  async deletePost(e){
+    let dom = this.select('#delete')
+    switch(e.target.innerHTML){
+      case 'delete':
+        dom.innerHTML = `are you sure? <span style="color: var(--text-danger);">confirm delete</span> | <span>cancel</span>`
+        break
+      case 'confirm delete':
+        await soci.postData('post/delete', { url: this.getAttribute('url') })
+        this.remove()
+        break
+      case 'cancel':
+        dom.innerHTML = `<span>delete</span>`
+        break
     }
   }
 
