@@ -1,11 +1,23 @@
 let post = {
-  dom: document.currentScript.closest('soci-route'),
   init() {
-    soci.registerPage(post)
+    let postRoute = document.querySelector('#post')
+    if(postRoute) {
+      postRoute.addEventListener('routeactivate', post.onActivate)
+    }
   },
-  onActivate() {
-    let post = document.querySelector('#post soci-post')
-    post.setAttribute('url', document.location.pathname.substr(1))
+  onActivate(e) {
+    let route = e.target
+    let postElement = route.querySelector('soci-post')
+    let path = window.soci.routeContext.path
+    let url = path.substr(1)
+
+    // Check if it's a community post (/@community/post-slug)
+    let match = path.match(/^\/@([\w-]+)\/([\w-]+)$/)
+    if(match) {
+        url = match[2] // The post slug (without community prefix)
+    }
+
+    postElement.setAttribute('url', url)
   },
   submit(e) {
     if(submit.form.checkValidity()){

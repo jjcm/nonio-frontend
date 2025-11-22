@@ -19,6 +19,7 @@ html(lang="en")
   link(rel="stylesheet" href="/soci.styl")
   link(rel="stylesheet" href="/lib/quillStyle.css")
 
+  soci-community-bar
   soci-sidebar(loading)
     div(slot="login")
       form
@@ -35,7 +36,7 @@ html(lang="en")
         soci-button(async onclick="this.closest('soci-sidebar').register()") Create Account
     tags(slot="tags")
   #pages
-    soci-route#tags(test="both" path="(^/#)|(^/$)" fresh)
+    soci-route#tags(test="both" path="^(/@[\\w-]+)?/?(#.*)?$" fresh)
       include pages/tags.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
       include pages/admin/create.pug
@@ -51,7 +52,7 @@ html(lang="en")
       include pages/notifications.pug
     soci-route#user(test="both" path="^/user/" fresh)
       include pages/user.pug
-    soci-route#submit(path="/submit")
+    soci-route#submit(path="^(/@[\\w-]+)?/submit$" fresh)
       include pages/submit.pug
     soci-route#admin-financials(path="/admin/financials").admin-page
       include pages/admin/financials.pug
@@ -61,10 +62,22 @@ html(lang="en")
       include pages/about/privacy-policy.pug
     soci-route#contact(path="/about/contact")
       include pages/about/contact.pug
+
+    soci-route#community-admin(path="^/@[\\w-]+/admin$" fresh)
+      .community-admin(load-order="primary")
+        h1 Community Admin
+        p Manage moderators for this community.
+        .moderator-form
+          input#new-mod(type="text" placeholder="Username")
+          button#add-mod Add Moderator
+        #mod-list
+      script.
+        lazyload('/pages/community-admin.js', document.currentScript.closest('soci-route'))
+
     soci-route#post(default fresh)
       include pages/post.pug
 
-
+  script(src="/pages/post.js")
   script.
     lazyload('/lib/quill.min.js')
 

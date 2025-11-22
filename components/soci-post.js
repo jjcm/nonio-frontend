@@ -408,7 +408,7 @@ export default class SociPost extends SociComponent {
         dom.innerHTML = `are you sure? <span style="color: var(--text-danger);">confirm delete</span> | <span>cancel</span>`
         break
       case 'confirm delete':
-        await soci.postData('post/delete', { url: this.getAttribute('url') })
+        await window.api.posts.delete(this.getAttribute('url'))
         window.location.href = '/'
         window.history.pushState(null, null, '/')
         break

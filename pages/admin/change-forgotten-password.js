@@ -19,7 +19,7 @@ let adminChangeForgottenPassword = {
     if(form.reportValidity()){
       let data = soci.getJSONFromForm(button.closest('form'))
       data.token = token
-      let response = await soci.postData('user/change-forgotten-password', data)
+      let response = await window.api.user.changeForgottenPassword(data)
       if(response == true) {
         button.success()
         setTimeout(()=>{

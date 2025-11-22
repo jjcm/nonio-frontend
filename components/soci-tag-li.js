@@ -77,8 +77,12 @@ export default class SociTagLi extends SociComponent {
         display: none;
       }
 
-      :host(:hover:not([href])) #toggleSubscribe {
+      :host(:hover) #toggleSubscribe {
         display: block;
+      }
+
+      :host([hide-subscribe]) #toggleSubscribe {
+        display: none !important;
       }
 
       #toggleSubscribe:hover {
@@ -192,7 +196,10 @@ export default class SociTagLi extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     if(name == 'tag') {
       this.innerHTML = newValue
-      this.select('a').href = `/#${newValue}`
+      // Only set default href if not explicitly set
+      if(!this.hasAttribute('href')) {
+        this.select('a').href = `/#${newValue}`
+      }
     }
     else if(name == 'href') {
       this.select('a').href = newValue
@@ -216,7 +223,8 @@ export default class SociTagLi extends SociComponent {
     })
 
     this.postData(`/subscription/${subscribing ? 'create' : 'delete'}`, {
-      tag: this.innerHTML
+      tag: this.innerHTML,
+      community: window.soci.routeContext.community
     })
   }
 
@@ -225,10 +233,5 @@ export default class SociTagLi extends SociComponent {
     let href = this.select('a').href
     window.history.pushState(null, null, href)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
-    let special = href.match(/#all|#images|#videos|#blogs/)
-    let tagName = special ? special[0].slice(1) : this.tag
-    let column = document.querySelector('#tags soci-column')
-    column?.removeAttribute('filter')
-    column?.setAttribute('tag', tagName)
   }
 }

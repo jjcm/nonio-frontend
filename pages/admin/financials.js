@@ -41,7 +41,7 @@ let adminFinancials = {
   cancelSubscription: async () => {
     let button = adminFinancials.dom.querySelector('#financial-subscription soci-button.cancel-sub-button')
     button?.wait()
-    await soci.postData('stripe/subscription/delete', {}).then(response => {
+    await window.api.stripe.deleteSubscription().then(response => {
       if(response.error) {
         console.error(response.error)
         button?.error()
@@ -62,7 +62,7 @@ let adminFinancials = {
   },
   requestManualWithdrawal: async () => {
     let button = adminFinancials.dom.querySelector('soci-modal soci-button')
-    await soci.postData('user/request-withdrawal', {
+    await window.api.user.requestWithdrawal({
 
     }).then(response => {
       if(response.error) {

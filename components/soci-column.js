@@ -287,7 +287,7 @@ export default class SociColumn extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['tag', 'filter', 'sort']
+    return ['tag', 'filter', 'sort', 'community']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -311,6 +311,9 @@ export default class SociColumn extends SociComponent {
       case 'subscribers':
         let subs = newValue || 0
         this.select('subscribers').innerHTML = subs + ' subscribers'
+        break
+      case 'community':
+        this.sortPosts()
         break
     }
   }
@@ -360,7 +363,11 @@ export default class SociColumn extends SociComponent {
         break
     }
 
-    if(this.tag) params.push(`tag=${this.tag}`)
+    if(this.tag && this.tag != 'all') params.push(`tag=${this.tag}`)
+    
+    let community = this.getAttribute('community')
+    if(community) params.push(`community=${community}`)
+
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
     this._updateBar(this.select('sorts'), sort)

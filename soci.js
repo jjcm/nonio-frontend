@@ -1,9 +1,12 @@
 import config from './config.js'
+import api from './api.js'
+import SociRouteContext from './lib/soci-route-context.js'
 
 let soci = {
   init: () => {
     soci.checkTokenExpired()
   },
+  routeContext: SociRouteContext,
   get accessToken() {
     return localStorage.getItem('accessToken')
   },
@@ -37,7 +40,7 @@ let soci = {
     })
   },
   refreshAccessToken: () => {
-    soci.postData('user/refresh-access-token', {refreshToken: soci.refreshToken}).then(res=>{
+    api.user.refreshAccessToken(soci.refreshToken).then(res=>{
       soci.accessToken = res.accessToken
       soci.refreshToken = res.refreshToken
     })
@@ -85,37 +88,11 @@ let soci = {
     }
     return json
   },
-  postData: async function(url, data = {}) {
-    const response = await fetch(`${config.API_HOST}/${url}`, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + soci.accessToken
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data) 
-    })
-    return await response.json()
+  postData: async (url, data) => {
+    return await api.postData(url, data)
   },
-  getData: async function(url){
-    /* Use this if we ever switch to a secure server for non.io only
-    let options = {
-      mode: 'cors',
-      credentials: 'include'
-    }
-    */
-
-    let options = {}
-    if(soci.accessToken) options.headers = { 
-      Authorization: 'Bearer ' + soci.accessToken
-    }
-
-    const response = await fetch(`${config.API_HOST}/${url}`, options)
-    return await response.json()
+  getData: async (url) => {
+    return await api.getData(url)
   },
   log(message, details, type){
     let color = ['deebff', '0747ac']
@@ -141,7 +118,7 @@ let soci = {
   },
   votes: {},
   loadVotes() {
-    soci.getData('votes').then(res=>{
+    api.votes.get().then(res=>{
       let votes = {}
       res.votes.forEach(vote => {
         if(!votes[vote.postID]) votes[vote.postID] = []

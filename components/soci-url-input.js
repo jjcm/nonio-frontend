@@ -80,7 +80,7 @@ export default class SociUrlInput extends SociComponent {
   `}
 
   html() { return `
-    <label for="url-path">${config.HOST}/</label>
+    <label for="url-path" id="url-prefix">${config.HOST}/</label>
     <input id="url-path" type="text" placeholder="post-url" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
@@ -89,6 +89,7 @@ export default class SociUrlInput extends SociComponent {
   connectedCallback() {
     this._input = this.select('input')
     this._statusIcon = this.select('soci-icon')
+    this._prefix = this.select('#url-prefix')
 
     this._keyDownTimer = null
     this._error = null
@@ -98,6 +99,21 @@ export default class SociUrlInput extends SociComponent {
     this.addEventListener('focus', this._onFocus.bind(this))
 
     this._internals.setValidity({customError: true}, 'Submissions require a url')
+    
+    // Update prefix based on current path
+    this._updatePrefix()
+    window.addEventListener('hashchange', this._updatePrefix.bind(this))
+    window.addEventListener('popstate', this._updatePrefix.bind(this))
+    window.addEventListener('link', this._updatePrefix.bind(this))
+  }
+
+  _updatePrefix() {
+    let community = window.soci.routeContext.community
+    if(community) {
+      this._prefix.textContent = `${config.HOST}/@${community}/`
+    } else {
+      this._prefix.textContent = `${config.HOST}/`
+    }
     this.manuallySet = false
   }
 

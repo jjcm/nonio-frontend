@@ -4,21 +4,29 @@ let submit = {
     soci.registerPage(submit)
   },
   form: null, 
+  currentCommunity: null,
   onActivate() {
-    submit.form = document.querySelector('#submit form')
+    submit.form = this.dom.querySelector('form')
 
-    document.title = 'Submit post to Nonio'
-    let title = submit.dom.querySelector('input[name="title"]')
+    submit.currentCommunity = window.soci.routeContext.community
+    
+    console.log('Submit onActivate - path:', window.soci.routeContext.path, 'currentCommunity:', submit.currentCommunity)
+
+    document.title = submit.currentCommunity 
+      ? `Submit to ${submit.currentCommunity}` 
+      : 'Submit post to Nonio'
+    
+    let title = this.dom.querySelector('input[name="title"]')
     title.setCustomValidity("A title is required.")
     title.addEventListener('input', submit.checkTitleValidity)
     title.addEventListener('input', submit.populateUrl)
     title.addEventListener('blur', submit.checkUrl)
     title.focus()
 
-    submit.submitButton = submit.dom.querySelector('soci-button')
+    submit.submitButton = this.dom.querySelector('soci-button')
     submit.submitButton.addEventListener('click', submit.submit)
 
-    let linkInput = submit.dom.querySelector('soci-link-input')
+    let linkInput = this.dom.querySelector('soci-link-input')
     linkInput.addEventListener('url-metadata', submit.setLinkMetadata)
   },
   checkTitleValidity(e) {
@@ -57,7 +65,8 @@ let submit = {
           return 0
         }
       }
-      soci.postData('post/create', {
+
+      let payload = {
         title: data.get('title'),
         url: data.get('url'),
         content: data.get('description'),
@@ -65,10 +74,20 @@ let submit = {
         type: type,
         width: fileUploader?.width,
         height: fileUploader?.height
-      }).then(e=>{
+      }
+      
+      // Only add community if we're in a community context
+      if(submit.currentCommunity) {
+        payload.community = submit.currentCommunity
+      }
+      
+      console.log('Submitting post with payload:', payload)
+
+      window.api.posts.create(payload).then(e=>{
         if(e.url){
           submit.submitButton.success()
-          window.history.pushState(null, null, e.url)
+          let url = submit.currentCommunity ? `/@${submit.currentCommunity}/${e.url}` : `/${e.url}`
+          window.history.pushState(null, null, url)
           window.dispatchEvent(new HashChangeEvent('hashchange'))
           document.dispatchEvent(new CustomEvent('activitychange'))
         }

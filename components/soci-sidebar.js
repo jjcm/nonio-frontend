@@ -330,14 +330,14 @@ export default class SociSidebar extends SociComponent {
         </section>
         <content>
           <section id="all-tags">
-            <soci-tag-li href="/#all" icon="home">
+            <soci-tag-li href="/#all" icon="home" hide-subscribe>
               All posts
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"/>
                 <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#images">
+            <soci-tag-li href="/#images" hide-subscribe>
               Images
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
@@ -345,14 +345,14 @@ export default class SociSidebar extends SociComponent {
                 <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#videos">
+            <soci-tag-li href="/#videos" hide-subscribe>
               Videos
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
                 <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
               </svg>
             </soci-tag-li>
-            <soci-tag-li href="/#blogs">
+            <soci-tag-li href="/#blogs" hide-subscribe>
               Blogs
               <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
@@ -365,6 +365,10 @@ export default class SociSidebar extends SociComponent {
           <section id="subscribed-tags" style="height: 0px; opacity: 0;">
             <h2>Subscribed Tags</h2>
             <tags></tags>
+          </section>
+          <section id="communities">
+            <h2>Communities</h2>
+            <communities></communities>
           </section>
           <section id="tags">
             <h2>Tags</h2>
@@ -396,6 +400,10 @@ export default class SociSidebar extends SociComponent {
     `
   }
 
+  get currentCommunity() {
+    return window.soci.routeContext.community
+  }
+
   async connectedCallback(){
     this.toggleAttribute('loading', false)
     if(!this.authToken) {
@@ -405,11 +413,56 @@ export default class SociSidebar extends SociComponent {
     else {
       this._loadSubscribedTags()
       this._loadCommonTags()
+      this._loadCommunities()
     }
 
     this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
     this.select('content').addEventListener('subscribe', this._createSubscribedTag.bind(this))
     this.select('content').addEventListener('unsubscribe', this._removeSubscribedTag.bind(this))
+    
+    // Update submit button href based on current route
+    window.addEventListener('hashchange', this._onRouteChange.bind(this))
+    window.addEventListener('popstate', this._onRouteChange.bind(this))
+    window.addEventListener('link', this._onRouteChange.bind(this))
+    
+    // Set initial submit href
+    setTimeout(() => this._onRouteChange(), 0)
+  }
+
+  _onRouteChange() {
+    this._updateLinks()
+    this._checkCommunityChange()
+  }
+
+  _lastCommunity = undefined
+
+  _checkCommunityChange() {
+    let newCommunity = this.currentCommunity
+    if(this._lastCommunity !== newCommunity){
+        this._lastCommunity = newCommunity
+        this._loadSubscribedTags()
+        this._loadCommonTags()
+    }
+  }
+
+  _updateLinks() {
+    let community = this.currentCommunity
+    let prefix = community ? `/@${community}` : ''
+
+    // Update submit link
+    let submitLink = this.select('#user-actions soci-link')
+    if(submitLink) {
+      submitLink.href = `${prefix}/submit`
+    }
+
+    // Update static tag links
+    let staticTags = ['all', 'images', 'videos', 'blogs']
+    staticTags.forEach(tag => {
+      let link = this.select(`soci-tag-li[href$="#${tag}"]`)
+      if(link) {
+        link.setAttribute('href', `${prefix}/#${tag}`)
+      }
+    })
   }
 
   // Logic for the tag lists
@@ -419,16 +472,42 @@ export default class SociSidebar extends SociComponent {
   _commonTagsLoaded = false
 
   async _loadSubscribedTags(){
-    let tags = await this.getData('/subscriptions', this.authToken)
+    let url = '/subscriptions'
+    if(this.currentCommunity) url += `?community=${this.currentCommunity}`
+    let tags = await this.getData(url, this.authToken)
     this._subscribedTags = tags.subscriptions.map(t=>t.tag)
     this._subscribedTagsLoaded = true
     this._populateTags()
   }
   async _loadCommonTags(){
-    let tags = await this.getData('/tags', this.authToken)
+    let url = '/tags'
+    if(this.currentCommunity) url += `?community=${this.currentCommunity}`
+    let tags = await this.getData(url, this.authToken)
     this._commonTags = tags.tags.map(t=>t.tag)
     this._commonTagsLoaded = true
     this._populateTags()
+  }
+
+  async _loadCommunities(){
+    let res = await this.getData('/communities')
+    if(res.communities) {
+        this._createCommunities(res.communities, this.select('#communities communities'))
+    }
+  }
+
+  _createCommunities(data, dom){
+    let communities = `
+      ${data.map((c) => `
+        <soci-tag-li href="/@${c.url}" tag="${c.name}" icon="community">
+            ${c.name}
+            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="7.25" stroke="var(--text-brand)" stroke-width="1.5"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="var(--text-brand)" font-size="10" font-weight="bold">${c.name.charAt(0).toUpperCase()}</text>
+            </svg>
+        </soci-tag-li>
+      `).join('')}
+    `
+    dom.innerHTML = communities
   }
 
   _populateTags(){
@@ -445,9 +524,11 @@ export default class SociSidebar extends SociComponent {
   }
 
   _createTags(data, dom, subscribed=false){
+    console.log('_createTags data:', data)
+    let prefix = this.currentCommunity ? `/@${this.currentCommunity}` : ''
     let tags = ` 
       ${data.map((tag) => `
-        <soci-tag-li tag=${tag} ${subscribed ? 'subscribed' : ''} ${this._activeTag == tag ? 'active' : ''}></soci-tag-li>
+        <soci-tag-li tag=${tag} href="${prefix}/#${tag}" ${subscribed ? 'subscribed' : ''} ${this._activeTag == tag ? 'active' : ''}></soci-tag-li>
       `).join('')}
     `
     dom.innerHTML = tags
@@ -543,7 +624,7 @@ export default class SociSidebar extends SociComponent {
     }
 
 
-    soci.postData('user/login', loginData).then(response => {
+    window.api.user.login(loginData).then(response => {
       if(response.accessToken){
         soci.log('Login Successful! Token:', response.accessToken)
         soci.accessToken = response.accessToken
@@ -585,7 +666,7 @@ export default class SociSidebar extends SociComponent {
     }
 
     let formData = soci.getJSONFromForm(form)
-    let response = await soci.postData('user/register', formData)
+    let response = await window.api.user.register(formData)
 
     if(response.accessToken){
       button.success()

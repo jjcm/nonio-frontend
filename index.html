@@ -19,6 +19,7 @@
   </script>
   <link rel="stylesheet" href="/soci.css">
   <link rel="stylesheet" href="/lib/quillStyle.css">
+  <soci-community-bar></soci-community-bar>
   <soci-sidebar loading>
     <div slot="login">
       <form>
@@ -40,7 +41,7 @@
     <tags slot="tags"></tags>
   </soci-sidebar>
   <div id="pages">
-    <soci-route id="tags" test="both" path="(^/#)|(^/$)" fresh>
+    <soci-route id="tags" test="both" path="^(/@[\w-]+)?/?(#.*)?$" fresh>
       <script>lazyload('/pages/tags.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route class="admin-page" id="admin-create" path="/admin/create-account">
@@ -278,7 +279,7 @@
       </div>
       <script src="/pages/user.js"></script>
     </soci-route>
-    <soci-route id="submit" path="/submit">
+    <soci-route id="submit" path="^(/@[\w-]+)?/submit$" fresh>
       <div id="submit-container">
         <form action="#">
           <div class="load-group centered-container" id="submit-header" load-order="primary">
@@ -462,13 +463,28 @@
         </div>
       </div>
     </soci-route>
+    <soci-route id="community-admin" path="^/@[\w-]+/admin$" fresh>
+      <div class="community-admin" load-order="primary">
+        <h1>Community Admin</h1>
+        <p>Manage moderators for this community.</p>
+        <div class="moderator-form">
+          <input id="new-mod" type="text" placeholder="Username">
+          <button id="add-mod">Add Moderator</button>
+        </div>
+        <div id="mod-list"></div>
+      </div>
+      <script>
+        lazyload('/pages/community-admin.js', document.currentScript.closest('soci-route'))
+        
+      </script>
+    </soci-route>
     <soci-route id="post" default fresh>
-      <script src="/pages/post.js"></script>
       <soci-post>
         <soci-tag-group slot="tags" size="large"></soci-tag-group>
         <soci-comment-list slot="comments"></soci-comment-list>
       </soci-post>
     </soci-route>
   </div>
+  <script src="/pages/post.js"></script>
   <script>lazyload('/lib/quill.min.js')</script>
 </html>

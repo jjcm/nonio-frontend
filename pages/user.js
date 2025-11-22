@@ -64,7 +64,7 @@ let user = {
     let button = user.dom.querySelector('soci-button.nuke-user')
     if(confirm('Are you sure you want to nuke this user? This will delete all their posts and comments.')) {
       let username = document.location.pathname.slice(6)
-      let response = await soci.postData(`admin/nuke`, {username: username})
+      let response = await window.api.user.nuke(username)
       console.log(response)
       if(response === true) {
         button?.success()
