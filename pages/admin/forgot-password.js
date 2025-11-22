@@ -11,9 +11,9 @@ let adminForgotPassword = {
   onDeactivate: () => {
   },
   submitRequest: async e => {
-    soci.postData('user/forgot-password-request', {
-      email: adminForgotPassword.dom.querySelector('input')?.value
-    }).then(res=>{
+    window.api.user.forgotPassword(
+      adminForgotPassword.dom.querySelector('input')?.value
+    ).then(res=>{
       console.log(res)
       adminForgotPassword.submitButton.success()
     })

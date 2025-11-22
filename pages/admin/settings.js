@@ -17,7 +17,7 @@ let adminSettings = {
     let form = button.closest('form')
     if(form.reportValidity()){
       let data = soci.getJSONFromForm(button.closest('form'))
-      let response = await soci.postData('user/change-password', data)
+      let response = await window.api.user.changePassword(data)
       button.wait()
       if(response == true) {
         button.success()
@@ -42,7 +42,7 @@ let adminSettings = {
   changeDescription: async e => {
     let button = e.currentTarget
     let description = adminSettings.dom.querySelector('.description soci-input')?.value
-    let response = await soci.postData('user/update-description', {description: description})
+    let response = await window.api.user.updateDescription(description)
     button.wait()
     if(!response.error) {
       button.success()

@@ -52,7 +52,7 @@ let adminSubscribe = {
     }
   },
   chooseFree: () => {
-    soci.postData('user/choose-free-account').then(result => {
+    window.api.user.chooseFreeAccount().then(result => {
       let button = adminSubscribe.dom.querySelector('soci-button.free-button')
       if(result === true){
         button?.success()
@@ -67,7 +67,7 @@ let adminSubscribe = {
     })
   },
   chooseSupporter: () => {
-    soci.postData('stripe/create-customer').then(result => {
+    window.api.stripe.createCustomer().then(result => {
       let button = adminSubscribe.dom.querySelector('soci-button.supporter-button')
       if(result === true) {
         button?.success()
@@ -109,7 +109,7 @@ let adminSubscribe = {
     console.log(paymentMethodId)
     let button = adminSubscribe.dom.querySelector('.subscribe-button')
     return (
-      soci.postData('stripe/subscription/create', {
+      window.api.stripe.createSubscription({
         paymentMethodId: paymentMethodId,
         price: price,
       })
