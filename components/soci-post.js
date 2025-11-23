@@ -114,7 +114,7 @@ export default class SociPost extends SociComponent {
 
       title-container {
         display: block;
-        padding-left: 60px;
+        padding-left: 0;
         margin-bottom: 12px;
         transform: translateY(20px);
       }

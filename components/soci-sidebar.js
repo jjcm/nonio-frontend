@@ -32,9 +32,15 @@ export default class SociSidebar extends SociComponent {
       :host([create]) #create {
         left: 0;
       }
+      
+      :host([create-community]) #create-community {
+        left: 0;
+      }
 
       :host([create]) #auth,
-      :host([create]) #noauth {
+      :host([create]) #noauth,
+      :host([create-community]) #auth,
+      :host([create-community]) #noauth {
         left: 100%;
       }
 
@@ -185,7 +191,8 @@ export default class SociSidebar extends SociComponent {
       }
 
       #create,
-      #noauth {
+      #noauth,
+      #create-community {
         padding: 24px 22px 20px;
         left: -100%;
       }
@@ -229,7 +236,8 @@ export default class SociSidebar extends SociComponent {
         line-height: 32px;
       }
 
-      #create form {
+      #create form,
+      #create-community form {
         display: flex;
         flex-direction: column;
       }
@@ -238,9 +246,45 @@ export default class SociSidebar extends SociComponent {
         margin-top: 50px;
       }
 
-      #create soci-button {
+      #create soci-button,
+      #create-community soci-button {
         margin-top: 16px;
         align-self: flex-end;
+      }
+      
+      /* Create Community specific styles */
+      #create-community .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 24px;
+      }
+      
+      #create-community .panel-header h3 {
+        margin: 0 0 0 12px;
+        font-size: 16px;
+      }
+      
+      #create-community textarea {
+        min-height: 60px;
+        resize: vertical;
+      }
+      
+      #create-community select {
+        border: 1px solid var(--bg-secondary);
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        background: var(--bg);
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      
+      #create-community .error {
+        color: var(--text-danger);
+        font-size: 13px;
+        margin-top: 8px;
       }
 
       input {
@@ -253,10 +297,28 @@ export default class SociSidebar extends SociComponent {
         font-size: 14px;
         width: 100%;
       }
+      
+      textarea {
+        margin: 0 0 8px;
+        border: 0;
+        color: var(--text);
+        border: 1px solid var(--bg-secondary);
+        background: var(--bg);
+        padding: 8px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 4px;
+      }
 
       input:focus {
         outline: 0;
         border-bottom: 2px solid var(--bg-brand);
+      }
+      
+      textarea:focus, select:focus {
+        outline: 0;
+        border-color: var(--bg-brand);
       }
 
       input[type="email"] {
@@ -270,6 +332,50 @@ export default class SociSidebar extends SociComponent {
       cc-details input:first-child {
         min-width: 160px;
         margin-right: 12px;
+      }
+      
+      #community-selector {
+        padding: 16px 12px 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      soci-select {
+        width: 100%;
+        --height: 36px;
+        --color: var(--text);
+        --padding: 12px;
+        background: var(--bg-secondary);
+        border-radius: 4px;
+        box-shadow: 0px 1px 1px color-mix(in srgb, var(--shadow) 80%, transparent), 0px 2px 10px color-mix(in srgb, var(--shadow) 10%, transparent);
+      }
+      
+      soci-select selected {
+        border-radius: 4px;
+      }
+      
+      #community-subscribe {
+        width: 100%;
+        margin: 0;
+        background: var(--bg-secondary);
+        color: var(--text);
+        border-radius: 4px;
+        justify-content: center;
+      }
+      
+      #community-subscribe:hover {
+        background: var(--bg-secondary-hover);
+      }
+      
+      #community-subscribe[subscribed] {
+        background: var(--bg-brand);
+        color: var(--text-inverse);
+      }
+      
+      #community-subscribe[subscribed]:hover {
+        background: var(--bg-brand-hover);
       }
 
       @media(max-height: 780px){
@@ -329,6 +435,12 @@ export default class SociSidebar extends SociComponent {
           </div>
         </section>
         <content>
+          <div id="community-selector">
+             <soci-select>
+                <soci-option slot="selected" value="">Frontpage</soci-option>
+             </soci-select>
+             <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
+          </div>
           <section id="all-tags">
             <soci-tag-li href="/#all" icon="home" hide-subscribe>
               All posts
@@ -366,10 +478,6 @@ export default class SociSidebar extends SociComponent {
             <h2>Subscribed Tags</h2>
             <tags></tags>
           </section>
-          <section id="communities">
-            <h2>Communities</h2>
-            <communities></communities>
-          </section>
           <section id="tags">
             <h2>Tags</h2>
             <tags></tags>
@@ -386,6 +494,27 @@ export default class SociSidebar extends SociComponent {
       <panel id="create">
         <slot name="create">
         </slot>
+      </panel>
+      <panel id="create-community">
+        <div class="panel-header">
+          <soci-button subtle @click=closeCreateCommunity>
+            <soci-icon glyph="view-back"></soci-icon>
+          </soci-button>
+          <h3>Create Community</h3>
+        </div>
+        <form @submit=createCommunity>
+          <input name="name" placeholder="Name" required>
+          <input name="url" placeholder="URL (no @)" required>
+          <textarea name="description" placeholder="Description"></textarea>
+          <select name="privacy">
+            <option value="public">Public</option>
+            <option value="invite-only">Invite only</option>
+          </select>
+          <div class="error" hidden></div>
+          <div class="actions">
+            <soci-button async @click=submitCreateCommunity>Create</soci-button>
+          </div>
+        </form>
       </panel>
       <section id="footer">
         <svg width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -425,6 +554,9 @@ export default class SociSidebar extends SociComponent {
     window.addEventListener('popstate', this._onRouteChange.bind(this))
     window.addEventListener('link', this._onRouteChange.bind(this))
     
+    // Listen for community selection
+    this.select('soci-select').addEventListener('selected', this._onCommunitySelect.bind(this))
+
     // Set initial submit href
     setTimeout(() => this._onRouteChange(), 0)
   }
@@ -435,6 +567,8 @@ export default class SociSidebar extends SociComponent {
   }
 
   _lastCommunity = undefined
+  _communities = []
+  _communitiesLoaded = false
 
   _checkCommunityChange() {
     let newCommunity = this.currentCommunity
@@ -442,6 +576,55 @@ export default class SociSidebar extends SociComponent {
         this._lastCommunity = newCommunity
         this._loadSubscribedTags()
         this._loadCommonTags()
+        
+        // Update dropdown selection and check if the community is in the list
+        this._updateCommunitySelection(newCommunity)
+    }
+  }
+  
+  _updateCommunitySelection(communityUrl) {
+    let select = this.select('soci-select')
+    
+    // Remove any previously added temporary options
+    let tempOptions = select.querySelectorAll('soci-option[temporary]')
+    tempOptions.forEach(opt => opt.remove())
+
+    let options = Array.from(select.querySelectorAll('soci-option'))
+    
+    // If the community is not in our list (not subscribed), we need to add a temp option
+    let existingOption = options.find(opt => {
+      if(communityUrl) return opt.getAttribute('value') == communityUrl
+      return opt.getAttribute('value') == ""
+    })
+    
+    // Clear previous selection
+    options.forEach(o => o.removeAttribute('slot'))
+
+    if(existingOption) {
+      existingOption.setAttribute('slot', 'selected')
+      // It's a subscribed community (or frontpage)
+      this.select('#community-subscribe').hidden = true
+    } else {
+      // Not in list, so we are viewing a community we aren't subscribed to
+      // Create a temporary option for it
+      let tempOption = document.createElement('soci-option')
+      tempOption.setAttribute('temporary', '')
+      tempOption.setAttribute('value', communityUrl)
+      tempOption.setAttribute('slot', 'selected')
+      tempOption.innerText = communityUrl.charAt(0).toUpperCase() + communityUrl.slice(1) // Simple capitalization
+      select.insertBefore(tempOption, select.firstChild)
+      
+      // Also fetch the community details to get proper casing/name if possible, though route context might suffice
+      // But more importantly, show the subscribe button
+      // Only show subscribe button if communities have loaded. 
+      // If they haven't loaded, we can't be sure if it's a new subscription or just not loaded yet.
+      if (this._communitiesLoaded) {
+        this.select('#community-subscribe').hidden = false
+        this.select('#community-subscribe').innerText = "Subscribe"
+        this.select('#community-subscribe').removeAttribute('subscribed')
+      } else {
+        this.select('#community-subscribe').hidden = true
+      }
     }
   }
 
@@ -489,25 +672,93 @@ export default class SociSidebar extends SociComponent {
   }
 
   async _loadCommunities(){
-    let res = await this.getData('/communities')
-    if(res.communities) {
-        this._createCommunities(res.communities, this.select('#communities communities'))
+    try {
+      const endpoint = window.soci?.accessToken ? 'communities/subscribed' : 'communities'
+      const response = await window.soci.getData(endpoint)
+      this._communities = response.communities || []
+      this._populateCommunitySelect(this._communities)
+    } catch (err) {
+      console.error('Failed to load communities', err)
     }
   }
 
-  _createCommunities(data, dom){
-    let communities = `
-      ${data.map((c) => `
-        <soci-tag-li href="/@${c.url}" tag="${c.name}" icon="community">
-            ${c.name}
-            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="7.25" stroke="var(--text-brand)" stroke-width="1.5"/>
-                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="var(--text-brand)" font-size="10" font-weight="bold">${c.name.charAt(0).toUpperCase()}</text>
-            </svg>
-        </soci-tag-li>
-      `).join('')}
-    `
-    dom.innerHTML = communities
+  _populateCommunitySelect(communities){
+    this._communitiesLoaded = true
+    let select = this.select('soci-select')
+    
+    let html = `<soci-option value="">Frontpage</soci-option>`
+    
+    communities.forEach(c => {
+        html += `<soci-option value="${c.url}">${c.name}</soci-option>`
+    })
+    
+    html += `<soci-option value="__create__" style="border-top: 1px solid var(--bg-secondary); color: var(--text-brand);">+ Create Community</soci-option>`
+    
+    // Prevent flickering by pre-calculating the state based on current community
+    // BEFORE setting innerHTML
+    const currentCommunity = this.currentCommunity
+    const subscribed = !currentCommunity || communities.some(c => c.url == currentCommunity)
+    
+    if(!subscribed && currentCommunity){
+        html = `<soci-option value="${currentCommunity}" slot="selected" temporary>${currentCommunity.charAt(0).toUpperCase() + currentCommunity.slice(1)}</soci-option>` + html
+        this.select('#community-subscribe').hidden = false
+        this.select('#community-subscribe').innerText = "Subscribe"
+        this.select('#community-subscribe').removeAttribute('subscribed')
+        this.select('#community-subscribe').style.display = ''
+    } else {
+        this.select('#community-subscribe').hidden = true
+        this.select('#community-subscribe').style.display = 'none'
+    }
+
+    select.innerHTML = html
+    
+    // Restore selection if it is subscribed
+    if(subscribed) {
+        let value = currentCommunity || ""
+        let option = select.querySelector(`soci-option[value="${value}"]`)
+        if(option) option.setAttribute('slot', 'selected')
+    }
+  }
+  
+  _onCommunitySelect(e) {
+    let val = e.target.getAttribute('value')
+    if(val === '__create__') {
+        this.openCreateCommunity()
+        // Reset select to previous value
+        this._updateCommunitySelection(this.currentCommunity)
+    } else {
+        let href = val ? `/@${val}` : '/'
+        window.history.pushState(null, null, href)
+        window.dispatchEvent(new CustomEvent('link'))
+    }
+  }
+  
+  async toggleSubscribe() {
+    if(!this.currentCommunity) return
+    
+    let button = this.select('#community-subscribe')
+    button.wait()
+    
+    try {
+      let response = await window.soci.postData('community/subscribe', {
+        community: this.currentCommunity
+      })
+      
+      if(response.success) {
+        button.success()
+        button.innerText = "Subscribed"
+        button.setAttribute('subscribed', '')
+        setTimeout(() => {
+             this._loadCommunities() // Reload list which will include the new subscription
+             button.hidden = true // Hide button after successful subscription
+        }, 1000)
+      } else {
+        button.error()
+      }
+    } catch(e) {
+      button.error()
+      console.error(e)
+    }
   }
 
   _populateTags(){
@@ -524,7 +775,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   _createTags(data, dom, subscribed=false){
-    console.log('_createTags data:', data)
+    //console.log('_createTags data:', data)
     let prefix = this.currentCommunity ? `/@${this.currentCommunity}` : ''
     let tags = ` 
       ${data.map((tag) => `
@@ -639,6 +890,7 @@ export default class SociSidebar extends SociComponent {
         this._loadSubscribedTags()
         this._loadCommonTags()
         this._populateTags()
+        this._loadCommunities()
         soci.loadVotes()
         this.select('#logout').innerHTML = "Logout"
         return
@@ -651,6 +903,7 @@ export default class SociSidebar extends SociComponent {
   logout(){
     soci.clearToken()
     this.removeAttribute('create')
+    this.removeAttribute('create-community')
     this.setAttribute('noauth', '')
     this.select('#logout').innerHTML = "Login"
   }
@@ -675,6 +928,7 @@ export default class SociSidebar extends SociComponent {
       soci.username = response.username
       this._loadSubscribedTags()
       this._loadCommonTags()
+      this._loadCommunities()
       setTimeout(()=>{
         window.history.pushState(null, null, '/admin/subscribe')
         window.dispatchEvent(new CustomEvent('link'))
@@ -701,5 +955,74 @@ export default class SociSidebar extends SociComponent {
     this.removeAttribute('noauth')
     this.setAttribute('create', '')
     this.select('#logout').innerHTML = "Login"
+  }
+  
+  // Create Community Logic
+  
+  openCreateCommunity() {
+    if(!window.soci.accessToken) {
+      window.soci.showLogin()
+      return
+    }
+    this.setAttribute('create-community', '')
+    this.select('#create-community input[name="name"]').focus()
+  }
+
+  closeCreateCommunity() {
+    this.removeAttribute('create-community')
+    const form = this.select('#create-community form')
+    form.reset()
+    this.toggleError()
+  }
+
+  toggleError(message) {
+    const error = this.select('#create-community .error')
+    if(message) {
+      error.hidden = false
+      error.textContent = message
+    } else {
+      error.hidden = true
+      error.textContent = ''
+    }
+  }
+  
+  createCommunity(e) {
+    e.preventDefault()
+  }
+
+  async submitCreateCommunity(e) {
+    if(!window.soci.accessToken) {
+      window.soci.showLogin()
+      return
+    }
+    const form = this.select('#create-community form')
+    const submitButton = e.currentTarget
+    this.toggleError()
+
+    const payload = {
+      name: form.name.value.trim(),
+      url: form.url.value.trim().replace(/^@/, '').toLowerCase(),
+      description: form.description.value.trim(),
+      privacyType: form.privacy.value
+    }
+
+    try {
+      const result = await window.api.community.create(payload)
+      if(result.error) {
+        this.toggleError(result.error)
+        submitButton.error()
+      } else {
+        submitButton.success()
+        this.closeCreateCommunity()
+        await this._loadCommunities()
+        if(result.url) {
+          window.history.pushState(null, null, `/@${result.url}`)
+          window.dispatchEvent(new CustomEvent('link'))
+        }
+      }
+    } catch (err) {
+      this.toggleError('Unable to create community')
+      submitButton.error()
+    }
   }
 }

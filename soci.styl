@@ -11,14 +11,14 @@ body
     user-select: none
   &[noauth]
     soci-sidebar
-      left: -220px
+      left: -280px
       transition: none
     #pages 
-      margin-left: 60px
-      width: calc(100vw - 60px)
+      margin-left: 0
+      width: 100vw
       transition: none
       &:before
-        left: 60px
+        left: 0
         opacity: 0
         transition: none
         animation: none
@@ -97,7 +97,7 @@ button
     content: ''
     position: fixed
     top: 0
-    left: 340px
+    left: 280px
     height: 100dvh
     width: 30px
     background: linear-gradient(90deg, var(--shadow) 0px, var(--shadow-light) 1px, transparent 4px)
@@ -583,7 +583,7 @@ button
 
 
 soci-sidebar
-  left: 60px
+  left: 0
   transition: left 0.2s ease
   z-index: 3
   background: var(--bg)
@@ -667,9 +667,6 @@ soci-sidebar
   cc-details input:first-child
     min-width: 160px
     margin-right: 12px
-
-soci-community-bar
-  display: block
 
 [load-order]
   transform: translateY(20px)
@@ -770,7 +767,4 @@ hr
     width: 100%
 
   #pages::before 
-    display: none
-
-  soci-community-bar
     display: none

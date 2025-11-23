@@ -12,6 +12,7 @@ export class SociSelect extends SociComponent {
       --font-weight: 500;
       --font-size: 12px;
       --color: var(--bg);
+      --padding: 8px;
 
       position: relative;
       line-height: var(--height);
@@ -19,18 +20,20 @@ export class SociSelect extends SociComponent {
       font-weight: var(--font-weight, 500);
       font-size: 12px;
       text-transform: capitalize;
+      padding: 0 var(--padding);
+      box-sizing: border-box;
     }
 
     selected {
       height: var(--height);
-      padding: 0 24px 0 8px;
+      padding-right: 8px;
       cursor: pointer;
     }
 
     selected::after {
       content: '';
-      position: absolute;
-      right: 8px;
+      position: relative;
+      float: right;
       top: calc(var(--height) / 2 - 2px);
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
@@ -68,9 +71,10 @@ export class SociSelect extends SociComponent {
       color: var(--text);
       overflow: hidden;
       padding: 4px 0;
-      box-shadow: 0px 1px 1px var(--shadow), 0px 2px 10px var(--shadow);
-      min-width: 100px;
+      box-shadow: 0px 1px 1px var(--shadow), 0px 2px 10px color-mix(in srgb, var(--shadow) 40%, transparent);
+      min-width: max(100%, 100px);
       z-index: 1;
+      margin: 0 calc(var(--padding) * -1);
     }
 
     :host([open]) dropdown {
@@ -147,7 +151,7 @@ export class SociOption extends SociComponent {
       user-select: none;
       cursor: pointer;
       color: var(--text);
-      padding: 0 8px;
+      padding: 0 var(--padding);
       width: 100%;
       display: block;
     }

@@ -6,9 +6,6 @@ window.customElements.define('soci-route', SociRoute)
 import SociRouter from "./soci-router.js"
 window.sociRouter = new SociRouter()
 
-import SociCommunityBar from "./soci-community-bar.js"
-window.customElements.define('soci-community-bar', SociCommunityBar)
-
 import SociAvatarUploader from "./soci-avatar-uploader.js"
 window.customElements.define('soci-avatar-uploader', SociAvatarUploader)
 
