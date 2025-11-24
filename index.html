@@ -19,7 +19,6 @@
   </script>
   <link rel="stylesheet" href="/soci.css">
   <link rel="stylesheet" href="/lib/quillStyle.css">
-  <soci-community-bar></soci-community-bar>
   <soci-sidebar loading>
     <div slot="login">
       <form>
@@ -463,20 +462,178 @@
         </div>
       </div>
     </soci-route>
-    <soci-route id="community-admin" path="^/@[\w-]+/admin$" fresh>
-      <div class="community-admin" load-order="primary">
-        <h1>Community Admin</h1>
-        <p>Manage moderators for this community.</p>
-        <div class="moderator-form">
-          <input id="new-mod" type="text" placeholder="Username">
-          <button id="add-mod">Add Moderator</button>
-        </div>
-        <div id="mod-list"></div>
+    <soci-route id="community-settings" path="^(/@[\w-]+)/admin$" fresh>
+      <style>
+        #community-settings {
+          .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          .columns {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+          }
+          .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            &:first-child {
+              max-width: 158px;
+            }
+          }
+          .load-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+          textarea {
+            min-height: 100px;
+            resize: vertical;
+          }
+          soci-input {
+            border: 2px solid var(--bg-secondary);
+            border-radius: 8px;
+            min-height: 100px;
+          }
+          label {
+            color: var(--text-secondary);
+          }
+        }
+      </style>
+      <div class="container">
+        <form>
+          <div class="load-group" load-order="primary">
+            <h1>Community Settings</h1>
+            <h2>Basic Info</h2>
+            <div class="columns">
+              <div class="column"> 
+                <label for="avatar">Avatar</label>
+                <soci-avatar-uploader></soci-avatar-uploader>
+              </div>
+              <div class="column">
+                <label for="name">Display name</label>
+                <input name="name" placeholder="Community Name" required>
+                <label for="description">Description</label>
+                <soci-input name="description" placeholder="Add a short description of your community"></soci-input>
+              </div>
+            </div>
+          </div>
+          <div class="load-group" load-order="secondary">
+            <h2>Privacy & Permissions</h2>
+            <select name="privacy">
+              <option value="public">Public</option>
+              <option value="invite-only">Invite Only</option>
+            </select>
+            <label>Who can post?</label>
+            <select name="post_permission">
+              <option value="all">All Users</option>
+              <option value="paid">Paid Users Only</option>
+              <option value="admin">Admins Only</option>
+            </select>
+            <label>Who can comment?</label>
+            <select name="comment_permission">
+              <option value="all">All Users</option>
+              <option value="paid">Paid Users Only</option>
+              <option value="admin">Admins Only</option>
+            </select>
+          </div>
+          <div class="load-group" load-order="tertiary">
+            <div style="margin-top: 20px; text-align: right;">
+              <soci-button>Save Changes</soci-button>
+            </div>
+          </div>
+        </form>
       </div>
-      <script>
-        lazyload('/pages/community-admin.js', document.currentScript.closest('soci-route'))
+      <script>lazyload('/pages/community-settings.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
+    <soci-route id="community-users" path="^(/@[\w-]+)/admin/users$" fresh>
+      <style>
+        #community-users {
+          padding: 20px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        #community-users h3 {
+          margin-top: 30px;
+          border-bottom: 1px solid var(--bg-secondary);
+          padding-bottom: 8px;
+        }
+        .user-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 0;
+          border-bottom: 1px solid var(--bg-secondary);
+        }
+        .user-row .actions button {
+          margin-left: 8px;
+          padding: 4px 8px;
+          background: var(--bg-secondary);
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          color: var(--text);
+        }
+        .user-row .actions button:hover {
+          background: var(--bg-secondary-hover);
+        }
+        .empty {
+          padding: 20px 0;
+          color: var(--text-secondary);
+          font-style: italic;
+        }
         
-      </script>
+      </style>
+      <div>
+        <h1>User Management</h1>
+        <h3>Moderators</h3>
+        <div id="moderators-list"></div>
+        <h3>Subscribers</h3>
+        <div id="subscribers-list"></div>
+        <h3>Banned Users</h3>
+        <div id="banned-list"></div>
+      </div>
+      <script>lazyload('/pages/community-users.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
+    <soci-route id="community-financials" path="^(/@[\w-]+)/admin/financials$" fresh>
+      <style>
+        #community-financials {
+          padding: 20px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        #community-financials table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        #community-financials th, #community-financials td {
+          text-align: left;
+          padding: 12px;
+          border-bottom: 1px solid var(--bg-secondary);
+        }
+        #community-financials th {
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+      </style>
+      <div>
+        <h1>Community Financials</h1>
+        <p>Earnings in the last 30 days</p>
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Amount Earned</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <script>lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="post" default fresh>
       <soci-post>

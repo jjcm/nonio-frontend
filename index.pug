@@ -62,16 +62,14 @@ html(lang="en")
     soci-route#contact(path="/about/contact")
       include pages/about/contact.pug
 
-    soci-route#community-admin(path="^/@[\\w-]+/admin$" fresh)
-      .community-admin(load-order="primary")
-        h1 Community Admin
-        p Manage moderators for this community.
-        .moderator-form
-          input#new-mod(type="text" placeholder="Username")
-          button#add-mod Add Moderator
-        #mod-list
-      script.
-        lazyload('/pages/community-admin.js', document.currentScript.closest('soci-route'))
+    soci-route#community-settings(path="^(/@[\\w-]+)/admin$" fresh)
+      include pages/community-settings.pug
+
+    soci-route#community-users(path="^(/@[\\w-]+)/admin/users$" fresh)
+      include pages/community-users.pug
+
+    soci-route#community-financials(path="^(/@[\\w-]+)/admin/financials$" fresh)
+      include pages/community-financials.pug
 
     soci-route#post(default fresh)
       include pages/post.pug
@@ -79,6 +77,3 @@ html(lang="en")
   script(src="/pages/post.js")
   script.
     lazyload('/lib/quill.min.js')
-
-
-

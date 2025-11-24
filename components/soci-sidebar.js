@@ -378,6 +378,26 @@ export default class SociSidebar extends SociComponent {
         background: var(--bg-brand-hover);
       }
 
+      #community-admin {
+        padding: 0 12px 12px;
+        border-bottom: 1px solid var(--bg-secondary);
+        margin-bottom: 12px;
+      }
+      
+      #community-admin soci-link {
+        display: block;
+        font-size: 14px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: var(--text-secondary);
+        text-decoration: none;
+      }
+      
+      #community-admin soci-link:hover {
+        background: var(--bg-secondary);
+        color: var(--text);
+      }
+
       @media(max-height: 780px){
         #footer {
           border-top: 1px solid var(--bg-bold);
@@ -441,6 +461,12 @@ export default class SociSidebar extends SociComponent {
              </soci-select>
              <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
           </div>
+          <section id="community-admin" style="display: none;">
+             <h2>Admin</h2>
+             <soci-link href="#">Settings</soci-link>
+             <soci-link href="#">Users</soci-link>
+             <soci-link href="#">Financials</soci-link>
+          </section>
           <section id="all-tags">
             <soci-tag-li href="/#all" icon="home" hide-subscribe>
               All posts
@@ -559,11 +585,15 @@ export default class SociSidebar extends SociComponent {
 
     // Set initial submit href
     setTimeout(() => this._onRouteChange(), 0)
+    
+    // Initial admin check
+    this._checkAdminStatus()
   }
 
   _onRouteChange() {
     this._updateLinks()
     this._checkCommunityChange()
+    this._checkAdminStatus()
   }
 
   _lastCommunity = undefined
@@ -579,6 +609,33 @@ export default class SociSidebar extends SociComponent {
         
         // Update dropdown selection and check if the community is in the list
         this._updateCommunitySelection(newCommunity)
+        this._checkAdminStatus()
+    }
+  }
+
+  async _checkAdminStatus() {
+    let community = this.currentCommunity
+    if(!community) {
+        this.select('#community-admin').style.display = 'none'
+        return
+    }
+
+    // We need to fetch community info to know if admin
+    try {
+        let res = await this.getData(`/communities/${community}`, this.authToken)
+        if(res && res.isAdmin) {
+            this.select('#community-admin').style.display = 'block'
+            let prefix = `/@${community}/admin`
+            let links = this.select('#community-admin').querySelectorAll('soci-link')
+            links[0].setAttribute('href', `${prefix}`)
+            links[1].setAttribute('href', `${prefix}/users`)
+            links[2].setAttribute('href', `${prefix}/financials`)
+        } else {
+            this.select('#community-admin').style.display = 'none'
+        }
+    } catch(e) {
+        console.error('SociSidebar: Error checking admin status', e)
+        this.select('#community-admin').style.display = 'none'
     }
   }
   

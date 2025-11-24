@@ -1,0 +1,78 @@
+style.
+  #community-settings {
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .columns {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      &:first-child {
+        max-width: 158px;
+      }
+    }
+    .load-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    soci-input {
+      border: 2px solid var(--bg-secondary);
+      border-radius: 8px;
+      min-height: 100px;
+    }
+    label {
+      color: var(--text-secondary);
+    }
+  }
+.container
+  form
+    .load-group(load-order="primary")
+      h1 Community Settings
+      h2 Basic Info
+      .columns
+        .column 
+          label(for="avatar") Avatar
+          soci-avatar-uploader
+        .column
+          label(for="name") Display name
+          input(name="name" placeholder="Community Name" required)
+          label(for="description") Description
+          soci-input(name="description" placeholder="Add a short description of your community")
+    
+    .load-group(load-order="secondary")
+      h2 Privacy & Permissions
+      select(name="privacy")
+        option(value="public") Public
+        option(value="invite-only") Invite Only
+
+      label Who can post?
+      select(name="post_permission")
+        option(value="all") All Users
+        option(value="paid") Paid Users Only
+        option(value="admin") Admins Only
+      
+      label Who can comment?
+      select(name="comment_permission")
+        option(value="all") All Users
+        option(value="paid") Paid Users Only
+        option(value="admin") Admins Only
+      
+    .load-group(load-order="tertiary")
+      div(style="margin-top: 20px; text-align: right;")
+        soci-button Save Changes
+
+script.
+  lazyload('/pages/community-settings.js', document.currentScript.closest('soci-route'))
