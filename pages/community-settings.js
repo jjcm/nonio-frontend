@@ -11,24 +11,28 @@ let communitySettings = {
     communitySettings.communityName = communityName
     document.title = `${communityName} - Settings`
     
+    // Fetch settings
     communitySettings.loadSettings()
 
-    communitySettings.dom.querySelector('form').addEventListener('submit', communitySettings.saveSettings)
-    
-    let avatarInput = communitySettings.dom.querySelector('soci-avatar-uploader')
-    // Assuming soci-avatar-uploader handles 'community' attribute
-    // If not, I might need to update it or use a workaround
-    // The backend expects 'community' param in upload.
+    // Bind events
+    let saveButton = communitySettings.dom.querySelector('soci-button')
+    saveButton.addEventListener('click', communitySettings.saveSettings)
   },
   loadSettings: async () => {
-    let res = await soci.getData(`/communities/${communitySettings.communityName}`)
+    let res = await soci.getData(`communities/${communitySettings.communityName}`)
     if(res.error) {
         console.error(res.error)
         return
     }
     let form = communitySettings.dom.querySelector('form')
     form.querySelector('input[name="name"]').value = res.name
-    form.querySelector('textarea[name="description"]').value = res.description
+    let descInput = form.querySelector('soci-input[name="description"]')
+    try {
+      JSON.parse(res.description)
+      descInput.value = res.description
+    } catch(e) {
+      descInput.setText(res.description)
+    }
     form.querySelector('select[name="privacy"]').value = res.privacyType
     form.querySelector('select[name="post_permission"]').value = res.postPermission || 'all'
     form.querySelector('select[name="comment_permission"]').value = res.commentPermission || 'all'
@@ -42,13 +46,13 @@ let communitySettings = {
     let data = {
         community: communitySettings.communityName,
         name: form.querySelector('input[name="name"]').value,
-        description: form.querySelector('textarea[name="description"]').value,
+        description: form.querySelector('soci-input[name="description"]').value,
         privacyType: form.querySelector('select[name="privacy"]').value,
         postPermission: form.querySelector('select[name="post_permission"]').value,
         commentPermission: form.querySelector('select[name="comment_permission"]').value
     }
     
-    let res = await soci.postData('/community/update', data)
+    let res = await soci.postData('community/update', data)
     if(res === true) {
         button.success()
     } else {
@@ -57,5 +61,5 @@ let communitySettings = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', communitySettings.init)
+communitySettings.init()
 

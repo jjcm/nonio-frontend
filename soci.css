@@ -444,6 +444,37 @@ input:-webkit-autofill {
   background: var(--bg) !important;
   color: var(--text);
 }
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input {
+  margin: 0 0 8px;
+  border: 0;
+  border-bottom: 2px solid var(--bg-secondary);
+  background: var(--bg) !important;
+  height: 38px;
+  font-size: 14px;
+  width: 100%;
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
+}
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus:active,
+input:-webkit-autofill:hover:active,
+input:active,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:focus:focus,
+input:-webkit-autofill:hover:focus,
+input:focus {
+  border-bottom: 2px solid var(--bg-brand);
+  outline: 0;
+}
+input:-webkit-autofill::placeholder,
+input:-webkit-autofill:focus::placeholder,
+input:-webkit-autofill:hover::placeholder,
+input::placeholder {
+  color: var(--text-secondary);
+}
 h1:first-child {
   margin-top: 0;
 }
@@ -851,22 +882,6 @@ button:focus {
   min-width: 160px;
   margin-right: 12px;
 }
-.admin-page input {
-  margin: 0 0 8px;
-  border: 0;
-  border-bottom: 2px solid var(--bg-secondary);
-  background: var(--bg);
-  height: 38px;
-  font-size: 14px;
-  width: 100%;
-}
-.admin-page input:focus {
-  border-bottom: 2px solid var(--bg-brand);
-  outline: 0;
-}
-.admin-page input::placeholder {
-  color: var(--text-secondary);
-}
 .admin-page .actions {
   width: 100%;
   justify-content: flex-end;
@@ -1117,31 +1132,6 @@ soci-sidebar {
 }
 soci-sidebar[loading] {
   opacity: 0;
-}
-soci-sidebar input:-webkit-autofill,
-soci-sidebar input:-webkit-autofill:focus,
-soci-sidebar input:-webkit-autofill:hover,
-soci-sidebar input {
-  margin: 0 0 8px;
-  border: 0;
-  border-bottom: 2px solid var(--bg-secondary);
-  background: var(--bg) !important;
-  -webkit-text-fill-color: var(--text);
-  -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
-  height: 38px;
-  font-size: 14px;
-  width: 100%;
-}
-soci-sidebar input::placeholder {
-  text-transform: none;
-  font-size: 14px;
-  opacity: 0.5;
-}
-soci-sidebar input:focus,
-soci-sidebar input:active {
-  box-shadow: none;
-  outline: none;
-  border-bottom: 2px solid var(--bg-brand);
 }
 soci-sidebar h2 {
   font-size: 14px;

@@ -33,6 +33,26 @@ input:-webkit-autofill {
   color: var(--text)
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input 
+  margin: 0 0 8px
+  border: 0
+  border-bottom: 2px solid var(--bg-secondary)
+  background: var(--bg) !important
+  height: 38px
+  font-size: 14px
+  width: 100%
+  -webkit-text-fill-color: var(--text)
+  -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
+  &:active,
+  &:focus
+    border-bottom: 2px solid var(--bg-brand)
+    outline: 0
+  &::placeholder 
+    color: var(--text-secondary)
+
 h1:first-child
   margin-top: 0
 
@@ -364,19 +384,6 @@ button
     min-width: 160px
     margin-right: 12px
 
-  input 
-    margin: 0 0 8px
-    border: 0
-    border-bottom: 2px solid var(--bg-secondary)
-    background: var(--bg)
-    height: 38px
-    font-size: 14px
-    width: 100%
-    &:focus
-      border-bottom: 2px solid var(--bg-brand)
-      outline: 0
-    &::placeholder 
-      color: var(--text-secondary)
 
   .actions
     width: 100%
@@ -589,30 +596,6 @@ soci-sidebar
   background: var(--bg)
   &[loading]
     opacity: 0
-  input:-webkit-autofill,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:hover,
-  input
-    margin: 0 0 8px
-    border: 0
-    border-bottom: 2px solid var(--bg-secondary)
-    background: var(--bg) !important
-    -webkit-text-fill-color: var(--text)
-    -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
-    height: 38px
-    font-size: 14px
-    width: 100%
-
-  input::placeholder
-    text-transform: none
-    font-size: 14px
-    opacity: 0.5
-
-  input:focus,
-  input:active
-    box-shadow: none
-    outline: none
-    border-bottom: 2px solid var(--bg-brand)
   
   h2
     font-size: 14px

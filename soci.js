@@ -106,16 +106,6 @@ let soci = {
     console.groupEnd(groupLabel)
   },
 
-  lazyload(path, parent) {
-    document.addEventListener('DOMContentLoaded', ()=>{
-
-      let resource = document.createElement('script')
-      resource.async = 'true'
-      resource.src = path
-      let root = parent ? parent : document.head
-      root.appendChild(resource)
-    })
-  },
   votes: {},
   loadVotes() {
     api.votes.get().then(res=>{

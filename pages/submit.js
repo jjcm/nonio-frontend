@@ -6,6 +6,7 @@ let submit = {
   form: null, 
   currentCommunity: null,
   onActivate() {
+    console.log('Submit onActivate')
     submit.form = this.dom.querySelector('form')
 
     submit.currentCommunity = window.soci.routeContext.community

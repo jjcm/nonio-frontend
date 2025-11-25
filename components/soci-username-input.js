@@ -17,15 +17,21 @@ export default class SociUsernameInput extends SociComponent {
       display: block;
     }
 
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:hover,
     input {
-      margin: 0 0 8px;
-      border: 0;
       color: var(--text);
       background: var(--bg);
+      border: 0
       border-bottom: 2px solid var(--bg-secondary);
       height: 38px;
       font-size: 14px;
       width: 100%;
+      margin: 0 0 8px
+      background: var(--bg) !important
+      -webkit-text-fill-color: var(--text)
+      -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
     }
 
     :host input:focus {

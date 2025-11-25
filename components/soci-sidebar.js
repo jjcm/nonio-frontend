@@ -19,66 +19,41 @@ export default class SociSidebar extends SociComponent {
         box-sizing: border-box;
         transition: opacity 0.1s var(--soci-ease);
         opacity: 1;
+        
+        &([noauth]) {
+          & #noauth { left: 0; }
+          & #auth { left: -100%; }
+        }
+        &([create]) {
+          & #create { left: 0; }
+          & #auth, & #noauth { left: 100%; }
+        }
+        &([create-community]) {
+          & #create-community { left: 0; }
+          & #auth, & #noauth { left: 100%; }
+        }
+        &([dragging]) { user-select: none; }
       }
 
-      :host([noauth]) #noauth {
-        left: 0;
-      }
-
-      :host([noauth]) #auth {
-        left: -100%;
-      }
-
-      :host([create]) #create {
-        left: 0;
-      }
-      
-      :host([create-community]) #create-community {
-        left: 0;
-      }
-
-      :host([create]) #auth,
-      :host([create]) #noauth,
-      :host([create-community]) #auth,
-      :host([create-community]) #noauth {
-        left: 100%;
-      }
-
-      :host([dragging]) {
-        user-select: none;
-      }
-
-      #auth input::placeholder, h2 {
+      h2 {
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 1.4px;
         font-weight: normal;
         color: var(--text-secondary);
-      }
-
-      #auth input {
-        margin-bottom: 0;
-        border-bottom: 0 !important;
-        padding-left: 54px;
-      }
-
-      h2 {
         line-height: 40px;
         margin: 12px 0 4px 0;
-      }
-
-      h2:first-child {
-        margin-top: 0;
+        &:first-child { margin-top: 0; }
       }
 
       section {
         position: relative;
         transition: all var(--anim-duration-med) var(--soci-ease), opacity var(--anim-duration-long) var(--soci-ease);
       }
-
+      
       content section {
         border: none;
-        padding: 16px 12px 12px;
+        padding: 0 12px;
       }
 
       #user {
@@ -88,58 +63,43 @@ export default class SociSidebar extends SociComponent {
         z-index: 10;
         height: 40px;
         border-bottom: 1px solid var(--bg-bold);
-      }
-
-      #user soci-user {
-        display: flex;
-        box-sizing: border-box;
-        align-items: center;
-        padding-left: 22px;
-        width: 100%;
-        height: 100%;
-        margin: 0;
+        
+        & soci-user {
+          display: flex;
+          box-sizing: border-box;
+          align-items: center;
+          padding-left: 22px;
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          --spacing: 12px;
+          --font-weight: 500;
+          --font-size: 14px;
+          --avatar-size: 20px;
+          --line-height: 20px;
+        }
+        & soci-button {
+          display: inline-flex;
+          background: var(--bg-secondary-hover);
+          &:hover soci-icon { margin: -2px -2px -2px -8px; }
+        }
+        & soci-icon {
+          margin: -2px 8px -2px -10px;
+          transition: margin 0.1s var(--soci-ease);
+        }
+        & #submit {
+          transition: width 0.1s var(--soci-ease);
+          width: 20px;
+          overflow: hidden;
+          &:hover { width: 64px; }
+        }
+        & svg { margin: -2px 0px -2px -6px; }
       }
 
       #user-actions {
         position: absolute;
         right: 8px;
         top: 10px;
-      }
-
-      #user soci-button {
-        display: inline-flex;
-        background: var(--bg-secondary-hover);
-      }
-
-      #user soci-icon {
-        margin: -2px 8px -2px -10px;
-        transition: margin 0.1s var(--soci-ease);
-      }
-
-      #user #submit {
-        transition: width 0.1s var(--soci-ease);
-        width: 20px;
-        overflow: hidden;
-      }
-
-      #user svg {
-        margin: -2px 0px -2px -6px;
-      }
-
-      #user #submit:hover {
-        width: 64px;
-      }
-
-      #user soci-button:hover soci-icon {
-        margin: -2px -2px -2px -8px;
-      }
-
-      #user soci-user {
-        --spacing: 12px;
-        --font-weight: 500;
-        --font-size: 14px;
-        --avatar-size: 20px;
-        --line-height: 20px;
       }
 
       #footer {
@@ -154,27 +114,35 @@ export default class SociSidebar extends SociComponent {
         background: var(--bg);
         border-top: 2px solid transparent;
         transition: border-top 0.3s var(--soci-ease);
+        
+        & links {
+          justify-content: flex-start;
+          display: flex;
+          font-size: 14px;
+        }
+        & soci-link, & a {
+          color: var(--text-tertiary);
+          text-decoration: none;
+          margin-right: 28px;
+          &:hover { color: var(--text-secondary); }
+        }
+        & svg { margin-bottom: 12px; }
       }
 
-      #footer links {
-        justify-content: flex-start;
-        display: flex;
-        font-size: 14px;
-      }
-
-      #footer soci-link,
-      #footer a {
-        margin-right: 28px;
-        text-decoration: none;
-        color: var(--text-secondary);
-      }
-
-      :host([#noauth]) #footer soci-link#logout {
+      #admin-links {
         display: none;
-      }
-
-      #footer svg {
-        margin-bottom: 12px;
+        padding-top: 8px;
+        margin: 0 -8px;
+        
+        & soci-link {
+          display: inline-block;
+          font-size: 14px;
+          padding: 4px 8px;
+          border-radius: 4px;
+          color: var(--text-tertiary);
+          text-decoration: none;
+          &:hover { color: var(--text-secondary); }
+        }
       }
 
       panel {
@@ -190,101 +158,87 @@ export default class SociSidebar extends SociComponent {
         transition: left 0.2s ease-in-out;
       }
 
-      #create,
-      #noauth,
-      #create-community {
+      #create, #noauth, #create-community {
         padding: 24px 22px 20px;
         left: -100%;
       }
 
-      #noauth svg {
-        margin-bottom: 24px;
+      #noauth {
+        & svg { margin-bottom: 24px; }
+        & h2 { padding-left: 0; }
+        & soci-link {
+          display: block;
+          margin-top: 32px;
+          font-size: 13px;
+          color: var(--text-brand);
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          opacity: 0.8;
+          cursor: pointer;
+          text-align: center;
+        }
+        & #im-stupid {
+          margin-top: 12px;
+          color: var(--text-secondary);
+          font-weight: 400;
+          opacity: 0.5;
+        }
       }
 
-      #noauth h2 {
-        padding-left: 0;
+      #auth {
+        & input {
+          margin-bottom: 0;
+          border-bottom: 0 !important;
+          padding-left: 54px;
+          &::placeholder {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: normal;
+            color: var(--text-secondary);
+          }
+        }
+        & content {
+          display: flex;
+          flex-direction: column;
+          height: calc(100% - 42px);
+          overflow-x: hidden;
+          gap: 16px;
+        }
+        & h2 {
+          padding-left: 12px;
+          line-height: 32px;
+        }
       }
 
-      #noauth soci-link {
-        display: block;
-        margin-top: 32px;
-        font-size: 13px;
-        color: var(--text-brand);
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        opacity: 0.8;
-        cursor: pointer;
-        text-align: center;
+      #create {
+        & form { display: flex; flex-direction: column; }
+        & h2:not(:first-child) { margin-top: 50px; }
+        & soci-button { margin-top: 16px; align-self: flex-end; }
       }
 
-      #noauth #im-stupid {
-        margin-top: 12px;
-        color: var(--text-secondary);
-        font-weight: 400;
-        opacity: 0.5;
-      }
-
-      #auth content {
-        display: flex;
-        flex-direction: column;
-        height: calc(100% - 42px);
-        overflow-x: hidden;
-      }
-
-      #auth h2 {
-        padding-left: 12px;
-        line-height: 32px;
-      }
-
-      #create form,
-      #create-community form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #create h2:not(:first-child) {
-        margin-top: 50px;
-      }
-
-      #create soci-button,
-      #create-community soci-button {
-        margin-top: 16px;
-        align-self: flex-end;
-      }
-      
-      /* Create Community specific styles */
-      #create-community .panel-header {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 24px;
-      }
-      
-      #create-community .panel-header h3 {
-        margin: 0 0 0 12px;
-        font-size: 16px;
-      }
-      
-      #create-community textarea {
-        min-height: 60px;
-        resize: vertical;
-      }
-      
-      #create-community select {
-        border: 1px solid var(--bg-secondary);
-        border-radius: 6px;
-        padding: 8px;
-        font-size: 14px;
-        font-family: inherit;
-        background: var(--bg);
-        color: var(--text);
-        margin-bottom: 8px;
-      }
-      
-      #create-community .error {
-        color: var(--text-danger);
-        font-size: 13px;
-        margin-top: 8px;
+      #create-community {
+        & form { display: flex; flex-direction: column; }
+        & soci-button { margin-top: 16px; align-self: flex-end; }
+        & .panel-header {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          margin-bottom: 24px;
+          & h3 { margin: 0 0 0 12px; font-size: 16px; }
+        }
+        & textarea { min-height: 60px; resize: vertical; }
+        & select {
+          border: 1px solid var(--bg-secondary);
+          border-radius: 6px;
+          padding: 8px;
+          font-size: 14px;
+          font-family: inherit;
+          background: var(--bg);
+          color: var(--text);
+          margin-bottom: 8px;
+        }
+        & .error { color: var(--text-danger); font-size: 13px; margin-top: 8px; }
       }
 
       input {
@@ -296,42 +250,28 @@ export default class SociSidebar extends SociComponent {
         height: 38px;
         font-size: 14px;
         width: 100%;
+        &:focus { outline: 0; border-bottom: 2px solid var(--bg-brand); }
+        &[type="email"] { margin-bottom: 24px; }
       }
       
       textarea {
         margin: 0 0 8px;
-        border: 0;
-        color: var(--text);
         border: 1px solid var(--bg-secondary);
+        color: var(--text);
         background: var(--bg);
         padding: 8px;
         font-size: 14px;
         width: 100%;
         box-sizing: border-box;
         border-radius: 4px;
-      }
-
-      input:focus {
-        outline: 0;
-        border-bottom: 2px solid var(--bg-brand);
+        &:focus { outline: 0; border-color: var(--bg-brand); }
       }
       
-      textarea:focus, select:focus {
-        outline: 0;
-        border-color: var(--bg-brand);
-      }
-
-      input[type="email"] {
-        margin-bottom: 24px;
-      }
+      select:focus { outline: 0; border-color: var(--bg-brand); }
 
       cc-details {
         display: flex;
-      }
-
-      cc-details input:first-child {
-        min-width: 160px;
-        margin-right: 12px;
+        & input:first-child { min-width: 160px; margin-right: 12px; }
       }
       
       #community-selector {
@@ -350,10 +290,7 @@ export default class SociSidebar extends SociComponent {
         background: var(--bg-secondary);
         border-radius: 4px;
         box-shadow: 0px 1px 1px color-mix(in srgb, var(--shadow) 80%, transparent), 0px 2px 10px color-mix(in srgb, var(--shadow) 10%, transparent);
-      }
-      
-      soci-select selected {
-        border-radius: 4px;
+        & selected { border-radius: 4px; }
       }
       
       #community-subscribe {
@@ -363,81 +300,54 @@ export default class SociSidebar extends SociComponent {
         color: var(--text);
         border-radius: 4px;
         justify-content: center;
-      }
-      
-      #community-subscribe:hover {
-        background: var(--bg-secondary-hover);
-      }
-      
-      #community-subscribe[subscribed] {
-        background: var(--bg-brand);
-        color: var(--text-inverse);
-      }
-      
-      #community-subscribe[subscribed]:hover {
-        background: var(--bg-brand-hover);
-      }
-
-      #community-admin {
-        padding: 0 12px 12px;
-        border-bottom: 1px solid var(--bg-secondary);
-        margin-bottom: 12px;
-      }
-      
-      #community-admin soci-link {
-        display: block;
-        font-size: 14px;
-        padding: 4px 8px;
-        border-radius: 4px;
-        color: var(--text-secondary);
-        text-decoration: none;
-      }
-      
-      #community-admin soci-link:hover {
-        background: var(--bg-secondary);
-        color: var(--text);
-      }
-
-      @media(max-height: 780px){
-        #footer {
-          border-top: 1px solid var(--bg-bold);
+        &:hover { background: var(--bg-secondary-hover); }
+        &[subscribed] {
+          background: var(--bg-brand);
+          color: var(--text-inverse);
+          &:hover { background: var(--bg-brand-hover); }
         }
       }
 
-      ::-webkit-scrollbar {
-        width: 14px;
+      #community-description {
+        padding: 0 16px;
+        height: 0;
+        min-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin-bottom: -16px;
+        transition: all 0.2s var(--soci-ease);
+        border-bottom: 1px solid var(--bg-secondary);
+        
+        & soci-quill-view {
+          font-size: 13px;
+          line-height: 1.5;
+          color: var(--text-secondary);
+          padding: 8px 0;
+          & p {
+            margin: 0 0 8px;
+            &:last-child { margin-bottom: 0; }
+          }
+        }
       }
 
-      ::-webkit-scrollbar-track {
-        background: var(--bg);
-      }
-
-      /* this is a bad hack to get alpha transparency on the scroll bars */
+      ::-webkit-scrollbar { width: 14px; }
+      ::-webkit-scrollbar-track { background: var(--bg); }
       ::-webkit-scrollbar-thumb {
         background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
         border-radius: 7px;
         border: 3px solid var(--bg);
+        &:hover { background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px); }
       }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
+      @media (max-height: 780px) {
+        #footer { border-top: 1px solid var(--bg-bold); }
       }
 
       @media (max-width: 768px) {
-        :host {
-          width: 100%;
-        }
-        :host([overlay]) {
-          background: var(--bg);
-          left: 0 !important;
-        }
-        panel {
-          height: 100%;
-        }
-
-        #footer {
-          display: none;
-        }
+        :host { width: 100%; }
+        :host([overlay]) { background: var(--bg); left: 0 !important; }
+        panel { height: 100%; }
+        #footer { display: none; }
       }
     `
   }
@@ -461,12 +371,14 @@ export default class SociSidebar extends SociComponent {
              </soci-select>
              <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
           </div>
-          <section id="community-admin" style="display: none;">
-             <h2>Admin</h2>
-             <soci-link href="#">Settings</soci-link>
-             <soci-link href="#">Users</soci-link>
-             <soci-link href="#">Financials</soci-link>
-          </section>
+          <div id="community-description">
+             <soci-quill-view></soci-quill-view>
+             <div id="admin-links">
+               <soci-link href="#">Settings</soci-link>
+               <soci-link href="#">Users</soci-link>
+               <soci-link href="#">Financials</soci-link>
+             </div>
+          </div>
           <section id="all-tags">
             <soci-tag-li href="/#all" icon="home" hide-subscribe>
               All posts
@@ -500,7 +412,7 @@ export default class SociSidebar extends SociComponent {
               </svg>
             </soci-tag-li>
           </section>
-          <section id="subscribed-tags" style="height: 0px; opacity: 0;">
+          <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">
             <h2>Subscribed Tags</h2>
             <tags></tags>
           </section>
@@ -583,59 +495,80 @@ export default class SociSidebar extends SociComponent {
     // Listen for community selection
     this.select('soci-select').addEventListener('selected', this._onCommunitySelect.bind(this))
 
-    // Set initial submit href
+    // Set initial routes and community details
     setTimeout(() => this._onRouteChange(), 0)
-    
-    // Initial admin check
-    this._checkAdminStatus()
   }
 
   _onRouteChange() {
     this._updateLinks()
     this._checkCommunityChange()
-    this._checkAdminStatus()
   }
 
-  _lastCommunity = undefined
+  _lastCommunity = null
   _communities = []
   _communitiesLoaded = false
 
   _checkCommunityChange() {
-    let newCommunity = this.currentCommunity
-    if(this._lastCommunity !== newCommunity){
-        this._lastCommunity = newCommunity
-        this._loadSubscribedTags()
-        this._loadCommonTags()
-        
-        // Update dropdown selection and check if the community is in the list
-        this._updateCommunitySelection(newCommunity)
-        this._checkAdminStatus()
-    }
+    let community = this.currentCommunity
+    if(this._lastCommunity === community) return
+    
+    this._lastCommunity = community
+    this._loadSubscribedTags()
+    this._loadCommonTags()
+    this._updateCommunitySelection(community)
+    this._populateCommunityDetails()
   }
 
-  async _checkAdminStatus() {
+  async _populateCommunityDetails() {
     let community = this.currentCommunity
+    let container = this.select('#community-description')
+    let adminLinks = this.select('#admin-links')
+    
     if(!community) {
-        this.select('#community-admin').style.display = 'none'
+        this._animateSection(container, false)
+        adminLinks.style.display = 'none'
         return
     }
 
-    // We need to fetch community info to know if admin
     try {
         let res = await this.getData(`/communities/${community}`, this.authToken)
-        if(res && res.isAdmin) {
-            this.select('#community-admin').style.display = 'block'
+        
+        // Update admin links
+        if(res?.isAdmin) {
             let prefix = `/@${community}/admin`
-            let links = this.select('#community-admin').querySelectorAll('soci-link')
-            links[0].setAttribute('href', `${prefix}`)
-            links[1].setAttribute('href', `${prefix}/users`)
-            links[2].setAttribute('href', `${prefix}/financials`)
+            let links = adminLinks.querySelectorAll('soci-link')
+            links[0].href = prefix
+            links[1].href = `${prefix}/users`
+            links[2].href = `${prefix}/financials`
+            adminLinks.style.display = 'block'
         } else {
-            this.select('#community-admin').style.display = 'none'
+            adminLinks.style.display = 'none'
+        }
+        
+        // Update description
+        let quillView = container.querySelector('soci-quill-view')
+        if(res?.description || res?.isAdmin) {
+            quillView.render(res?.description || '')
+            this._animateSection(container, true, quillView.offsetHeight + adminLinks.offsetHeight + 8)
+        } else {
+            this._animateSection(container, false)
         }
     } catch(e) {
-        console.error('SociSidebar: Error checking admin status', e)
-        this.select('#community-admin').style.display = 'none'
+        console.error('SociSidebar: Error loading community details', e)
+        this._animateSection(container, false)
+        adminLinks.style.display = 'none'
+    }
+  }
+  
+  _animateSection(el, show, height = 0) {
+    if(show) {
+        el.style.height = el.style.minHeight = height + 'px'
+        el.style.opacity = 1
+        el.style.marginBottom = 0
+    } else {
+        el.style.height = el.style.minHeight = 0
+        el.style.opacity = 0
+        el.style.marginBottom = '-16px'
     }
   }
   
@@ -715,6 +648,9 @@ export default class SociSidebar extends SociComponent {
     let url = '/subscriptions'
     if(this.currentCommunity) url += `?community=${this.currentCommunity}`
     let tags = await this.getData(url, this.authToken)
+    if(tags) {
+      this.select('#subscribed-tags').style.display = 'block'
+    }
     this._subscribedTags = tags.subscriptions.map(t=>t.tag)
     this._subscribedTagsLoaded = true
     this._populateTags()
@@ -755,16 +691,17 @@ export default class SociSidebar extends SociComponent {
     // BEFORE setting innerHTML
     const currentCommunity = this.currentCommunity
     const subscribed = !currentCommunity || communities.some(c => c.url == currentCommunity)
-    
+
+    const communitySubscribe = this.select('#community-subscribe')
     if(!subscribed && currentCommunity){
         html = `<soci-option value="${currentCommunity}" slot="selected" temporary>${currentCommunity.charAt(0).toUpperCase() + currentCommunity.slice(1)}</soci-option>` + html
-        this.select('#community-subscribe').hidden = false
-        this.select('#community-subscribe').innerText = "Subscribe"
-        this.select('#community-subscribe').removeAttribute('subscribed')
-        this.select('#community-subscribe').style.display = ''
+        communitySubscribe.hidden = false
+        communitySubscribe.innerText = "Subscribe"
+        communitySubscribe.removeAttribute('subscribed')
+        communitySubscribe.style.display = ''
     } else {
-        this.select('#community-subscribe').hidden = true
-        this.select('#community-subscribe').style.display = 'none'
+        communitySubscribe.hidden = true
+        communitySubscribe.style.display = 'none'
     }
 
     select.innerHTML = html
