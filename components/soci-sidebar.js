@@ -64,7 +64,7 @@ export default class SociSidebar extends SociComponent {
         height: 40px;
         border-bottom: 1px solid var(--bg-bold);
         
-        & soci-user {
+        soci-user {
           display: flex;
           box-sizing: border-box;
           align-items: center;
@@ -78,22 +78,22 @@ export default class SociSidebar extends SociComponent {
           --avatar-size: 20px;
           --line-height: 20px;
         }
-        & soci-button {
+        soci-button {
           display: inline-flex;
           background: var(--bg-secondary-hover);
           &:hover soci-icon { margin: -2px -2px -2px -8px; }
         }
-        & soci-icon {
+        soci-icon {
           margin: -2px 8px -2px -10px;
           transition: margin 0.1s var(--soci-ease);
         }
-        & #submit {
+        #submit {
           transition: width 0.1s var(--soci-ease);
           width: 20px;
           overflow: hidden;
           &:hover { width: 64px; }
         }
-        & svg { margin: -2px 0px -2px -6px; }
+        svg { margin: -2px 0px -2px -6px; }
       }
 
       #user-actions {
@@ -115,18 +115,18 @@ export default class SociSidebar extends SociComponent {
         border-top: 2px solid transparent;
         transition: border-top 0.3s var(--soci-ease);
         
-        & links {
+        links {
           justify-content: flex-start;
           display: flex;
           font-size: 14px;
         }
-        & soci-link, & a {
+        soci-link, & a {
           color: var(--text-tertiary);
           text-decoration: none;
           margin-right: 28px;
           &:hover { color: var(--text-secondary); }
         }
-        & svg { margin-bottom: 12px; }
+        svg { margin-bottom: 12px; }
       }
 
       #admin-links {
@@ -134,7 +134,7 @@ export default class SociSidebar extends SociComponent {
         padding-top: 8px;
         margin: 0 -8px;
         
-        & soci-link {
+        soci-link {
           display: inline-block;
           font-size: 14px;
           padding: 4px 8px;
@@ -164,9 +164,9 @@ export default class SociSidebar extends SociComponent {
       }
 
       #noauth {
-        & svg { margin-bottom: 24px; }
-        & h2 { padding-left: 0; }
-        & soci-link {
+        svg { margin-bottom: 24px; }
+        h2 { padding-left: 0; }
+        soci-link {
           display: block;
           margin-top: 32px;
           font-size: 13px;
@@ -177,7 +177,7 @@ export default class SociSidebar extends SociComponent {
           cursor: pointer;
           text-align: center;
         }
-        & #im-stupid {
+        #im-stupid {
           margin-top: 12px;
           color: var(--text-secondary);
           font-weight: 400;
@@ -186,7 +186,7 @@ export default class SociSidebar extends SociComponent {
       }
 
       #auth {
-        & input {
+        input {
           margin-bottom: 0;
           border-bottom: 0 !important;
           padding-left: 54px;
@@ -198,37 +198,37 @@ export default class SociSidebar extends SociComponent {
             color: var(--text-secondary);
           }
         }
-        & content {
+        content {
           display: flex;
           flex-direction: column;
           height: calc(100% - 42px);
           overflow-x: hidden;
           gap: 16px;
         }
-        & h2 {
+        h2 {
           padding-left: 12px;
           line-height: 32px;
         }
       }
 
       #create {
-        & form { display: flex; flex-direction: column; }
-        & h2:not(:first-child) { margin-top: 50px; }
-        & soci-button { margin-top: 16px; align-self: flex-end; }
+        form { display: flex; flex-direction: column; }
+        h2:not(:first-child) { margin-top: 50px; }
+        soci-button { margin-top: 16px; align-self: flex-end; }
       }
 
       #create-community {
-        & form { display: flex; flex-direction: column; }
-        & soci-button { margin-top: 16px; align-self: flex-end; }
-        & .panel-header {
+        form { display: flex; flex-direction: column; }
+        soci-button { margin-top: 16px; align-self: flex-end; }
+        .panel-header {
           display: flex;
           align-items: center;
           justify-content: flex-start;
           margin-bottom: 24px;
           & h3 { margin: 0 0 0 12px; font-size: 16px; }
         }
-        & textarea { min-height: 60px; resize: vertical; }
-        & select {
+        textarea { min-height: 60px; resize: vertical; }
+        select {
           border: 1px solid var(--bg-secondary);
           border-radius: 6px;
           padding: 8px;
@@ -238,7 +238,7 @@ export default class SociSidebar extends SociComponent {
           color: var(--text);
           margin-bottom: 8px;
         }
-        & .error { color: var(--text-danger); font-size: 13px; margin-top: 8px; }
+        .error { color: var(--text-danger); font-size: 13px; margin-top: 8px; }
       }
 
       input {
@@ -318,12 +318,12 @@ export default class SociSidebar extends SociComponent {
         transition: all 0.2s var(--soci-ease);
         border-bottom: 1px solid var(--bg-secondary);
         
-        & soci-quill-view {
+        soci-quill-view {
           font-size: 13px;
           line-height: 1.5;
           color: var(--text-secondary);
           padding: 8px 0;
-          & p {
+          p {
             margin: 0 0 8px;
             &:last-child { margin-bottom: 0; }
           }
@@ -769,7 +769,6 @@ export default class SociSidebar extends SociComponent {
   }
 
   _createTags(data, dom, subscribed=false){
-    //console.log('_createTags data:', data)
     let prefix = this.currentCommunity ? `/@${this.currentCommunity}` : ''
     let tags = ` 
       ${data.map((tag) => `
@@ -854,20 +853,15 @@ export default class SociSidebar extends SociComponent {
     let button = form.querySelector('soci-button')
 
     this.querySelector('[slot="login"] soci-password')?.checkValidity()
-    //todo - remove this override later
     let loginData = soci.getJSONFromForm(form)
-    if (loginData.email == 'hackernews') { loginData.email = 'j+hn@jjcm.org'}
-    else {
 
-	    if(!form.reportValidity()) {
-        console.log('form invalid')
-	      setTimeout(()=>{
-          button?.error()
-	      }, 1)
-	      return
-	    }
+    if(!form.reportValidity()) {
+      console.log('form invalid')
+      setTimeout(()=>{
+        button?.error()
+      }, 1)
+      return
     }
-
 
     window.api.user.login(loginData).then(response => {
       if(response.accessToken){
@@ -945,7 +939,6 @@ export default class SociSidebar extends SociComponent {
   }
 
   async _createAccount(){
-    //console.log(await soci.stripe)
     this.removeAttribute('noauth')
     this.setAttribute('create', '')
     this.select('#logout').innerHTML = "Login"
