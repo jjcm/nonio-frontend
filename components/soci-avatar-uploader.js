@@ -214,6 +214,14 @@ export default class SociFileDrop extends SociComponent {
     </actions>
   `}
 
+  static get observedAttributes() {
+    return ['community']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if(name === 'community') this._loadCurrentAvatar()
+  }
+
   connectedCallback(){
     ['dragenter', 'dragleave', 'dragover', 'drop'].forEach(
       e => this.addEventListener(e, this['_' + e])
@@ -225,6 +233,11 @@ export default class SociFileDrop extends SociComponent {
     this._loadCurrentAvatar()
   }
 
+  get _avatarName() {
+    let community = this.getAttribute('community')
+    return community ? `community_${community.replace('@', '')}` : soci.username
+  }
+
   _loadCurrentAvatar(){
     let formats = [
       {tag: 'source', extension: 'webp'},
@@ -232,7 +245,7 @@ export default class SociFileDrop extends SociComponent {
       {tag: 'img', extension: 'webp'},
     ]
     let html = formats.map(format=>{
-      return `<${format.tag} src${format.tag == 'source' ? 'set' : ''}="${config.AVATAR_HOST}/${soci.username}.${format.extension}?${Date.now()}">`
+      return `<${format.tag} src${format.tag == 'source' ? 'set' : ''}="${config.AVATAR_HOST}/${this._avatarName}.${format.extension}?${Date.now()}">`
     })
     this.select('picture').innerHTML = html.join('')
   }
@@ -324,6 +337,9 @@ export default class SociFileDrop extends SociComponent {
     data.append('xoffset', Math.floor(this._positionX * this.scale))
     data.append('yoffset', Math.floor(this._positionY * this.scale))
 
+    let community = this.getAttribute('community')
+    if(community) data.append('community', community.replace('@', ''))
+
     request.open('post', config.AVATAR_HOST + '/upload') 
 
     request.addEventListener('load', e => {
@@ -343,7 +359,7 @@ export default class SociFileDrop extends SociComponent {
         this.select('#resizer').style.opacity = 0
         setTimeout(()=>{
           this._cancelCropPreview()
-          this.fire('avatar-updated')
+          this.fire('avatar-updated', { community })
         }, 200)
       }, 400)
     })

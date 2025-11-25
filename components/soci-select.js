@@ -28,16 +28,18 @@ export class SociSelect extends SociComponent {
       height: var(--height);
       padding-right: 8px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
     }
 
     selected::after {
       content: '';
-      position: relative;
-      float: right;
-      top: calc(var(--height) / 2 - 2px);
+      margin-left: auto;
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       border-top: 4px solid var(--color);
+      position: relative;
+      left: 8px;
     }
 
     selected::before {
@@ -153,10 +155,23 @@ export class SociOption extends SociComponent {
       color: var(--text);
       padding: 0 var(--padding);
       width: 100%;
-      display: block;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
     }
     :host(:not([slot="selected"]):hover) {
       background: var(--bg-secondary-hover);
+    }
+    :host([slot="selected"]) {
+      display: flex;
+      align-items: center;
+    }
+    ::slotted(img) {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      margin-right: 8px;
+      object-fit: cover;
     }
   `}
 

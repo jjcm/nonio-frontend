@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import config from '../config.js'
 
 export default class SociSidebar extends SociComponent {
   constructor() {
@@ -596,7 +597,7 @@ export default class SociSidebar extends SociComponent {
       tempOption.setAttribute('temporary', '')
       tempOption.setAttribute('value', communityUrl)
       tempOption.setAttribute('slot', 'selected')
-      tempOption.innerText = communityUrl.charAt(0).toUpperCase() + communityUrl.slice(1) // Simple capitalization
+      tempOption.innerHTML = this._communityAvatar(communityUrl) + (communityUrl.charAt(0).toUpperCase() + communityUrl.slice(1))
       select.insertBefore(tempOption, select.firstChild)
       
       // Also fetch the community details to get proper casing/name if possible, though route context might suffice
@@ -670,6 +671,10 @@ export default class SociSidebar extends SociComponent {
     }
   }
 
+  _communityAvatar(url) {
+    return url ? `<img src="${config.AVATAR_HOST}/thumbnail/community_${url}.webp" onerror="this.style.display='none'">` : ''
+  }
+
   _populateCommunitySelect(communities){
     this._communitiesLoaded = true
     let select = this.select('soci-select')
@@ -677,7 +682,7 @@ export default class SociSidebar extends SociComponent {
     let html = `<soci-option value="">Frontpage</soci-option>`
     
     communities.forEach(c => {
-        html += `<soci-option value="${c.url}">${c.name}</soci-option>`
+        html += `<soci-option value="${c.url}">${this._communityAvatar(c.url)}${c.name}</soci-option>`
     })
     
     html += `<soci-option value="__create__" style="border-top: 1px solid var(--bg-secondary); color: var(--text-brand);">+ Create Community</soci-option>`
@@ -689,7 +694,7 @@ export default class SociSidebar extends SociComponent {
 
     const communitySubscribe = this.select('#community-subscribe')
     if(!subscribed && currentCommunity){
-        html = `<soci-option value="${currentCommunity}" slot="selected" temporary>${currentCommunity.charAt(0).toUpperCase() + currentCommunity.slice(1)}</soci-option>` + html
+        html = `<soci-option value="${currentCommunity}" slot="selected" temporary>${this._communityAvatar(currentCommunity)}${currentCommunity.charAt(0).toUpperCase() + currentCommunity.slice(1)}</soci-option>` + html
         communitySubscribe.hidden = false
         communitySubscribe.innerText = "Subscribe"
         communitySubscribe.removeAttribute('subscribed')

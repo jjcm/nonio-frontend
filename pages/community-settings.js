@@ -11,6 +11,9 @@ let communitySettings = {
     communitySettings.communityName = communityName
     document.title = `${communityName} - Settings`
     
+    // Set community on avatar uploader
+    communitySettings.dom.querySelector('soci-avatar-uploader').setAttribute('community', communityName)
+    
     // Fetch settings
     communitySettings.loadSettings()
 
