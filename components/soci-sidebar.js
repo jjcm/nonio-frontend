@@ -19,21 +19,16 @@ export default class SociSidebar extends SociComponent {
         box-sizing: border-box;
         transition: opacity 0.1s var(--soci-ease);
         opacity: 1;
-        
-        &([noauth]) {
-          & #noauth { left: 0; }
-          & #auth { left: -100%; }
-        }
-        &([create]) {
-          & #create { left: 0; }
-          & #auth, & #noauth { left: 100%; }
-        }
-        &([create-community]) {
-          & #create-community { left: 0; }
-          & #auth, & #noauth { left: 100%; }
-        }
-        &([dragging]) { user-select: none; }
       }
+      :host([noauth]) #noauth { left: 0; }
+      :host([noauth]) #auth { left: -100%; }
+      :host([create]) #create { left: 0; }
+      :host([create]) #auth,
+      :host([create]) #noauth,
+      :host([create-community]) #auth,
+      :host([create-community]) #noauth { left: 100%; }
+      :host([create-community]) #create-community { left: 0; }
+      :host([dragging]) { user-select: none; }
 
       h2 {
         font-size: 14px;
@@ -120,7 +115,7 @@ export default class SociSidebar extends SociComponent {
           display: flex;
           font-size: 14px;
         }
-        soci-link, & a {
+        soci-link, a {
           color: var(--text-tertiary);
           text-decoration: none;
           margin-right: 28px;
