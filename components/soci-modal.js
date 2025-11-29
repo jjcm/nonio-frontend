@@ -25,16 +25,10 @@ export default class SociModal extends SociComponent {
       padding: 20px;
       transition: opacity 0.25s var(--soci-ease);
     }
-
-    :host([active]) {
-      pointer-events: all;
-      opacity: 1;
-    }
-
-    :host([deactivating]) {
-      transition: opacity 0.15s var(--soci-ease);
-    }
-
+    :host([active]) { pointer-events: all; opacity: 1; }
+    :host([active]) #modal { transform: translateY(0); }
+    :host([deactivating]) { transition: opacity 0.15s var(--soci-ease); }
+    :host([deactivating]) #modal { transform: translateY(-16px); transition: transform 0.15s var(--soci-ease); }
     #blanket {
       width: 100%;
       height: 100%;
@@ -44,7 +38,6 @@ export default class SociModal extends SociComponent {
       background: var(--shadow);
       z-index: 5;
     }
-
     #modal {
       position: relative;
       z-index: 10;
@@ -57,19 +50,7 @@ export default class SociModal extends SociComponent {
       transform: translateY(16px);
       transition: transform 0.25s var(--soci-ease);
     }
-
-    :host([active]) #modal {
-      transform: translateY(0);
-    }
-
-    :host([deactivating]) #modal {
-      transform: translateY(-16px);
-      transition: transform 0.15s var(--soci-ease);
-    }
-
-    h2 {
-      margin-top: 0;
-    }
+    h2 { margin-top: 0; }
   `}
 
   html(){ return `

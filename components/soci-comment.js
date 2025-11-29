@@ -18,64 +18,41 @@ export default class SociComment extends SociComponent {
         margin: 12px 0 8px;
         min-height: 0px;
         transition: height 0.1s var(--soci-ease);
+        &:last-child { margin-bottom: 0; }
       }
-
-      :host(:last-child) {
-        margin-bottom: 0;
+      :host(:not([edited])) .edited { display: none; }
+      :host([expanded]) #replies { height: auto; }
+      :host(:not([self])) .user-control { display: none; }
+      :host([inserting]) {
+        position: absolute;
+        margin: 0;
+        opacity: 0;
+        transform: translateY(-8px);
       }
-
-      comment {
-        display: block;
-        position: relative;
-      }
-
-      top {
-        display: flex;
-        align-items: flex-start;
-      }
-
-      soci-user {
-        color: var(--text-brand);
-      }
-
-      .edited,
-      time {
+      comment { display: block; position: relative; }
+      top { display: flex; align-items: flex-start; }
+      soci-user { color: var(--text-brand); }
+      .edited, time {
         color: var(--text-secondary);
         display: inline;
         font-size: 12px;
         line-height: 18px;
         margin-left: 18px;
         position: relative;
+        &::before {
+          content: '';
+          display: block;
+          width: 4px;
+          height: 4px;
+          border-radius: 2px;
+          background: var(--text-secondary);
+          position: absolute;
+          top: 8px;
+          left: -13px;
+        }
       }
-
-      .edited:before,
-      time:before {
-        content: '';
-        display: block;
-        width: 4px;
-        height: 4px;
-        border-radius: 2px;
-        background: var(--text-secondary);
-        position: absolute;
-        top: 8px;
-        left: -13px;
-      }
-
-      .edited {
-        margin-left: 24px;
-        font-style: italic;
-      }
-
-      :host(:not([edited])) .edited {
-        display: none;
-      }
-
-      #comment {
-        margin-top: 4px;
-        font-size: 14px;
-        max-width: 900px;
-      }
-
+      .edited { margin-left: 24px; font-style: italic; }
+      #comment { margin-top: 4px; font-size: 14px; max-width: 900px; }
       #actions {
         display: flex;
         font-weight: 500;
@@ -85,34 +62,15 @@ export default class SociComment extends SociComponent {
         max-width: 900px;
         user-select: none;
         color: var(--text-secondary);
+        > div {
+          cursor: pointer;
+          &:hover { text-decoration: underline; }
+          &:not(:first-child) { margin-left: 12px; }
+        }
+        .confirmable:hover { text-decoration: none; }
       }
-
-      #actions > div {
-        cursor: pointer;
-      }
-
-      #actions > div:hover {
-        text-decoration: underline;
-      }
-
-      #actions .confirmable:hover {
-        text-decoration: none;
-      }
-
-      #actions > div:not(:first-child) {
-        margin-left: 12px;
-      }
-
-      #view-replies {
-        position: relative;
-      }
-
-      #vote-container {
-        display: flex;
-        position: relative;
-        margin-left: 8px;
-      }
-
+      #view-replies { position: relative; }
+      #vote-container { display: flex; position: relative; margin-left: 8px; }
       #upvote {
         display: flex;
         align-items: center;
@@ -126,139 +84,59 @@ export default class SociComment extends SociComponent {
         user-select: none;
         --fill-color: transparent;
         margin-right: 2px;
+        soci-icon { color: var(--text-secondary); height: 20px; width: 20px; }
+        &:hover { background: var(--upvote-bg-hover); color: var(--text-secondary-hover); }
+        &:active { filter: brightness(0.9); }
+        &[upvoted] {
+          background: var(--bg-success);
+          color: var(--text-inverse);
+          --fill-color: var(--text-inverse);
+          soci-icon { color: transparent; }
+        }
       }
-
-      #upvote soci-icon {
-        color: var(--text-secondary);
-        height: 20px;
-        width: 20px;
-      }
-      
-      #upvote:hover {
-        background: var(--upvote-bg-hover);
-        color: var(--text-secondary-hover);
-      }
-
-      #upvote:active {
-        filter: brightness(0.9);
-      }
-
-      #upvote[upvoted] {
-        background: var(--bg-success);
-        color: var(--text-inverse);
-        --fill-color: var(--text-inverse);
-      }
-
-      #upvote[upvoted] soci-icon {
-        color: transparent;
-
-      }
-
       soci-icon[glyph=downvote] {
         cursor: pointer;
         color: var(--text-secondary);
         --fill-color: transparent;
         height: 20px;
         width: 20px;
+        &:hover { color: var(--text-secondary-hover); }
+        &:active { color: var(--text-secondary-active); --fill-color: var(--text-secondary-active); }
+        &[downvoted] { color: var(--text-danger); --fill-color: var(--text-danger); }
       }
-
-      soci-icon[glyph=downvote]:hover {
-        color: var(--text-secondary-hover);
-      }
-      soci-icon[glyph=downvote]:active {
-        color: var(--text-secondary-active);
-        --fill-color: var(--text-secondary-active);
-      }
-
-      soci-icon[glyph=downvote][downvoted] {
-        color: var(--text-danger);
-        --fill-color: var(--text-danger);
-      }
-
-      #replies {
-        position: relative;
-        height: auto;
-      }
-
+      #replies { position: relative; height: auto; }
       .confirmable {
         display: flex;
+        &[active] > span:hover { text-decoration: none; }
+        &[active] .confirm-controls { display: flex; margin-left: 4px; }
+        span:hover { text-decoration: underline; }
       }
-
-      .confirmable[active] > span:hover {
-        text-decoration: none;
-      }
-
-      .confirmable span:hover {
-        text-decoration: underline;
-      }
-
       .confirm-controls {
         display: none;
+        span:first-child { margin-right: 4px; color: var(--text-danger); }
       }
-
-      .confirmable[active] .confirm-controls {
-        display: flex;
-        margin-left: 4px;
-      }
-
-      .confirm-controls span:first-child {
-        margin-right: 4px;
-        color: var(--text-danger);
-      }
-
-      :host([expanded]) #replies {
-        height: auto;
-      }
-
-      #comment-edit,
-      #comment-reply {
+      #comment-edit, #comment-reply {
         height: 0px;
         position: relative;
         border: 1px solid transparent;
         transition: height 0.1s ease-out;
         margin-top: 0;
         pointer-events: none;
+        &.active {
+          height: auto;
+          margin-top: 10px;
+          pointer-events: all;
+          actions { margin: 4px 0 -8px; display: flex; justify-content: flex-end; }
+        }
       }
-
-      #comment-edit.active,
-      #comment-reply.active {
-        height: auto;
-        margin-top: 10px;
-        pointer-events: all;
-      }
-
-      .active actions {
-        margin: 4px 0 -8px;
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      actions soci-button:last-child {
-        margin-right: 0;
-      }
-
+      actions soci-button:last-child { margin-right: 0; }
       ::slotted(soci-input:not([readonly])) {
         border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         --min-height: 140px !important;
       }
-
-      :host(:not([self])) .user-control {
-        display: none;
-      }
-
-      :host([inserting]) {
-        position: absolute;
-        margin: 0;
-        opacity: 0;
-        transform: translateY(-8px);
-      }
-
       @media (max-width: 768px) {
-        #actions {
-          font-size: 13px;
-          line-height: 24px;
-        }
+        #actions { font-size: 13px; line-height: 24px; }
       }
     `
   }

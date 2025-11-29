@@ -25,34 +25,26 @@ export default class SociCommentList extends SociComponent {
         line-height: 30px;
         padding: 0 22px;
       }
-      filtering {
-        display: flex;
-      }
+      filtering { display: flex; }
       filter {
         margin-left: 32px;
         position: relative;
         cursor: pointer;
+        &:hover, &[active] { color: var(--text); }
+        &[active]::after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: -2px;
+          left: calc(50% - 8px);
+          width: 16px;
+          height: 4px;
+          border-radius: 2px;
+          background: var(--bg);
+          box-shadow: 0 1px 1px var(--shadow-light);
+        }
       }
-      filter:hover,
-      filter[active] {
-        color: var(--text);
-      }
-      filter[active]:after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: -2px;
-        left: calc(50% - 8px);
-        width: 16px;
-        height: 4px;
-        border-radius: 2px;
-        background: var(--bg);
-        box-shadow: 0 1px 1px var(--shadow-light);
-      }
-      comment-count {
-        white-space: nowrap;
-        margin-right: 6px;
-      }
+      comment-count { white-space: nowrap; margin-right: 6px; }
       content {
         display: block;
         padding: 0 20px 24px;
@@ -60,19 +52,17 @@ export default class SociCommentList extends SociComponent {
         margin: 0 auto;
         box-sizing: border-box;
       }
-      soci-input {
-        --min-height: 82px;
-      }
+      soci-input { --min-height: 82px; }
       comment-input {
         display: block;
         padding: 0 18px;
         max-width: 840px;
         box-sizing: border-box;
         margin: 0 auto;
-      }
-      comment-input[active] ::slotted(soci-input) {
-        --min-height: 200px !important;
-        margin-bottom: 8px;
+        &[active] {
+          ::slotted(soci-input) { --min-height: 200px !important; margin-bottom: 8px; }
+          button-container { height: 20px; }
+        }
       }
       ::slotted(soci-input) {
         --min-height: 82px !important;
@@ -91,13 +81,7 @@ export default class SociCommentList extends SociComponent {
         max-width: 840px;
         margin: 0 auto;
       }
-      comment-input[active] button-container {
-        height: 20px;
-      }
-
-      ::slotted(soci-comment) {
-        padding-left: 0;
-      }
+      ::slotted(soci-comment) { padding-left: 0; }
     `
   }
 

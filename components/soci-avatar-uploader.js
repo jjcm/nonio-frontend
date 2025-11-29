@@ -20,6 +20,26 @@ export default class SociFileDrop extends SociComponent {
         border: 2px dashed var(--bg-success);
         transition: border 0.1s ease-out;
       }
+      :host([cropping]) {
+        cursor: default;
+      }
+      :host([cropping]) #resizer,
+      :host([cropping]) svg {
+        opacity: 1;
+        transition: opacity 0.1s var(--soci-ease);
+        pointer-events: all;
+      }
+      :host([cropping]) actions {
+        transition: height 0.2s var(--soci-ease);
+        height: 32px;
+      }
+      :host([cropping]) #preview {
+        opacity: 1;
+        position: relative;
+      }
+      :host([cropping]) picture {
+        display: none;
+      }
       #container {
         border-radius: 8px;
         position: relative;
@@ -28,13 +48,8 @@ export default class SociFileDrop extends SociComponent {
         transition: border 0.2s var(--soci-ease), width 0.2s var(--soci-ease), height 0.2s var(--soci-ease);
         margin: -2px;
       }
-      img {
-        width: 100%;
-        border-radius: 6px;
-      }
-      input {
-        display: none;
-      }
+      img { width: 100%; border-radius: 6px; }
+      input { display: none; }
       #resizer {
         position: absolute;
         opacity: 0;
@@ -56,73 +71,45 @@ export default class SociFileDrop extends SociComponent {
         width: 50%;
         height: 50%;
         z-index: 3;
-      }
-      .resizer:before, .resizer:after {
-        content: '';
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        background: #fff;
-        display: block;
-        opacity: 0.2;
-      }
-      .resizer:before {
-        width: 10px;
-      }
-      .resizer:after {
-        height: 9px;
+        &::before, &::after {
+          content: '';
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          background: #fff;
+          display: block;
+          opacity: 0.2;
+        }
+        &::before { width: 10px; }
+        &::after { height: 9px; }
       }
       #nw {
         top: -1px;
         left: -1px;
         cursor: nw-resize;
-      }
-      #nw:before {
-        top: -1px;
-        left: -1px;
-      }
-      #nw:after {
-        top: 0px;
-        left: -1px;
+        &::before { top: -1px; left: -1px; }
+        &::after { top: 0px; left: -1px; }
       }
       #ne {
         top: -1px;
         right: -1px;
         cursor: ne-resize;
-      }
-      #ne:before {
-        top: -1px;
-        right: -1px;
-      }
-      #ne:after {
-        top: 0px;
-        right: -1px;
+        &::before { top: -1px; right: -1px; }
+        &::after { top: 0px; right: -1px; }
       }
       #sw {
         bottom: -1px;
         left: -1px;
         cursor: sw-resize;
-      }
-      #sw:before {
-        bottom: -1px;
-        left: -1px;
-      }
-      #sw:after {
-        bottom: 0px;
-        left: -1px;
+        &::before { bottom: -1px; left: -1px; }
+        &::after { bottom: 0px; left: -1px; }
       }
       #se {
         bottom: -1px;
         right: -1px;
         cursor: se-resize;
-      }
-      #se:before {
-        bottom: -1px;
-        right: -1px;
-      }
-      #se:after {
-        bottom: 0px;
-        right: -1px;
+        &::before { bottom: -1px; right: -1px; }
+        &::after { bottom: 0px; right: -1px; }
       }
       svg {
         height: 100%;
@@ -133,47 +120,20 @@ export default class SociFileDrop extends SociComponent {
         top: 0;
         left: 0;
         opacity: 0;
-        pointer-events: none;
-      }
-      :host([cropping]) {
-        cursor: default;
-      }
-      :host([cropping]) #resizer,
-      :host([cropping]) svg {
-        opacity: 1;
-        transition: opacity 0.1s var(--soci-ease);
-        pointer-events: all;
       }
       actions {
         display: flex;
         justify-content: flex-end;
         height: 0;
         overflow: hidden;
+        soci-button { margin: 8px 2px; }
       }
-      :host([cropping]) actions {
-        transition: height 0.2s var(--soci-ease);
-        height: 32px;
-      }
-      actions soci-button {
-        margin: 8px 2px;
-      }
-
       #preview {
         position: absolute;
         pointer-events: none;
         opacity: 0;
         z-index: 1;
       }
-
-      :host([cropping]) #preview {
-        opacity: 1;
-        position: relative;
-      }
-
-      :host([cropping]) picture {
-        display: none;
-      }
-
       cropping {
         display: block;
         position: relative;

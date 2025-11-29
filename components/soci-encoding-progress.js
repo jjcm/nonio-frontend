@@ -7,54 +7,20 @@ export default class SociEncodingProgress extends SociComponent {
 
   css(){
     return `
-      :host {
-        width: 420px;
-        display: block;
-        margin: 0 auto;
-        padding: 40px 0;
-      }
-
-      .info {
-        font-weight: 500;
-        color: var(--text-secondary);
-        margin-bottom: 12px;
-        text-align: center;
-      }
-
-      columns {
-        display: flex;
-      }
-
-      column {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-
+      :host { width: 420px; display: block; margin: 0 auto; padding: 40px 0; }
+      .info { font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; text-align: center; }
+      columns { display: flex; }
+      column { width: 100%; display: flex; flex-direction: column; align-items: flex-end; }
       .fidelity {
         line-height: 24px;
         width: 152px;
         display: flex;
         margin-bottom: 8px;
         transition: opacity 0.3s var(--soci-ease);
+        &[disabled] { opacity: 0.3; }
+        span { color: var(--text-brand); font-size: 11px; position: relative; top: -4px; left: 6px; }
       }
-
-      .fidelity[disabled] {
-        opacity: 0.3;
-      }
-
-      .fidelity span {
-        color: var(--text-brand);
-        font-size: 11px;
-        position: relative;
-        top: -4px;
-        left: 6px;
-      }
-
-      soci-radial-progress {
-        margin-right: 10px;
-      }
+      soci-radial-progress { margin-right: 10px; }
     `
   }
 

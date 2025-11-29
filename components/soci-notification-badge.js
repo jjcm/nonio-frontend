@@ -29,44 +29,19 @@ export default class SociNotificationBadge extends SociComponent {
         --transition-time: 0.1s;
         transition: all var(--transition-time) ease;
       }
-
-      :host(:hover) {
-        color: var(--text-secondary-hover);
-      }
-
-      :host([loaded]) {
-        --transition-time: 0.2s;
-      }
-
-      :host([count]) {
-        color: var(--text-danger);
-        gap: 4px;
-        padding: 0 8px;
-      }
-
+      :host(:hover) { color: var(--text-secondary-hover); }
+      :host([loaded]) { --transition-time: 0.2s; }
+      :host([count]) { color: var(--text-danger); gap: 4px; padding: 0 8px; }
+      :host([count]) span { transform: translateY(0); opacity: 1; }
+      :host([count]:hover) { color: var(--text-danger-hover); }
+      :host([count]:hover) span { color: var(--text-danger-hover); }
       span {
         transform: translateY(8px);
         opacity: 0;
         transition: opacity var(--transition-time) ease, transform var(--transition-time) ease;
         color: var(--text-danger);
       }
-
-      :host([count]) span {
-        transform: translateY(0);
-        opacity: 1;
-      }
-
-      :host([count]:hover) {
-        color: var(--text-danger-hover);
-      }
-
-      :host([count]:hover) span {
-        color: var(--text-danger-hover);
-      }
-
-      soci-link {
-        display: contents;
-      }
+      soci-link { display: contents; }
     `
   }
 

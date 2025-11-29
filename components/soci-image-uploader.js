@@ -21,42 +21,36 @@ export default class SociImageUploader extends SociComponent {
         margin-bottom: 12px;
         position: relative;
         transition: border 0.2s ease;
-
         --upload-progress: 0%;
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: var(--bg-success);
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          pointer-events: none;
+        }
       }
-
       :host([dragover]) {
         border: 2px dashed var(--bg-success);
         transition: border 0.1s ease-out;
+        &::before { opacity: 0.1; transition: opacity 0.1s ease-out; z-index: -1; }
       }
-
-      :host:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--bg-success);
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        pointer-events: none;
+      :host([preview]) {
+        min-height: 0;
+        border-color: transparent;
+        transition: all 0.2s ease-in-out;
+        overflow: hidden;
+        &::before { opacity: 0; transition: all 0.2s ease-in-out; }
       }
-
-      :host([dragover]):before {
-        opacity: 0.1;
-        transition: opacity 0.1s ease-out;
-        z-index: -1;
-      }
-
-      div {
-        font-weight: 500;
-        color: var(--text-secondary);
-        margin-bottom: 12px;
-        mix-blend-mode: multiply;
-      }
-
+      :host([preview]) label,
+      :host([preview]) div { display: none; }
+      div { font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; mix-blend-mode: multiply; }
       label {
         border-radius: 4px;
         height: 24px;
@@ -72,56 +66,31 @@ export default class SociImageUploader extends SociComponent {
         transition: height 0.1s ease-in-out;
         user-select: none;
         position: relative;
-      }
-      label:hover {
-        background: var(--bg-brand-hover);
-        border-color: var(--bg-brand-hover);
-      }
-      label:active {
-        background: var(--bg-brand-active);
-        border-color: var(--bg-brand-active);
-      }
-      label.uploading {
-        height: 8px;
-        transition: all 0.1s ease-in-out;
-        background: var(--bg);
-        border-color: var(--bg-success);
-      }
-      label.uploading:after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 8px;
-        width: var(--upload-progress);
-        transition: width 0.3s ease;
-        background: var(--bg-success);
-      }
-      :host([preview]) {
-        min-height: 0;
-        border-color: transparent;
-        transition: all 0.2s ease-in-out;
-        overflow: hidden;
-      }
-      :host([preview]):before {
-        opacity: 0;
-        transition: all 0.2s ease-in-out;
-      }
-      :host([preview]) label,
-      :host([preview]) div {
-        display: none;
+        &:hover { background: var(--bg-brand-hover); border-color: var(--bg-brand-hover); }
+        &:active { background: var(--bg-brand-active); border-color: var(--bg-brand-active); }
+        &.uploading {
+          height: 8px;
+          transition: all 0.1s ease-in-out;
+          background: var(--bg);
+          border-color: var(--bg-success);
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 8px;
+            width: var(--upload-progress);
+            transition: width 0.3s ease;
+            background: var(--bg-success);
+          }
+        }
       }
       #preview {
         max-width: 100%;
+        img, video { max-width: 100%; }
       }
-      #preview img,
-      #preview video {
-        max-width: 100%;
-      }
-      input {
-        display: none;
-      }
+      input { display: none; }
     `
   }
 

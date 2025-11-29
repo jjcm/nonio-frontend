@@ -26,9 +26,7 @@ export default class SociLinkInput extends SociComponent {
       padding: 0 8px;
       border-radius: 8px;
       transition: none;
-    }
-    :host(:focus) {
-      outline: 0;
+      &:focus { outline: 0; }
     }
     :host([available="true"]) {
       background: var(--bg-success);
@@ -36,6 +34,10 @@ export default class SociLinkInput extends SociComponent {
       color: var(--text-inverse);
       cursor: pointer;
       transition: all 0.1s ease-in-out, color 0s ease-in-out;
+    }
+    :host([available="false"]) {
+      border: 2px solid var(--bg-danger);
+      soci-icon { color: var(--bg-danger); }
     }
     input {
       cursor: pointer;
@@ -48,32 +50,10 @@ export default class SociLinkInput extends SociComponent {
       width: 100%;
       background: transparent;
       color: inherit;
+      &::placeholder { font-weight: normal; text-transform: none; opacity: 0.5; font-size: 14px; }
     }
-    input::placeholder {
-      font-weight: normal;
-      text-transform: none;
-      opacity: 0.5;
-      font-size: 14px;
-    }
-    :host([available="false"]) {
-      border: 2px solid var(--bg-danger);
-    }
-    soci-icon {
-      pointer-events: none;
-      position: absolute;
-      right: 2px;
-    }
-    :host([available="false"]) soci-icon {
-      color: var(--bg-danger);
-    }
-    error {
-      position: absolute;
-      left: 2px;
-      bottom: -20px;
-      color: var(--text-danger);
-      height: 20px;
-      font-size: 12px;
-    }
+    soci-icon { pointer-events: none; position: absolute; right: 2px; }
+    error { position: absolute; left: 2px; bottom: -20px; color: var(--text-danger); height: 20px; font-size: 12px; }
   `}
 
   html() { return `

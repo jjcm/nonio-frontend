@@ -19,8 +19,16 @@ export default class SociLedger extends SociComponent {
         transform: translateY(0);
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+        #line {
+          opacity: 1;
+          fill-opacity: 0.1;
+          stroke-dasharray: 4000;
+          stroke-dashoffset: 4000;
+          animation: line-in 2.25s var(--soci-ease) forwards;
+          stroke: var(--text-success);
+          fill: var(--text-brand);
+        }
       }
-
       svg {
         height: 200px;
         width: 100%;
@@ -29,32 +37,14 @@ export default class SociLedger extends SociComponent {
         overflow: hidden;
         border: 1px solid var(--bg-secondary);
       }
-
       #line {
         opacity: 0;
         fill-opacity: 0;
         transition: opacity 1.2s var(--soci-ease), fill-opacity 0.4s var(--soci-ease) 1.0s;
       }
-
-      :host([loaded]) #line {
-        opacity: 1;
-        fill-opacity: 0.1;
-        stroke-dasharray: 4000;
-        stroke-dashoffset: 4000;
-        animation: line-in 2.25s var(--soci-ease) forwards;
-        stroke: var(--text-success);
-        fill: var(--text-brand);
-      }
       @keyframes line-in {
-        from {
-          stroke-dasharray: 4000;
-          stroke-dashoffset: 4000;
-        }
-
-        to {
-          stroke-dasharray: 4000;
-          stroke-dashoffset: 2000;
-        }
+        from { stroke-dasharray: 4000; stroke-dashoffset: 4000; }
+        to { stroke-dasharray: 4000; stroke-dashoffset: 2000; }
       }
     `
   }

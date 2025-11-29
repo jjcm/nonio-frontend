@@ -8,75 +8,32 @@ export class SociSelect extends SociComponent {
   css(){ return `
     :host {
       --height: 30px;
-      --text-transform: capitalize;
-      --font-weight: 500;
-      --font-size: 12px;
-      --color: var(--bg);
-      --padding: 8px;
-
       position: relative;
-      line-height: var(--height);
-      user-select: none;
-      font-weight: var(--font-weight, 500);
-      font-size: 12px;
-      text-transform: capitalize;
-      padding: 0 var(--padding);
-      box-sizing: border-box;
+      display: block;
     }
 
     selected {
-      height: var(--height);
-      padding-right: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-    }
-
-    selected::after {
-      content: '';
-      margin-left: auto;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 4px solid var(--color);
-      position: relative;
-      left: 8px;
-    }
-
-    selected::before {
-      content: '';
-      background: var(--color);
-      width: 100%;
-      height: 100%;
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      border-radius: 3px;
-    }
-
-    selected:hover::before {
-      opacity: 0.1;
-    }
-
-    :host([open]) selected::before {
-      opacity: 0.1;
+      cursor: pointer;
+      height: var(--height);
+      border-radius: inherit;
     }
 
     dropdown {
       display: none;
       position: absolute;
-      top: calc(var(--height) + 4px);
+      min-width: 100px;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
       cursor: pointer;
       background: var(--bg-secondary);
-      border-radius: 3px;
+      border-radius: 4px;
       color: var(--text);
       overflow: hidden;
       padding: 4px 0;
       box-shadow: 0px 1px 1px var(--shadow), 0px 2px 10px color-mix(in srgb, var(--shadow) 40%, transparent);
-      min-width: max(100%, 100px);
       z-index: 1;
-      margin: 0 calc(var(--padding) * -1);
     }
 
     :host([open]) dropdown {
@@ -146,31 +103,69 @@ export class SociOption extends SociComponent {
   }
 
   css(){ return `
-    :host(:not([slot="selected"])) {
-      height: 30px;
-      line-height: 30px;
+    :host {
+      --padding: 12px;
+      --shadow: ;
+      height: var(--height, 30px);
+      line-height: var(--height, 30px);
       position: relative;
       user-select: none;
       cursor: pointer;
       color: var(--text);
       padding: 0 var(--padding);
-      width: 100%;
       display: flex;
       align-items: center;
       box-sizing: border-box;
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: capitalize;
+      gap: 8px;
+      text-shadow: var(--shadow);
     }
+
     :host(:not([slot="selected"]):hover) {
       background: var(--bg-secondary-hover);
     }
-    :host([slot="selected"]) {
-      display: flex;
-      align-items: center;
+
+    :host([slot="selected"])::after {
+      content: '';
+      margin-left: auto;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid currentColor;
+      flex-shrink: 0;
+      filter: drop-shadow(30px 10px 4px #4444dd);
     }
+
+    :host([slot="selected"])::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s ease;
+    }
+
+    :host([slot="selected"]:hover)::before {
+      opacity: 0.08;
+    }
+
+    :host([slot="selected"]) ::slotted(img) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: inherit;
+      object-fit: cover;
+      z-index: -1;
+    }
+
     ::slotted(img) {
       width: 18px;
       height: 18px;
       border-radius: 4px;
-      margin-right: 8px;
       object-fit: cover;
     }
   `}

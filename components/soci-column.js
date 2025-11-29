@@ -18,13 +18,10 @@ export default class SociColumn extends SociComponent {
         background: var(--bg-bold);
         container-type: inline-size;
       }
-
-      @container {
-        * {
-          color: red;
-        }
-      }
-      
+      :host([large]) sorts,
+      :host([large]) filters { display: flex; }
+      :host([large]) soci-select { display: none; }
+      @container { * { color: red; } }
       separator {
         height: 100%;
         right: 0; 
@@ -33,23 +30,15 @@ export default class SociColumn extends SociComponent {
         display: block;
         color: #f00;
       }
-
       scroll-container {
         overflow: auto;
         width: 100%;
         height: 100%;
         display: block;
         scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
       }
-
-      scroll-container::-webkit-scrollbar {
-        display: none;
-      }
-
-      content {
-        display: block;
-      }
-
+      content { display: block; }
       header {
         background-color: var(--bg);
         position: sticky;
@@ -57,17 +46,14 @@ export default class SociColumn extends SociComponent {
         height: 40px;
         width: 100%;
         z-index: 2;
-        display: block;
+        display: flex;
         padding: 0 8px;
         box-sizing: border-box;
-        display: flex;
         justify-content: space-between;
         align-items: center;
         box-shadow: 0 1px 2px var(--shadow);
       }
-
-      sort,
-      filter {
+      sort, filter {
         text-transform: capitalize;
         position: relative;
         padding: 0 12px;
@@ -75,62 +61,48 @@ export default class SociColumn extends SociComponent {
         font-weight: 500;
         font-size: 12px;
         line-height: 20px;
-        position: relative;
         z-index: 2;
         color: var(--text-secondary);
         border-radius: 3px;
+        &::before {
+          position: absolute;
+          content: ''; 
+          left: 0;
+          top: -10px;
+          height: 40px;
+          width: 100%;
+          background: transparent;
+        }
+        &:hover { color: var(--text-secondary-hover); }
+        &[selected] {
+          opacity: 1;
+          color: var(--text-brand-bold);
+          background: var(--bg-secondary);
+          &::after {
+            content:'';
+            display: block;
+            position: absolute;
+            top: 29px;
+            left: calc(50% - 8px);
+            width: 16px;
+            height: 3px;
+            border-radius: 0 0 2px 2px;
+            background: var(--bg);
+            box-shadow: 0 1px 1px var(--shadow);
+          }
+        }
       }
-
-      sort:before,
-      filter:before {
-        position: absolute;
-        content: ''; 
-        left: 0;
-        top: -10px;
-        height: 40px;
-        width: 100%;
-        background: transparent;
-      }
-
       soci-select {
         position: absolute;
         z-index: 2;
         left: 6px;
-        --height: 24px;
+        --height: 30px;
         --color: var(--text-secondary);
+        &#filter-select { right: 6px; left: auto; }
       }
-
-      soci-select#filter-select {
-        right: 6px;
-        left: auto;
+      soci-option[slot="selected"] {
+        border-radius: 3px;
       }
-
-      sort:hover,
-      filter:hover {
-        color: var(--text-secondary-hover);
-      }
-
-      sort[selected],
-      filter[selected] {
-        opacity: 1;
-        color: var(--text-brand-bold);
-        background: var(--bg-secondary);
-      }
-
-      sort[selected]::after,
-      filter[selected]::after {
-        content:'';
-        display: block;
-        position: absolute;
-        top: 29px;
-        left: calc(50% - 8px);
-        width: 16px;
-        height: 3px;
-        border-radius: 0 0 2px 2px;
-        background: var(--bg);
-        box-shadow: 0 1px 1px var(--shadow);
-      }
-
       #tag-container {
         display: inline-flex;
         margin: 0 auto;
@@ -144,72 +116,30 @@ export default class SociColumn extends SociComponent {
         border-radius: 3px;
         margin-right: 4px;
       }
-
       #tag-title {
         font-size: 16px;
         letter-spacing: 1px;
         text-transform: uppercase;
       }
-
-      sorts,
-      filters {
-        display: none;
-      }
-
-      :host([large]) sorts,
-      :host([large]) filters {
-        display: flex;
-      }
-
-      :host([large]) soci-select {
-        display: none;
-      }
-
-      sorts,
-      filters,
-      soci-select {
-        position: absolute;
-      }
-
-      sorts {
-        left: 10px;
-      }
-
-      filters {
-        right: 10px;
-      }
-
+      sorts, filters { display: none; }
+      sorts, filters, soci-select { position: absolute; }
+      sorts { left: 10px; }
+      filters { right: 10px; }
       @keyframes load-in {
-        from {
-          transform: translateY(4px);
-          opacity: 0;
-        }
-
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
+        from { transform: translateY(4px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
       }
-
       #menu {
         display: none;
         cursor: pointer;
         border-radius: 3px;
+        &:hover { background-color: var(--bg-secondary); }
       }
-
-      #menu:hover {
-        background-color: var(--bg-secondary);
-      }
-
       @media (max-width: 768px) {
-        header #menu {
-          display: block;
+        header {
+          #menu { display: block; }
+          soci-select { left: 36px; }
         }
-
-        header soci-select {
-          left: 36px;
-        }
-
       }
     `
   }

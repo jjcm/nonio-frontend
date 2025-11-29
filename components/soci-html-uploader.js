@@ -23,54 +23,47 @@ export default class SociHTMLUploader extends SociComponent {
         transition: border 0.2s ease;
         max-width: 920px;
         margin: 0 auto;
-
         --upload-progress: 0%;
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: var(--bg-success);
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          pointer-events: none;
+        }
       }
-
       :host([dragover]) {
         border: 2px dashed var(--bg-success);
         transition: border 0.1s ease-out;
+        &::before { opacity: 0.1; transition: opacity 0.1s ease-out; z-index: -1; }
       }
-
-      :host:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--bg-success);
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        pointer-events: none;
-      }
-
-      :host([dragover]):before {
-        opacity: 0.1;
-        transition: opacity 0.1s ease-out;
-        z-index: -1;
-      }
-
       :host([state="uploading"]),
+      :host([state="preview"]) { border: 2px dashed var(--bg-brand); }
       :host([state="preview"]) {
-        border: 2px dashed var(--bg-brand);
+        min-height: 0;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0px;
+        overflow: hidden;
+        max-width: 100%;
+        border: 0;
+        border-top: 1px solid var(--bg-secondary);
+        border-bottom: 1px solid var(--bg-secondary);
+        padding: 24px 0;
+        background: var(--bg-bold);
+        &::before { opacity: 0; transition: all 0.2s ease-in-out; }
       }
-
-      #uploading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .info {
-        font-weight: 500;
-        color: var(--text-secondary);
-        margin-bottom: 12px;
-        mix-blend-mode: multiply;
-        text-align: center;
-      }
-
+      :host([state="preview"]) label,
+      :host([state="preview"]) div { display: none; }
+      :host([state="preview"]) #preview { display: block; }
+      :host([state="preview"]) #uploading { display: none; }
+      #uploading { display: flex; flex-direction: column; align-items: center; }
+      .info { font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; mix-blend-mode: multiply; text-align: center; }
       label {
         border-radius: 4px;
         height: 24px;
@@ -86,69 +79,28 @@ export default class SociHTMLUploader extends SociComponent {
         transition: height 0.1s ease-in-out;
         user-select: none;
         position: relative;
+        &:hover { background: var(--bg-brand-hover); border-color: var(--bg-brand-hover); }
+        &:active { background: var(--bg-brand-active); border-color: var(--bg-brand-active); }
+        &.uploading {
+          height: 8px;
+          transition: all 0.1s ease-in-out;
+          background: var(--bg);
+          border-color: var(--bg-brand);
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 8px;
+            width: var(--upload-progress);
+            transition: width 0.3s linear;
+            background: var(--bg-brand);
+          }
+        }
       }
-      label:hover {
-        background: var(--bg-brand-hover);
-        border-color: var(--bg-brand-hover);
-      }
-      label:active {
-        background: var(--bg-brand-active);
-        border-color: var(--bg-brand-active);
-      }
-      label.uploading {
-        height: 8px;
-        transition: all 0.1s ease-in-out;
-        background: var(--bg);
-        border-color: var(--bg-brand);
-      }
-      label.uploading:after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 8px;
-        width: var(--upload-progress);
-        transition: width 0.3s linear;
-        background: var(--bg-brand);
-      }
-      :host([state="preview"]) {
-        min-height: 0;
-        transition: all 0.2s ease-in-out;
-        border-radius: 0px;
-        overflow: hidden;
-        max-width: 100%;
-        border: 0;
-        border-top: 1px solid var(--bg-secondary);
-        border-bottom: 1px solid var(--bg-secondary);
-        padding: 24px 0;
-        background: var(--bg-bold);
-      }
-
-      :host([state="preview"]):before {
-        opacity: 0;
-        transition: all 0.2s ease-in-out;
-      }
-      :host([state="preview"]) label,
-      :host([state="preview"]) div {
-        display: none;
-      }
-      #preview {
-        max-width: 100%;
-        display: none;
-      }
-      :host([state="preview"]) #preview {
-        display: block;
-      }
-      input {
-        display: none;
-      }
-      :host([state="preview"]) #preview {
-        display: block;
-      }
-      :host([state="preview"]) #uploading {
-        display: none;
-      }
+      #preview { max-width: 100%; display: none; }
+      input { display: none; }
     `
   }
 

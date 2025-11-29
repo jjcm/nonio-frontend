@@ -17,53 +17,22 @@ export default class SociLedgerLi extends SociComponent {
         line-height: 24px;
         margin-bottom: 4px;
       }
-
       :host([type="withdrawal"]) {
         border: 1px solid var(--bg-secondary);
+        soci-icon { display: block; transform: scale(0.8); }
+        slot[name="amount"] { color: var(--text-danger); &::before { content: "-$"; } }
+        slot[name="description"] { font-weight: bold; }
       }
-
-      soci-icon {
-        display: none;
-      }
-
-      :host([type="withdrawal"]) soci-icon {
-        display: block;
-        transform: scale(0.8);
-      }
-
-
-      :host([type="withdrawal"]) slot[name="amount"] {
-        color: var(--text-danger);
-      }
-
-      :host([type="withdrawal"]) slot[name="amount"]::before {
-        content: "-$";
-      }
-
-      slot[name="description"] {
-        white-space: nowrap;
-      }
-
-      :host([type="withdrawal"]) slot[name="description"] {
-        font-weight: bold;
-      }
-
-      slot[name="date"] {
-        display: block;
-        color: var(--text-secondary);
-        width: 100%;
-      }
-
+      soci-icon { display: none; }
+      slot[name="description"] { white-space: nowrap; }
+      slot[name="date"] { display: block; color: var(--text-secondary); width: 100%; }
       slot[name="amount"] {
         padding-left: 12px;
         min-width: 120px;
         display: flex;
         font-weight: bold;
         justify-content: flex-end;
-      }
-      
-      slot[name="amount"]::before {
-        content: '$';
+        &::before { content: '$'; }
       }
     `
   }

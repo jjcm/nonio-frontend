@@ -13,34 +13,23 @@ export default class SociContributionSlider extends SociComponent {
 
   css(){
     return `
-      :host {
-        margin: 18px 0 36px;
-        display: block;
-      }
-
-      slider {
-        position: relative;
-        display: block;
-        margin: 8px 0 16px;
-      }
-
+      :host { margin: 18px 0 36px; display: block; }
+      slider { position: relative; display: block; margin: 8px 0 16px; }
       slider-track {
         height: 4px;
         width: 100%;
         background: var(--bg-brand-secondary);
         display: block;
         position: relative;
+        &::before {
+          content: '';
+          width: 30px;
+          height: 4px;
+          background: var(--bg-secondary);
+          border-right: 2px solid var(--bg);
+          display: block;
+        }
       }
-
-      slider-track::before {
-        content: '';
-        width: 30px;
-        height: 4px;
-        background: var(--bg-secondary);
-        border-right: 2px solid var(--bg);
-        display: block;
-      }
-
       slider-handle {
         width: 16px;
         height: 16px;
@@ -52,59 +41,27 @@ export default class SociContributionSlider extends SociComponent {
         border-radius: 8px;
         cursor: pointer;
         transition: box-shadow 0.1s var(--soci-ease-out);
+        &:focus { outline: 0; }
+        &:focus:not(:active) { box-shadow: 0 0 0 2px var(--bg-brand-bold) inset; }
       }
-
-      slider-handle:focus {
-        outline: 0;
-      }
-
-      slider-handle:focus:not(:active) {
-        box-shadow: 0 0 0 2px var(--bg-brand-bold) inset;
-      }
-
-      info {
-        display: flex;
-      }
-
-      amount {
-        display: block;
-        font-size: 22px;
-        font-weight: bold; 
-      }
-
-      label {
-        font-size: 11px;
-        color: var(--text-secondary);
-      }
-
+      info { display: flex; }
+      amount { display: block; font-size: 22px; font-weight: bold; }
+      label { font-size: 11px; color: var(--text-secondary); }
       server {
         max-width: 42px;
+        amount { color: var(--text-secondary); }
       }
-
-      server amount {
-        color: var(--text-secondary);
-      }
-
       contribution {
         max-width: 80px;
         margin-right: auto;
         margin-left: 8px;
+        amount { color: var(--text-brand); }
       }
-
-      contribution amount {
-        color: var(--text-brand);
-      }
-
       total {
         min-width: 110px;
         text-align: right;
+        span { font-weight: 100; color: var(--text-secondary); }
       }
-
-      total span {
-        font-weight: 100;
-        color: var(--text-secondary);
-      }
-
     `
   }
 

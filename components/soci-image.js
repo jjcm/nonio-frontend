@@ -7,29 +7,17 @@ export default class SociImageViewer extends SociComponent {
   }
 
   css(){ return `
-    :host {
-      width: 100%;
-      display: block;
-      overflow: auto;
-      position: relative;
-    }
-    ::-webkit-scrollbar {
-      width: 14px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-bold);
-    }
-
+    :host { width: 100%; display: block; overflow: auto; position: relative; }
+    :host([zoomable]) #image { cursor: zoom-in; }
+    :host([zoomed]) #image { cursor: zoom-out; max-height: var(--media-height); max-width: var(--media-width); }
+    ::-webkit-scrollbar { width: 14px; }
+    ::-webkit-scrollbar-track { background: var(--bg-bold); }
     /* this is a bad hack to get alpha transparency on the scroll bars */
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
       border-radius: 7px;
       border: 3px solid var(--bg-bold);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px);
+      &:hover { background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px); }
     }
     #image {
       max-width: min(var(--media-width), 100%);
@@ -40,28 +28,16 @@ export default class SociImageViewer extends SociComponent {
       z-index: 2;
     }
     img.bg {
-      position: inherit;
+      position: absolute;
       z-index: 1;
       left: 0;
+      top: 0;
       object-fit: cover;
       opacity: 0.2;
       filter: blur(20px);
       margin-bottom: 0;
-      position: absolute;
-      top: 0;
       height: 100%;
       width: 100%;
-    }
-    :host([zoomable]) #image {
-      cursor: zoom-in;
-    }
-
-    :host([zoomed]) #image {
-      cursor: zoom-out;
-    }
-    :host([zoomed]) #image {
-      max-height: var(--media-height);
-      max-width: var(--media-width);
     }
   `}
 

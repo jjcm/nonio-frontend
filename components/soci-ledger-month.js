@@ -23,49 +23,20 @@ export default class SociLedgerMonth extends SociComponent {
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
-
+      :host(.open) #deposits { display: block; }
       #header {
         display: flex;
         padding: 8px;
         gap: 8px;
         white-space: nowrap;
         cursor: pointer;
+        &:hover { background: var(--bg-secondary); }
       }
-      #header:hover {
-        background: var(--bg-secondary);
-      }
-
-      #number,
-      #date,
-      soci-icon {
-        color: var(--text-secondary);
-      }
-
-      #description {
-        width: 100%;
-        font-weight: bold;
-      }
-
-      #total {
-        width: 100px;
-        font-weight: bold;
-        text-align: right;
-        color: var(--text-success);
-      }
-
-      #deposits {
-        display: none;
-        padding-left: 32px;
-      }
-
-      :host(.open) #deposits {
-        display: block;
-      }
-
-      ::slotted(soci-ledger-li) {
-        border: 0;
-        animation: load-down 0.15s var(--soci-ease);
-      }
+      #number, #date, soci-icon { color: var(--text-secondary); }
+      #description { width: 100%; font-weight: bold; }
+      #total { width: 100px; font-weight: bold; text-align: right; color: var(--text-success); }
+      #deposits { display: none; padding-left: 32px; }
+      ::slotted(soci-ledger-li) { border: 0; animation: load-down 0.15s var(--soci-ease); }
     `
   }
 
