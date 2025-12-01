@@ -13,8 +13,7 @@ export default class SociSidebar extends SociComponent {
         min-width: 280px;
         display: block;
         height: 100dvh;
-        overflow: auto;
-        overflow-x: hidden;
+        overflow: hidden;
         position: fixed;
         padding-bottom: 90px;
         box-sizing: border-box;
@@ -53,10 +52,7 @@ export default class SociSidebar extends SociComponent {
       }
 
       #user {
-        position: sticky;
-        top: 0;
         background: var(--bg-secondary);
-        z-index: 10;
         height: 40px;
         border-bottom: 1px solid var(--bg-bold);
         
@@ -144,8 +140,6 @@ export default class SociSidebar extends SociComponent {
       panel {
         position: absolute;
         height: calc(100% - 62px);
-        overflow-y: auto;
-        overflow-x: hidden;
         display: block;
         top: 0;
         left: 0;
@@ -182,6 +176,8 @@ export default class SociSidebar extends SociComponent {
       }
 
       #auth {
+        display: flex;
+        flex-direction: column;
         input {
           margin-bottom: 0;
           border-bottom: 0 !important;
@@ -197,9 +193,11 @@ export default class SociSidebar extends SociComponent {
         content {
           display: flex;
           flex-direction: column;
-          height: calc(100% - 42px);
-          overflow-x: hidden;
           gap: 16px;
+        }
+        #tag-container {
+          overflow: auto;
+          padding: 12px 0;
         }
         h2 {
           padding-left: 12px;
@@ -331,14 +329,14 @@ export default class SociSidebar extends SociComponent {
       }
 
       #community-description {
-        padding: 0 16px;
+        padding: 12px 16px 0;
         height: 0;
         min-height: 0;
         opacity: 0;
         overflow: hidden;
-        margin-bottom: -16px;
+        margin-bottom: -12px;
         transition: all 0.2s var(--soci-ease);
-        border-bottom: 1px solid var(--bg-secondary);
+        border-bottom: 1px solid var(--bg-bold);
         
         soci-quill-view {
           font-size: 13px;
@@ -377,16 +375,16 @@ export default class SociSidebar extends SociComponent {
   html(){
     return `
       <panel id="auth">
-        <section id="user">
-          <soci-user self></soci-user>
-          <div id="user-actions">
-            <soci-notification-badge></soci-notification-badge>
-            <soci-link href="/submit" fresh>
-              <soci-button id="submit" subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
-            </soci-link>
-          </div>
-        </section>
-        <content>
+        <header>
+          <section id="user">
+            <soci-user self></soci-user>
+            <div id="user-actions">
+              <soci-notification-badge></soci-notification-badge>
+              <soci-link href="/submit" fresh>
+                <soci-button id="submit" subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
+              </soci-link>
+            </div>
+          </section>
           <div id="community-selector">
              <soci-select></soci-select>
              <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
@@ -399,48 +397,52 @@ export default class SociSidebar extends SociComponent {
                <soci-link href="#">Financials</soci-link>
              </div>
           </div>
-          <section id="all-tags">
-            <soci-tag-li href="/#all" icon="home" hide-subscribe>
-              All posts
-              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"/>
-                <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-              </svg>
-            </soci-tag-li>
-            <soci-tag-li href="/#images" hide-subscribe>
-              Images
-              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"/>
-              </svg>
-            </soci-tag-li>
-            <soci-tag-li href="/#videos" hide-subscribe>
-              Videos
-              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-              </svg>
-            </soci-tag-li>
-            <soci-tag-li href="/#blogs" hide-subscribe>
-              Blogs
-              <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M5 4H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M5 7H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M5 10H8.5" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </soci-tag-li>
-          </section>
-          <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">
-            <h2>Subscribed Tags</h2>
-            <tags></tags>
-          </section>
-          <section id="tags">
-            <h2>Tags</h2>
-            <tags></tags>
-          </section>
-        </content>
+        </header>
+        <div id="tag-container">
+          <content>
+            <section id="all-tags">
+              <soci-tag-li href="/#all" icon="home" hide-subscribe>
+                All posts
+                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"/>
+                  <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </soci-tag-li>
+              <soci-tag-li href="/#images" hide-subscribe>
+                Images
+                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                  <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                  <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"/>
+                </svg>
+              </soci-tag-li>
+              <soci-tag-li href="/#videos" hide-subscribe>
+                Videos
+                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </soci-tag-li>
+              <soci-tag-li href="/#blogs" hide-subscribe>
+                Blogs
+                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M5 4H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M5 7H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M5 10H8.5" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </soci-tag-li>
+            </section>
+            <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">
+              <h2>Subscribed Tags</h2>
+              <tags></tags>
+            </section>
+            <section id="tags">
+              <h2>Tags</h2>
+              <tags></tags>
+            </section>
+          </content>
+        </div>
       </panel>
       <panel id="noauth">
         <h2>Login to your account</h2>
@@ -585,7 +587,7 @@ export default class SociSidebar extends SociComponent {
     } else {
         el.style.height = el.style.minHeight = 0
         el.style.opacity = 0
-        el.style.marginBottom = '-16px'
+        el.style.marginBottom = '-12px'
     }
   }
   
@@ -693,7 +695,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   _communityAvatar(url) {
-    return url ? `<img src="${config.AVATAR_HOST}/community_${url}.webp" onerror="this.style.display='none'">` : ''
+    return url ? `<img src="${config.AVATAR_HOST}/@${url}.webp" onerror="this.style.display='none'">` : ''
   }
 
   _populateCommunitySelect(communities){

@@ -501,6 +501,13 @@
           label {
             color: var(--text-secondary);
           }
+          soci-avatar-uploader {
+            height: 180px
+            transition: height 0.2s var(--soci-ease);
+          }
+          soci-avatar-uploader[cropping] {
+            height: 212px;
+          }
         }
       </style>
       <div class="container">
@@ -511,7 +518,7 @@
             <div class="columns">
               <div class="column"> 
                 <label for="avatar">Avatar</label>
-                <soci-avatar-uploader></soci-avatar-uploader>
+                <soci-avatar-uploader id="avatar-uploader"></soci-avatar-uploader>
               </div>
               <div class="column">
                 <label for="name">Display name</label>
@@ -519,6 +526,10 @@
                 <label for="description">Description</label>
                 <soci-input name="description" placeholder="Add a short description of your community"></soci-input>
               </div>
+            </div>
+            <label>Banner</label>
+            <div class="banner-uploader">
+              <soci-avatar-uploader id="banner-uploader" type="banner"></soci-avatar-uploader>
             </div>
           </div>
           <div class="load-group" load-order="secondary">

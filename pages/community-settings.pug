@@ -36,6 +36,13 @@ style.
     label {
       color: var(--text-secondary);
     }
+    soci-avatar-uploader {
+      height: 180px
+      transition: height 0.2s var(--soci-ease);
+    }
+    soci-avatar-uploader[cropping] {
+      height: 212px;
+    }
   }
 .container
   form
@@ -45,12 +52,16 @@ style.
       .columns
         .column 
           label(for="avatar") Avatar
-          soci-avatar-uploader
+          soci-avatar-uploader#avatar-uploader
         .column
           label(for="name") Display name
           input(name="name" placeholder="Community Name" required)
           label(for="description") Description
           soci-input(name="description" placeholder="Add a short description of your community")
+      label Banner
+      .banner-uploader
+        soci-avatar-uploader#banner-uploader(type="banner")
+        soci-avatar-uploader-new#banner-uploader-new
     
     .load-group(load-order="secondary")
       h2 Privacy & Permissions

@@ -156,7 +156,8 @@ export default class SociUser extends SociComponent {
   _setImages(path, force = false){
     if(!path) return ''
     let cacheBuster = force ? `?${Date.now()}` : ''
-    let formats = ['webp', 'heic'].map(format => `<source srcset="${config.AVATAR_HOST}${this.getAttribute('size') == 'large' ? '/' : '/thumbnail/'}${path}.${format}${cacheBuster}" />`).join('')
+    let basePath = this.getAttribute('size') == 'large' ? path : `thumbnail/${path}`
+    let formats = ['webp', 'heic'].map(format => `<source srcset="${config.AVATAR_HOST}/${basePath}.${format}${cacheBuster}" />`).join('')
     return (path == 'Anonymous coward' ? '' : formats) + `<img src="${config.AVATAR_HOST}/thumbnail/default.png"/>`
   }
 }
