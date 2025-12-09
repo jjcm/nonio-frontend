@@ -9,9 +9,6 @@ window.sociRouter = new SociRouter()
 import SociAvatarUploader from "./soci-avatar-uploader.js"
 window.customElements.define('soci-avatar-uploader', SociAvatarUploader)
 
-import SociAvatarUploaderNew from "./soci-avatar-uploader-new.js"
-window.customElements.define('soci-avatar-uploader-new', SociAvatarUploaderNew)
-
 import SociBanner from "./soci-banner.js"
 window.customElements.define('soci-banner', SociBanner)
 
@@ -87,6 +84,12 @@ window.customElements.define('soci-post-list', SociPostList)
 import {SociSelect, SociOption} from "./soci-select.js"
 window.customElements.define('soci-select', SociSelect)
 window.customElements.define('soci-option', SociOption)
+
+import SociRadioButton from "./soci-radio-button.js"
+window.customElements.define('soci-radio-button', SociRadioButton)
+
+import SociRadioButtonGroup from "./soci-radio-button-group.js"
+window.customElements.define('soci-radio-button-group', SociRadioButtonGroup)
 
 import SociRadialProgress from "./soci-radial-progress.js"
 window.customElements.define('soci-radial-progress', SociRadialProgress)

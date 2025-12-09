@@ -473,7 +473,8 @@
           .columns {
             display: flex;
             flex-direction: row;
-            gap: 16px;
+            gap: 32px;
+            margin-top: 8px;
           }
           .column {
             flex: 1;
@@ -481,7 +482,7 @@
             flex-direction: column;
             gap: 8px;
             &:first-child {
-              max-width: 158px;
+              min-width: 460px;
             }
           }
           .load-group {
@@ -501,12 +502,39 @@
           label {
             color: var(--text-secondary);
           }
+          soci-radio-button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+          }
+        
           soci-avatar-uploader {
-            height: 180px
+            height: 180px;
             transition: height 0.2s var(--soci-ease);
           }
-          soci-avatar-uploader[cropping] {
-            height: 212px;
+          soci-avatar-uploader[editing] {
+            height: 300px;
+          }
+        
+          soci-radio-button-group {
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            width: fit-content;
+          }
+        
+          soci-radio-button[selected] {
+            background: var(--bg-brand);
+            color: var(--text-inverse);
+          }
+        
+          soci-button {
+            margin: 0;
+          }
+        
+          input {
+            width: auto;
           }
         }
       </style>
@@ -514,46 +542,41 @@
         <form>
           <div class="load-group" load-order="primary">
             <h1>Community Settings</h1>
-            <h2>Basic Info</h2>
+            <label>Banner</label>
+            <soci-avatar-uploader type="banner"></soci-avatar-uploader>
+          </div>
+          <div class="load-group" load-order="secondary">
             <div class="columns">
-              <div class="column"> 
-                <label for="avatar">Avatar</label>
-                <soci-avatar-uploader id="avatar-uploader"></soci-avatar-uploader>
-              </div>
-              <div class="column">
+              <div class="column basic-info">
+                <h2>Basic Info</h2>
                 <label for="name">Display name</label>
                 <input name="name" placeholder="Community Name" required>
                 <label for="description">Description</label>
                 <soci-input name="description" placeholder="Add a short description of your community"></soci-input>
+                <div style="margin-top: 8px; text-align: right;">
+                  <soci-button>Save Changes</soci-button>
+                </div>
               </div>
-            </div>
-            <label>Banner</label>
-            <div class="banner-uploader">
-              <soci-avatar-uploader id="banner-uploader" type="banner"></soci-avatar-uploader>
-            </div>
-          </div>
-          <div class="load-group" load-order="secondary">
-            <h2>Privacy & Permissions</h2>
-            <select name="privacy">
-              <option value="public">Public</option>
-              <option value="invite-only">Invite Only</option>
-            </select>
-            <label>Who can post?</label>
-            <select name="post_permission">
-              <option value="all">All Users</option>
-              <option value="paid">Paid Users Only</option>
-              <option value="admin">Admins Only</option>
-            </select>
-            <label>Who can comment?</label>
-            <select name="comment_permission">
-              <option value="all">All Users</option>
-              <option value="paid">Paid Users Only</option>
-              <option value="admin">Admins Only</option>
-            </select>
-          </div>
-          <div class="load-group" load-order="tertiary">
-            <div style="margin-top: 20px; text-align: right;">
-              <soci-button>Save Changes</soci-button>
+              <div class="column">
+                <h2>Privacy & Permissions</h2>
+                <label>Privacy</label>
+                <soci-radio-button-group class="radio-group" name="privacy" value="public">
+                  <soci-radio-button value="public">Public</soci-radio-button>
+                  <soci-radio-button value="invite-only">Invite Only</soci-radio-button>
+                </soci-radio-button-group>
+                <label>Who can post?</label>
+                <soci-radio-button-group class="radio-group" name="post_permission" value="all">
+                  <soci-radio-button value="all">All Users</soci-radio-button>
+                  <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
+                  <soci-radio-button value="admin">Admins Only</soci-radio-button>
+                </soci-radio-button-group>
+                <label>Who can comment?</label>
+                <soci-radio-button-group class="radio-group" name="comment_permission" value="all">
+                  <soci-radio-button value="all">All Users</soci-radio-button>
+                  <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
+                  <soci-radio-button value="admin">Admins Only</soci-radio-button>
+                </soci-radio-button-group>
+              </div>
             </div>
           </div>
         </form>

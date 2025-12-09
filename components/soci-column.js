@@ -18,8 +18,7 @@ export default class SociColumn extends SociComponent {
         background: var(--bg-bold);
         container-type: inline-size;
       }
-      :host([large]) sorts,
-      :host([large]) filters { display: flex; }
+      :host([large]) soci-radio-button-group { display: flex; }
       :host([large]) soci-select { display: none; }
       @container { * { color: red; } }
       separator {
@@ -53,45 +52,6 @@ export default class SociColumn extends SociComponent {
         align-items: center;
         box-shadow: 0 1px 2px var(--shadow);
       }
-      sort, filter {
-        text-transform: capitalize;
-        position: relative;
-        padding: 0 12px;
-        cursor: pointer;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 20px;
-        z-index: 2;
-        color: var(--text-secondary);
-        border-radius: 3px;
-        &::before {
-          position: absolute;
-          content: ''; 
-          left: 0;
-          top: -10px;
-          height: 40px;
-          width: 100%;
-          background: transparent;
-        }
-        &:hover { color: var(--text-secondary-hover); }
-        &[selected] {
-          opacity: 1;
-          color: var(--text-brand-bold);
-          background: var(--bg-secondary);
-          &::after {
-            content:'';
-            display: block;
-            position: absolute;
-            top: 29px;
-            left: calc(50% - 8px);
-            width: 16px;
-            height: 3px;
-            border-radius: 0 0 2px 2px;
-            background: var(--bg);
-            box-shadow: 0 1px 1px var(--shadow);
-          }
-        }
-      }
       soci-select {
         position: absolute;
         z-index: 2;
@@ -121,10 +81,25 @@ export default class SociColumn extends SociComponent {
         letter-spacing: 1px;
         text-transform: uppercase;
       }
-      sorts, filters { display: none; }
-      sorts, filters, soci-select { position: absolute; }
-      sorts { left: 10px; }
-      filters { right: 10px; }
+      soci-radio-button-group {
+        display: none;
+        position: absolute;
+      }
+      soci-radio-button-group#sort-buttons { left: 10px; }
+      soci-radio-button-group#filter-buttons { right: 10px; }
+      soci-radio-button-group#sort-buttons soci-radio-button[selected]::after,
+      soci-radio-button-group#filter-buttons soci-radio-button[selected]::after {
+        content:'';
+        display: block;
+        position: absolute;
+        top: 29px;
+        left: calc(50% - 8px);
+        width: 16px;
+        height: 3px;
+        border-radius: 0 0 2px 2px;
+        background: var(--bg);
+        box-shadow: 0 1px 1px var(--shadow);
+      }
       @keyframes load-in {
         from { transform: translateY(4px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
@@ -159,14 +134,14 @@ export default class SociColumn extends SociComponent {
               <soci-option value="year">Top - Year</soci-option>
               <soci-option value="all">Top - All Time</soci-option>
             </soci-select>
-            <sorts @click=_sortBarClick>
-              <sort selected>popular</sort>
-              <sort>new</sort>
-              <sort>week</sort>
-              <sort>month</sort>
-              <sort>year</sort>
-              <sort>all</sort>
-            </sorts>
+            <soci-radio-button-group id="sort-buttons">
+              <soci-radio-button value="popular" selected>popular</soci-radio-button>
+              <soci-radio-button value="new">new</soci-radio-button>
+              <soci-radio-button value="week">week</soci-radio-button>
+              <soci-radio-button value="month">month</soci-radio-button>
+              <soci-radio-button value="year">year</soci-radio-button>
+              <soci-radio-button value="all">all</soci-radio-button>
+            </soci-radio-button-group>
             <div id="tag-container">
               <svg id="hash" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(1,1.5)">
@@ -181,12 +156,12 @@ export default class SociColumn extends SociComponent {
               <soci-option value="videos">Videos</soci-option>
               <soci-option value="blogs">Blogs</soci-option>
             </soci-select>
-            <filters @click=_filterBarClick>
-              <filter selected>all</filter>
-              <filter>images</filter>
-              <filter>videos</filter>
-              <filter>blogs</filter>
-            </filters>
+            <soci-radio-button-group id="filter-buttons">
+              <soci-radio-button value="all" selected>all</soci-radio-button>
+              <soci-radio-button value="images">images</soci-radio-button>
+              <soci-radio-button value="videos">videos</soci-radio-button>
+              <soci-radio-button value="blogs">blogs</soci-radio-button>
+            </soci-radio-button-group>
           </header>
           <slot name="posts"></slot>
         </content>
@@ -198,6 +173,8 @@ export default class SociColumn extends SociComponent {
   connectedCallback() {
     this.select('#sort-select').addEventListener('selected', this._sortChanged.bind(this))
     this.select('#filter-select').addEventListener('selected', this._filterChanged.bind(this))
+    this.select('#sort-buttons').addEventListener('change', this._sortGroupChanged.bind(this))
+    this.select('#filter-buttons').addEventListener('change', this._filterGroupChanged.bind(this))
 
     this._ro = new ResizeObserver(observable => {
       this.toggleAttribute('large', this.offsetWidth > 800)
@@ -209,7 +186,7 @@ export default class SociColumn extends SociComponent {
     posts.setAttribute('slot', 'posts')
     posts.setAttribute('filter', this.getAttribute('filter'))
     this.appendChild(posts)
-    this.sortPosts('popular')
+    this._initializeControls()
   }
 
   disconnectedCallback(){
@@ -223,27 +200,23 @@ export default class SociColumn extends SociComponent {
   attributeChangedCallback(name, oldValue, newValue){
     switch(name){
       case 'sort':
-        console.log('sort changed', newValue)
-        this.sortPosts(newValue)
+        this._applySort(newValue)
         break
       case 'filter':
-        this.filterPosts(newValue)
-        this.updateTitle()
+        this._applyFilter(newValue)
         break
       case 'tag':
         newValue = decodeURIComponent(newValue)
         this.select('#tag-title').innerHTML = newValue
         this.updateTitle()
-        document.querySelector('soci-sidebar').activateTag(newValue)
+        document.querySelector('soci-sidebar')?.activateTag(newValue)
         if(newValue.match(/all|images|videos|blogs/)) this.setAttribute('filter', newValue)
-        //this.sortPosts()
         break
       case 'subscribers':
-        let subs = newValue || 0
-        this.select('subscribers').innerHTML = subs + ' subscribers'
+        this.select('subscribers').innerHTML = (newValue || 0) + ' subscribers'
         break
       case 'community':
-        this.sortPosts()
+        this._applySort(this._currentSort || this.getAttribute('sort') || 'popular', true)
         break
     }
   }
@@ -300,7 +273,6 @@ export default class SociColumn extends SociComponent {
 
     let paramString = params.length > 0 ? `?${params.join('&')}` : ''
 
-    this._updateBar(this.select('sorts'), sort)
     let postList = this.querySelector('soci-post-list')
     if(postList?.getAttribute('data') == '/posts' + paramString) return
     postList?.setAttribute('data', '/posts' + paramString)
@@ -309,47 +281,81 @@ export default class SociColumn extends SociComponent {
   filterPosts(filter){
     filter = filter || 'all'
     this.querySelector('soci-post-list')?.setAttribute('filter', filter)
-    this._updateBar(this.select('filters'), filter)
-  }
-
-  _sortBarClick(e){
-    let sort = e.target.innerHTML
-    this.setAttribute('sort', sort)
-    this._updateBar(e.currentTarget, sort)
-  }
-
-  _filterBarClick(e){
-    let filter = e.target.innerHTML
-    this._visuallyFilter(filter)
-  }
-
-  _visuallyFilter(filter){
-    let special = this.getAttribute('tag')?.match(/all|images|videos|blogs/)
-    if(special) {
-      this.select('#tag-title').innerHTML = filter
-      document.querySelector('soci-sidebar').activateTag(filter)
-    }
-    this.setAttribute('filter', filter)
-    this._updateBar(this.select('filters'), filter)
-
-    //TODO - make this update the dropdown as well, as the dropdown updates wont be mirrored
-  }
-
-  _updateBar(bar, value) {
-    Array.from(bar.children).forEach(child => {
-      if(child.innerHTML == value) child.setAttribute('selected', '')
-      else child.removeAttribute('selected')
-    })
   }
 
   _sortChanged(){
-    let sort = this.select('#sort-select').value
-    this.sortPosts(sort)
+    this.setAttribute('sort', this.select('#sort-select').value)
   }
 
   _filterChanged(){
-    let filter = this.select('#filter-select').value
-    this._visuallyFilter(filter)
+    this.setAttribute('filter', this.select('#filter-select').value)
+  }
+
+  _sortGroupChanged(e){
+    let sort = e.detail?.value
+    if(sort) this.setAttribute('sort', sort)
+  }
+
+  _filterGroupChanged(e){
+    let filter = e.detail?.value
+    if(filter) this.setAttribute('filter', filter)
+  }
+
+  _applySort(sort = 'popular', force = false){
+    const value = sort || 'popular'
+    if(!force && this._currentSort === value) return
+    this._currentSort = value
+    this._updateSortUI(value)
+    this.sortPosts(value)
+  }
+
+  _applyFilter(filter = 'all', force = false){
+    const value = filter || 'all'
+    if(!force && this._currentFilter === value) return
+    this._currentFilter = value
+    this._updateFilterTagUI(value)
+    this.filterPosts(value)
+    this._updateFilterUI(value)
+    this.updateTitle()
+  }
+
+  _initializeControls(){
+    const sort = this.getAttribute('sort') || 'popular'
+    const filter = this.getAttribute('filter') || 'all'
+    this._applySort(sort, true)
+    this._applyFilter(filter, true)
+    this.setAttribute('sort', sort)
+    this.setAttribute('filter', filter)
+  }
+
+  _updateSortUI(sort){
+    this.select('#sort-buttons')?.setAttribute('value', sort)
+    this._syncSelectValue(this.select('#sort-select'), sort)
+  }
+
+  _updateFilterUI(filter){
+    this.select('#filter-buttons')?.setAttribute('value', filter)
+    this._syncSelectValue(this.select('#filter-select'), filter)
+  }
+
+  _syncSelectValue(select, value){
+    if(!select || !value) return
+    const options = Array.from(select.querySelectorAll('soci-option'))
+    const normalizedValue = value.toLowerCase()
+    const target = options.find(option => {
+      const optionValue = (option.getAttribute('value') || option.textContent.trim()).toLowerCase()
+      return optionValue === normalizedValue
+    })
+    if(!target) return
+    options.forEach(option => option.removeAttribute('slot'))
+    target.setAttribute('slot', 'selected')
+  }
+
+  _updateFilterTagUI(filter){
+    const special = this.getAttribute('tag')?.match(/all|images|videos|blogs/)
+    if(!special) return
+    this.select('#tag-title').innerHTML = filter
+    document.querySelector('soci-sidebar')?.activateTag(filter)
   }
 
   _menuClick(){

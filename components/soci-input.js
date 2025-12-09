@@ -44,6 +44,7 @@ export default class SociInput extends HTMLElement {
 
     this.editor.on('text-change', ()=>{
       this._internals.setFormValue(this.value)
+      this.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}))
     })
   }
 

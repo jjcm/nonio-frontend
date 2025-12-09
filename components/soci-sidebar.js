@@ -4,6 +4,8 @@ import config from '../config.js'
 export default class SociSidebar extends SociComponent {
   constructor() {
     super()
+    this._onAvatarUpdate = this._onAvatarUpdate.bind(this)
+    this._onCommunityUpdate = this._onCommunityUpdate.bind(this)
   }
 
   css(){
@@ -300,6 +302,7 @@ export default class SociSidebar extends SociComponent {
         --shadow: 0px 1px 2px #000000f0, 0px 4px 16px #000000f0;
         font-size: 16px;
         border-bottom: 1px solid var(--bg-bold);
+        color: #fff;
       }
 
       #nonio-community[slot="selected"] {
@@ -513,9 +516,16 @@ export default class SociSidebar extends SociComponent {
     
     // Listen for community selection
     this.select('soci-select').addEventListener('selected', this._onCommunitySelect.bind(this))
+    document.addEventListener('avatar-updated', this._onAvatarUpdate)
+    document.addEventListener('community-updated', this._onCommunityUpdate)
 
     // Set initial routes and community details
     setTimeout(() => this._onRouteChange(), 0)
+  }
+
+  disconnectedCallback(){
+    document.removeEventListener('avatar-updated', this._onAvatarUpdate)
+    document.removeEventListener('community-updated', this._onCommunityUpdate)
   }
 
   _onRouteChange() {
@@ -858,6 +868,44 @@ export default class SociSidebar extends SociComponent {
     setTimeout(()=>{
       e.detail.dom.remove()
     }, 200)
+  }
+
+  _onAvatarUpdate(e){
+    const community = e.detail?.community
+    if(!community) return
+    const value = community.replace('@', '')
+    const select = this.select('soci-select')
+    if(!select) return
+    const url = `${config.AVATAR_HOST}/@${value}.webp?${Date.now()}`
+    select.querySelectorAll(`soci-option[value="${value}"] img`).forEach(img => {
+      img.src = url
+      img.style.display = ''
+    })
+  }
+
+  _onCommunityUpdate(e){
+    const detail = e.detail || {}
+    const community = detail.community
+    if(!community) return
+    const value = community.replace('@', '')
+    const select = this.select('soci-select')
+    if(select){
+      select.querySelectorAll(`soci-option[value="${value}"]`).forEach(opt => {
+        const imgHtml = opt.querySelector('img')?.outerHTML || this._communityAvatar(value)
+        const name = detail.name || opt.textContent || value
+        opt.innerHTML = `${imgHtml}${name}`
+      })
+    }
+
+    if(this.currentCommunity === value){
+      const container = this.select('#community-description')
+      const adminLinks = this.select('#admin-links')
+      const quillView = container?.querySelector('soci-quill-view')
+      if(quillView){
+        quillView.render(detail.description || '')
+        this._animateSection(container, !!detail.description, quillView.offsetHeight + adminLinks.offsetHeight + 8)
+      }
+    }
   }
 
   _toggleSubscribedList(revealed){

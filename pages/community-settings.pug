@@ -8,7 +8,8 @@ style.
     .columns {
       display: flex;
       flex-direction: row;
-      gap: 16px;
+      gap: 32px;
+      margin-top: 8px;
     }
     .column {
       flex: 1;
@@ -16,7 +17,7 @@ style.
       flex-direction: column;
       gap: 8px;
       &:first-child {
-        max-width: 158px;
+        min-width: 460px;
       }
     }
     .load-group {
@@ -36,54 +37,77 @@ style.
     label {
       color: var(--text-secondary);
     }
+    soci-radio-button-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     soci-avatar-uploader {
-      height: 180px
+      height: 180px;
       transition: height 0.2s var(--soci-ease);
     }
-    soci-avatar-uploader[cropping] {
-      height: 212px;
+    soci-avatar-uploader[editing] {
+      height: 300px;
+    }
+
+    soci-radio-button-group {
+      background: var(--bg-secondary);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      width: fit-content;
+    }
+
+    soci-radio-button[selected] {
+      background: var(--bg-brand);
+      color: var(--text-inverse);
+    }
+
+    soci-button {
+      margin: 0;
+    }
+
+    input {
+      width: auto;
     }
   }
 .container
   form
     .load-group(load-order="primary")
       h1 Community Settings
-      h2 Basic Info
+      label Banner
+      soci-avatar-uploader(type="banner")
+    
+    .load-group(load-order="secondary")
       .columns
-        .column 
-          label(for="avatar") Avatar
-          soci-avatar-uploader#avatar-uploader
-        .column
+        .column.basic-info
+          h2 Basic Info
           label(for="name") Display name
           input(name="name" placeholder="Community Name" required)
           label(for="description") Description
           soci-input(name="description" placeholder="Add a short description of your community")
-      label Banner
-      .banner-uploader
-        soci-avatar-uploader#banner-uploader(type="banner")
-        soci-avatar-uploader-new#banner-uploader-new
-    
-    .load-group(load-order="secondary")
-      h2 Privacy & Permissions
-      select(name="privacy")
-        option(value="public") Public
-        option(value="invite-only") Invite Only
+          div(style="margin-top: 8px; text-align: right;")
+            soci-button Save Changes
+        .column
+          h2 Privacy & Permissions
+          label Privacy
+          soci-radio-button-group(name="privacy" class="radio-group" value="public")
+            soci-radio-button(value="public") Public
+            soci-radio-button(value="invite-only") Invite Only
 
-      label Who can post?
-      select(name="post_permission")
-        option(value="all") All Users
-        option(value="paid") Paid Users Only
-        option(value="admin") Admins Only
+          label Who can post?
+          soci-radio-button-group(name="post_permission" class="radio-group" value="all")
+            soci-radio-button(value="all") All Users
+            soci-radio-button(value="paid") Paid Users Only
+            soci-radio-button(value="admin") Admins Only
+          
+          label Who can comment?
+          soci-radio-button-group(name="comment_permission" class="radio-group" value="all")
+            soci-radio-button(value="all") All Users
+            soci-radio-button(value="paid") Paid Users Only
+            soci-radio-button(value="admin") Admins Only
       
-      label Who can comment?
-      select(name="comment_permission")
-        option(value="all") All Users
-        option(value="paid") Paid Users Only
-        option(value="admin") Admins Only
-      
-    .load-group(load-order="tertiary")
-      div(style="margin-top: 20px; text-align: right;")
-        soci-button Save Changes
 
 script.
   lazyload('/pages/community-settings.js', document.currentScript.closest('soci-route'))
