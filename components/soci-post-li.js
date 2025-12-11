@@ -318,6 +318,8 @@ export default class SociPostLi extends SociComponent {
     const score = this.getAttribute('score')
     const comments = this.getAttribute('comments')
     const url = this.getAttribute('url')
+    const community = this.getAttribute('community') || ''
+    const postPath = community ? `/@${community}/${url}` : `/${url}`
 
     return `
     <slot name="thumbnail">
@@ -339,7 +341,7 @@ export default class SociPostLi extends SociComponent {
       <div id="top">
         <div id="details">
           <slot name="user"></slot>
-          <soci-link id="metadata-link" ${url ? `href="/${url}"` : ''}>
+            <soci-link id="metadata-link" ${url ? `href="${postPath}"` : ''}>
             <div id="votes">${score} vote${score == 1 ? '' : 's'}</div>
             <div id="comments"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/></svg><span>${comments} comment${comments == 1 ? '' : 's'}</span></div>
             <div id="time"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.5"/><path d="M7.5 5V8.5H10" stroke-linecap="round"/></svg><span></span><suffix> ago</suffix></div>
@@ -347,7 +349,7 @@ export default class SociPostLi extends SociComponent {
           </soci-link>
           <div id="delete" style="display: none;" @click=deletePost><span>delete</span></div>
         </div>
-        <soci-link id="internal-link" ${url ? `href="/${url}"` : ''}>
+          <soci-link id="internal-link" ${url ? `href="${postPath}"` : ''}>
           <div class="title">${title}</div>
         </soci-link>
         <a id="external-link" href="${this.getAttribute('link')}">
@@ -386,7 +388,7 @@ export default class SociPostLi extends SociComponent {
         dom.innerHTML = `are you sure? <span style="color: var(--text-danger);">confirm delete</span> | <span>cancel</span>`
         break
       case 'confirm delete':
-        await window.api.posts.delete(this.getAttribute('url'))
+        await window.api.posts.delete(this.getAttribute('url'), this.community)
         this.remove()
         break
       case 'cancel':
@@ -396,7 +398,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['post-title', 'score', 'time', 'type', 'comments', 'url', 'link']
+    return ['post-title', 'score', 'time', 'type', 'comments', 'url', 'link', 'community']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -427,8 +429,10 @@ export default class SociPostLi extends SociComponent {
         this.select('#comments span').innerHTML = `${newValue}<suffix> comment${(newValue == 1 ? '' : 's')}</suffix>`
         break;
       case 'url':
-        this.select('#metadata-link').setAttribute('href', '/' + newValue)
-        this.select('#internal-link').setAttribute('href', '/' + newValue)
+        this._updateLinks()
+        break;
+      case 'community':
+        this._updateLinks()
         break;
 
     }
@@ -447,6 +451,24 @@ export default class SociPostLi extends SociComponent {
     return this.getAttribute('url')
   }
 
+  get community(){
+    return this.getAttribute('community') || ''
+  }
+
+  _postPath(){
+    return this.community ? `/@${this.community}/${this.url}` : `/${this.url}`
+  }
+
+  _postApiPath(){
+    return this.community ? `/posts/@${this.community}/${this.url}` : `/posts/${this.url}`
+  }
+
+  _updateLinks(){
+    const path = this._postPath()
+    this.select('#metadata-link')?.setAttribute('href', path)
+    this.select('#internal-link')?.setAttribute('href', path)
+  }
+
   expand(){
     this.toggleAttribute('expanded')
     let thumbnail = this.select('#thumbnail img')
@@ -462,7 +484,7 @@ export default class SociPostLi extends SociComponent {
         if(this.hasAttribute('expanded'))
           preview.style.opacity = 1
       }, 100)
-      this.getData(`/posts/${this.url}`).then(e=>{
+      this.getData(this._postApiPath()).then(e=>{
         if(e.content.length && this.hasAttribute('expanded')){
           description.render(e.content)
           this.appendChild(description)

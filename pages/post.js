@@ -15,6 +15,9 @@ let post = {
     let match = path.match(/^\/@([\w-]+)\/([\w-]+)$/)
     if(match) {
         url = match[2] // The post slug (without community prefix)
+        postElement.setAttribute('community', match[1])
+    } else {
+        postElement.removeAttribute('community')
     }
 
     postElement.setAttribute('url', url)

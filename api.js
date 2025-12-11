@@ -30,7 +30,8 @@ const api = {
   },
 
   async getData(url) {
-    const response = await fetch(`${config.API_HOST}/${url}`, {
+    const path = url.startsWith('/') ? url.slice(1) : url
+    const response = await fetch(`${config.API_HOST}/${path}`, {
       headers: this.headers()
     })
     return await response.json()
@@ -39,7 +40,7 @@ const api = {
 
 api.posts = {
   create: (data) => api.postData('post/create', data),
-  delete: (url) => api.postData('post/delete', { url })
+  delete: (url, community) => api.postData('post/delete', { url, community })
 }
 
 api.user = {

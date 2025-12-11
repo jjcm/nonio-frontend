@@ -121,6 +121,9 @@ window.customElements.define('soci-username-input', SociUsernameInput)
 import SociUser from "./soci-user.js"
 window.customElements.define('soci-user', SociUser)
 
+import SociUserPicker from "./soci-user-picker.js"
+window.customElements.define('soci-user-picker', SociUserPicker)
+
 import SociUserComment from "./soci-user-comment.js"
 window.customElements.define('soci-user-comment', SociUserComment)
 

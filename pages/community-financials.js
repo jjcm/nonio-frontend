@@ -14,28 +14,41 @@ let communityFinancials = {
     communityFinancials.loadFinancials()
   },
   loadFinancials: async () => {
+    console.log('loading financials for community:', communityFinancials.communityName)
     let res = await soci.getData(`/community/financials?community=${communityFinancials.communityName}`)
     if(res.error) {
-        console.error(res.error)
-        return
+      console.error(res.error)
+      return
     }
-    
+
+    let format = (amt) => `$${amt.toFixed(2)}`
+
+    let totalEl = communityFinancials.dom.querySelector('.js-total-earned')
+    if(totalEl) totalEl.textContent = format(res.totalEarnedThisMonth || 0)
+
+    let adminEl = communityFinancials.dom.querySelector('.js-admin-payout')
+    if(adminEl) {
+      let adminAmount = res.adminPayoutPerAdmin || 0
+      adminEl.textContent = format(adminAmount)
+    }
+
     let tbody = communityFinancials.dom.querySelector('tbody')
+    if(!tbody) return
     tbody.innerHTML = ''
     if(res.financials && res.financials.length > 0) {
-        res.financials.forEach(f => {
-            let tr = document.createElement('tr')
-            tr.innerHTML = `
-                <td>${f.username}</td>
-                <td>$${f.amount.toFixed(2)}</td>
-            `
-            tbody.appendChild(tr)
-        })
+      res.financials.forEach(f => {
+        let tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${f.username}</td>
+          <td>${format(f.amount)}</td>
+        `
+        tbody.appendChild(tr)
+      })
     } else {
-        tbody.innerHTML = '<tr><td colspan="2">No earnings recorded for this period.</td></tr>'
+      tbody.innerHTML = '<tr><td colspan="2">No earnings recorded for this period.</td></tr>'
     }
   }
 }
 
-document.addEventListener('DOMContentLoaded', communityFinancials.init)
+communityFinancials.init()
 

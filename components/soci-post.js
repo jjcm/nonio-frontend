@@ -321,14 +321,22 @@ export default class SociPost extends SociComponent {
         break
       case 'url':
         this.querySelector('soci-comment-list').setAttribute('url', newValue)
+        if(this.community) this.querySelector('soci-comment-list').setAttribute('community', this.community)
         this.loadPost(newValue)
+        break
+      case 'community':
+        if(newValue){
+          this.querySelector('soci-comment-list')?.setAttribute('community', newValue)
+        } else {
+          this.querySelector('soci-comment-list')?.removeAttribute('community')
+        }
         break
     }
   }
 
   loadPost(url) {
     this.toggleAttribute('loaded', false)
-    this.getData('/posts/' + url).then(post => {
+    this.getData(this._postApiPath(url)).then(post => {
       if(post.error) {
         this.select('#details-container').innerHTML = `<div id="error">${post.error}</div>`
         this.style.opacity = 1
@@ -408,7 +416,7 @@ export default class SociPost extends SociComponent {
         dom.innerHTML = `are you sure? <span style="color: var(--text-danger);">confirm delete</span> | <span>cancel</span>`
         break
       case 'confirm delete':
-        await window.api.posts.delete(this.getAttribute('url'))
+        await window.api.posts.delete(this.getAttribute('url'), this.community)
         window.location.href = '/'
         window.history.pushState(null, null, '/')
         break
@@ -536,6 +544,15 @@ export default class SociPost extends SociComponent {
     return this.getAttribute('url')
   }
 
+  get community(){
+    return this.getAttribute('community') || window.soci.routeContext.community || ''
+  }
+
+  _postApiPath(urlOverride){
+    const slug = urlOverride || this.url
+    return this.community ? `/posts/@${this.community}/${slug}` : `/posts/${slug}`
+  }
+
   _zoomImage(){
     this.select()
   }
@@ -602,7 +619,7 @@ export default class SociPost extends SociComponent {
       console.log('[SociPost] Waiting 500ms before checking encoding status...')
       setTimeout(() => {
         console.log('[SociPost] Checking post encoding status...')
-        this.getData('/posts/' + this.url).then(post => {
+        this.getData(this._postApiPath()).then(post => {
           console.log('[SociPost] Post data received, isEncoding:', post.isEncoding)
           // If encoding is false OR we got an error from WebSocket, load the video
           if(!post.isEncoding || wasError) {
@@ -665,7 +682,7 @@ export default class SociPost extends SociComponent {
   checkEncodingStatus(){
     // Fallback polling method if WebSocket fails
     const checkInterval = setInterval(() => {
-      this.getData('/posts/' + this.url).then(post => {
+      this.getData(this._postApiPath()).then(post => {
         if(!post.isEncoding) {
           // Encoding is complete, reload the post content
           clearInterval(checkInterval)

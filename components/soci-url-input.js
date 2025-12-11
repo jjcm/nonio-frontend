@@ -175,7 +175,9 @@ export default class SociUrlInput extends SociComponent {
     this._statusIcon.glyph = 'spinner'
 
     let url = this._input.value
-    let available = await fetch(`${config.API_HOST}/post/url-is-available/${url}`)
+    const community = window.soci.routeContext.community
+    const communityQuery = community ? `?community=${encodeURIComponent(community)}` : ''
+    let available = await fetch(`${config.API_HOST}/post/url-is-available/${url}${communityQuery}`)
     if(this._keyDownTimer || this._error) return 0
     if(await available.json() === true){
       this._statusIcon.glyph = 'success'

@@ -116,13 +116,16 @@ export default class SociCommentList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['url']
+    return ['url', 'community']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
     switch(name) {
       case 'url':
         this.renderComments(newValue)
+        break
+      case 'community':
+        if(this.url) this.renderComments(this.url)
         break
     }
   }
@@ -163,10 +166,12 @@ export default class SociCommentList extends SociComponent {
   }
 
   async renderComments(url){
-    let comments = await this.getData('/comments?post=' + url)
+    const community = this.community
+    const communityQuery = community ? `&community=${community}` : ''
+    let comments = await this.getData('/comments?post=' + url + communityQuery)
     comments = comments.comments
     this.select('comment-count').innerHTML = comments.length + (comments.length == 1 ? ' comment' : ' comments')
-    let votes = await this.getData('/comment-votes?post=' + url, this.authToken)
+    let votes = await this.getData('/comment-votes?post=' + url + communityQuery, this.authToken)
     votes = votes.commentVotes
 
     comments.sort((a,b)=>{
@@ -192,7 +197,8 @@ export default class SociCommentList extends SociComponent {
     let value = this.querySelector('soci-input').value
     this.postData('/comment/create', {
       post: this.url,
-      content: value
+      content: value,
+      community: this.community
     }).then(res=>{
       if(res.id){
         this.select('#submit').success()
@@ -211,5 +217,9 @@ export default class SociCommentList extends SociComponent {
 
   get url(){
     return this.getAttribute('url')
+  }
+
+  get community(){
+    return this.getAttribute('community') || window.soci.routeContext.community || ''
   }
 }

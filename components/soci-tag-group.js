@@ -247,10 +247,12 @@ export default class SociTagGroup extends SociComponent {
       console.warn('No url found when creating tag.')
       return 0
     }
+    const community = this.closest('[community]')?.getAttribute('community') || window.soci.routeContext.community || ''
 
     this.postData('/posttag/create', {
       post: url,
-      tag: tagName
+      tag: tagName,
+      community
     }).then(res => {
       console.log(res)
       if(res.postID && res.tagID)

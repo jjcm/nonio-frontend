@@ -112,7 +112,7 @@ export default class SociTag extends SociComponent {
       <soci-icon glyph="upvote"></soci-icon>
       <score>${this.getAttribute('score')}</score>
     </div>
-    <soci-link href="/#${this.getAttribute('tag')}">${this.getAttribute('tag')}</soci-link>
+    <soci-link href="${this._tagHref()}">${this.getAttribute('tag')}</soci-link>
   `}
 
   get score(){
@@ -130,7 +130,20 @@ export default class SociTag extends SociComponent {
 
   set tag(val){
     this.setAttribute('tag', val)
-    this.select('soci-link').href = '#' + val
+    this.select('soci-link').href = this._tagHref(val)
+  }
+  
+  get community(){
+    return this.closest('[community]')?.getAttribute('community') 
+      || this.closest('soci-post')?.getAttribute('community') 
+      || window.soci.routeContext.community 
+      || ''
+  }
+
+  _tagHref(tagOverride){
+    const tag = tagOverride || this.tag
+    const community = this.community
+    return community ? `/@${community}/#${tag}` : `/#${tag}`
   }
   
   vote(e){
@@ -146,9 +159,11 @@ export default class SociTag extends SociComponent {
 
     const post = this.closest('[post-id]')
     if(post) {
+      const community = post.getAttribute('community') || window.soci.routeContext.community || ''
       this.postData(`/posttag/${upvoted ? 'add' : 'remove'}-vote`, {
         post: post.getAttribute('url'),
-        tag: this.tag
+        tag: this.tag,
+        community
       }).then(()=>{
         soci.votes[post.getAttribute('post-id')].push(parseInt(this.getAttribute('tag-id')))
       })

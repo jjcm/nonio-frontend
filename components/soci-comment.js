@@ -252,6 +252,10 @@ export default class SociComment extends SociComponent {
     return this.closest('[url]').getAttribute('url')
   }
 
+  get community(){
+    return this.closest('soci-comment-list')?.getAttribute('community') || window.soci.routeContext.community || ''
+  }
+
   factory(user, score, lineageScore, date, id, content, edited){
     let comment = document.createElement('soci-comment')
     comment.setAttribute('user', user)
@@ -389,7 +393,8 @@ export default class SociComment extends SociComponent {
     this.postData('/comment/create', {
       post: this.url,
       content: this.querySelector('soci-input').value,
-      parent: parseInt(this.getAttribute('comment-id'))
+      parent: parseInt(this.getAttribute('comment-id')),
+      community: this.community
     }).then(res=>{
       if(res.id){
         // TODO - fix the animation here. Should animate smoothly.

@@ -1,33 +1,77 @@
 style.
   #community-financials {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    h1 {
+      margin: 0;
+    }
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+    }
+    p {
+      margin: 0;
+    }
+    .stat {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--bg-secondary);
+    }
+    th {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
   }
-  #community-financials table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  #community-financials th, #community-financials td {
-    text-align: left;
-    padding: 12px;
-    border-bottom: 1px solid var(--bg-secondary);
-  }
-  #community-financials th {
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-div
-  h1 Community Financials
-  p Earnings in the last 30 days
-  
-  table
-    thead
-      tr
-        th User
-        th Amount Earned
-    tbody
+.container
+  .load-group(load-order="primary")
+    h1 Community Financials
+  .load-group(load-order="secondary")
+    h2 Earnings this month
+    .cards
+      .card
+        h2 Overview
+        p.stat.js-total-earned $0.00
+
+      .card
+        h2 Admin payouts
+        p.stat.js-admin-payout $0.00
+
+  .load-group(load-order="tertiary")
+    h2 User payouts
+    table
+      thead
+        tr
+          th User
+          th Amount Earned
+      tbody
 
 script.
   lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))

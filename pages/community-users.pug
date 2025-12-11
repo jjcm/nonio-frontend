@@ -1,50 +1,133 @@
 style.
   #community-users {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  #community-users h3 {
-    margin-top: 30px;
-    border-bottom: 1px solid var(--bg-secondary);
-    padding-bottom: 8px;
-  }
-  .user-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--bg-secondary);
-  }
-  .user-row .actions button {
-    margin-left: 8px;
-    padding: 4px 8px;
-    background: var(--bg-secondary);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    color: var(--text);
-  }
-  .user-row .actions button:hover {
-    background: var(--bg-secondary-hover);
-  }
-  .empty {
-    padding: 20px 0;
-    color: var(--text-secondary);
-    font-style: italic;
+    .container {
+      padding: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    h1 {
+      margin: 0;
+    }
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header soci-button.add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: 28px;
+      min-width: 28px;
+      padding: 0 8px;
+      overflow: hidden;
+      transition: width 0.12s var(--soci-ease);
+      background: var(--bg-secondary-hover);
+    }
+    .card-header soci-button.add-btn:hover {
+      width: 76px;
+    }
+    .card-header soci-button.add-btn soci-icon {
+      margin: -2px 0 -2px -4px;
+    }
+    .card-header soci-button.add-btn span {
+      text-transform: lowercase;
+    }
+    .card-header soci-user-picker {
+      display: none;
+      flex: 1;
+    }
+    .card-header[editing] h2,
+    .card-header[editing] soci-button.add-btn {
+      display: none;
+    }
+    .card-header[editing] soci-user-picker {
+      display: block;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bg);
+    }
+    .user-row:last-child {
+      border-bottom: 0;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+    .empty {
+      padding: 12px 0;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    soci-user-picker {
+      width: 100%;
+    }
   }
 
-div
-  h1 User Management
-  
-  h3 Moderators
-  div#moderators-list
-  
-  h3 Subscribers
-  div#subscribers-list
-  
-  h3 Banned Users
-  div#banned-list
+#community-users
+  .container
+    .load-group(load-order="primary")
+      h1 Community Users
+      p Manage moderators, members, and bans in one place.
+    .load-group(load-order="secondary")
+      .grid
+        .card
+          .card-header(data-role="moderators")
+            h2 Moderators
+            soci-button.add-btn(subtle data-role="moderators" aria-label="Add moderator")
+              soci-icon(glyph="create")
+              span add
+            soci-user-picker(data-role="moderators" placeholder="Add moderator" action-label="Add")
+          .list(data-list="moderators")
+        .card
+          .card-header(data-role="members")
+            h2 Members
+            soci-button.add-btn(subtle data-role="members" aria-label="Add member")
+              soci-icon(glyph="create")
+              span add
+            soci-user-picker(data-role="members" placeholder="Add member" action-label="Add")
+          .list(data-list="members")
+        .card
+          .card-header(data-role="banned")
+            h2 Banned Users
+            soci-button.add-btn(subtle data-role="banned" aria-label="Ban user")
+              soci-icon(glyph="create")
+              span add
+            soci-user-picker(data-role="banned" placeholder="Ban user" action-label="Ban")
+          .list(data-list="banned")
 
 script.
   lazyload('/pages/community-users.js', document.currentScript.closest('soci-route'))

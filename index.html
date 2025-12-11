@@ -586,86 +586,190 @@
     <soci-route id="community-users" path="^(/@[\w-]+)/admin/users$" fresh>
       <style>
         #community-users {
-          padding: 20px;
-          max-width: 800px;
-          margin: 0 auto;
-        }
-        #community-users h3 {
-          margin-top: 30px;
-          border-bottom: 1px solid var(--bg-secondary);
-          padding-bottom: 8px;
-        }
-        .user-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 10px 0;
-          border-bottom: 1px solid var(--bg-secondary);
-        }
-        .user-row .actions button {
-          margin-left: 8px;
-          padding: 4px 8px;
-          background: var(--bg-secondary);
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          color: var(--text);
-        }
-        .user-row .actions button:hover {
-          background: var(--bg-secondary-hover);
-        }
-        .empty {
-          padding: 20px 0;
-          color: var(--text-secondary);
-          font-style: italic;
+          .container {
+            padding: 20px;
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          }
+          .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+          }
+          .card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+          h1 {
+            margin: 0;
+          }
+          h2 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+          .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--bg);
+          }
+          .user-row:last-child {
+            border-bottom: 0;
+          }
+          .actions {
+            display: flex;
+            gap: 8px;
+          }
+          .empty {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+          }
+          soci-user-picker {
+            width: 100%;
+          }
         }
         
       </style>
-      <div>
-        <h1>User Management</h1>
-        <h3>Moderators</h3>
-        <div id="moderators-list"></div>
-        <h3>Subscribers</h3>
-        <div id="subscribers-list"></div>
-        <h3>Banned Users</h3>
-        <div id="banned-list"></div>
+      <div id="community-users">
+        <div class="container">
+          <div class="load-group" load-order="primary">
+            <h1>Community Users</h1>
+            <p>Manage moderators, members, and bans in one place.</p>
+          </div>
+          <div class="load-group" load-order="secondary">
+            <div class="grid">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Moderators</h2>
+                </div>
+                <soci-user-picker data-role="moderators" placeholder="Add moderator" action-label="Add"></soci-user-picker>
+                <div class="list" data-list="moderators"></div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h2>Members</h2>
+                </div>
+                <soci-user-picker data-role="members" placeholder="Add member" action-label="Add"></soci-user-picker>
+                <div class="list" data-list="members"></div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h2>Banned Users</h2>
+                </div>
+                <soci-user-picker data-role="banned" placeholder="Ban user" action-label="Ban"></soci-user-picker>
+                <div class="list" data-list="banned"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <script>lazyload('/pages/community-users.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="community-financials" path="^(/@[\w-]+)/admin/financials$" fresh>
       <style>
         #community-financials {
-          padding: 20px;
-          max-width: 800px;
-          margin: 0 auto;
-        }
-        #community-financials table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-        }
-        #community-financials th, #community-financials td {
-          text-align: left;
-          padding: 12px;
-          border-bottom: 1px solid var(--bg-secondary);
-        }
-        #community-financials th {
-          color: var(--text-secondary);
-          font-weight: 500;
+          .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          }
+          .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+          }
+          .card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+          }
+          h1 {
+            margin: 0;
+          }
+          h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+          }
+          p {
+            margin: 0;
+          }
+          .stat {
+            font-size: 22px;
+            font-weight: 600;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--bg-secondary);
+          }
+          th {
+            color: var(--text-secondary);
+            font-weight: 500;
+          }
         }
       </style>
-      <div>
-        <h1>Community Financials</h1>
-        <p>Earnings in the last 30 days</p>
-        <table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Amount Earned</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="container">
+        <div class="load-group" load-order="primary">
+          <h1>Community Financials</h1>
+        </div>
+        <div class="load-group" load-order="secondary">
+          <h2>Earnings this month</h2>
+          <div class="cards">
+            <div class="card">
+              <h2>Overview</h2>
+              <p class="stat js-total-earned">$0.00</p>
+            </div>
+            <div class="card">
+              <h2>Admin payouts</h2>
+              <p class="stat js-admin-payout">$0.00</p>
+            </div>
+          </div>
+        </div>
+        <div class="load-group" load-order="tertiary">
+          <h2>User payouts</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Amount Earned</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
       <script>lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>

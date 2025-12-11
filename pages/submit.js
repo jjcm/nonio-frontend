@@ -7,7 +7,8 @@ let submit = {
   currentCommunity: null,
   onActivate() {
     console.log('Submit onActivate')
-    submit.form = this.dom.querySelector('form')
+    const dom = submit.dom || this
+    submit.form = dom.querySelector('form')
 
     submit.currentCommunity = window.soci.routeContext.community
     
@@ -17,17 +18,17 @@ let submit = {
       ? `Submit to ${submit.currentCommunity}` 
       : 'Submit post to Nonio'
     
-    let title = this.dom.querySelector('input[name="title"]')
+    let title = dom.querySelector('input[name="title"]')
     title.setCustomValidity("A title is required.")
     title.addEventListener('input', submit.checkTitleValidity)
     title.addEventListener('input', submit.populateUrl)
     title.addEventListener('blur', submit.checkUrl)
     title.focus()
 
-    submit.submitButton = this.dom.querySelector('soci-button')
+    submit.submitButton = dom.querySelector('soci-button')
     submit.submitButton.addEventListener('click', submit.submit)
 
-    let linkInput = this.dom.querySelector('soci-link-input')
+    let linkInput = dom.querySelector('soci-link-input')
     linkInput.addEventListener('url-metadata', submit.setLinkMetadata)
   },
   checkTitleValidity(e) {
