@@ -177,6 +177,11 @@ export class SociOption extends SociComponent {
   }
 
   select() {
+    // Clicking the already-selected option should not re-select/navigate.
+    // This prevents consumers (like the sidebar community selector) from
+    // reacting to "open dropdown" clicks as if the selection changed.
+    if(this.getAttribute('slot') == 'selected') return
+
     let options = Array.from(this.parentNode.children)
     options.forEach(option => {
       option.removeAttribute('slot')

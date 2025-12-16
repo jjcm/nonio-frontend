@@ -621,6 +621,38 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
+          }
+          .card-header soci-button.add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: 28px;
+            min-width: 28px;
+            padding: 0 8px;
+            overflow: hidden;
+            transition: width 0.12s var(--soci-ease);
+            background: var(--bg-secondary-hover);
+          }
+          .card-header soci-button.add-btn:hover {
+            width: 76px;
+          }
+          .card-header soci-button.add-btn soci-icon {
+            margin: -2px 0 -2px -4px;
+          }
+          .card-header soci-button.add-btn span {
+            text-transform: lowercase;
+          }
+          .card-header soci-user-picker {
+            display: none;
+            flex: 1;
+          }
+          .card-header[editing] h2,
+          .card-header[editing] soci-button.add-btn {
+            display: none;
+          }
+          .card-header[editing] soci-user-picker {
+            display: block;
           }
           .list {
             display: flex;
@@ -661,24 +693,33 @@
           <div class="load-group" load-order="secondary">
             <div class="grid">
               <div class="card">
-                <div class="card-header">
+                <div class="card-header" data-role="moderators">
                   <h2>Moderators</h2>
+                  <soci-button class="add-btn" subtle data-role="moderators" aria-label="Add moderator">
+                    <soci-icon glyph="create"></soci-icon><span>add</span>
+                  </soci-button>
+                  <soci-user-picker data-role="moderators" placeholder="Add moderator" action-label="Add"></soci-user-picker>
                 </div>
-                <soci-user-picker data-role="moderators" placeholder="Add moderator" action-label="Add"></soci-user-picker>
                 <div class="list" data-list="moderators"></div>
               </div>
               <div class="card">
-                <div class="card-header">
+                <div class="card-header" data-role="members">
                   <h2>Members</h2>
+                  <soci-button class="add-btn" subtle data-role="members" aria-label="Add member">
+                    <soci-icon glyph="create"></soci-icon><span>add</span>
+                  </soci-button>
+                  <soci-user-picker data-role="members" placeholder="Add member" action-label="Add"></soci-user-picker>
                 </div>
-                <soci-user-picker data-role="members" placeholder="Add member" action-label="Add"></soci-user-picker>
                 <div class="list" data-list="members"></div>
               </div>
               <div class="card">
-                <div class="card-header">
+                <div class="card-header" data-role="banned">
                   <h2>Banned Users</h2>
+                  <soci-button class="add-btn" subtle data-role="banned" aria-label="Ban user">
+                    <soci-icon glyph="create"></soci-icon><span>add</span>
+                  </soci-button>
+                  <soci-user-picker data-role="banned" placeholder="Ban user" action-label="Ban"></soci-user-picker>
                 </div>
-                <soci-user-picker data-role="banned" placeholder="Ban user" action-label="Ban"></soci-user-picker>
                 <div class="list" data-list="banned"></div>
               </div>
             </div>
