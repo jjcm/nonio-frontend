@@ -340,17 +340,17 @@ export default class SociSidebar extends SociComponent {
         margin-bottom: -12px;
         transition: all 0.2s var(--soci-ease);
         border-bottom: 1px solid var(--bg-bold);
-        
-        soci-quill-view {
-          font-size: 13px;
-          line-height: 1.5;
-          color: var(--text-secondary);
-          padding: 8px 0;
-          p {
-            margin: 0 0 8px;
-            &:last-child { margin-bottom: 0; }
-          }
-        }
+      }
+
+      /* Let markdown inherit site styles; keep only container-level typography */
+      #community-description {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--text-secondary);
+      }
+
+      #community-description > * {
+        padding: 8px 0;
       }
 
       ::-webkit-scrollbar { width: 14px; }
@@ -393,7 +393,7 @@ export default class SociSidebar extends SociComponent {
              <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
           </div>
           <div id="community-description">
-             <soci-quill-view></soci-quill-view>
+             <soci-markdown-view></soci-markdown-view>
              <div id="admin-links">
                <soci-link href="#">Settings</soci-link>
                <soci-link href="#">Users</soci-link>
@@ -575,7 +575,7 @@ export default class SociSidebar extends SociComponent {
         }
         
         // Update description
-        let quillView = container.querySelector('soci-quill-view')
+        let quillView = container.querySelector('soci-markdown-view')
         if(res?.description || res?.isAdmin) {
             quillView.render(res?.description || '')
             this._animateSection(container, true, quillView.offsetHeight + adminLinks.offsetHeight + 8)
@@ -900,7 +900,7 @@ export default class SociSidebar extends SociComponent {
     if(this.currentCommunity === value){
       const container = this.select('#community-description')
       const adminLinks = this.select('#admin-links')
-      const quillView = container?.querySelector('soci-quill-view')
+      const quillView = container?.querySelector('soci-markdown-view')
       if(quillView){
         quillView.render(detail.description || '')
         this._animateSection(container, !!detail.description, quillView.offsetHeight + adminLinks.offsetHeight + 8)

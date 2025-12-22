@@ -187,7 +187,7 @@ export default class SociPostLi extends SociComponent {
         z-index: 1;
       }
 
-      :host([expanded]) ::slotted(soci-quill-view) {
+      :host([expanded]) ::slotted(soci-markdown-view) {
         display: block;
         opacity: 0;
         animation: load-in 0.25s var(--soci-ease) 0.14s forwards;
@@ -477,7 +477,7 @@ export default class SociPostLi extends SociComponent {
       //TODO - this only works for desktop. Mobile this logic is a bit funky
       thumbnail.style.height = preview.style.height = '376px'
       thumbnail.style.width = preview.style.width = `${(thumbnail.naturalWidth / thumbnail.naturalHeight) * 376}px`
-      let description = document.createElement('soci-quill-view')
+      let description = document.createElement('soci-markdown-view')
       this._setImageSource(this.select('#preview'), config.IMAGE_HOST)
       description.setAttribute('slot', 'description')
       setTimeout(()=>{
@@ -494,7 +494,7 @@ export default class SociPostLi extends SociComponent {
     else {
       thumbnail.style.height = preview.style.height = ''
       thumbnail.style.width = preview.style.width = ''
-      this.querySelector('soci-quill-view')?.remove()
+      this.querySelector('soci-markdown-view')?.remove()
       preview.style.opacity = ''
     }
 

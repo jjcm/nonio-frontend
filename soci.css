@@ -268,146 +268,148 @@
   background: var(--bg-bold);
   height: 100%;
   overflow-y: auto;
+  .columns {
+    display: flex;
+    margin: 40px -20px 0;
+    width: calc(100% + 40px);
+    align-items: flex-start;
+  }
+  .column {
+    border: 1px solid var(--bg-secondary);
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: 0 2px 8px var(--shadow);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    transition: height 0.2s var(--soci-ease);
+  }
+  .column:first-child {
+    margin-right: 10px;
+  }
+  .column.supporter[active] {
+    .features {
+      opacity: 0;
+      transition: all var(--anim-duration-med) var(--soci-ease);
+      pointer-events: none;
+    }
+    .payment {
+      opacity: 1;
+      pointer-events: all;
+      user-select: all;
+      transform: translateY(0px);
+    }
+  }
+  h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    font-weight: normal;
+    margin-top: 20px;
+  }
+  .features {
+    opacity: 1;
+  }
+  .payment {
+    box-sizing: border-box;
+    overflow: hidden;
+    position: absolute;
+    transition: all var(--anim-duration-med) var(--soci-ease) var(--anim-duration-short);
+    padding: 10px 20px;
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+    width: 100%;
+    transform: translateY(10px);
+  }
+  #card-element {
+    border-bottom: 2px solid var(--bg-secondary);
+    height: 38px;
+    margin-bottom: 10px;
+  }
+  .price-container {
+    position: relative;
+    padding: 0 20px 10px;
+    border-bottom: 1px solid var(--bg-secondary);
+    soci-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+  }
+  .title {
+    padding: 10px 20px 0;
+    p {
+      color: var(--text-secondary);
+      height: 80px;
+    }
+  }
+  h2 {
+    color: var(--text-bold);
+    margin-bottom: 4px;
+  }
+  .price {
+    font-size: 44px;
+    font-weight: bold;
+    color: var(--text-brand);
+    span {
+      font-size: 14px;
+      font-weight: normal;
+      color: var(--text-secondary);
+    }
+  }
+  ul {
+    list-style: none;
+    padding: 0 20px;
+  }
+  li {
+    position: relative;
+    line-height: 24px;
+    padding-left: 20px;
+  }
+  li.cant {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+  }
+  li.cant:after,
+  li.cant:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    transform: rotate(45deg);
+    left: 0;
+    top: calc(50% - 1px);
+    background: var(--text-danger);
+  }
+  li.cant:before {
+    transform: rotate(-45deg);
+  }
+  li.can:after,
+  li.can:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 2px;
+    background: var(--text-success);
+    height: 5px;
+    top: calc(50% - 2px);
+    left: 0;
+    transform: rotate(-45deg);
+  }
+  li.can:after {
+    height: 9px;
+    top: calc(50% - 5px);
+    left: 4px;
+    transform: rotate(45deg);
+  }
+  form soci-button {
+    margin: 24px 0 8px;
+  }
 }
 #admin-subscribe[active] {
   display: block;
-}
-#admin-subscribe .columns {
-  display: flex;
-  margin: 40px -20px 0;
-  width: calc(100% + 40px);
-  align-items: flex-start;
-}
-#admin-subscribe .column {
-  border: 1px solid var(--bg-secondary);
-  border-radius: 4px;
-  width: 100%;
-  box-shadow: 0 2px 8px var(--shadow);
-  background: var(--bg);
-  position: relative;
-  overflow: hidden;
-  transition: height 0.2s var(--soci-ease);
-}
-#admin-subscribe .column:first-child {
-  margin-right: 10px;
-}
-#admin-subscribe .column.supporter[active] .features {
-  opacity: 0;
-  transition: all var(--anim-duration-med) var(--soci-ease);
-  pointer-events: none;
-}
-#admin-subscribe .column.supporter[active] .payment {
-  opacity: 1;
-  pointer-events: all;
-  user-select: all;
-  transform: translateY(0px);
-}
-#admin-subscribe h3 {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  font-weight: normal;
-  margin-top: 20px;
-}
-#admin-subscribe .features {
-  opacity: 1;
-}
-#admin-subscribe .payment {
-  box-sizing: border-box;
-  overflow: hidden;
-  position: absolute;
-  transition: all var(--anim-duration-med) var(--soci-ease) var(--anim-duration-short);
-  padding: 10px 20px;
-  opacity: 0;
-  user-select: none;
-  pointer-events: none;
-  width: 100%;
-  transform: translateY(10px);
-}
-#admin-subscribe #card-element {
-  border-bottom: 2px solid var(--bg-secondary);
-  height: 38px;
-  margin-bottom: 10px;
-}
-#admin-subscribe .price-container {
-  position: relative;
-  padding: 0 20px 10px;
-  border-bottom: 1px solid var(--bg-secondary);
-}
-#admin-subscribe .price-container soci-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-}
-#admin-subscribe .title {
-  padding: 10px 20px 0;
-}
-#admin-subscribe .title p {
-  color: var(--text-secondary);
-  height: 80px;
-}
-#admin-subscribe h2 {
-  color: var(--text-bold);
-  margin-bottom: 4px;
-}
-#admin-subscribe .price {
-  font-size: 44px;
-  font-weight: bold;
-  color: var(--text-brand);
-}
-#admin-subscribe .price span {
-  font-size: 14px;
-  font-weight: normal;
-  color: var(--text-secondary);
-}
-#admin-subscribe ul {
-  list-style: none;
-  padding: 0 20px;
-}
-#admin-subscribe li {
-  position: relative;
-  line-height: 24px;
-  padding-left: 20px;
-}
-#admin-subscribe li.cant {
-  color: var(--text-secondary);
-  text-decoration: line-through;
-}
-#admin-subscribe li.cant:after,
-#admin-subscribe li.cant:before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 10px;
-  height: 2px;
-  transform: rotate(45deg);
-  left: 0;
-  top: calc(50% - 1px);
-  background: var(--text-danger);
-}
-#admin-subscribe li.cant:before {
-  transform: rotate(-45deg);
-}
-#admin-subscribe li.can:after,
-#admin-subscribe li.can:before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 2px;
-  background: var(--text-success);
-  height: 5px;
-  top: calc(50% - 2px);
-  left: 0;
-  transform: rotate(-45deg);
-}
-#admin-subscribe li.can:after {
-  height: 9px;
-  top: calc(50% - 5px);
-  left: 4px;
-  transform: rotate(45deg);
-}
-#admin-subscribe form soci-button {
-  margin: 24px 0 8px;
 }
 body {
   margin: 0;
@@ -419,20 +421,22 @@ body {
 body[dragging] {
   user-select: none;
 }
-body[noauth] soci-sidebar {
-  left: -280px;
-  transition: none;
-}
-body[noauth] #pages {
-  margin-left: 0;
-  width: 100vw;
-  transition: none;
-}
-body[noauth] #pages:before {
-  left: 0;
-  opacity: 0;
-  transition: none;
-  animation: none;
+body[noauth] {
+  soci-sidebar {
+    left: -280px;
+    transition: none;
+  }
+  #pages {
+    margin-left: 0;
+    width: 100vw;
+    transition: none;
+  }
+  #pages:before {
+    left: 0;
+    opacity: 0;
+    transition: none;
+    animation: none;
+  }
 }
 input,
 body {
@@ -482,7 +486,7 @@ h1,
 h2,
 h3 {
   margin: 0;
-  margin-bottom: 0.5em;
+  margin-bottom: 4px;
 }
 h1 {
   font-size: 2em;
@@ -500,7 +504,32 @@ p {
 p + h1,
 p + h2,
 p + h3 {
-  margin-top: 1em;
+  margin-top: 0.75em;
+}
+table {
+  border: 1px solid var(--bg-secondary);
+  border-radius: 4px;
+  border-collapse: collapse;
+  margin: 12px 0;
+  th, td {
+    padding: 4px 8px;
+    border: 1px solid var(--bg-secondary);
+    text-align: left;
+  }
+}
+soci-markdown-view *:last-child {
+  margin-bottom: 0;
+}
+soci-markdown-view img {
+  max-width: 100%;
+  margin-top: 8px;
+  border-radius: 4px;
+} 
+pre {
+  display: block;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  padding: 8px 12px;
 }
 a {
   color: var(--text-brand);
@@ -559,183 +588,183 @@ button:focus {
 #home {
   transition: all var(--anim-duration-med) var(--soci-ease), height 0s linear;
   display: none;
+  #home-container {
+    width: 100%;
+    min-width: 1160px;
+    margin: 0 auto;
+    .inner-container {
+      padding: 32px 54px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+  .header-container {
+    background: radial-gradient(farthest-corner at 10% 50%, #1e72d2 30%, #073f80);
+    position: relative;
+    overflow: hidden;
+    .page-cut {
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0px -4px 8px rgba(7,14,23,0.251));
+    }
+    img {
+      position: absolute;
+      right: 0;
+      z-index: 1;
+      top: 80px;
+      max-width: calc(max(min(100vw - 1000px, 600px), 440px));
+      box-shadow: 0 0 80px #073f80;
+      border-radius: 6px 0 0 6px;
+    }
+  }
+  .account-actions {
+    position: absolute;
+    top: 28px;
+    right: 54px;
+    soci-button {
+      margin-left: 4px;
+      background: transparent;
+      font-weight: 700;
+    }
+    soci-button:hover {
+      background: var(--bg-brand);
+    }
+    .primary {
+      background: var(--bg-brand);
+    }
+    .primary:hover {
+      filter: brightness(1.1) saturate(0.9);
+    }
+  }
+  .header {
+    color: var(--text-inverse);
+    .left-block {
+      max-width: 600px;
+    }
+    svg {
+      opacity: 0.5;
+      width: 100px;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-size: 80px;
+      line-height: 80px;
+      margin-left: -4px;
+    }
+    p {
+      font-size: 24px;
+      opacity: 0.8;
+    }
+  }
+  h2 {
+    font-weight: bold;
+  }
+  .divider {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #319ef2, #106fb9);
+    margin-bottom: 48px;
+  }
+  .columns {
+    display: flex;
+    .divider {
+      width: 100px;
+      margin-bottom: 8px;
+    }
+    .column {
+      width: 100%;
+      margin-left: 20px;
+    }
+    .column:first-child {
+      margin-left: 0;
+    }
+  }
+  .type-examples {
+    margin: 0 -48px;
+    width: calc(100% + 96px);
+  }
 }
 #home[active] {
   display: contents;
 }
-#home #home-container {
-  width: 100%;
-  min-width: 1160px;
-  margin: 0 auto;
-}
-#home #home-container .inner-container {
-  padding: 32px 54px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-#home .header-container {
-  background: radial-gradient(farthest-corner at 10% 50%, #1e72d2 30%, #073f80);
-  position: relative;
-  overflow: hidden;
-}
-#home .header-container .page-cut {
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0px -4px 8px rgba(7,14,23,0.251));
-}
-#home .header-container img {
-  position: absolute;
-  right: 0;
-  z-index: 1;
-  top: 80px;
-  max-width: calc(max(min(100vw - 1000px, 600px), 440px));
-  box-shadow: 0 0 80px #073f80;
-  border-radius: 6px 0 0 6px;
-}
-#home .account-actions {
-  position: absolute;
-  top: 28px;
-  right: 54px;
-}
-#home .account-actions soci-button {
-  margin-left: 4px;
-  background: transparent;
-  font-weight: 700;
-}
-#home .account-actions soci-button:hover {
-  background: var(--bg-brand);
-}
-#home .account-actions .primary {
-  background: var(--bg-brand);
-}
-#home .account-actions .primary:hover {
-  filter: brightness(1.1) saturate(0.9);
-}
-#home .header {
-  color: var(--text-inverse);
-}
-#home .header .left-block {
-  max-width: 600px;
-}
-#home .header svg {
-  opacity: 0.5;
-  width: 100px;
-  margin-bottom: 32px;
-}
-#home .header h1 {
-  font-size: 80px;
-  line-height: 80px;
-  margin-left: -4px;
-}
-#home .header p {
-  font-size: 24px;
-  opacity: 0.8;
-}
-#home h2 {
-  font-weight: bold;
-}
-#home .divider {
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, #319ef2, #106fb9);
-  margin-bottom: 48px;
-}
-#home .columns {
-  display: flex;
-}
-#home .columns .divider {
-  width: 100px;
-  margin-bottom: 8px;
-}
-#home .columns .column {
-  width: 100%;
-  margin-left: 20px;
-}
-#home .columns .column:first-child {
-  margin-left: 0;
-}
-#home .type-examples {
-  margin: 0 -48px;
-  width: calc(100% + 96px);
-}
 #user {
   min-width: 420px;
   overflow: hidden;
+  .sidebar {
+    padding: 30px 46px 30px 50px;
+    border-right: 4px solid var(--bg);
+    box-sizing: border-box;
+    overflow-y: auto;
+    width: 400px;
+    min-width: 400px;
+    height: 100dvh;
+    position: relative;
+    z-index: 1;
+    box-shadow: 1px 0 5px var(--shadow);
+    soci-link {
+      display: block;
+      width: 100%;
+    }
+    soci-button {
+      width: 100%;
+      margin: 0 0 16px 0;
+      float: none;
+      svg {
+        margin-right: 4px;
+        position: relative;
+        top: 1.5px;
+      }
+    }
+  }
+  .stats {
+    border: 1px solid var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    .stat {
+      display: flex;
+      border-bottom: inherit;
+      padding: 8px 12px;
+    }
+    label {
+      flex: 1;
+      font-weight: 600;
+    }
+    .value {
+      flex: 1;
+      text-align: right;
+    }
+  }
+  .self-actions,
+  .admin-actions {
+    display: none;
+    gap: 8px;
+  }
+  .self-actions[active],
+  .admin-actions[active] {
+    display: flex;
+  }
+  .hero {
+    margin-bottom: 16px;
+    .description {
+      text-align: justify;
+    }
+  }
+  soci-user[avatar-only] {
+    --avatar-size: 220px;
+    display: block;
+    width: 220px;
+    height: 220px;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    margin: 0 auto 8px;
+  }
+  soci-user[username-only] {
+    margin-bottom: 8px;
+    display: block;
+  }
 }
 #user[active] {
   display: flex;
-}
-#user .sidebar {
-  padding: 30px 46px 30px 50px;
-  border-right: 4px solid var(--bg);
-  box-sizing: border-box;
-  overflow-y: auto;
-  width: 400px;
-  min-width: 400px;
-  height: 100dvh;
-  position: relative;
-  z-index: 1;
-  box-shadow: 1px 0 5px var(--shadow);
-}
-#user .sidebar soci-link {
-  display: block;
-  width: 100%;
-}
-#user .sidebar soci-button {
-  width: 100%;
-  margin: 0 0 16px 0;
-  float: none;
-}
-#user .sidebar soci-button svg {
-  margin-right: 4px;
-  position: relative;
-  top: 1.5px;
-}
-#user .stats {
-  border: 1px solid var(--bg-secondary);
-  border-radius: 8px;
-  margin-bottom: 16px;
-}
-#user .stats .stat {
-  display: flex;
-  border-bottom: inherit;
-  padding: 8px 12px;
-}
-#user .stats label {
-  flex: 1;
-  font-weight: 600;
-}
-#user .stats .value {
-  flex: 1;
-  text-align: right;
-}
-#user .self-actions,
-#user .admin-actions {
-  display: none;
-  gap: 8px;
-}
-#user .self-actions[active],
-#user .admin-actions[active] {
-  display: flex;
-}
-#user .hero {
-  margin-bottom: 16px;
-}
-#user .hero .description {
-  text-align: justify;
-}
-#user soci-user[avatar-only] {
-  --avatar-size: 220px;
-  display: block;
-  width: 220px;
-  height: 220px;
-  background: var(--bg-secondary);
-  border-radius: 50%;
-  margin: 0 auto 8px;
-}
-#user soci-user[username-only] {
-  margin-bottom: 8px;
-  display: block;
 }
 #user .content,
 #notifications .content {
@@ -834,135 +863,143 @@ button:focus {
   max-width: 800px;
   margin: 0 auto;
 }
-.admin-page .content {
-  padding: 28px 40px;
-  max-width: 800px;
-  margin: 0 auto;
+.admin-page {
+  .content {
+    padding: 28px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .container {
+    padding: 24px 50px;
+  }
+  soci-input {
+    border: 1px solid var(--bg-secondary);
+    border-radius: 3px;
+    --min-height: 240px;
+  }
+  .blocks {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% + 40px);
+    .block {
+      min-width: 240px;
+      width: 100%;
+      flex: 1;
+      margin-right: 40px;
+      margin-bottom: 20px;
+    }
+    .block.avatar {
+      max-width: 420px;
+      flex: 1;
+    }
+    .block.description {
+      min-width: 380px;
+      flex: 2;
+    }
+    .block h2 {
+      margin-bottom: 0;
+    }
+  }
+  h1.cash {
+    font-size: 60px;
+    margin: 0;
+    color: var(--text-success);
+  }
+  .cc-details {
+    display: flex;
+    input:first-child {
+      min-width: 160px;
+      margin-right: 12px;
+    }
+  }
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    margin-top: 8px;
+    button:last-child {
+      margin-right: 0;
+    }
+  }
+  h2 {
+    margin-top: 0;
+  }
 }
-.admin-page .container {
-  padding: 24px 50px;
-}
-.admin-page soci-input {
-  border: 1px solid var(--bg-secondary);
-  border-radius: 3px;
-  --min-height: 240px;
-}
-.admin-page .blocks {
-  display: flex;
-  flex-wrap: wrap;
-  width: calc(100% + 40px);
-}
-.admin-page .blocks .block {
-  min-width: 240px;
-  width: 100%;
-  flex: 1;
-  margin-right: 40px;
-  margin-bottom: 20px;
-}
-.admin-page .blocks .block.avatar {
-  max-width: 420px;
-  flex: 1;
-}
-.admin-page .blocks .block.description {
-  min-width: 380px;
-  flex: 2;
-}
-.admin-page .blocks .block h2 {
-  margin-bottom: 0;
-}
-.admin-page h1.cash {
-  font-size: 60px;
-  margin: 0;
-  color: var(--text-success);
-}
-.admin-page .cc-details {
-  display: flex;
-}
-.admin-page .cc-details input:first-child {
-  min-width: 160px;
-  margin-right: 12px;
-}
-.admin-page .actions {
-  width: 100%;
-  justify-content: flex-end;
-  display: flex;
-  margin-top: 8px;
-}
-.admin-page .actions button:last-child {
-  margin-right: 0;
-}
-.admin-page h2 {
-  margin-top: 0;
-}
-#admin-financials a soci-button.dashboard-link {
-  position: absolute;
-  top: 10px;
-  right: 0;
-  margin-right: 0;
-}
-#admin-financials p {
-  margin-bottom: 24px;
-}
-#admin-financials .button-group {
-  display: flex;
-}
-#admin-financials .button-group soci-button {
-  float: none;
-  margin-right: 6px;
-}
-#admin-financials .cash {
-  margin-bottom: 12px;
-}
-#admin-financials #financial-subscription .cash {
-  color: var(--text-brand);
-}
-#admin-financials #financial-subscription .cash span {
-  color: var(--text-secondary);
-  font-size: 24px;
-  font-weight: 100;
-}
-#admin-financials soci-modal soci-user {
-  display: inline-block;
-  --font-size: 14px;
-  --avatar-size: 14px;
-  --line-height: 14px;
-  --spacing: 6px;
-  transform: translateY(2px);
-}
-#admin-financials soci-modal p {
-  margin-bottom: 12px;
-}
-#admin-financials table {
-  text-align: left;
-  vertical-align: top;
-  width: calc(100% + 2px);
-  margin-left: -1px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  font-size: 16px;
-  border-spacing: 0;
-  padding: 0;
-  background: var(--bg-secondary);
-}
-#admin-financials table th,
-#admin-financials table td {
-  padding: 8px 12px;
-}
-#admin-financials table th {
-  border-bottom: 1px solid var(--bg);
-}
-#admin-financials table td:not(:last-child),
-#admin-financials table th:not(:last-child) {
-  border-right: 1px solid var(--bg);
-}
-#admin-financials soci-input {
-  --min-height: 100px;
-  margin-bottom: 12px;
-  width: calc(100% + 2px);
-  margin-left: -1px;
-}
-#admin-financials soci-button {
-  margin-right: 0;
+#admin-financials {
+  a soci-button.dashboard-link {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    margin-right: 0;
+  }
+  p {
+    margin-bottom: 24px;
+  }
+  .button-group {
+    display: flex;
+    soci-button {
+      float: none;
+      margin-right: 6px;
+    }
+  }
+  .cash {
+    margin-bottom: 12px;
+  }
+  #financial-subscription {
+    .cash {
+      color: var(--text-brand);
+      span {
+        color: var(--text-secondary);
+        font-size: 24px;
+        font-weight: 100;
+      }
+    }
+  }
+  soci-modal {
+    soci-user {
+      display: inline-block;
+      --font-size: 14px;
+      --avatar-size: 14px;
+      --line-height: 14px;
+      --spacing: 6px;
+      transform: translateY(2px);
+    }
+    p {
+      margin-bottom: 12px;
+    }
+  }
+  table {
+    text-align: left;
+    vertical-align: top;
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    border-spacing: 0;
+    padding: 0;
+    background: var(--bg-secondary);
+    th,
+    td {
+      padding: 8px 12px;
+    }
+    th {
+      border-bottom: 1px solid var(--bg);
+    }
+    td:not(:last-child),
+    th:not(:last-child) {
+      border-right: 1px solid var(--bg);
+    }
+  }
+  soci-input {
+    --min-height: 100px;
+    margin-bottom: 12px;
+    width: calc(100% + 2px);
+    margin-left: -1px;
+  }
+  soci-button {
+    margin-right: 0;
+  }
 }
 #admin-change-forgotten-password .success {
   transform: translateY(20px);
@@ -1020,109 +1057,109 @@ button:focus {
 }
 #submit-container {
   box-sizing: border-box;
-}
-#submit-container h1,
-#submit-container h2 {
-  margin: 0;
-  padding-left: 2px;
-}
-#submit-container soci-url-input {
-  margin-bottom: 12px;
-}
-#submit-container soci-button {
-  margin-top: 8px;
-}
-#submit-container label {
-  cursor: inherit;
-}
-#submit-container .centered-container {
-  max-width: 920px;
-  margin: 0 auto;
-}
-#submit-container input {
-  text-decoration: inherit;
-  font-weight: bold;
-  border: none;
-  outline: none;
-  padding: 0;
-  font-size: 14px;
-  width: 100%;
-  background: transparent;
-  color: inherit;
-}
-#submit-container input::placeholder {
-  font-weight: normal;
-  text-transform: none;
-  opacity: 0.5;
-  font-size: 14px;
-}
-#submit-container input[name="title"] {
-  font-size: 32px;
-  margin-bottom: 24px;
-  padding-left: 2px;
-}
-#submit-container input[name="title"]::placeholder {
-  font-size: 32px;
-}
-#submit-container soci-icon {
-  pointer-events: none;
-  position: absolute;
-  right: 2px;
-}
-#submit-container .preview {
-  overflow: hidden;
-  height: 0;
-  margin: 0 -20px;
-  padding: 0 20px;
-  transition: all 0.1s var(--soci-ease);
-}
-#submit-container .preview.active {
-  height: 168px;
-  margin-bottom: -8px;
-}
-#submit-container #submit-header,
-#submit-container #submit-actions {
-  max-width: 920px;
-  margin: 0 auto;
-}
-#submit-container .load-group {
-  padding: 0 40px;
-}
-#submit-container #submit-header {
-  padding: 24px 40px;
-}
-#submit-container soci-tab soci-input {
-  width: 100%;
-  --min-height: 240px;
-}
-#submit-container soci-tab[name="Blog"] soci-input {
-  --min-height: 550px;
-}
-#submit-container soci-tab[name="HTML"] {
-  max-width: 100%;
-}
-#submit-container soci-tab[name="HTML"] soci-input {
-  max-width: 920px;
-  margin: 0 auto;
-}
-#submit-container soci-input {
-  border: 2px solid var(--bg-secondary);
-  border-radius: 8px;
-}
-#submit-container h2 {
-  font-weight: 500;
-  margin-top: 36px;
-  margin-bottom: 12px;
-}
-#submit-container .tags {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 36px;
-  grid-column-gap: 10px;
-}
-#submit-container .tags soci-tag-input {
-  flex: 1;
-  --tag-height: 30px;
+  h1,
+  h2 {
+    margin: 0;
+    padding-left: 2px;
+  }
+  soci-url-input {
+    margin-bottom: 12px;
+  }
+  soci-button {
+    margin-top: 8px;
+  }
+  label {
+    cursor: inherit;
+  }
+  .centered-container {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  input {
+    text-decoration: inherit;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    padding: 0;
+    font-size: 14px;
+    width: 100%;
+    background: transparent;
+    color: inherit;
+  }
+  input::placeholder {
+    font-weight: normal;
+    text-transform: none;
+    opacity: 0.5;
+    font-size: 14px;
+  }
+  input[name="title"] {
+    font-size: 32px;
+    margin-bottom: 24px;
+    padding-left: 2px;
+  }
+  input[name="title"]::placeholder {
+    font-size: 32px;
+  }
+  soci-icon {
+    pointer-events: none;
+    position: absolute;
+    right: 2px;
+  }
+  .preview {
+    overflow: hidden;
+    height: 0;
+    margin: 0 -20px;
+    padding: 0 20px;
+    transition: all 0.1s var(--soci-ease);
+  }
+  .preview.active {
+    height: 168px;
+    margin-bottom: -8px;
+  }
+  #submit-header,
+  #submit-actions {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .load-group {
+    padding: 0 40px;
+  }
+  #submit-header {
+    padding: 24px 40px;
+  }
+  soci-tab soci-input {
+    width: 100%;
+    --min-height: 240px;
+  }
+  soci-tab[name="Blog"] soci-input {
+    --min-height: 550px;
+  }
+  soci-tab[name="HTML"] {
+    max-width: 100%;
+  }
+  soci-tab[name="HTML"] soci-input {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  soci-input {
+    border: 2px solid var(--bg-secondary);
+    border-radius: 8px;
+  }
+  h2 {
+    font-weight: 500;
+    margin-top: 36px;
+    margin-bottom: 12px;
+  }
+  .tags {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 36px;
+    grid-column-gap: 10px;
+    soci-tag-input {
+      flex: 1;
+      --tag-height: 30px;
+    }
+  }
 }
 soci-sidebar {
   left: 0;
@@ -1209,11 +1246,15 @@ soci-route[active] [load-order="tertiary"] {
 soci-route:not([active]):not([activating]) {
   display: none;
 }
-#new-user #new-user-container {
-  padding: 24px 36px;
+#new-user {
+  #new-user-container {
+    padding: 24px 36px;
+  }
 }
-#post soci-comment-list {
-  width: 100%;
+#post {
+  soci-comment-list {
+    width: 100%;
+  }
 }
 #blog {
   display: block;

@@ -8,7 +8,6 @@ var path = require('path')
 var pug = require('pug')
 var url = require('url')
 var mime = require('mime-types')
-var stylus = require('stylus')
 var prerender = require('prerender-node')
 
 
@@ -20,9 +19,6 @@ var server = http.createServer(function (req, res) {
         switch(ext){
           case '.pug':
             handler.pug(req,res)
-            break
-          case '.styl':
-            handler.styl(req,res)
             break
           case '':
             handler.folder(req, res)
@@ -119,26 +115,6 @@ var handler = {
         var html = pug.render(data, {doctype: 'html'})
         res.writeHead(200, { 'Content-Type' : 'text/html' })
         res.end(html, 'utf-8')
-      }
-    })
-  },
-  styl: function(req, res){
-    var filePath = '.' + req.url
-    console.log(req.method + ' | ' + 'STYLUS | ' + req.url)
-    fs.readFile(filePath, 'utf8', (err, data) => {
-      if(err){
-        handler.error(req, res, err)
-      }
-      else {
-        stylus.render(data, {filename: filePath}, (err, css) => {
-          if(err){
-            handler.error(req, res, err)
-          }
-          else {
-            res.writeHead(200, { 'Content-Type' : 'text/css' })
-            res.end(css, 'utf-8')
-          }
-        })
       }
     })
   },

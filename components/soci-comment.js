@@ -215,7 +215,7 @@ export default class SociComment extends SociComponent {
     if(this.hasAttribute('date')) this.updateTime(this.getAttribute('date'), this.select('time'))
 
     if(!this.quillView){
-      this.quillView = document.createElement('soci-quill-view')
+      this.quillView = document.createElement('soci-markdown-view')
       this.quillView.setAttribute('slot', 'content')
       this.appendChild(this.quillView)
     }
@@ -287,7 +287,7 @@ export default class SociComment extends SociComponent {
   }
 
   _renderContent(){
-    let contentContainer = this.querySelector('soci-quill-view[slot="content"]')
+    let contentContainer = this.querySelector('soci-markdown-view[slot="content"]')
     contentContainer?.render(this._content)
   }
 
@@ -454,7 +454,7 @@ export default class SociComment extends SociComponent {
     editInput.setAttribute('placeholder', 'Enter comment')
     editInput.setAttribute('slot', 'edit')
     this.appendChild(editInput)
-    editInput.value = this.querySelector('soci-quill-view').value
+    editInput.value = this.querySelector('soci-markdown-view').value
 
     this.style.minHeight = this.offsetHeight
     this.select('#comment').style.display = 'none'
@@ -495,7 +495,7 @@ export default class SociComment extends SociComponent {
     }).then(()=>{
       this.select('#comment-edit soci-button').success()
       setTimeout(()=>{
-        this.querySelector('soci-quill-view').value = content
+        this.querySelector('soci-markdown-view').value = content
         this._cancelEdit()
       }, 1000)
     })

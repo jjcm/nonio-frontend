@@ -4,6 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg">
+  <script src="/lib/markdown-wasm/markdown.js"></script>
   <script src="/soci.js" type="module"></script>
   <script src="/components/soci-components.js" type="module"></script>
   <script>
@@ -18,7 +19,6 @@
     }
   </script>
   <link rel="stylesheet" href="/soci.css">
-  <link rel="stylesheet" href="/lib/quillStyle.css">
   <soci-sidebar loading>
     <div slot="login">
       <form>
@@ -72,6 +72,182 @@
     </soci-route>
     <soci-route class="admin-page" id="admin-subscribe" path="/admin/subscribe" fresh>
       <div class="content">
+        <style>
+          #admin-subscribe {
+            background: var(--bg-bold);
+            height: 100%;
+            overflow-y: auto;
+          }
+          
+          #admin-subscribe[active] {
+            display: block;
+          }
+          
+          #admin-subscribe .columns {
+            display: flex;
+            margin: 40px -20px 0;
+            width: calc(100% + 40px);
+            align-items: flex-start;
+          }
+          
+          #admin-subscribe .column {
+            border: 1px solid var(--bg-secondary);
+            border-radius: 4px;
+            width: 100%;
+            box-shadow: 0 2px 8px var(--shadow);
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            transition: height 0.2s var(--soci-ease);
+          }
+          
+          #admin-subscribe .column:first-child {
+            margin-right: 10px;
+          }
+          
+          #admin-subscribe .column.supporter[active] .features {
+            opacity: 0;
+            transition: all var(--anim-duration-med) var(--soci-ease);
+            pointer-events: none;
+          }
+          
+          #admin-subscribe .column.supporter[active] .payment {
+            opacity: 1;
+            pointer-events: all;
+            user-select: all;
+            transform: translateY(0px);
+          }
+          
+          #admin-subscribe h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: normal;
+            margin-top: 20px;
+          }
+          
+          #admin-subscribe .features {
+            opacity: 1;
+          }
+          
+          #admin-subscribe .payment {
+            box-sizing: border-box;
+            overflow: hidden;
+            position: absolute;
+            transition: all var(--anim-duration-med) var(--soci-ease) var(--anim-duration-short);
+            padding: 10px 20px;
+            opacity: 0;
+            user-select: none;
+            pointer-events: none;
+            width: 100%;
+            transform: translateY(10px);
+          }
+          
+          #admin-subscribe #card-element {
+            border-bottom: 2px solid var(--bg-secondary);
+            height: 38px;
+            margin-bottom: 10px;
+          }
+          
+          #admin-subscribe .price-container {
+            position: relative;
+            padding: 0 20px 10px;
+            border-bottom: 1px solid var(--bg-secondary);
+          }
+          
+          #admin-subscribe .price-container soci-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+          }
+          
+          #admin-subscribe .title {
+            padding: 10px 20px 0;
+          }
+          
+          #admin-subscribe .title p {
+            color: var(--text-secondary);
+            height: 80px;
+          }
+          
+          #admin-subscribe h2 {
+            color: var(--text-bold);
+            margin-bottom: 4px;
+          }
+          
+          #admin-subscribe .price {
+            font-size: 44px;
+            font-weight: bold;
+            color: var(--text-brand);
+          }
+          
+          #admin-subscribe .price span {
+            font-size: 14px;
+            font-weight: normal;
+            color: var(--text-secondary);
+          }
+          
+          #admin-subscribe ul {
+            list-style: none;
+            padding: 0 20px;
+          }
+          
+          #admin-subscribe li {
+            position: relative;
+            line-height: 24px;
+            padding-left: 20px;
+          }
+          
+          #admin-subscribe li.cant {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+          }
+          
+          #admin-subscribe li.cant:after,
+          #admin-subscribe li.cant:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 10px;
+            height: 2px;
+            left: 0;
+            top: calc(50% - 1px);
+            background: var(--text-danger);
+          }
+          
+          #admin-subscribe li.cant:after {
+            transform: rotate(45deg);
+          }
+          
+          #admin-subscribe li.cant:before {
+            transform: rotate(-45deg);
+          }
+          
+          #admin-subscribe li.can:after,
+          #admin-subscribe li.can:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 2px;
+            background: var(--text-success);
+            height: 5px;
+            top: calc(50% - 2px);
+            left: 0;
+            transform: rotate(-45deg);
+          }
+          
+          #admin-subscribe li.can:after {
+            height: 9px;
+            top: calc(50% - 5px);
+            left: 4px;
+            transform: rotate(45deg);
+          }
+          
+          #admin-subscribe form soci-button {
+            margin: 24px 0 8px;
+          }
+          
+        </style>
         <script src="/pages/admin/subscribe.js"></script>
         <div class="loading-block" load-order="primary">
           <h1>Subscription</h1>
@@ -216,7 +392,7 @@
         <div class="hero">
           <soci-user size="large" avatar-only></soci-user>
           <soci-user size="large" username-only></soci-user>
-          <soci-quill-view class="description" value="description"></soci-quill-view>
+          <soci-markdown-view class="description" value="description"></soci-markdown-view>
         </div>
         <div class="self-actions">
           <soci-link href="/admin/settings">
@@ -822,5 +998,4 @@
     </soci-route>
   </div>
   <script src="/pages/post.js"></script>
-  <script>lazyload('/lib/quill.min.js')</script>
 </html>

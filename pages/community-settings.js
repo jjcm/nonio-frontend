@@ -37,12 +37,7 @@ let communitySettings = {
     let form = communitySettings.dom.querySelector('form')
     form.querySelector('input[name="name"]').value = res.name
     let descInput = form.querySelector('soci-input[name="description"]')
-    try {
-      JSON.parse(res.description)
-      descInput.value = res.description
-    } catch(e) {
-      descInput.setText(res.description)
-    }
+    descInput.value = res.description || ''
     const setGroupValue = (name, value) => {
       const group = form.querySelector(`soci-radio-button-group[name="${name}"]`)
       if(group && value) group.setAttribute('value', value)

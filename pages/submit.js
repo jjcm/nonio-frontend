@@ -127,7 +127,7 @@ let submit = {
     }
 
     let description = submit.dom.querySelector('soci-input[name="description"]')
-    if(description.value == '{"ops":[{"insert":"\\n"}]}') {
+    if(description.value == '') {
       description.setText(e.detail.description)
     }
   }

@@ -179,13 +179,13 @@ export default class SociPost extends SociComponent {
         transform: translateY(20px);
       }
 
-      ::slotted(soci-quill-view){
+      ::slotted(soci-markdown-view){
         margin: 12px 0;
         border: 1px solid var(--bg-secondary);
         border-radius: 4px;
         line-height: 1.5;
         display: block;
-        padding: 8px;
+        padding: 8px 12px 10px;
       }
 
       slot[name="tags"] {
@@ -530,9 +530,9 @@ export default class SociPost extends SociComponent {
   }
 
   renderDescription(description){
-    let dom = this.querySelector('soci-quill-view[slot="description"]')
+    let dom = this.querySelector('soci-markdown-view[slot="description"]')
     if(!dom){
-      dom = document.createElement('soci-quill-view')
+      dom = document.createElement('soci-markdown-view')
       dom.setAttribute('slot', 'description')
       this.appendChild(dom)
     }
