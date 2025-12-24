@@ -44,10 +44,8 @@ export default class SociLink extends SociComponent {
   }
 
   localLink(e){
-    console.log('localLink', e)
     e.preventDefault()
     let link = e.currentTarget
-    console.log('link', link)
     window.history.pushState(null, null, link.href)
     window.dispatchEvent(new CustomEvent('link', {detail: link.hasAttribute('fresh') ? 'fresh' : ''}))
   }

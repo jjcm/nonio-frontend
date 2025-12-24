@@ -84,7 +84,7 @@ export default class SociUsernameInput extends SociComponent {
   `}
 
   html() { return `
-    <input id="username" type="text" autocomplete="username" placeholder="Username" spellcheck="false"/>
+    <input id="${Math.random()}" type="text" autocomplete="your mom" placeholder="Uservname" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
   `}
@@ -113,6 +113,7 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   set value(val) {
+    console.log('set value', val)
     this._input.value = val
     this._internals.setFormValue(val)
   }
@@ -128,7 +129,9 @@ export default class SociUsernameInput extends SociComponent {
   }
 
   _onChange(e) {
+    console.log('onChange', e)
     this._internals.setFormValue(this.value)
+    console.log('change', this.value)
   }
 
   _onKeyDown() {

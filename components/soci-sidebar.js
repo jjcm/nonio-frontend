@@ -6,516 +6,124 @@ export default class SociSidebar extends SociComponent {
     super()
     this._onAvatarUpdate = this._onAvatarUpdate.bind(this)
     this._onCommunityUpdate = this._onCommunityUpdate.bind(this)
+    this._onToggleAuth = this._toggleAuth.bind(this)
+    this._onRouteChange = this._onRouteChange.bind(this)
   }
 
   css(){
-    return `
-      :host {
-        width: 280px;
-        min-width: 280px;
-        display: block;
-        height: 100dvh;
-        overflow: hidden;
-        position: fixed;
-        padding-bottom: 90px;
-        box-sizing: border-box;
-        transition: opacity 0.1s var(--soci-ease);
-        opacity: 1;
-      }
-      :host([noauth]) #noauth { left: 0; }
-      :host([noauth]) #auth { left: -100%; }
-      :host([create]) #create { left: 0; }
-      :host([create]) #auth,
-      :host([create]) #noauth,
-      :host([create-community]) #auth,
-      :host([create-community]) #noauth { left: 100%; }
-      :host([create-community]) #create-community { left: 0; }
-      :host([dragging]) { user-select: none; }
-
-      h2 {
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 1.4px;
-        font-weight: normal;
-        color: var(--text-secondary);
-        line-height: 40px;
-        margin: 12px 0 4px 0;
-        &:first-child { margin-top: 0; }
-      }
-
-      section {
-        position: relative;
-        transition: all var(--anim-duration-med) var(--soci-ease), opacity var(--anim-duration-long) var(--soci-ease);
-      }
-      
-      content section {
-        border: none;
-        padding: 0 12px;
-      }
-
-      #user {
-        background: var(--bg-secondary);
-        height: 40px;
-        border-bottom: 1px solid var(--bg-bold);
-        
-        soci-user {
-          display: flex;
-          box-sizing: border-box;
-          align-items: center;
-          padding-left: 16px;
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          --spacing: 12px;
-          --font-weight: 500;
-          --font-size: 14px;
-          --avatar-size: 20px;
-          --line-height: 20px;
-        }
-        soci-button {
-          display: inline-flex;
-          background: var(--bg-secondary-hover);
-          &:hover soci-icon { margin: -2px -2px -2px -8px; }
-        }
-        soci-icon {
-          margin: -2px 8px -2px -10px;
-          transition: margin 0.1s var(--soci-ease);
-        }
-        #submit {
-          transition: width 0.1s var(--soci-ease);
-          width: 20px;
-          overflow: hidden;
-          &:hover { width: 64px; }
-        }
-        svg { margin: -2px 0px -2px -6px; }
-      }
-
-      #user-actions {
-        position: absolute;
-        right: 8px;
-        top: 10px;
-      }
-
-      #footer {
-        font-size: 12px;
-        padding: 18px 22px;
-        line-height: 24px;
-        position: fixed;
-        bottom: 0;
-        box-sizing: border-box;
-        width: 280px;
-        color: var(--text-secondary);
-        background: var(--bg);
-        border-top: 2px solid transparent;
-        transition: border-top 0.3s var(--soci-ease);
-        
-        links {
-          justify-content: flex-start;
-          display: flex;
-          font-size: 14px;
-        }
-        soci-link, a {
-          color: var(--text-tertiary);
-          text-decoration: none;
-          margin-right: 28px;
-          &:hover { color: var(--text-secondary); }
-        }
-        svg { margin-bottom: 12px; }
-      }
-
-      #admin-links {
-        display: none;
-        padding-top: 8px;
-        margin: 0 -8px;
-        
-        soci-link {
-          display: inline-block;
-          font-size: 14px;
-          padding: 4px 8px;
-          border-radius: 4px;
-          color: var(--text-tertiary);
-          text-decoration: none;
-          &:hover { color: var(--text-secondary); }
-        }
-      }
-
-      panel {
-        position: absolute;
-        height: calc(100% - 62px);
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        box-sizing: border-box;
-        transition: left 0.2s ease-in-out;
-      }
-
-      #create, #noauth, #create-community {
-        padding: 24px 22px 20px;
-        left: -100%;
-      }
-
-      #noauth {
-        svg { margin-bottom: 24px; }
-        h2 { padding-left: 0; }
-        soci-link {
-          display: block;
-          margin-top: 32px;
-          font-size: 13px;
-          color: var(--text-brand);
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          opacity: 0.8;
-          cursor: pointer;
-          text-align: center;
-        }
-        #im-stupid {
-          margin-top: 12px;
-          color: var(--text-secondary);
-          font-weight: 400;
-          opacity: 0.5;
-        }
-      }
-
-      #auth {
-        display: flex;
-        flex-direction: column;
-        input {
-          margin-bottom: 0;
-          border-bottom: 0 !important;
-          padding-left: 54px;
-          &::placeholder {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1.4px;
-            font-weight: normal;
-            color: var(--text-secondary);
-          }
-        }
-        content {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        #tag-container {
-          overflow: auto;
-          padding: 12px 0;
-        }
-        h2 {
-          padding-left: 12px;
-          line-height: 32px;
-        }
-      }
-
-      #create {
-        form { display: flex; flex-direction: column; }
-        h2:not(:first-child) { margin-top: 50px; }
-        soci-button { margin-top: 16px; align-self: flex-end; }
-      }
-
-      #create-community {
-        form { display: flex; flex-direction: column; }
-        soci-button { margin-top: 16px; align-self: flex-end; }
-        .panel-header {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          margin-bottom: 24px;
-          & h3 { margin: 0 0 0 12px; font-size: 16px; }
-        }
-        textarea { min-height: 60px; resize: vertical; }
-        select {
-          border: 1px solid var(--bg-secondary);
-          border-radius: 6px;
-          padding: 8px;
-          font-size: 14px;
-          font-family: inherit;
-          background: var(--bg);
-          color: var(--text);
-          margin-bottom: 8px;
-        }
-        .error { color: var(--text-danger); font-size: 13px; margin-top: 8px; }
-      }
-
-      input {
-        margin: 0 0 8px;
-        border: 0;
-        color: var(--text);
-        border-bottom: 2px solid var(--bg-secondary);
-        background: var(--bg);
-        height: 38px;
-        font-size: 14px;
-        width: 100%;
-        &:focus { outline: 0; border-bottom: 2px solid var(--bg-brand); }
-        &[type="email"] { margin-bottom: 24px; }
-      }
-      
-      textarea {
-        margin: 0 0 8px;
-        border: 1px solid var(--bg-secondary);
-        color: var(--text);
-        background: var(--bg);
-        padding: 8px;
-        font-size: 14px;
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 4px;
-        &:focus { outline: 0; border-color: var(--bg-brand); }
-      }
-      
-      select:focus { outline: 0; border-color: var(--bg-brand); }
-
-      cc-details {
-        display: flex;
-        & input:first-child { min-width: 160px; margin-right: 12px; }
-      }
-      
-      #community-selector {
-        padding: 0 12px;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      
-      soci-select {
-        width: 100%;
-        --height: 32px;
-        --padding: 12px;
-        color: var(--text);
-        height: 64px;
-      }
-      
-      #nonio-community {
-        span {
-          display: block;
-        }
-        svg {
-          display: none;
-        }
-      }
-
-      soci-option[slot="selected"] {
-        margin: 0 -12px;
-        padding: 0 16px;
-        height: 64px;
-        --shadow: 0px 1px 2px #000000f0, 0px 4px 16px #000000f0;
-        font-size: 16px;
-        border-bottom: 1px solid var(--bg-bold);
-        color: #fff;
-      }
-
-      #nonio-community[slot="selected"] {
-        img,
-        span {
-          display: none;
-        }
-        svg {
-          display: block;
-        }
-      }
-
-      
-      #community-subscribe {
-        width: 100%;
-        margin: 0;
-        background: var(--bg-secondary);
-        color: var(--text);
-        border-radius: 4px;
-        justify-content: center;
-        &:hover { background: var(--bg-secondary-hover); }
-        &[subscribed] {
-          background: var(--bg-brand);
-          color: var(--text-inverse);
-          &:hover { background: var(--bg-brand-hover); }
-        }
-      }
-
-      #community-description {
-        padding: 12px 16px 0;
-        height: 0;
-        min-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        margin-bottom: -12px;
-        transition: all 0.2s var(--soci-ease);
-        border-bottom: 1px solid var(--bg-bold);
-      }
-
-      /* Let markdown inherit site styles; keep only container-level typography */
-      #community-description {
-        font-size: 13px;
-        line-height: 1.5;
-        color: var(--text-secondary);
-      }
-
-      #community-description > * {
-        padding: 8px 0;
-      }
-
-      ::-webkit-scrollbar { width: 14px; }
-      ::-webkit-scrollbar-track { background: var(--bg); }
-      ::-webkit-scrollbar-thumb {
-        background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
-        border-radius: 7px;
-        border: 3px solid var(--bg);
-        &:hover { background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px); }
-      }
-
-      @media (max-height: 780px) {
-        #footer { border-top: 1px solid var(--bg-bold); }
-      }
-
-      @media (max-width: 768px) {
-        :host { width: 100%; }
-        :host([overlay]) { background: var(--bg); left: 0 !important; }
-        panel { height: 100%; }
-        #footer { display: none; }
-      }
-    `
+    // Styling is now sourced from soci-frontend/soci.css (light-DOM sidebar markup)
+    return ''
   }
 
   html(){
     return `
-      <panel id="auth">
-        <header>
-          <section id="user">
-            <soci-user self></soci-user>
-            <div id="user-actions">
-              <soci-notification-badge></soci-notification-badge>
-              <soci-link href="/submit" fresh>
-                <soci-button id="submit" subtle><soci-icon glyph="create"></soci-icon><span>submit</span></soci-button>
-              </soci-link>
-            </div>
-          </section>
-          <div id="community-selector">
-             <soci-select></soci-select>
-             <soci-button id="community-subscribe" @click=toggleSubscribe style="display: none;">Subscribe</soci-button>
-          </div>
-          <div id="community-description">
-             <soci-markdown-view></soci-markdown-view>
-             <div id="admin-links">
-               <soci-link href="#">Settings</soci-link>
-               <soci-link href="#">Users</soci-link>
-               <soci-link href="#">Financials</soci-link>
-             </div>
-          </div>
-        </header>
-        <div id="tag-container">
-          <content>
-            <section id="all-tags">
-              <soci-tag-li href="/#all" icon="home" hide-subscribe>
-                All posts
-                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"/>
-                  <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                </svg>
-              </soci-tag-li>
-              <soci-tag-li href="/#images" hide-subscribe>
-                Images
-                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                  <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                  <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"/>
-                </svg>
-              </soci-tag-li>
-              <soci-tag-li href="/#videos" hide-subscribe>
-                Videos
-                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                </svg>
-              </soci-tag-li>
-              <soci-tag-li href="/#blogs" hide-subscribe>
-                Blogs
-                <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M5 4H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-                  <path d="M5 7H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-                  <path d="M5 10H8.5" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </soci-tag-li>
-            </section>
-            <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">
-              <h2>Subscribed Tags</h2>
-              <tags></tags>
-            </section>
-            <section id="tags">
-              <h2>Tags</h2>
-              <tags></tags>
-            </section>
-          </content>
-        </div>
-      </panel>
-      <panel id="noauth">
-        <h2>Login to your account</h2>
-        <slot name="login">
-        </slot>
-        <soci-link href="/admin/create-account" @click=_createAccount>create account</soci-link>
-        <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
-      </panel>
-      <panel id="create">
-        <slot name="create">
-        </slot>
-      </panel>
-      <panel id="create-community">
-        <div class="panel-header">
-          <soci-button subtle @click=closeCreateCommunity>
-            <soci-icon glyph="view-back"></soci-icon>
-          </soci-button>
-          <h3>Create Community</h3>
-        </div>
-        <form @submit=createCommunity>
-          <input name="name" placeholder="Name" required>
-          <input name="url" placeholder="URL (no @)" required>
-          <textarea name="description" placeholder="Description"></textarea>
-          <select name="privacy">
-            <option value="public">Public</option>
-            <option value="invite-only">Invite only</option>
-          </select>
-          <div class="error" hidden></div>
-          <div class="actions">
-            <soci-button async @click=submitCreateCommunity>Create</soci-button>
-          </div>
-        </form>
-      </panel>
-      <section id="footer">
-        <links>
-          <soci-link href="/about">About</soci-link>
-          <a href="https://github.com/jjcm/nonio/issues/new">Feedback</a>
-          <soci-link id="logout" @click=logout href="/">Logout</soci-link>
-        </links>
-      </section>
+      <slot name="user"></slot>
+      <slot></slot>
+      <slot name="footer"></slot>
     `
+  }
+
+  // This component is now primarily light-DOM; query from the host instead of shadowRoot.
+  select(s){
+    return this.querySelector(s)
+  }
+
+  selectAll(s){
+    return this.querySelectorAll(s)
   }
 
   get currentCommunity() {
     return window.soci.routeContext.community
   }
 
+  static get observedAttributes() {
+    return ['view']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if(name === 'view' && oldValue !== newValue) this._syncPanels()
+  }
+
+  _setView(view) {
+    if(view) this.setAttribute('view', view)
+    else this.removeAttribute('view')
+  }
+
+  setView(view) {
+    this._setView(view)
+  }
+
+  showLogin() {
+    // Explicitly show the login panel (no longer the default for logged-out users)
+    this._setView('login')
+  }
+
+  needsLogin() {
+    // Visual nudge: user stays on community view; footer "Login" is the explicit entry point.
+    this.removeAttribute('needs-login')
+    this.setAttribute('needs-login', '')
+    setTimeout(() => this.removeAttribute('needs-login'), 900)
+  }
+
+  showCommunity() {
+    this._setView('community')
+  }
+
+  _syncPanels() {
+    const view = this.getAttribute('view') || 'community'
+    this.querySelectorAll('[panel]').forEach(p => {
+      p.toggleAttribute('active', p.getAttribute('panel') === view)
+    })
+  }
+
+  _onLoggedIn(response) {
+    if(!response?.accessToken) return
+    window.soci.accessToken = response.accessToken
+    if(response.refreshToken) window.soci.refreshToken = response.refreshToken
+    if(response.username) window.soci.username = response.username
+    if(response.roles) window.soci.roles = response.roles
+
+    this._loadCommunities()
+    this._loadCommonTags()
+    this._loadSubscribedTags()
+    window.soci.loadVotes?.()
+    this._syncAuthUI()
+
+    this.showCommunity()
+  }
+
   async connectedCallback(){
     this.toggleAttribute('loading', false)
-    if(!this.authToken) {
-      this.setAttribute('noauth', '')
-      this.querySelector('input').focus()
-    }
-    else {
-      this._loadSubscribedTags()
-      this._loadCommonTags()
-      this._loadCommunities()
-    }
 
-    this.select('#noauth').addEventListener('keydown', this._loginOnEnter.bind(this))
-    this.select('content').addEventListener('subscribe', this._createSubscribedTag.bind(this))
-    this.select('content').addEventListener('unsubscribe', this._removeSubscribedTag.bind(this))
+    // Default view is always "community" (even when logged out).
+    // Login panel is only shown via footer "Login" action or explicit showLogin().
+    if(!this.hasAttribute('view')) this.showCommunity()
+    this._syncPanels()
+
+    // Always load public data
+    this._loadCommunities()
+
+    // Tags: common tags are public; subscribed tags require auth.
+    if(this.authToken) {
+      this._loadSubscribedTags()
+    } else {
+      this._subscribedTags = []
+      this._subscribedTagsLoaded = true
+      this._toggleSubscribedTagsVisible(false)
+    }
+    this._loadCommonTags()
+
+    this._syncAuthUI()
+
+    if(!this._eventsBound) {
+      this.select('#logout')?.addEventListener('click', this._onToggleAuth)
+      this._eventsBound = true
+    }
     
     // Update submit button href based on current route
-    window.addEventListener('hashchange', this._onRouteChange.bind(this))
-    window.addEventListener('popstate', this._onRouteChange.bind(this))
-    window.addEventListener('link', this._onRouteChange.bind(this))
-    
-    // Listen for community selection
-    this.select('soci-select').addEventListener('selected', this._onCommunitySelect.bind(this))
+    window.addEventListener('hashchange', this._onRouteChange)
+    window.addEventListener('popstate', this._onRouteChange)
+    window.addEventListener('link', this._onRouteChange)
     document.addEventListener('avatar-updated', this._onAvatarUpdate)
     document.addEventListener('community-updated', this._onCommunityUpdate)
 
@@ -524,8 +132,23 @@ export default class SociSidebar extends SociComponent {
   }
 
   disconnectedCallback(){
+    window.removeEventListener('hashchange', this._onRouteChange)
+    window.removeEventListener('popstate', this._onRouteChange)
+    window.removeEventListener('link', this._onRouteChange)
     document.removeEventListener('avatar-updated', this._onAvatarUpdate)
     document.removeEventListener('community-updated', this._onCommunityUpdate)
+  }
+
+  _nextFrame(){
+    return new Promise(resolve => requestAnimationFrame(resolve))
+  }
+
+  _computeCommunityDescriptionHeight(mdView, adminLinks){
+    const mdHidden = !mdView || mdView.style.display === 'none'
+    const adminHidden = !adminLinks || adminLinks.style.display === 'none'
+    const mdH = mdHidden ? 0 : mdView.getBoundingClientRect().height
+    const adminH = adminHidden ? 0 : adminLinks.getBoundingClientRect().height
+    return Math.ceil(mdH + adminH + 8)
   }
 
   _onRouteChange() {
@@ -542,7 +165,7 @@ export default class SociSidebar extends SociComponent {
     if(this._lastCommunity === community) return
     
     this._lastCommunity = community
-    this._loadSubscribedTags()
+    if(this.authToken) this._loadSubscribedTags()
     this._loadCommonTags()
     this._updateCommunitySelection(community)
     this._populateCommunityDetails()
@@ -577,8 +200,9 @@ export default class SociSidebar extends SociComponent {
         // Update description
         let quillView = container.querySelector('soci-markdown-view')
         if(res?.description || res?.isAdmin) {
-            quillView.render(res?.description || '')
-            this._animateSection(container, true, quillView.offsetHeight + adminLinks.offsetHeight + 8)
+            await quillView.render(res?.description || '')
+            await this._nextFrame()
+            this._animateSection(container, true, this._computeCommunityDescriptionHeight(quillView, adminLinks))
         } else {
             this._animateSection(container, false)
         }
@@ -603,6 +227,7 @@ export default class SociSidebar extends SociComponent {
   
   _updateCommunitySelection(communityUrl) {
     let select = this.select('soci-select')
+    if(!select) return
     
     // Remove any previously added temporary options
     let tempOptions = select.querySelectorAll('soci-option[temporary]')
@@ -674,21 +299,26 @@ export default class SociSidebar extends SociComponent {
   _commonTagsLoaded = false
 
   async _loadSubscribedTags(){
+    if(!this.authToken) {
+      this._subscribedTags = []
+      this._subscribedTagsLoaded = true
+      this._toggleSubscribedTagsVisible(false)
+      this._populateTags()
+      return
+    }
     let url = '/subscriptions'
     if(this.currentCommunity) url += `?community=${this.currentCommunity}`
     let tags = await this.getData(url, this.authToken)
-    if(tags) {
-      this.select('#subscribed-tags').style.display = 'block'
-    }
-    this._subscribedTags = tags.subscriptions.map(t=>t.tag)
+    this._subscribedTags = tags?.subscriptions?.map(t=>t.tag) || []
     this._subscribedTagsLoaded = true
+    this._toggleSubscribedTagsVisible(this._subscribedTags.length > 0)
     this._populateTags()
   }
   async _loadCommonTags(){
     let url = '/tags'
     if(this.currentCommunity) url += `?community=${this.currentCommunity}`
     let tags = await this.getData(url, this.authToken)
-    this._commonTags = tags.tags.map(t=>t.tag)
+    this._commonTags = tags?.tags?.map(t=>t.tag) || []
     this._commonTagsLoaded = true
     this._populateTags()
   }
@@ -711,6 +341,7 @@ export default class SociSidebar extends SociComponent {
   _populateCommunitySelect(communities){
     this._communitiesLoaded = true
     let select = this.select('soci-select')
+    if(!select) return
     
     let html = `<soci-option id="nonio-community" value="">
       <svg style="margin-left: 4px;" width="94" height="16" viewBox="0 0 94 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -796,6 +427,7 @@ export default class SociSidebar extends SociComponent {
 
   _populateTags(){
     if(this._subscribedTagsLoaded && this._commonTagsLoaded){
+      if(!this.select('#tags tags')) return
       if(this._subscribedTags.length){
         this._createTags(this._subscribedTags, this.select('#subscribed-tags tags'), true)
       }
@@ -804,6 +436,17 @@ export default class SociSidebar extends SociComponent {
         return this._subscribedTags.indexOf(t) == -1
       })
       this._createTags(this._commonTags, this.select('#tags tags'))
+    }
+  }
+
+  _toggleSubscribedTagsVisible(visible) {
+    const section = this.select('#subscribed-tags')
+    if(!section) return
+    section.style.display = visible ? 'block' : 'none'
+    if(!visible) {
+      // reset any prior animation remnants
+      section.style.height = section.style.minHeight = '0px'
+      section.style.opacity = '0'
     }
   }
 
@@ -902,14 +545,19 @@ export default class SociSidebar extends SociComponent {
       const adminLinks = this.select('#admin-links')
       const quillView = container?.querySelector('soci-markdown-view')
       if(quillView){
-        quillView.render(detail.description || '')
-        this._animateSection(container, !!detail.description, quillView.offsetHeight + adminLinks.offsetHeight + 8)
+        Promise.resolve(quillView.render(detail.description || '')).then(() => {
+          requestAnimationFrame(() => {
+            const show = !!detail.description || adminLinks.offsetHeight > 0
+            this._animateSection(container, show, this._computeCommunityDescriptionHeight(quillView, adminLinks))
+          })
+        })
       }
     }
   }
 
   _toggleSubscribedList(revealed){
     let list = this.select('#subscribed-tags')
+    if(!list) return
     list.style.height = list.style.minHeight = revealed ? 0 : list.offsetHeight
     list.style.opacity = revealed ? 0 : 1;
     list.style.overflow = 'hidden'
@@ -924,169 +572,46 @@ export default class SociSidebar extends SociComponent {
     }, 1)
   }
 
-  // Account control actions
-  async login(){
-    let form = this.querySelector('[slot="login"] form')
-    let button = form.querySelector('soci-button')
+  _toggleAuth(e){
+    e?.preventDefault?.()
+    if(this.authToken) return this.logout()
+    return this.showLogin()
+  }
 
-    this.querySelector('[slot="login"] soci-password')?.checkValidity()
-    let loginData = soci.getJSONFromForm(form)
+  _syncAuthUI(){
+    const link = this.select('#logout')
+    if(link) link.innerHTML = this.authToken ? "Logout" : "Login"
 
-    if(!form.reportValidity()) {
-      console.log('form invalid')
-      setTimeout(()=>{
-        button?.error()
-      }, 1)
-      return
-    }
+    // Hide user-only affordances when logged out
+    const userActions = this.select('#user-actions')
+    if(userActions) userActions.style.display = this.authToken ? '' : 'none'
 
-    window.api.user.login(loginData).then(response => {
-      if(response.accessToken){
-        soci.log('Login Successful! Token:', response.accessToken)
-        soci.accessToken = response.accessToken
-        soci.refreshToken = response.refreshToken
-        soci.username = response.username
-        soci.roles = response.roles
-        this.fire('login')
-        button?.success()
-        setTimeout(()=>{
-          this.toggleAttribute('noauth')
-        }, 400)
-        this._loadSubscribedTags()
-        this._loadCommonTags()
-        this._populateTags()
-        this._loadCommunities()
-        soci.loadVotes()
-        this.select('#logout').innerHTML = "Logout"
-        return
+    // Subscribe-to-community requires auth
+    const subscribe = this.select('#community-subscribe')
+    if(subscribe) {
+      if(!this.authToken) {
+        subscribe.hidden = true
+        subscribe.style.display = 'none'
+      } else {
+        // let existing selection logic decide hidden vs shown; just restore display if applicable
+        subscribe.style.display = subscribe.hidden ? 'none' : ''
       }
-      soci.log('Invalid login', response.error, 'error')
-      button?.error()
-    })
+    }
   }
 
   logout(){
     soci.clearToken()
-    this.removeAttribute('create')
-    this.removeAttribute('create-community')
-    this.setAttribute('noauth', '')
-    this.select('#logout').innerHTML = "Login"
-  }
+    this.showCommunity()
 
-  async register(){
-    let form = this.querySelector('[slot="create"] form')
-    let button = form.querySelector('soci-button')
-    if(!form.reportValidity()) {
-      setTimeout(()=>{
-        button.error()
-      },1)
-      return
-    }
+    // Logged-out: keep community + common tags visible, hide subscribed section.
+    this._subscribedTags = []
+    this._subscribedTagsLoaded = true
+    this._toggleSubscribedTagsVisible(false)
 
-    let formData = soci.getJSONFromForm(form)
-    let response = await window.api.user.register(formData)
+    this._syncAuthUI()
 
-    if(response.accessToken){
-      button.success()
-      soci.log('Login Successful! Token:', response.accessToken)
-      soci.accessToken = response.accessToken
-      soci.username = response.username
-      this._loadSubscribedTags()
-      this._loadCommonTags()
-      this._loadCommunities()
-      setTimeout(()=>{
-        window.history.pushState(null, null, '/admin/subscribe')
-        window.dispatchEvent(new CustomEvent('link'))
-        this._populateTags()
-        this.select('#logout').innerHTML = "Logout"
-        this.toggleAttribute('create')
-      }, 400)
-    }
-    else {
-      button.error()
-    }
-  }
-
-  _loginOnEnter(e){
-    if(e.key == "Enter"){
-      window.blur()
-      this.querySelector('soci-button')?.wait()
-      this.login()
-    }
-  }
-
-  async _createAccount(){
-    this.removeAttribute('noauth')
-    this.setAttribute('create', '')
-    this.select('#logout').innerHTML = "Login"
-  }
-  
-  // Create Community Logic
-  
-  openCreateCommunity() {
-    if(!window.soci.accessToken) {
-      window.soci.showLogin()
-      return
-    }
-    this.setAttribute('create-community', '')
-    this.select('#create-community input[name="name"]').focus()
-  }
-
-  closeCreateCommunity() {
-    this.removeAttribute('create-community')
-    const form = this.select('#create-community form')
-    form.reset()
-    this.toggleError()
-  }
-
-  toggleError(message) {
-    const error = this.select('#create-community .error')
-    if(message) {
-      error.hidden = false
-      error.textContent = message
-    } else {
-      error.hidden = true
-      error.textContent = ''
-    }
-  }
-  
-  createCommunity(e) {
-    e.preventDefault()
-  }
-
-  async submitCreateCommunity(e) {
-    if(!window.soci.accessToken) {
-      window.soci.showLogin()
-      return
-    }
-    const form = this.select('#create-community form')
-    const submitButton = e.currentTarget
-    this.toggleError()
-
-    const payload = {
-      name: form.name.value.trim(),
-      url: form.url.value.trim().replace(/^@/, '').toLowerCase(),
-      description: form.description.value.trim(),
-      privacyType: form.privacy.value
-    }
-
-    try {
-      const result = await window.api.community.create(payload)
-      if(result.error) {
-        this.toggleError(result.error)
-        submitButton.error()
-      } else {
-        submitButton.success()
-        this.closeCreateCommunity()
-        await this._loadCommunities()
-        if(result.url) {
-          window.history.pushState(null, null, `/@${result.url}`)
-          window.dispatchEvent(new CustomEvent('link'))
-        }
-      }
-    } catch (err) {
-      this.toggleError('Unable to create community')
-      submitButton.error()
-    }
+    // Refresh public data (and clear any stale auth-only data)
+    this._loadCommunities()
+    this._loadCommonTags()
   }
 }

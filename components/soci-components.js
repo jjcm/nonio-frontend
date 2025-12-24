@@ -97,6 +97,13 @@ window.customElements.define('soci-radial-progress', SociRadialProgress)
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
 
+import {SociSidebarPanel, SociSidebarCommunityPanel, SociSidebarLoginPanel, SociSidebarAccountCreation, SociSidebarCreateCommunityPanel} from "./soci-sidebar-panel.js"
+window.customElements.define('soci-sidebar-panel', SociSidebarPanel)
+window.customElements.define('soci-sidebar-community-panel', SociSidebarCommunityPanel)
+window.customElements.define('soci-sidebar-login-panel', SociSidebarLoginPanel)
+window.customElements.define('soci-sidebar-account-creation', SociSidebarAccountCreation)
+window.customElements.define('soci-sidebar-create-community-panel', SociSidebarCreateCommunityPanel)
+
 import SociTab from "./soci-tab.js"
 window.customElements.define('soci-tab', SociTab)
 

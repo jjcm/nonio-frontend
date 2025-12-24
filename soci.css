@@ -517,6 +517,9 @@ table {
     text-align: left;
   }
 }
+soci-markdown-view *:first-child {
+  margin-top: 0;
+}
 soci-markdown-view *:last-child {
   margin-bottom: 0;
 }
@@ -687,7 +690,7 @@ button:focus {
 #home[active] {
   display: contents;
 }
-#user {
+soci-route#user {
   min-width: 420px;
   overflow: hidden;
   .sidebar {
@@ -763,18 +766,18 @@ button:focus {
     display: block;
   }
 }
-#user[active] {
+soci-route#user[active] {
   display: flex;
 }
-#user .content,
-#notifications .content {
+soci-route#user .content,
+soci-route#notifications .content {
   width: 100%;
   background: var(--bg-bold);
   height: 100dvh;
   overflow: hidden;
 }
-#user .content header,
-#notifications .content header {
+soci-route#user .content header,
+soci-route#notifications .content header {
   background-color: var(--bg);
   position: sticky;
   top: 0;
@@ -790,16 +793,16 @@ button:focus {
   justify-content: space-between;
   user-select: none;
 }
-#user .content header .types,
-#notifications .content header .types,
-#user .content header .sorts,
-#notifications .content header .sorts {
+soci-route#user .content header .types,
+soci-route#notifications .content header .types,
+soci-route#user .content header .sorts,
+soci-route#notifications .content header .sorts {
   display: flex;
 }
-#user .content header .type,
-#notifications .content header .type,
-#user .content header .sort,
-#notifications .content header .sort {
+soci-route#user .content header .type,
+soci-route#notifications .content header .type,
+soci-route#user .content header .sort,
+soci-route#notifications .content header .sort {
   text-transform: capitalize;
   position: relative;
   padding: 0px 12px;
@@ -812,24 +815,24 @@ button:focus {
   border-radius: 3px;
   color: var(--text-secondary);
 }
-#user .content header .type:hover,
-#notifications .content header .type:hover,
-#user .content header .sort:hover,
-#notifications .content header .sort:hover {
+soci-route#user .content header .type:hover,
+soci-route#notifications .content header .type:hover,
+soci-route#user .content header .sort:hover,
+soci-route#notifications .content header .sort:hover {
   color: var(--text-secondary-hover);
 }
-#user .content header .type[selected],
-#notifications .content header .type[selected],
-#user .content header .sort[selected],
-#notifications .content header .sort[selected] {
+soci-route#user .content header .type[selected],
+soci-route#notifications .content header .type[selected],
+soci-route#user .content header .sort[selected],
+soci-route#notifications .content header .sort[selected] {
   opacity: 1;
   color: var(--text-brand-bold);
   background: var(--bg-secondary);
 }
-#user .content header .type[selected]::after,
-#notifications .content header .type[selected]::after,
-#user .content header .sort[selected]::after,
-#notifications .content header .sort[selected]::after {
+soci-route#user .content header .type[selected]::after,
+soci-route#notifications .content header .type[selected]::after,
+soci-route#user .content header .sort[selected]::after,
+soci-route#notifications .content header .sort[selected]::after {
   content: '';
   display: block;
   position: absolute;
@@ -841,10 +844,10 @@ button:focus {
   background: var(--bg);
   box-shadow: 0 1px 1px var(--shadow);
 }
-#user .content header .type:before,
-#notifications .content header .type:before,
-#user .content header .sort:before,
-#notifications .content header .sort:before {
+soci-route#user .content header .type:before,
+soci-route#notifications .content header .type:before,
+soci-route#user .content header .sort:before,
+soci-route#notifications .content header .sort:before {
   position: absolute;
   content: '';
   left: 0;
@@ -853,8 +856,8 @@ button:focus {
   width: 100%;
   background: transparent;
 }
-#user .content .inner-content,
-#notifications .content .inner-content {
+soci-route#user .content .inner-content,
+soci-route#notifications .content .inner-content {
   height: 100%;
   overflow-y: auto;
 }
@@ -1014,7 +1017,7 @@ button:focus {
   display: block;
 }
 @media screen and (max-width: 968px) {
-  #user .stats {
+  soci-route#user .stats {
     margin-top: 12px;
   }
 }
@@ -1162,67 +1165,324 @@ button:focus {
   }
 }
 soci-sidebar {
+  width: 280px;
+  min-width: 280px;
+  display: block;
+  height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  padding-bottom: 90px;
+  box-sizing: border-box;
+  transition: left 0.2s ease, opacity 0.1s var(--soci-ease);
+  opacity: 1;
   left: 0;
-  transition: left 0.2s ease;
   z-index: 3;
   background: var(--bg);
 }
-soci-sidebar[loading] {
-  opacity: 0;
-}
+soci-sidebar[loading] { opacity: 0; }
+soci-sidebar[dragging] { user-select: none; }
+
 soci-sidebar h2 {
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
   font-weight: normal;
   color: var(--text-secondary);
+  line-height: 40px;
+  margin: 12px 0 4px 0;
+  &:first-child { margin-top: 0; }
 }
-soci-sidebar button {
-  margin-top: 8px;
-  border-radius: 16px;
-  height: 32px;
-  outline: 0;
-  border: 0;
-  width: 100%;
-  text-align: center;
-  font-weight: 600;
-  border: 1px solid var(--bg-secondary);
-  background: var(--bg);
-  cursor: pointer;
+
+soci-sidebar section {
   position: relative;
+  transition: all var(--anim-duration-med) var(--soci-ease), opacity var(--anim-duration-long) var(--soci-ease);
 }
-soci-sidebar button svg {
+
+soci-sidebar content section {
+  border: none;
+  padding: 0 12px;
+}
+
+soci-sidebar #user {
+  background: var(--bg-secondary);
+  height: 40px;
+  border-bottom: 1px solid var(--bg-bold);
+
+  soci-user {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding-left: 16px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    --spacing: 12px;
+    --font-weight: 500;
+    --font-size: 14px;
+    --avatar-size: 20px;
+    --line-height: 20px;
+  }
+  soci-button {
+    display: inline-flex;
+    background: var(--bg-secondary-hover);
+    &:hover soci-icon { margin: -2px -2px -2px -8px; }
+  }
+  soci-icon {
+    margin: -2px 8px -2px -10px;
+    transition: margin 0.1s var(--soci-ease);
+  }
+  #submit {
+    transition: width 0.1s var(--soci-ease);
+    width: 20px;
+    overflow: hidden;
+    &:hover { width: 64px; }
+  }
+  svg { margin: -2px 0px -2px -6px; }
+}
+
+soci-sidebar #user-actions {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  left: 4px;
-  top: 3px;
+  right: 8px;
+  top: 10px;
+}
+
+soci-sidebar #footer {
+  font-size: 12px;
+  padding: 18px 22px;
+  line-height: 24px;
+  position: fixed;
+  bottom: 0;
+  box-sizing: border-box;
+  width: 280px;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border-top: 2px solid transparent;
+  transition: border-top 0.3s var(--soci-ease);
+
+  links {
+    justify-content: flex-start;
+    display: flex;
+    font-size: 14px;
+  }
+  soci-link, a {
+    color: var(--text-tertiary);
+    text-decoration: none;
+    margin-right: 28px;
+    &:hover { color: var(--text-secondary); }
+  }
+  svg { margin-bottom: 12px; }
+}
+
+soci-sidebar[needs-login] #footer { border-top: 2px solid var(--bg-brand); }
+
+soci-sidebar #admin-links {
   display: none;
+  padding-top: 8px;
+  margin: 0 -8px;
+
+  soci-link {
+    display: inline-block;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    &:hover { color: var(--text-secondary); }
+  }
 }
-soci-sidebar button:hover {
-  border: 1px solid var(--bg-secondary-hover);
-  background: var(--bg-hover);
-}
-soci-sidebar button[waiting] svg {
+
+soci-sidebar [panel] {
+  position: absolute;
+  top: 40px;
+  height: calc(100% - 62px - 40px);
   display: block;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+  opacity: 0;
 }
-soci-sidebar form {
+
+soci-sidebar #create,
+soci-sidebar #login,
+soci-sidebar #create-community {
+  padding: 24px 22px 20px;
+}
+
+soci-sidebar [panel][active] {
+  pointer-events: all;
+  opacity: 1;
+}
+
+soci-sidebar #login {
+  soci-link {
+    display: block;
+    margin-top: 32px;
+    font-size: 13px;
+    color: var(--text-brand);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    cursor: pointer;
+    text-align: center;
+  }
+  #im-stupid {
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    opacity: 0.5;
+  }
+}
+
+soci-sidebar #community {
   display: flex;
   flex-direction: column;
+
+  content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #tag-container {
+    overflow: auto;
+    padding: 12px 0;
+  }
+  h2 {
+    padding-left: 12px;
+    line-height: 32px;
+  }
 }
-soci-sidebar h2:not(:first-child) {
-  margin-top: 50px;
+
+soci-sidebar input {
+  margin: 0 0 8px;
+  border: 0;
+  color: var(--text);
+  border-bottom: 2px solid var(--bg-secondary);
+  background: var(--bg);
+  height: 38px;
+  font-size: 14px;
+  width: 100%;
+  &:focus { outline: 0; border-bottom: 2px solid var(--bg-brand); }
 }
-soci-sidebar soci-button {
-  margin-top: 16px;
-  align-self: flex-end;
+
+soci-sidebar textarea {
+  margin: 0 0 8px;
+  border: 1px solid var(--bg-secondary);
+  color: var(--text);
+  background: var(--bg);
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  &:focus { outline: 0; border-color: var(--bg-brand); }
 }
-soci-sidebar cc-details {
+
+soci-sidebar select:focus { outline: 0; border-color: var(--bg-brand); }
+
+soci-sidebar #create-community {
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    & h3 { margin: 0 0 0 12px; font-size: 16px; }
+  }
+  textarea { min-height: 60px; resize: vertical; }
+  select {
+    border: 1px solid var(--bg-secondary);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .error { color: var(--text-danger); font-size: 13px; margin-top: 8px; }
+}
+
+soci-sidebar #community-selector {
+  padding: 0 12px;
+  z-index: 2;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-soci-sidebar cc-details input:first-child {
-  min-width: 160px;
-  margin-right: 12px;
+
+soci-sidebar soci-select {
+  width: 100%;
+  --height: 32px;
+  --padding: 12px;
+  color: var(--text);
+  height: 64px;
+}
+
+soci-sidebar #nonio-community {
+  span { display: block; }
+  svg { display: none; }
+}
+
+soci-sidebar soci-option[slot="selected"] {
+  margin: 0 -12px;
+  padding: 0 16px;
+  height: 64px;
+  --shadow: 0px 1px 2px #000000f0, 0px 4px 16px #000000f0;
+  font-size: 16px;
+  border-bottom: 1px solid var(--bg-bold);
+  color: #fff;
+}
+
+soci-sidebar #nonio-community[slot="selected"] {
+  img, span { display: none; }
+  svg { display: block; }
+}
+
+soci-sidebar #community-subscribe {
+  width: 100%;
+  margin: 0;
+  background: var(--bg-secondary);
+  color: var(--text);
+  border-radius: 4px;
+  justify-content: center;
+  &:hover { background: var(--bg-secondary-hover); }
+  &[subscribed] {
+    background: var(--bg-brand);
+    color: var(--text-inverse);
+    &:hover { background: var(--bg-brand-hover); }
+  }
+}
+
+soci-sidebar #community-description {
+  padding: 12px 16px 0;
+  height: 0;
+  min-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: -12px;
+  transition: all 0.2s var(--soci-ease);
+  border-bottom: 1px solid var(--bg-bold);
+
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+soci-sidebar #community-description > * { padding: 8px 0; }
+soci-sidebar #community-description soci-markdown-view { display: block; width: 100%; }
+
+soci-sidebar ::-webkit-scrollbar { width: 14px; }
+soci-sidebar ::-webkit-scrollbar-track { background: var(--bg); }
+soci-sidebar ::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--text-secondary) -1500px, transparent 1000px);
+  border-radius: 7px;
+  border: 3px solid var(--bg);
+  &:hover { background: linear-gradient(90deg, var(--text-secondary-hover) -1500px, transparent 1000px); }
+}
+
+@media (max-height: 780px) {
+  soci-sidebar #footer { border-top: 1px solid var(--bg-bold); }
 }
 [load-order] {
   transform: translateY(20px);
@@ -1284,7 +1544,11 @@ hr {
 @media (max-width: 768px) {
   soci-sidebar {
     left: -100%;
+    width: 100%;
   }
+  soci-sidebar[overlay] { background: var(--bg); left: 0 !important; }
+  soci-sidebar [panel] { top: 40px; height: calc(100% - 40px); }
+  soci-sidebar #footer { display: none; }
   #pages {
     margin-left: 0;
     width: 100%;

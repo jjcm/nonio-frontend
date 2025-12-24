@@ -135,7 +135,7 @@ let soci = {
   showLogin() {
     soci.animateSidebar()
     document.body.toggleAttribute('noauth', false)
-    document.querySelector('soci-sidebar').logout()
+    document.querySelector('soci-sidebar')?.needsLogin?.()
   },
   setAnimationTimings(){
     let root = document.documentElement
