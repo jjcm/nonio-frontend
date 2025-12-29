@@ -20,24 +20,10 @@
   </script>
   <link rel="stylesheet" href="/soci.css">
   <soci-sidebar loading>
-    <div slot="login">
-      <form>
-        <input type="email" name="email" placeholder="Email address" autocomplete="email">
-        <soci-password name="password"></soci-password>
-        <soci-button async onclick="this.closest('soci-sidebar').login()">login</soci-button>
-      </form>
-    </div>
-    <div slot="create">
-      <form>
-        <h2>Essentials</h2>
-        <soci-username-input name="username" tabindex="0"></soci-username-input>
-        <input type="email" name="email" placeholder="Email address" autocomplete="email">
-        <soci-password tabindex="0" name="password"></soci-password>
-        <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
-        <soci-button async onclick="this.closest('soci-sidebar').register()">Create Account</soci-button>
-      </form>
-    </div>
-    <tags slot="tags"></tags>
+    <soci-sidebar-community-panel id="community" panel="community"></soci-sidebar-community-panel>
+    <soci-sidebar-login-panel id="login" panel="login"></soci-sidebar-login-panel>
+    <soci-sidebar-account-creation id="create" panel="create"></soci-sidebar-account-creation>
+    <soci-sidebar-create-community-panel id="create-community" panel="create-community"></soci-sidebar-create-community-panel>
   </soci-sidebar>
   <div id="pages">
     <soci-route id="tags" test="both" path="^(/@[\w-]+)?/?(#.*)?$" fresh>

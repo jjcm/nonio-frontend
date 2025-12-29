@@ -10,7 +10,7 @@ export default class SociPostLi extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 2px 8px 28px;
+        padding: 4px 12px 28px;
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);

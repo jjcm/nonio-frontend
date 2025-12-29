@@ -23,15 +23,12 @@ export default class SociUsernameInput extends SociComponent {
     input {
       color: var(--text);
       background: var(--bg);
-      border: 0
+      border: 0;
       border-bottom: 2px solid var(--bg-secondary);
       height: 38px;
       font-size: 14px;
       width: 100%;
-      margin: 0 0 8px
-      background: var(--bg) !important
-      -webkit-text-fill-color: var(--text)
-      -webkit-box-shadow: 0 0 0 30px var(--bg) inset;
+      margin: 0 0 8px;
     }
 
     :host input:focus {
@@ -84,7 +81,7 @@ export default class SociUsernameInput extends SociComponent {
   `}
 
   html() { return `
-    <input id="${Math.random()}" type="text" autocomplete="your mom" placeholder="Uservname" spellcheck="false"/>
+    <input id="${Math.random()}" type="text" autocomplete="your mom" placeholder="Username" spellcheck="false"/>
     <soci-icon></soci-icon>
     <error></error>
   `}

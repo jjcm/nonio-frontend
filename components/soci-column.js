@@ -85,8 +85,8 @@ export default class SociColumn extends SociComponent {
         display: none;
         position: absolute;
       }
-      soci-radio-button-group#sort-buttons { left: 10px; }
-      soci-radio-button-group#filter-buttons { right: 10px; }
+      soci-radio-button-group#sort-buttons { left: 12px; }
+      soci-radio-button-group#filter-buttons { right: 12px; }
       soci-radio-button-group#sort-buttons soci-radio-button[selected]::after,
       soci-radio-button-group#filter-buttons soci-radio-button[selected]::after {
         content:'';
