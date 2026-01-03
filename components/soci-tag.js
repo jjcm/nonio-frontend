@@ -148,6 +148,7 @@ export default class SociTag extends SociComponent {
   
   vote(e){
     e?.preventDefault()
+    if(!this.authToken) return window.soci?.requireLogin?.('upvote tags')
     const score = parseInt(this.getAttribute('score')) || 0
     const upvoted = this.toggleAttribute('upvoted')
     this.score = score + (upvoted ? 1 : -1)

@@ -441,6 +441,7 @@ export default class SociSidebar extends SociComponent {
 
   openCreateCommunity(){
     // Switch to the create-community panel (used by the community selector "__create__" option)
+    if(!this.authToken) return window.soci?.requireLogin?.('create a community')
     this.setView('create-community')
   }
   

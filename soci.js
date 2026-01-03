@@ -7,6 +7,48 @@ let soci = {
     soci.checkTokenExpired()
   },
   routeContext: SociRouteContext,
+  _tokenValid: (token) => {
+    if(!token) return false
+    try {
+      const expiry = parseInt(JSON.parse(atob(token.split('.')[1])).expiresAt)
+      return expiry > Date.now() / 1000
+    }
+    catch {
+      return false
+    }
+  },
+  isLoggedIn: () => soci._tokenValid(soci.accessToken),
+  _ensureLoginRequiredModal: () => {
+    let modal = document.querySelector('soci-modal#login-required-modal')
+    if(modal) return modal
+
+    modal = document.createElement('soci-modal')
+    modal.id = 'login-required-modal'
+    modal.setAttribute('title', 'Login required')
+    modal.innerHTML = `
+      <p id="login-required-message"></p>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <soci-button id="login-required-login">Login</soci-button>
+        <soci-button subtle id="login-required-close">Close</soci-button>
+      </div>
+    `
+    document.body.appendChild(modal)
+
+    modal.querySelector('#login-required-close')?.addEventListener('click', () => modal.deactivate())
+    modal.querySelector('#login-required-login')?.addEventListener('click', () => {
+      modal.deactivate()
+      document.querySelector('soci-sidebar')?.showLogin?.()
+    })
+
+    return modal
+  },
+  requireLogin: (action = 'do that') => {
+    if(soci.isLoggedIn()) return true
+    const modal = soci._ensureLoginRequiredModal()
+    modal.querySelector('#login-required-message').textContent = `You need to be logged in to ${action}.`
+    modal.activate()
+    return false
+  },
   get accessToken() {
     return localStorage.getItem('accessToken')
   },
@@ -49,23 +91,13 @@ let soci = {
     localStorage.clear()
   },
   checkTokenExpired: () => {
-    try {
-      let expiry = parseInt(JSON.parse(atob(soci.accessToken.split('.')[1])).expiresAt)
-      // if the token is not expired, return false
-      if(expiry > Date.now() / 1000) return false
-
-      // if the token is expired, try and refresh it
-      expiry = parseInt(JSON.parse(atob(soci.refreshToken.split('.')[1])).expiresAt)
-      if(expiry > Date.now() / 1000) {
-        soci.refreshAccessToken()
-        return false
-      }
-      soci.clearToken()
-      return true
+    if(soci._tokenValid(soci.accessToken)) return false
+    if(soci._tokenValid(soci.refreshToken)) {
+      soci.refreshAccessToken()
+      return false
     }
-    catch {
-      return true
-    }
+    soci.clearToken()
+    return true
   },
   get username() {
     return localStorage.getItem('username')

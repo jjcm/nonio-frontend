@@ -318,7 +318,7 @@ export class SociSidebarCreateCommunityPanel extends SociSidebarPanel {
   async _submit(){
     const sidebar = this.closest('soci-sidebar')
     if(!sidebar) return
-    if(!window.soci.accessToken) return sidebar.needsLogin()
+    if(!sidebar.authToken) return window.soci?.requireLogin?.('create a community')
 
     const form = this.querySelector('#create-community-form')
     const btn = this.querySelector('#submit-create-community')

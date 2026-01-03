@@ -230,6 +230,7 @@ export default class SociTagGroup extends SociComponent {
   }
 
   addTag(){
+    if(!this.authToken) return window.soci?.requireLogin?.('add tags to posts')
     let input = this.select('#add-tag input')
     let tagName = input.value
     console.log(tagName)
