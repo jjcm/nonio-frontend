@@ -20,10 +20,27 @@
   </script>
   <link rel="stylesheet" href="/soci.css">
   <soci-sidebar loading>
+    <section id="user" slot="user">
+      <soci-user self></soci-user>
+      <div id="user-actions">
+        <soci-notification-badge></soci-notification-badge>
+        <soci-link href="/submit" fresh>
+          <soci-button id="submit" subtle>
+            <soci-icon glyph="create"></soci-icon><span>submit</span>
+          </soci-button>
+        </soci-link>
+      </div>
+    </section>
     <soci-sidebar-community-panel id="community" panel="community"></soci-sidebar-community-panel>
     <soci-sidebar-login-panel id="login" panel="login"></soci-sidebar-login-panel>
     <soci-sidebar-account-creation id="create" panel="create"></soci-sidebar-account-creation>
     <soci-sidebar-create-community-panel id="create-community" panel="create-community"></soci-sidebar-create-community-panel>
+    <section id="footer" slot="footer">
+      <links>
+        <soci-link href="/about">About</soci-link><a href="https://github.com/jjcm/nonio/issues/new">Feedback</a>
+        <soci-link id="logout" href="/">Logout</soci-link>
+      </links>
+    </section>
   </soci-sidebar>
   <div id="pages">
     <soci-route id="tags" test="both" path="^(/@[\w-]+)?/?(#.*)?$" fresh>
