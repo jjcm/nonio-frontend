@@ -663,10 +663,16 @@ export default class SociSidebar extends SociComponent {
       return this.logout()
     }
 
-    const login = e.target?.closest?.('#login-signup')
+    const login = e.target?.closest?.('#login-link')
     if(login) {
       e.preventDefault?.()
       return this.showLogin()
+    }
+
+    const signup = e.target?.closest?.('#signup-link')
+    if(signup) {
+      e.preventDefault?.()
+      return this.setView('create')
     }
   }
 

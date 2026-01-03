@@ -106,7 +106,7 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     </div>
     <section id="sidebar-user">
       <div id="sidebar-user-logged-in">
-        <div class="user-row">
+        <div class="footer-bar">
           <soci-user self></soci-user>
           <div id="sidebar-user-actions">
             <soci-notification-badge></soci-notification-badge>
@@ -122,8 +122,11 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
         </div>
       </div>
       <div id="sidebar-user-logged-out" hidden>
-        <soci-link id="login-signup" href="#">Login / Signup</soci-link>
-        <soci-link href="/about">About</soci-link>
+        <div class="footer-bar">
+          <soci-link id="login-link" href="#">login</soci-link>
+          <soci-link id="signup-link" href="#">signup</soci-link>
+          <soci-link id="about-link" href="/about">about</soci-link>
+        </div>
       </div>
     </section>
   `}
