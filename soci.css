@@ -506,6 +506,23 @@ p + h2,
 p + h3 {
   margin-top: 0.75em;
 }
+blockquote {
+  margin: 12px 0;
+  padding-left: 12px;
+  border-left: 4px solid var(--bg-secondary);
+  font-family: serif;
+  font-style: italic;
+  font-size: 1.25em;
+}
+blockquote *:first-child:before {
+  content: '“';
+  font-size: 38px;
+  font-weight: bold;
+  color: var(--text-tertiary);
+  line-height: 30px;
+  margin-right: 4px;
+  font-family: serif;
+}
 table {
   border: 1px solid var(--bg-secondary);
   border-radius: 4px;
