@@ -5,8 +5,6 @@ export class SociSidebarPanel extends SociComponent {
     super()
   }
 
-  css(){ return '' }
-
   html(){ return `
     <slot></slot>
   `}
@@ -44,11 +42,14 @@ export class SociSidebarPanel extends SociComponent {
 
 export class SociSidebarCommunityPanel extends SociSidebarPanel {
   activeHTML(){ return `
+    <div class="panel-header">
+      <soci-select id="community-switcher"></soci-select>
+    </div>
     <header>
-      <div id="community-selector">
-        <soci-select></soci-select>
-        <soci-button id="community-subscribe" style="display: none;">Subscribe</soci-button>
+      <div id="community-avatar">
+        <img id="community-avatar-img" alt="">
       </div>
+      <soci-button id="community-subscribe" style="display: none;">Subscribe</soci-button>
       <div id="community-description">
         <soci-markdown-view></soci-markdown-view>
         <div id="admin-links">
@@ -103,14 +104,35 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
         </section>
       </content>
     </div>
+    <section id="sidebar-user">
+      <div id="sidebar-user-logged-in">
+        <div class="user-row">
+          <soci-user self></soci-user>
+          <div id="sidebar-user-actions">
+            <soci-notification-badge></soci-notification-badge>
+            <soci-link class="submit-link" href="/submit" fresh>
+              <soci-button id="submit" subtle>
+                <soci-icon glyph="create"></soci-icon><span>submit</span>
+              </soci-button>
+            </soci-link>
+            <soci-button id="logout-btn" subtle>
+              <soci-icon glyph="logout"></soci-icon><span>logout</span>
+            </soci-button>
+          </div>
+        </div>
+      </div>
+      <div id="sidebar-user-logged-out" hidden>
+        <soci-link id="login-signup" href="#">Login / Signup</soci-link>
+        <soci-link href="/about">About</soci-link>
+      </div>
+    </section>
   `}
 
   activatedCallback(){
     const sidebar = this.closest('soci-sidebar')
-    if(!sidebar || this._bound) return
-    this._bound = true
+    if(!sidebar) return
 
-    this.querySelector('soci-select')?.addEventListener('selected', (e) => sidebar._onCommunitySelect(e))
+    this.querySelector('#community-switcher')?.addEventListener('selected', (e) => sidebar._onCommunitySelect(e))
     this.querySelector('#community-subscribe')?.addEventListener('click', () => sidebar.toggleSubscribe())
     this.querySelector('content')?.addEventListener('subscribe', (e) => sidebar._createSubscribedTag(e))
     this.querySelector('content')?.addEventListener('unsubscribe', (e) => sidebar._removeSubscribedTag(e))
@@ -120,24 +142,38 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     sidebar._loadCommonTags()
     if(sidebar.authToken) sidebar._loadSubscribedTags()
     sidebar._onRouteChange()
+
+    // Panel re-renders on activation; repopulate community-dependent DOM even if route didn't change.
+    sidebar._updateCommunitySelection?.(sidebar.currentCommunity)
+    sidebar._updateCommunityAvatar?.(sidebar.currentCommunity)
+    sidebar._toggleCommunityHeaderVisible?.(sidebar.currentCommunity)
+    sidebar._populateCommunityDetails?.()
   }
 }
 
 export class SociSidebarLoginPanel extends SociSidebarPanel {
   activeHTML(){ return `
+    <soci-button subtle class="panel-back" id="back-to-community">&larr; back</soci-button>
     <h2>Login to your account</h2>
     <form>
       <input type="email" name="email" placeholder="Email address" autocomplete="email">
       <soci-password name="password"></soci-password>
       <soci-button async id="login-btn">login</soci-button>
     </form>
-    <soci-link id="create-account" href="#">create account</soci-link>
-    <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
+    <div class="panel-footer">
+      <soci-link id="create-account" href="#">create account</soci-link>
+      <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
+    </div>
   `}
 
   activatedCallback(){
     const sidebar = this.closest('soci-sidebar')
     if(!sidebar) return
+
+    this.querySelector('#back-to-community')?.addEventListener('click', (e) => {
+      e.preventDefault()
+      sidebar.setView('community')
+    })
 
     const form = this.querySelector('form')
     const btn = this.querySelector('#login-btn')
@@ -182,8 +218,9 @@ export class SociSidebarLoginPanel extends SociSidebarPanel {
 
 export class SociSidebarAccountCreation extends SociSidebarPanel {
   activeHTML(){ return `
+    <soci-button subtle class="panel-back" id="back-to-community">&larr; back</soci-button>
     <form>
-      <h2>Essentials</h2>
+      <h2>Create Account</h2>
       <soci-username-input name="username" tabindex="1"></soci-username-input>
       <input type="email" name="email" placeholder="Email address" autocomplete="email">
       <soci-password tabindex="0" name="password"></soci-password>
@@ -193,6 +230,12 @@ export class SociSidebarAccountCreation extends SociSidebarPanel {
   `}
 
   activatedCallback(){
+    const sidebar = this.closest('soci-sidebar')
+    this.querySelector('#back-to-community')?.addEventListener('click', (e) => {
+      e.preventDefault()
+      sidebar?.setView?.('community')
+    })
+
     const form = this.querySelector('form')
     const btn = this.querySelector('#register-btn')
     const submit = (e) => {
@@ -222,7 +265,7 @@ export class SociSidebarCreateCommunityPanel extends SociSidebarPanel {
   activeHTML(){ return `
     <div class="panel-header">
       <soci-button subtle id="close-create-community">
-        <soci-icon glyph="view-back"></soci-icon>
+        &larr; back
       </soci-button>
       <h3>Create Community</h3>
     </div>
