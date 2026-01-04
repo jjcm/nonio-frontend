@@ -6,11 +6,13 @@ let notifications = {
   onActivate: () => {
     notifications.dom.querySelector('header').addEventListener('click', notifications.tabClick)
     let container = notifications.dom.querySelector('.inner-content')
-    if(!soci.notificationCount) {
+    if(soci.notificationCount) {
       notifications.dom.querySelectorAll('.type').forEach(tab => {
-        tab.toggleAttribute('selected', tab.innerHTML != "Unread")
+        console.log("unread")
+        tab.toggleAttribute('selected', tab.innerHTML == "Unread")
       })
     }
+    console.log(soci.notificationCount)
     container.innerHTML = `<soci-user-comment-list data="/notifications${soci.notificationCount ? '?unread=true' : ''}"></soci-user-comment-list>`
   },
   tabClick: e => {
