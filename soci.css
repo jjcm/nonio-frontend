@@ -549,6 +549,7 @@ pre {
   background: var(--bg-secondary);
   border-radius: 4px;
   padding: 8px 12px;
+  overflow-x: auto;
 }
 a {
   color: var(--text-brand);
