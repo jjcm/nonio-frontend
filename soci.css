@@ -1219,7 +1219,7 @@ soci-sidebar {
 
   section {
     position: relative;
-    transition: all var(--anim-duration-med) var(--soci-ease), opacity var(--anim-duration-long) var(--soci-ease);
+    transition: height 0.2s var(--soci-ease), min-height 0.2s var(--soci-ease), opacity 0.2s var(--soci-ease);
   }
 
   content section {

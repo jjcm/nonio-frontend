@@ -636,18 +636,41 @@ export default class SociSidebar extends SociComponent {
   _toggleSubscribedList(revealed){
     let list = this.select('#subscribed-tags')
     if(!list) return
-    list.style.height = list.style.minHeight = revealed ? 0 : list.offsetHeight
-    list.style.opacity = revealed ? 0 : 1;
+    
+    // Guard against multiple simultaneous calls
+    if(revealed && this._subscribedListAnimating) return
+    
     list.style.overflow = 'hidden'
-    setTimeout(()=>{
-      list.style.height = list.style.minHeight = revealed ? 48 + (this._subscribedTags.length * 32) : 0
-      list.style.opacity = revealed ? 1 : 0;
-      if(revealed){
-        setTimeout(()=>{
-          list.style.overflow = list.style.height = list.style.minHeight = list.style.opacity = ''
-        }, 200)
-      }
-    }, 1)
+    if(revealed) {
+      this._subscribedListAnimating = true
+      
+      // Clear inline styles to measure natural height
+      list.style.height = list.style.minHeight = ''
+      list.style.opacity = ''
+      void list.offsetHeight
+      
+      // Measure actual natural height
+      const targetHeight = list.offsetHeight + 'px'
+      
+      // Set starting state
+      list.style.height = list.style.minHeight = '0px'
+      list.style.opacity = '0'
+      void list.offsetHeight
+      
+      // Animate to measured height
+      list.style.height = list.style.minHeight = targetHeight
+      list.style.opacity = '1'
+      
+      setTimeout(() => {
+        list.style.overflow = list.style.height = list.style.minHeight = list.style.opacity = ''
+        this._subscribedListAnimating = false
+      }, 220)
+    } else {
+      list.style.height = list.style.minHeight = list.offsetHeight + 'px'
+      void list.offsetHeight
+      list.style.height = list.style.minHeight = '0px'
+      list.style.opacity = '0'
+    }
   }
 
   _toggleAuth(e){
