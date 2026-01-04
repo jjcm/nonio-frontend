@@ -76,7 +76,6 @@ export default class SociUserComment extends SociComponent {
   html(){ return `
     <soci-link id="post">
       <div class="container">
-        <img id="thumbnail"/>
         <div id="title"></div>
       </div>
     </soci-link>
@@ -91,7 +90,12 @@ export default class SociUserComment extends SociComponent {
     switch(name) {
       case 'url':
         this.select('#post').setAttribute('href', '/' + newValue)
-        this.select('img').setAttribute('src', `${config.THUMBNAIL_HOST}/${newValue}.webp`)
+        let img = document.createElement('img')
+        img.setAttribute('src', `${config.THUMBNAIL_HOST}/${newValue}.webp`)
+        img.onload = () => {
+          img.className = 'thumbnail'
+          this.select('.container').prepend(img)
+        }
         break
       case 'post-title':
         this.select('#title').innerHTML = newValue
