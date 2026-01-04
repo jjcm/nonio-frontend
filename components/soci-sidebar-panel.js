@@ -69,28 +69,11 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
               <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></rect>
             </svg>
           </soci-tag-li>
-          <soci-tag-li href="/#images" hide-subscribe>
-            Images
+          <soci-tag-li id="sidebar-submit-post" href="/submit" hide-subscribe>
+            Submit post
             <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 4.25C10.4142 4.25 10.75 3.91421 10.75 3.5V3C10.75 2.0335 9.9665 1.25 9 1.25H7C6.0335 1.25 5.25 2.0335 5.25 3V3.5C5.25 3.91421 5.58579 4.25 6 4.25H10Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></path>
-              <rect x="0.75" y="4.25" width="14.5" height="9.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></rect>
-              <circle cx="8" cy="9" r="2.25" stroke="var(--text-brand)" stroke-width="1.5"></circle>
-            </svg>
-          </soci-tag-li>
-          <soci-tag-li href="/#videos" hide-subscribe>
-            Videos
-            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="0.75" y="1.75" width="14.5" height="12.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></rect>
-              <path d="M6.8975 4.864C6.6663 4.7195 6.37489 4.71185 6.13642 4.84402C5.89796 4.97619 5.75 5.22736 5.75 5.5V10.5C5.75 10.7726 5.89796 11.0238 6.13642 11.156C6.37489 11.2882 6.6663 11.2805 6.8975 11.136L10.8975 8.636C11.1168 8.49894 11.25 8.25859 11.25 8C11.25 7.74141 11.1168 7.50106 10.8975 7.364L6.8975 4.864Z" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></path>
-            </svg>
-          </soci-tag-li>
-          <soci-tag-li href="/#blogs" hide-subscribe>
-            Blogs
-            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2.25" y="0.75" width="11.5" height="14.5" rx="1.75" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></rect>
-              <path d="M5 4H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"></path>
-              <path d="M5 7H11" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"></path>
-              <path d="M5 10H8.5" stroke="var(--text-brand)" stroke-width="1.5" stroke-linecap="round"></path>
+              <rect x="2" y="7" width="12" height="2" rx="1" fill="var(--text-brand)"></rect>
+              <rect x="7" y="2" width="2" height="12" rx="1" fill="var(--text-brand)"></rect>
             </svg>
           </soci-tag-li>
         </section>
@@ -110,11 +93,6 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
           <soci-user self></soci-user>
           <div id="sidebar-user-actions">
             <soci-notification-badge></soci-notification-badge>
-            <soci-link class="submit-link" href="/submit" fresh>
-              <soci-button id="submit" subtle>
-                <soci-icon glyph="create"></soci-icon><span>submit</span>
-              </soci-button>
-            </soci-link>
             <soci-button id="logout-btn" subtle>
               <soci-icon glyph="logout"></soci-icon><span>logout</span>
             </soci-button>

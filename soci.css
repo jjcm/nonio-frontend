@@ -1616,18 +1616,13 @@ soci-sidebar {
         transition: margin 0.1s var(--soci-ease);
       }
 
-      #submit,
       #logout-btn {
         transition: width 0.1s var(--soci-ease);
         width: 20px;
         overflow: hidden;
-      }
-
-      #submit:hover {
-        width: 68px;
-      }
-      #logout-btn:hover {
-        width: 64px;
+        &:hover {
+          width: 64px;
+        }
       }
     }
 

@@ -152,12 +152,14 @@ export default class SociColumn extends SociComponent {
             </div>
             <soci-select id="filter-select" dropdown-horizontal-position="right">
               <soci-option slot="selected">All</soci-option>
+              <soci-option value="links">Links</soci-option>
               <soci-option value="images">Images</soci-option>
               <soci-option value="videos">Videos</soci-option>
               <soci-option value="blogs">Blogs</soci-option>
             </soci-select>
             <soci-radio-button-group id="filter-buttons">
               <soci-radio-button value="all" selected>all</soci-radio-button>
+              <soci-radio-button value="links">links</soci-radio-button>
               <soci-radio-button value="images">images</soci-radio-button>
               <soci-radio-button value="videos">videos</soci-radio-button>
               <soci-radio-button value="blogs">blogs</soci-radio-button>
@@ -210,7 +212,6 @@ export default class SociColumn extends SociComponent {
         this.select('#tag-title').innerHTML = newValue
         this.updateTitle()
         document.querySelector('soci-sidebar')?.activateTag(newValue)
-        if(newValue.match(/all|images|videos|blogs/)) this.setAttribute('filter', newValue)
         break
       case 'subscribers':
         this.select('subscribers').innerHTML = (newValue || 0) + ' subscribers'
@@ -225,8 +226,7 @@ export default class SociColumn extends SociComponent {
     let filter = this.filter
     if(!filter || filter == 'all') filter = 'Posts'
     else filter = filter.charAt(0).toUpperCase() + filter.slice(1)
-    if(this.tag == 'all') document.title = 'All posts'
-    else if(this.tag?.match(/images|videos|blogs|audio|html/)) document.title = 'All ' + this.tag
+    if(this.tag == 'all') document.title = this.filter && this.filter !== 'all' ? `All ${this.filter}` : 'All posts'
     else document.title = filter + ' in #' + this.getAttribute('tag')
   }
 
@@ -352,10 +352,9 @@ export default class SociColumn extends SociComponent {
   }
 
   _updateFilterTagUI(filter){
-    const special = this.getAttribute('tag')?.match(/all|images|videos|blogs/)
-    if(!special) return
-    this.select('#tag-title').innerHTML = filter
-    document.querySelector('soci-sidebar')?.activateTag(filter)
+    if(this.getAttribute('tag') !== 'all') return
+    this.select('#tag-title').innerHTML = filter === 'all' ? 'all posts' : filter
+    document.querySelector('soci-sidebar')?.activateTag('all')
   }
 
   _menuClick(){

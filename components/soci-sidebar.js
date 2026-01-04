@@ -154,6 +154,8 @@ export default class SociSidebar extends SociComponent {
   _onRouteChange() {
     this._updateLinks()
     this._checkCommunityChange()
+    // Activate submit nav item if on submit route (tag activation is driven by soci-column)
+    if(/\/submit\/?$/.test(window.location.pathname)) this._setActiveNavItem('submit')
   }
 
   // Sentinel so the first _checkCommunityChange() always runs on initial load,
@@ -318,20 +320,9 @@ export default class SociSidebar extends SociComponent {
     let community = this.currentCommunity
     let prefix = community ? `/@${community}` : ''
 
-    // Update submit link
-    let submitLink = this.select('#sidebar-user-actions soci-link.submit-link')
-    if(submitLink) {
-      submitLink.href = `${prefix}/submit`
-    }
-
-    // Update static tag links
-    let staticTags = ['all', 'images', 'videos', 'blogs']
-    staticTags.forEach(tag => {
-      let link = this.select(`soci-tag-li[href$="#${tag}"]`)
-      if(link) {
-        link.setAttribute('href', `${prefix}/#${tag}`)
-      }
-    })
+    // Update static "All posts" + "Submit post" links
+    this.select(`soci-tag-li[href$="#all"]`)?.setAttribute('href', `${prefix}/#all`)
+    this.select(`#sidebar-submit-post`)?.setAttribute('href', `${prefix}/submit`)
   }
 
   // Logic for the tag lists
@@ -508,16 +499,24 @@ export default class SociSidebar extends SociComponent {
     dom.innerHTML = tags
   }
 
-  activateTag(tag){
+  // Unified nav item activation - clears all active states and sets the appropriate one
+  _setActiveNavItem(type, value = null) {
     this.toggleAttribute('overlay', false)
     this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
-    if(tag.match(/all|images|videos|blogs/)){
-      // Static tags get their href rewritten with an optional community prefix (e.g. "/@foo/#all")
-      this.select(`soci-tag-li[href$="#${tag}"]`)?.toggleAttribute('active', true)
+    this.select('#sidebar-submit-post[active]')?.toggleAttribute('active', false)
+
+    if(type === 'submit') {
+      this.select('#sidebar-submit-post')?.toggleAttribute('active', true)
+      this._activeTag = null
+    } else if(type === 'tag' && value) {
+      if(value === 'all') this.select(`soci-tag-li[href$="#all"]`)?.toggleAttribute('active', true)
+      else this.select(`soci-tag-li[tag="${value}"]`)?.toggleAttribute('active', true)
+      this._activeTag = value
     }
-    else 
-      this.select(`soci-tag-li[tag="${tag}"]`)?.toggleAttribute('active', true)
-    this._activeTag = tag
+  }
+
+  activateTag(tag){
+    this._setActiveNavItem('tag', tag)
   }
 
   _createSubscribedTag(e){

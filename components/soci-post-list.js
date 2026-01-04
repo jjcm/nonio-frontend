@@ -39,6 +39,10 @@ export default class SociPostLi extends SociComponent {
       :host([filter="blogs"]) ::slotted(soci-post-li:not([type="blog"])){
         display:none;
       }
+
+      :host([filter="links"]) ::slotted(soci-post-li:not([type="link"])){
+        display:none;
+      }
     `
   }
 
