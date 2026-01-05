@@ -13,11 +13,37 @@ export default class SociSidebar extends SociComponent {
 
   css(){
     // Styling is now sourced from soci-frontend/soci.css (light-DOM sidebar markup)
-    return ''
+    // Exception: mobile header is in shadow DOM
+    return `
+      #mobile-header {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 8px;
+        height: 40px;
+        align-items: center;
+        z-index: 11;
+      }
+      #mobile-header soci-icon {
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      #mobile-header soci-icon:hover {
+        background-color: var(--bg-secondary);
+      }
+      @media (max-width: 768px) {
+        :host([overlay]) #mobile-header {
+          display: flex;
+        }
+      }
+    `
   }
 
   html(){
     return `
+      <div id="mobile-header">
+        <soci-icon glyph="menu" @click=_closeMobileOverlay></soci-icon>
+      </div>
       <slot></slot>
     `
   }
@@ -733,5 +759,9 @@ export default class SociSidebar extends SociComponent {
     // Refresh public data (and clear any stale auth-only data)
     this._loadCommunities()
     this._loadCommonTags()
+  }
+
+  _closeMobileOverlay(){
+    this.toggleAttribute('overlay', false)
   }
 }

@@ -74,6 +74,7 @@ export default class SociTagGroup extends SociComponent {
       line-height: 18px;
       background: transparent;
       color: var(--text-secondary);
+      right: 0;
     }
     #add-tag svg {
       position: absolute;

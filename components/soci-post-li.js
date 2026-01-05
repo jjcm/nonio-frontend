@@ -306,6 +306,9 @@ export default class SociPostLi extends SociComponent {
           margin-top: 0;
           margin-bottom: 12px;
         }
+        #delete {
+          display: none !important;
+        }
       }
 
     `
