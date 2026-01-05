@@ -387,11 +387,7 @@
     </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh>
       <div class="sidebar" load-order="primary">
-        <div class="hero">
-          <soci-user size="large" avatar-only></soci-user>
-          <soci-user size="large" username-only></soci-user>
-          <soci-markdown-view class="description" value="description"></soci-markdown-view>
-        </div>
+        <div class="hero"></div>
         <div class="self-actions">
           <soci-link href="/admin/settings">
             <soci-button subtle>
