@@ -317,7 +317,7 @@ export default class SociPostLi extends SociComponent {
     const title = this.getAttribute('post-title')
     const link = this.getAttribute('link')
     const score = this.getAttribute('score')
-    const comments = this.getAttribute('comments')
+    const comments = this.getAttribute('comments') || 0
     const url = this.getAttribute('url')
     const community = this.getAttribute('community') || ''
     const postPath = community ? `/@${community}/${url}` : `/${url}`

@@ -1256,7 +1256,7 @@ soci-sidebar {
     soci-select {
       width: calc(100% + 24px);
       height: 40px;
-      --height: 40px;
+      --height: 32px;
       --padding: 12px;
       color: var(--text);
     }
