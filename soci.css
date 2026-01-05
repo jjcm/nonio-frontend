@@ -1751,7 +1751,8 @@ hr {
     width: 100%;
   }
   soci-sidebar[overlay] { background: var(--bg); left: 0 !important; z-index: 100; }
-  soci-sidebar[overlay] soci-option[slot="selected"] { padding-left: 40px; }
+  soci-sidebar[overlay] soci-option[slot="selected"] { padding-left: 34px; }
+  soci-sidebar[overlay] soci-option#nonio-community { padding-left: 0; }
   soci-sidebar #sidebar-user {
     width: 100%;
     left: 0;
