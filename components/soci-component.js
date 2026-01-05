@@ -29,6 +29,10 @@ export default class SociComponent extends HTMLElement {
         }
       })
     })
+
+    setTimeout(()=>{
+      this._initialRenderComplete = true
+    }, 1)
   }
 
   select(s){

@@ -1,7 +1,6 @@
 import SociComponent from './soci-component.js'
 
 export default class SociTag extends SociComponent {
-  initialRender = false
 
   constructor() {
     super()
@@ -92,7 +91,7 @@ export default class SociTag extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(!this.initialRender) return
+    if(!this._initialRenderComplete) return
 
     switch(name){
       case 'score':
@@ -105,7 +104,6 @@ export default class SociTag extends SociComponent {
   }
 
   html(){ 
-    this.initialRender = true
 
     return `
     <div id="vote" @click=vote >

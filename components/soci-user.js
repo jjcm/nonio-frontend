@@ -2,7 +2,6 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociUser extends SociComponent {
-  initialRender = false
 
   constructor() {
     super()
@@ -98,7 +97,6 @@ export default class SociUser extends SociComponent {
   }
 
   html(){ 
-    this.initialRender = true
     let name = this.hasAttribute('self') ? soci.username : this.getAttribute('name')
 
     return `
@@ -126,6 +124,7 @@ export default class SociUser extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
+    if(!this._initialRenderComplete) return
 
     switch(name) {
       case 'name':

@@ -2,7 +2,6 @@ import SociComponent from './soci-component.js'
 import config from '../config.js'
 
 export default class SociPostLi extends SociComponent {
-  _initialRender = false
 
   constructor() {
     super()
@@ -315,7 +314,6 @@ export default class SociPostLi extends SociComponent {
   }
 
   html(){ 
-    this._initialRender = true
     const title = this.getAttribute('post-title')
     const link = this.getAttribute('link')
     const score = this.getAttribute('score')
@@ -405,7 +403,7 @@ export default class SociPostLi extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(!this._initialRender) return
+    if(!this._initialRenderComplete) return
 
     switch(name) {
       case 'post-title':
