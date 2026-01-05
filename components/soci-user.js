@@ -98,7 +98,6 @@ export default class SociUser extends SociComponent {
 
   html(){ 
     let name = this.hasAttribute('self') ? soci.username : this.getAttribute('name')
-
     return `
     <soci-link ${name ? `href="/user/${name}"` : ''}>
       <div>
@@ -124,8 +123,6 @@ export default class SociUser extends SociComponent {
   }
 
   attributeChangedCallback(name, oldValue, newValue){
-    if(!this._initialRenderComplete) return
-
     switch(name) {
       case 'name':
         this.select('username').innerHTML = newValue
