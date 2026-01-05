@@ -149,6 +149,7 @@ export class SociOption extends SociComponent {
 
     :host([slot="selected"]:hover)::before {
       opacity: 0.08;
+      border-radius: inherit;
     }
 
     :host([slot="selected"]) ::slotted(img) {

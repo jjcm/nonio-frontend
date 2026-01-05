@@ -9,9 +9,11 @@ let user = {
     let username = document.location.pathname.slice(6)
     document.title = 'Overview for ' + username
 
-    document.querySelectorAll('#user soci-user').forEach(user => {
-      user.setAttribute('name', username)
-    })
+    user.dom.querySelector('.hero').innerHTML = `
+      <soci-user size="large" avatar-only name="${username}"></soci-user>
+      <soci-user size="large" username-only name="${username}"></soci-user>
+      <soci-markdown-view class="description" value="description"></soci-markdown-view>
+    `
 
     if(username == soci.username){
       user.showPersonalControls()
