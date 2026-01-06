@@ -78,6 +78,9 @@ window.customElements.define('soci-post', SociPost)
 import SociPostLi from "./soci-post-li.js"
 window.customElements.define('soci-post-li', SociPostLi)
 
+import SociPostCard from "./soci-post-card.js"
+window.customElements.define('soci-post-card', SociPostCard)
+
 import SociPostList from "./soci-post-list.js"
 window.customElements.define('soci-post-list', SociPostList)
 

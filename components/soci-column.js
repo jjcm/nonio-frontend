@@ -63,24 +63,6 @@ export default class SociColumn extends SociComponent {
       soci-option[slot="selected"] {
         border-radius: 3px;
       }
-      #tag-container {
-        display: inline-flex;
-        margin: 0 auto;
-        align-items: center;
-        opacity: 0;
-        animation: load-in 0.3s var(--soci-ease) forwards;
-      }
-      svg {
-        background: var(--bg-brand);
-        color: var(--text-inverse);
-        border-radius: 3px;
-        margin-right: 4px;
-      }
-      #tag-title {
-        font-size: 16px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
       soci-radio-button-group {
         display: none;
         position: absolute;
@@ -110,11 +92,47 @@ export default class SociColumn extends SociComponent {
         border-radius: 3px;
         &:hover { background-color: var(--bg-secondary); }
       }
+      #view-toggle {
+        display: flex;
+        gap: 2px;
+        padding: 4px;
+        background: var(--bg-secondary);
+        border-radius: 6px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #view-toggle button {
+        all: unset;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        cursor: pointer;
+        color: var(--text-tertiary);
+        transition: background 0.15s, color 0.15s;
+      }
+      #view-toggle button:hover {
+        background: var(--bg);
+        color: var(--text-secondary);
+      }
+      #view-toggle button[active] {
+        background: var(--bg);
+        color: var(--text-bold);
+        box-shadow: 0 1px 2px var(--shadow-light);
+      }
+      #view-toggle svg {
+        width: 16px;
+        height: 16px;
+      }
       @media (max-width: 768px) {
         header {
           #menu { display: block; }
           soci-select { left: 36px; }
         }
+        #view-toggle { display: none; }
       }
     `
   }
@@ -142,13 +160,22 @@ export default class SociColumn extends SociComponent {
               <soci-radio-button value="year">year</soci-radio-button>
               <soci-radio-button value="all">all</soci-radio-button>
             </soci-radio-button-group>
-            <div id="tag-container">
-              <svg id="hash" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(1,1.5)">
-                <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="currentColor"></path>
-                </g>
-              </svg>
-              <div id="tag-title">funny</div>
+            <div id="view-toggle">
+              <button value="list" active title="List view" @click=_setView>
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="2" width="14" height="3" rx="1" fill="currentColor"/>
+                  <rect x="1" y="6.5" width="14" height="3" rx="1" fill="currentColor"/>
+                  <rect x="1" y="11" width="14" height="3" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <button value="lanes" title="Grid lanes view" @click=_setView>
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="1" width="6" height="5" rx="1" fill="currentColor"/>
+                  <rect x="9" y="1" width="6" height="7" rx="1" fill="currentColor"/>
+                  <rect x="1" y="8" width="6" height="7" rx="1" fill="currentColor"/>
+                  <rect x="9" y="10" width="6" height="5" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
             </div>
             <soci-select id="filter-select" dropdown-horizontal-position="right">
               <soci-option slot="selected">All</soci-option>
@@ -209,7 +236,6 @@ export default class SociColumn extends SociComponent {
         break
       case 'tag':
         newValue = decodeURIComponent(newValue)
-        this.select('#tag-title').innerHTML = newValue
         this.updateTitle()
         document.querySelector('soci-sidebar')?.activateTag(newValue)
         break
@@ -307,23 +333,48 @@ export default class SociColumn extends SociComponent {
     this._currentSort = value
     this._updateSortUI(value)
     this.sortPosts(value)
+    localStorage.setItem('soci-column-sort', value)
   }
 
   _applyFilter(filter = 'all', force = false){
     const value = filter || 'all'
     if(!force && this._currentFilter === value) return
     this._currentFilter = value
-    this._updateFilterTagUI(value)
     this.filterPosts(value)
     this._updateFilterUI(value)
     this.updateTitle()
+    localStorage.setItem('soci-column-filter', value)
+  }
+
+  _applyView(view = 'list'){
+    const value = view || 'list'
+    this._currentView = value
+    
+    // Update UI
+    const buttons = this.selectAll('#view-toggle button')
+    buttons.forEach(btn => btn.toggleAttribute('active', btn.getAttribute('value') === value))
+    
+    // Update post list
+    const postList = this.querySelector('soci-post-list')
+    if (postList) postList.setAttribute('view', value)
+    
+    localStorage.setItem('soci-column-view', value)
   }
 
   _initializeControls(){
-    const sort = this.getAttribute('sort') || 'popular'
-    const filter = this.getAttribute('filter') || 'all'
+    // Load saved preferences from localStorage
+    const savedSort = localStorage.getItem('soci-column-sort')
+    const savedFilter = localStorage.getItem('soci-column-filter')
+    const savedView = localStorage.getItem('soci-column-view')
+    
+    const sort = this.getAttribute('sort') || savedSort || 'popular'
+    const filter = this.getAttribute('filter') || savedFilter || 'all'
+    const view = savedView || 'list'
+    
     this._applySort(sort, true)
     this._applyFilter(filter, true)
+    this._applyView(view)
+    
     this.setAttribute('sort', sort)
     this.setAttribute('filter', filter)
   }
@@ -351,13 +402,11 @@ export default class SociColumn extends SociComponent {
     target.setAttribute('slot', 'selected')
   }
 
-  _updateFilterTagUI(filter){
-    if(this.getAttribute('tag') !== 'all') return
-    this.select('#tag-title').innerHTML = filter === 'all' ? 'all posts' : filter
-    document.querySelector('soci-sidebar')?.activateTag('all')
-  }
-
   _menuClick(){
     document.querySelector('soci-sidebar').toggleAttribute('overlay', true)
+  }
+
+  _setView(e){
+    this._applyView(e.currentTarget.getAttribute('value'))
   }
 }

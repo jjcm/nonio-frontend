@@ -1881,3 +1881,33 @@ hr {
     opacity: 1;
   }
 }
+
+/* soci-post-card markdown view styles */
+soci-post-card soci-markdown-view {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+soci-post-card soci-markdown-view h1,
+soci-post-card soci-markdown-view h2,
+soci-post-card soci-markdown-view h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0;
+  color: var(--text);
+}
+
+soci-post-card soci-markdown-view p {
+  margin: 4px 0;
+}
+
+soci-post-card soci-markdown-view img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+soci-post-card soci-markdown-view pre,
+soci-post-card soci-markdown-view code {
+  font-size: 12px;
+}
