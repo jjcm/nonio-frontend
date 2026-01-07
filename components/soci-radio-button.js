@@ -12,12 +12,12 @@ export default class SociRadioButton extends SociComponent {
         align-items: center;
         justify-content: center;
         position: relative;
-        padding: 0 12px;
+        padding: 0 8px;
         text-transform: capitalize;
         cursor: pointer;
         font-weight: 500;
         font-size: 12px;
-        line-height: 20px;
+        line-height: 24px;
         color: var(--text-secondary);
         border-radius: 3px;
         user-select: none;

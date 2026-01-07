@@ -12,7 +12,7 @@ export default class SociPostList extends SociComponent {
       :host {
         display: block;
         width: 100%;
-        padding: 4px 12px 28px;
+        padding: 12px 12px 28px;
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);
@@ -24,6 +24,9 @@ export default class SociPostList extends SociComponent {
       }
       ::slotted(soci-post-li){
         margin-top: 8px;
+      }
+      ::slotted(soci-post-li:first-child){
+        margin-top: 0;
       }
 
       /* Grid lanes layout - future native CSS */

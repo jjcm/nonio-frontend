@@ -71,6 +71,7 @@ export default class SociTagGroup extends SociComponent {
       border: 0;
       height: 18px;
       padding-left: 28px;
+      box-sizing: border-box;
       line-height: 18px;
       background: transparent;
       color: var(--text-secondary);
