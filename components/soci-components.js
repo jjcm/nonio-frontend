@@ -15,9 +15,6 @@ window.customElements.define('soci-banner', SociBanner)
 import SociButton from "./soci-button.js"
 window.customElements.define('soci-button', SociButton)
 
-import SociColumn from "./soci-column.js"
-window.customElements.define('soci-column', SociColumn)
-
 import SociComment from "./soci-comment.js"
 window.customElements.define('soci-comment', SociComment)
 

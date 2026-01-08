@@ -180,7 +180,7 @@ export default class SociSidebar extends SociComponent {
   _onRouteChange() {
     this._updateLinks()
     this._checkCommunityChange()
-    // Activate submit nav item if on submit route (tag activation is driven by soci-column)
+    // Activate submit nav item if on submit route
     if(/\/submit\/?$/.test(window.location.pathname)) this._setActiveNavItem('submit')
   }
 

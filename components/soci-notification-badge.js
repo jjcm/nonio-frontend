@@ -29,6 +29,7 @@ export default class SociNotificationBadge extends SociComponent {
         --transition-time: 0.1s;
         transition: all var(--transition-time) ease;
       }
+      svg { transform: translateY(2px); }
       :host(:hover) { color: var(--text-secondary-hover); }
       :host([loaded]) { --transition-time: 0.2s; }
       :host([count]) { color: var(--text-danger); gap: 4px; padding: 0 8px; }
@@ -47,7 +48,7 @@ export default class SociNotificationBadge extends SociComponent {
 
   html(){ return `
     <soci-link href="/notifications" fresh>
-      <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 14C10.7761 14 11 13.7761 11 13.5V6.5C11 6.22386 10.7761 6 10.5 6H1.5C1.22494 6 1.00175 6.22211 1.00001 6.49677C1 6.49784 1 6.49892 1 6.5L1 7.5C1 7.49981 1 7.50019 1 7.5V13.5C1 13.7761 1.22386 14 1.5 14H10.5ZM3 8L5.29289 10.2929C5.68342 10.6834 6.31658 10.6834 6.70711 10.2929L9 8V12H3V8Z" fill="currentColor"/></svg>
+      ${SociIcon?.icon('mail', 16)}
       <span></span>
     </soci-link>
   `}

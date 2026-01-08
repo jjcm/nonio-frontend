@@ -7,11 +7,15 @@ export default class SociPostList extends SociComponent {
   constructor() {
     super()
     this._postsData = null
-    this._fetchController = null
+    this._fetchController = null // incremental merge request
+    this._loadController = null // main list load request
     this._renderGeneration = 0
+    this._items = null
+
     this._onCardLoaded = () => {
-      if(this.getAttribute('view') === 'lanes') relayout(this)
+      if(this.getAttribute('view') === 'lanes' && this._items) relayout(this._items)
     }
+    this._onHashChange = () => this._syncFromLocation()
   }
 
   css(){
@@ -19,50 +23,269 @@ export default class SociPostList extends SociComponent {
       :host {
         display: block;
         width: 100%;
+        height: 100dvh;
+        overflow: hidden;
+        background: var(--bg-bold);
+        box-sizing: border-box;
+        container-type: inline-size;
+      }
+
+      scroll-container {
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+        display: block;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+      }
+      content { display: block; }
+
+      header {
+        background-color: var(--bg);
+        position: sticky;
+        top: 0;
+        height: 40px;
+        width: 100%;
+        z-index: 2;
+        display: flex;
+        padding: 0 12px;
+        box-sizing: border-box;
+        gap: 8px;
+        align-items: center;
+        box-shadow: 0 1px 2px var(--shadow);
+      }
+
+      #tag-input-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 100px;
+        max-width: 278px;
+        width: 100%;
+        margin-right: -8px;
+      }
+      #tag-input {
+        height: 28px;
+        box-sizing: border-box;
+        padding: 0 10px 2px 28px;
+        border: 1px solid color-mix(in srgb, var(--bg-bold) 50%, transparent);
+        border-radius: 4px;
+        background: color-mix(in srgb, var(--bg-bold) 50%, transparent);
+        color: var(--text);
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        width: 100%;
+        &::placeholder { color: var(--text-tertiary); }
+        &:focus {
+          border-color: var(--bg-secondary);
+          background: color-mix(in srgb, var(--bg-bold) 70%, transparent);
+        }
+      }
+      #hash {
+        position: absolute;
+        left: 18px;
+        top: 12px;
+        pointer-events: none;
+        width: 16px;
+        height: 16px;
+        background: var(--bg-brand);
+        color: var(--text-inverse);
+        border-radius: 3px;
+      }
+
+      .divider {
+        width: 1px;
+        height: 20px;
+        background: var(--bg-secondary);
+        margin: 0 4px;
+      }
+      #tag-input-divider {
+        opacity: 0;
+        transition: opacity 0.4s var(--soci-ease);
+      }
+      #header-spacer { flex: 1; }
+      #controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      soci-select {
+        --height: 30px;
+        --color: var(--text-secondary);
+      }
+      soci-option[slot="selected"] {
+        border-radius: 3px;
+      }
+      soci-radio-button-group { display: none; }
+      :host([large]) soci-radio-button-group { display: flex; }
+      :host([large]) soci-select { display: none; }
+
+      soci-radio-button-group soci-radio-button[selected]::after {
+        content:'';
+        display: block;
+        position: fixed;
+        top: 40px;
+        width: 16px;
+        height: 3px;
+        border-radius: 0 0 2px 2px;
+        background: var(--bg);
+        box-shadow: 0 1px 1px var(--shadow);
+      }
+
+      #menu {
+        display: none;
+        cursor: pointer;
+        border-radius: 3px;
+        flex-shrink: 0;
+        &:hover { background-color: var(--bg-secondary); }
+      }
+
+      #view-buttons, #filter-buttons {
+        padding: 4px;
+        soci-radio-button {
+          width: 24px;
+          height: 24px;
+          padding: 0 2px;
+          margin-right: 2px;
+          &:last-child { margin-right: 0px; }
+        }
+        soci-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      #items {
         padding: 12px 12px 28px;
         box-sizing: border-box;
         opacity: 0;
         transform: translateY(12px);
       }
-      :host([loaded]) {
+      :host([loaded]) #items {
         transform: translateY(0);
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
-      ::slotted(soci-post-li){
+      #items > soci-post-li {
         margin-top: 8px;
       }
-      ::slotted(soci-post-li:first-child){
+      #items > soci-post-li:first-child {
         margin-top: 0;
       }
 
       /* Grid lanes layout - future native CSS */
-      :host([view="lanes"]) {
+      :host([view="lanes"]) #items {
         display: grid-lanes;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 12px;
+        --grid-lanes: true;
+      }
+
+      @media (max-width: 768px) {
+        #menu { display: block; }
+        #view-buttons { display: none; }
+        #tag-input { max-width: 120px; }
+      }
+      @media (max-width: 480px) {
+        #tag-input { display: none; }
+      }
+      @media (max-width: 1128px) {
+        #tag-input-divider { opacity: 1; }
       }
     `
   }
 
-  static get observedAttributes() {
-    return ['data', 'order', 'timespan', 'filter', 'view']
+  html(){
+    return `
+      <scroll-container>
+        <content>
+          <header>
+            <soci-icon id="menu" glyph="menu" @click=_menuClick></soci-icon>
+            <div id="tag-input-container">
+              <input id="tag-input" type="text" placeholder="Viewing all tags" @keydown=_tagKeydown @blur=_tagBlur>
+              <soci-icon id="hash" glyph="hash"></soci-icon>
+            </div>
+            <div id="header-spacer"></div>
+            <div id="controls">
+              <div class="divider" id="tag-input-divider"></div>
+              <soci-radio-button-group id="view-buttons">
+                <soci-radio-button value="list" title="List view" selected>
+                  <soci-icon glyph="viewList"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="lanes" title="Grid lanes view">
+                  <soci-icon glyph="viewLanes"></soci-icon>
+                </soci-radio-button>
+              </soci-radio-button-group>
+              <div class="divider"></div>
+              <soci-select id="sort-select">
+                <soci-option slot="selected" value="popular">Popular</soci-option>
+                <soci-option value="new">New</soci-option>
+                <soci-option value="day">Top - Day</soci-option>
+                <soci-option value="week">Top - Week</soci-option>
+                <soci-option value="month">Top - Month</soci-option>
+                <soci-option value="year">Top - Year</soci-option>
+                <soci-option value="all">Top - All Time</soci-option>
+              </soci-select>
+              <soci-radio-button-group id="sort-buttons">
+                <soci-radio-button value="popular" selected>popular</soci-radio-button>
+                <soci-radio-button value="new">new</soci-radio-button>
+                <soci-radio-button value="week">week</soci-radio-button>
+                <soci-radio-button value="month">month</soci-radio-button>
+                <soci-radio-button value="year">year</soci-radio-button>
+                <soci-radio-button value="all">all</soci-radio-button>
+              </soci-radio-button-group>
+              <div class="divider"></div>
+              <soci-select id="filter-select" dropdown-horizontal-position="right">
+                <soci-option slot="selected">All</soci-option>
+                <soci-option value="links">Links</soci-option>
+                <soci-option value="images">Images</soci-option>
+                <soci-option value="videos">Videos</soci-option>
+                <soci-option value="blogs">Blogs</soci-option>
+              </soci-select>
+              <soci-radio-button-group id="filter-buttons">
+                <soci-radio-button value="all" selected>
+                  <soci-icon glyph="allPosts"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="images">
+                  <soci-icon glyph="filterImages"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="videos">
+                  <soci-icon glyph="filterVideos"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="blogs">
+                  <soci-icon glyph="filterBlogs"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="links">
+                  <soci-icon glyph="filterLinks"></soci-icon>
+                </soci-radio-button>
+              </soci-radio-button-group>
+            </div>
+          </header>
+          <div id="items"></div>
+        </content>
+      </scroll-container>
+    `
   }
 
-  async attributeChangedCallback(name, oldValue, newValue){
+  static get observedAttributes() {
+    return ['tag', 'filter', 'sort', 'view', 'community']
+  }
+
+  attributeChangedCallback(name, oldValue, newValue){
+    if(oldValue === newValue) return
     switch(name){
-      case 'data':
-        this.toggleAttribute('loaded', false)
-        let data = await this.getData(newValue, this.authToken)
-        if(data.posts) {
-          this._postsData = data.posts
-          this._dedupePostsData()
-          this._applyFilter(this.getAttribute('filter'))
-        }
-        this.toggleAttribute('loaded', true)
+      case 'tag':
+      case 'sort':
+      case 'community':
+        this._syncTagInput()
+        this._updateTitle()
+        this._refreshData()
         break
       case 'filter':
         this._applyFilter(newValue)
+        this._refreshFilterFetch()
         break
       case 'view':
         this._updateView(newValue)
@@ -70,22 +293,251 @@ export default class SociPostList extends SociComponent {
     }
   }
 
-  _applyFilter(filter){
-    // Cancel any pending incremental renders
-    this._renderGeneration++
-    
-    if(!this._postsData) return
-    
+  connectedCallback() {
+    this._items = this.select('#items')
+
+    this.select('#sort-select')?.addEventListener('selected', this._sortChanged.bind(this))
+    this.select('#filter-select')?.addEventListener('selected', this._filterChanged.bind(this))
+    this.select('#sort-buttons')?.addEventListener('change', this._sortGroupChanged.bind(this))
+    this.select('#filter-buttons')?.addEventListener('change', this._filterGroupChanged.bind(this))
+    this.select('#view-buttons')?.addEventListener('change', this._viewGroupChanged.bind(this))
+
+    this._ro = new ResizeObserver(() => {
+      this.toggleAttribute('large', this.offsetWidth > 800)
+    })
+    this._ro.observe(this)
+
+    this.addEventListener('card-loaded', this._onCardLoaded)
+    window.addEventListener('hashchange', this._onHashChange)
+
+    this._initializeControls()
+    this._syncFromLocation()
+    this._refreshData()
+  }
+
+  disconnectedCallback() {
+    this._ro?.disconnect()
+    if(this._items) unpolyfill(this._items)
+    this.removeEventListener('card-loaded', this._onCardLoaded)
+    window.removeEventListener('hashchange', this._onHashChange)
+    if(this._fetchController) this._fetchController.abort()
+    if(this._loadController) this._loadController.abort()
+  }
+
+  _menuClick(){
+    document.querySelector('soci-sidebar')?.toggleAttribute('overlay', true)
+  }
+
+  _initializeControls(){
+    const savedSort = localStorage.getItem('soci-column-sort')
+    const savedFilter = localStorage.getItem('soci-column-filter')
+    const savedView = localStorage.getItem('soci-column-view')
+
+    const sort = this.getAttribute('sort') || savedSort || 'popular'
+    const filter = this.getAttribute('filter') || savedFilter || 'all'
+    const view = this.getAttribute('view') || savedView || 'list'
+
+    this._currentSort = sort
+    this._currentFilter = filter
+    this._currentView = view
+
+    this._updateSortUI(sort)
+    this._updateFilterUI(filter)
+    this.select('#view-buttons')?.setAttribute('value', view)
+
+    this.setAttribute('sort', sort)
+    this.setAttribute('filter', filter)
+    this.setAttribute('view', view)
+  }
+
+  _updateSortUI(sort){
+    this.select('#sort-buttons')?.setAttribute('value', sort)
+    this._syncSelectValue(this.select('#sort-select'), sort)
+  }
+
+  _updateFilterUI(filter){
+    this.select('#filter-buttons')?.setAttribute('value', filter)
+    this._syncSelectValue(this.select('#filter-select'), filter)
+  }
+
+  _syncSelectValue(select, value){
+    if(!select) return
+    const options = Array.from(select.querySelectorAll('soci-option'))
+    const normalizedValue = String(value || '').toLowerCase()
+    const target = options.find(option => {
+      const optionValue = (option.getAttribute('value') || option.textContent.trim()).toLowerCase()
+      return optionValue === normalizedValue
+    })
+    if(!target) return
+    options.forEach(option => option.removeAttribute('slot'))
+    target.setAttribute('slot', 'selected')
+  }
+
+  _sortChanged(){
+    this.setAttribute('sort', this.select('#sort-select')?.value)
+    localStorage.setItem('soci-column-sort', this.getAttribute('sort') || 'popular')
+  }
+
+  _filterChanged(){
+    this.setAttribute('filter', this.select('#filter-select')?.value)
+    localStorage.setItem('soci-column-filter', this.getAttribute('filter') || 'all')
+  }
+
+  _sortGroupChanged(e){
+    const sort = e.detail?.value
+    if(sort) {
+      this.setAttribute('sort', sort)
+      localStorage.setItem('soci-column-sort', sort)
+    }
+  }
+
+  _filterGroupChanged(e){
+    const filter = e.detail?.value
+    if(filter) {
+      this.setAttribute('filter', filter)
+      localStorage.setItem('soci-column-filter', filter)
+    }
+  }
+
+  _viewGroupChanged(e){
+    const view = e.detail?.value
+    if(!view) return
+    this.setAttribute('view', view)
+    localStorage.setItem('soci-column-view', view)
+  }
+
+  _syncTagInput(){
+    const input = this.select('#tag-input')
+    if (!input) return
+    const tag = this.getAttribute('tag') || ''
+    input.value = tag === 'all' ? '' : `${tag}`
+  }
+
+  _tagKeydown(e){
+    if (e.key !== 'Enter') return
+    e.preventDefault()
+    this._navigateToTag()
+  }
+
+  _tagBlur(){
+    this._syncTagInput()
+  }
+
+  _navigateToTag(){
+    const input = this.select('#tag-input')
+    if (!input) return
+
+    let tag = input.value.trim().replace(/^#/, '')
+    if (!tag) tag = 'all'
+
+    const community = this.getAttribute('community') || window.soci?.routeContext?.community
+    const basePath = community ? `/@${community}` : ''
+    const hashPath = tag === 'all' ? '#all' : `#${encodeURIComponent(tag)}`
+
+    window.history.pushState(null, null, basePath + '/' + hashPath)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  }
+
+  _syncFromLocation(){
+    const raw = window.location.hash.replace(/^#/, '')
+    const first = raw.split('+')[0]
+    const tag = decodeURIComponent(first || 'all')
+    if(tag && tag !== this.getAttribute('tag')) this.setAttribute('tag', tag)
+    this._syncTagInput()
+    document.querySelector('soci-sidebar')?.activateTag(tag)
+  }
+
+  _updateTitle(){
+    let filter = this.getAttribute('filter') || 'all'
+    if(!filter || filter === 'all') filter = 'Posts'
+    else filter = filter.charAt(0).toUpperCase() + filter.slice(1)
+    const tag = this.getAttribute('tag') || 'all'
+    if(tag === 'all') document.title = (this.getAttribute('filter') && this.getAttribute('filter') !== 'all') ? `All ${this.getAttribute('filter')}` : 'All posts'
+    else document.title = filter + ' in #' + tag
+  }
+
+  _buildPostsUrl(){
+    let params = []
+    const sort = this.getAttribute('sort') || this._currentSort || 'popular'
+    const filter = this.getAttribute('filter') || this._currentFilter || 'all'
+
+    switch(sort){
+      case 'new':
+        params.push('sort=new')
+        break
+      case 'day':
+        params.push('sort=top', 'time=day')
+        break
+      case 'week':
+        params.push('sort=top', 'time=week')
+        break
+      case 'month':
+        params.push('sort=top', 'time=month')
+        break
+      case 'year':
+        params.push('sort=top', 'time=year')
+        break
+    }
+
+    const tag = this.getAttribute('tag')
+    if(tag && tag !== 'all') params.push(`tag=${encodeURIComponent(tag)}`)
+
+    const community = this.getAttribute('community') || window.soci?.routeContext?.community
+    if(community) params.push(`community=${encodeURIComponent(community)}`)
+
     const type = filterToType(filter)
-    
-    if(!type){
+    if(type) params.push(`type=${encodeURIComponent(type)}`)
+
+    return '/posts' + (params.length ? `?${params.join('&')}` : '')
+  }
+
+  async _refreshData(){
+    const url = this._buildPostsUrl()
+    if(url === this._currentDataUrl) return
+    this._currentDataUrl = url
+    await this._loadPosts(url)
+  }
+
+  _refreshFilterFetch(){
+    this._updateTitle()
+    this.fetchAndMerge(this._buildPostsUrl())
+  }
+
+  async _loadPosts(url){
+    if(this._loadController) this._loadController.abort()
+    this._loadController = new AbortController()
+    const signal = this._loadController.signal
+
+    this.toggleAttribute('loaded', false)
+    try {
+      const options = { signal }
+      if(this.authToken) options.headers = { Authorization: 'Bearer ' + this.authToken }
+
+      const res = await fetch(config.API_HOST + url, options)
+      const data = await res.json()
+      if(signal.aborted) return
+
+      this._postsData = data.posts || []
+      this._dedupePostsData()
+      this._applyFilter(this.getAttribute('filter'))
+    } catch(e) {
+      if(e.name !== 'AbortError') throw e
+    } finally {
+      if(!signal.aborted) this.toggleAttribute('loaded', true)
+    }
+  }
+
+  _applyFilter(filter){
+    this._renderGeneration++
+    if(!this._postsData) return
+
+    const type = filterToType(filter)
+    if(!type) {
       this.createPosts([...this._postsData])
       return
     }
-    
-    // Filter to matching posts from cache and re-render
-    const matchingPosts = this._postsData.filter(p => p.type === type)
-    this.createPosts([...matchingPosts])
+
+    this.createPosts(this._postsData.filter(p => p.type === type))
   }
 
   _dedupePostsData(){
@@ -100,105 +552,88 @@ export default class SociPostList extends SociComponent {
   }
 
   async fetchAndMerge(url){
-    // Cancel any existing fetch request
     if(this._fetchController) this._fetchController.abort()
     this._fetchController = new AbortController()
-    
+
     const currentFilter = this.getAttribute('filter')
-    
+
     try {
       const options = { signal: this._fetchController.signal }
       if(this.authToken) options.headers = { Authorization: 'Bearer ' + this.authToken }
-      
+
       const response = await fetch(config.API_HOST + url, options)
       const data = await response.json()
-      
-      // Check if filter changed while fetching - discard if so
+
       if(this.getAttribute('filter') !== currentFilter) return
       if(!data.posts?.length) return
-      
-      // Get existing post IDs from both DOM and cache
+
       const domIds = new Set(
-        Array.from(this.querySelectorAll('soci-post-li, soci-post-card'))
+        Array.from(this._items?.querySelectorAll('soci-post-li, soci-post-card') || [])
           .map(el => el.getAttribute('post-id'))
       )
       const cacheIds = new Set((this._postsData || []).map(p => String(p.ID)))
       const existingIds = new Set([...domIds, ...cacheIds])
-      
-      // Find new posts that aren't already in DOM or cache
+
       const newPosts = data.posts.filter(post => !existingIds.has(String(post.ID)))
       if(!newPosts.length) return
-      
-      // Add new posts to cached data
+
       this._postsData = [...(this._postsData || []), ...newPosts]
       this._dedupePostsData()
-      
-      // Render and animate new posts
+
       const isLanes = this.getAttribute('view') === 'lanes'
       const renderFn = isLanes ? this.renderPostCard.bind(this) : this.renderPostLi.bind(this)
-      
+
       newPosts.forEach((post, i) => {
         const tempDom = document.createElement('div')
         tempDom.innerHTML = renderFn(post)
         const postEl = tempDom.firstElementChild
-        
+        if(!postEl || !this._items) return
+
         postEl.style.opacity = '0'
         postEl.style.transform = 'translateY(12px)'
-        this.appendChild(postEl)
-        
+        this._items.appendChild(postEl)
+
         setTimeout(() => {
           postEl.style.transition = 'opacity 0.3s var(--soci-ease), transform 0.3s var(--soci-ease)'
           postEl.style.opacity = '1'
           postEl.style.transform = 'translateY(0)'
         }, i * 50)
       })
-      
-      if(isLanes) relayout(this)
+
+      if(isLanes && this._items) relayout(this._items)
     } catch(e) {
       if(e.name !== 'AbortError') throw e
     }
   }
 
   _updateView(view) {
-    // Clean up previous polyfill state
-    unpolyfill(this)
-    
-    // Re-render posts respecting current filter
-    if (this._postsData) {
-      this._applyFilter(this.getAttribute('filter'))
-    }
-  }
-
-  connectedCallback() {
-    this.addEventListener('card-loaded', this._onCardLoaded)
-  }
-
-  disconnectedCallback() {
-    unpolyfill(this)
-    this.removeEventListener('card-loaded', this._onCardLoaded)
-    if(this._fetchController) this._fetchController.abort()
+    if(this._items) unpolyfill(this._items)
+    if(this._postsData) this._applyFilter(this.getAttribute('filter'))
   }
 
   async createPosts(data){
     const generation = ++this._renderGeneration
     const isLanes = this.getAttribute('view') === 'lanes'
     const renderFn = isLanes ? this.renderPostCard.bind(this) : this.renderPostLi.bind(this)
-    
+    if(!this._items) return
+
     let numberToRender = Math.ceil(window.innerHeight / (isLanes ? 300 : 104))
-    this.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
-    
-    if (isLanes) polyfill(this, true)
-    
+    this._items.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
+
+    if (isLanes) polyfill(this._items, true)
+
     const renderNextPost = (remainingPosts) => {
       if (remainingPosts.length === 0) return
       if (this._renderGeneration !== generation) return
 
-      requestIdleCallback(() => {
+      const ric = window.requestIdleCallback || (cb => setTimeout(cb, 0))
+      ric(() => {
         if (this._renderGeneration !== generation) return
-        
+        if(!this._items) return
+
         let tempDom = document.createElement('div')
         tempDom.innerHTML = renderFn(remainingPosts[0])
-        this.appendChild(tempDom.firstElementChild)
+        this._items.appendChild(tempDom.firstElementChild)
         renderNextPost(remainingPosts.slice(1))
       })
     }

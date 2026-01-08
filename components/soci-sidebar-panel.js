@@ -88,7 +88,7 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
           <div id="sidebar-user-actions">
             <soci-notification-badge></soci-notification-badge>
             <soci-button id="logout-btn" subtle>
-              <soci-icon glyph="logout"></soci-icon><span>logout</span>
+              <soci-icon glyph="logout" size="16"></soci-icon><span>logout</span>
             </soci-button>
           </div>
         </div>
