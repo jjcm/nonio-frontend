@@ -25,7 +25,7 @@ export default class SociPostCard extends SociPostLi {
       }
 
       #title-row {
-        padding: 12px;
+        padding: 12px 12px 6px;
         order: 1;
       }
 
@@ -52,6 +52,12 @@ export default class SociPostCard extends SociPostLi {
         background: var(--bg-secondary);
         border-radius: 4px;
         order: 2;
+      }
+
+      #media-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
       }
 
       #media img {
@@ -94,29 +100,36 @@ export default class SociPostCard extends SociPostLi {
       #details {
         display: flex;
         gap: 8px;
-        font-size: 11px;
+        font-size: 12px;
         color: var(--text-tertiary);
         flex-wrap: wrap;
         align-items: center;
-      }
 
-      #details > * {
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-      }
-
-      #details svg {
-        width: 12px;
-        height: 12px;
+        > * {
+          display: inline-flex;
+          align-items: center;
+          gap: 2px;
+        }
       }
 
       #metadata-link {
         display: contents;
+        > span {
+        display: contents;}
+        &:before {
+          content: '•';
+          display: inline-block;
+          color: var(--text-tertiary);
+        }
+        #votes {
+          color: var(--text);
+        }
+        svg { margin-right: -4px; }
+        #time svg { margin-right: -5px; }
       }
 
       ::slotted(soci-user) {
-        --font-size: 11px;
+        --font-size: 12px;
       }
 
       slot[name="tags"] {
@@ -171,11 +184,13 @@ export default class SociPostCard extends SociPostLi {
         </a>
       </div>
       <div id="media">
-        <picture>
-          <source class="heic">
-          <source class="webp">
-          <img @load=_onImageLoad />
-        </picture>
+        <soci-link id="media-link" href="${postPath}">
+          <picture>
+            <source class="heic">
+            <source class="webp">
+            <img @load=_onImageLoad />
+          </picture>
+        </soci-link>
       </div>
       <div id="body">
         <div id="description">
@@ -186,10 +201,13 @@ export default class SociPostCard extends SociPostLi {
           <soci-link id="metadata-link" href="${postPath}">
             <span id="votes">${score} vote${score == 1 ? '' : 's'}</span>
             <span id="comments">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 9.5V4.5C1.5 3.39543 2.39543 2.5 3.5 2.5H12.5C13.6046 2.5 14.5 3.39543 14.5 4.5V9.5C14.5 10.6046 13.6046 11.5 12.5 11.5H9.81522C9.61005 11.5 9.40984 11.5631 9.24176 11.6808L5.28673 14.4493C4.95534 14.6813 4.5 14.4442 4.5 14.0397V12C4.5 11.7239 4.27614 11.5 4 11.5H3.5C2.39543 11.5 1.5 10.6046 1.5 9.5Z" stroke="currentColor"/></svg>
+              ${SociIcon?.icon('comments', 16)}
               <span>${comments}</span>
             </span>
-            <span id="time"><span></span></span>
+            <span id="time">
+              ${SociIcon?.icon('time', 16)}
+              <span></span>
+            </span>
           </soci-link>
           <span id="domain">${link?.replace(/^(?:https?:\/\/)?(?:www\.)?([^\/]+).*$/, '$1') || ''}</span>
         </div>
@@ -210,22 +228,18 @@ export default class SociPostCard extends SociPostLi {
       this.updateTime(time, this.select('#time span'))
     }
     
-    // Load post content for description
-    this._loadDescription()
-  }
+    const desc = this.querySelector('soci-markdown-view[slot="description"]')
+    this.classList.toggle('no-description', !desc || !desc.getAttribute('markdown'))
 
-  async _loadDescription() {
-    this.classList.add('no-description')
-    const data = await this.getData(this._postApiPath())
-    if (data?.content?.length) {
-      const description = document.createElement('soci-markdown-view')
-      description.setAttribute('slot', 'description')
-      description.render(data.content)
-      this.appendChild(description)
-      this.classList.remove('no-description')
+    // Notify parent for relayout once markdown renders (it renders async after markdown-wasm is ready)
+    if (desc && !desc._gridLanesObserved) {
+      desc._gridLanesObserved = true
+      const mo = new MutationObserver(() => {
+        mo.disconnect()
+        this.dispatchEvent(new CustomEvent('card-loaded', { bubbles: true }))
+      })
+      mo.observe(desc, { childList: true, subtree: true })
     }
-    // Notify parent for relayout
-    this.dispatchEvent(new CustomEvent('card-loaded', { bubbles: true }))
   }
 
   _onImageLoad() {
@@ -296,6 +310,7 @@ export default class SociPostCard extends SociPostLi {
     const path = this._postPath()
     this.select('#internal-link')?.setAttribute('href', path)
     this.select('#metadata-link')?.setAttribute('href', path)
+    this.select('#media-link')?.setAttribute('href', path)
   }
 }
 

@@ -62,19 +62,13 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     <div id="tag-container">
       <content>
         <section id="all-tags">
-          <soci-tag-li href="/#all" icon="home" hide-subscribe>
+          <soci-tag-li href="/#all" hide-subscribe>
             All posts
-            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.22109 1.04962L7.55491 1.72123L7.22109 1.04962L1.72109 3.78334C1.12618 4.07904 0.75 4.6861 0.75 5.35044V12.5C0.75 13.4665 1.5335 14.25 2.5 14.25H13.5C14.4665 14.25 15.25 13.4665 15.25 12.5V5.35044C15.25 4.6861 14.8738 4.07904 14.2789 3.78334L8.77891 1.04962C8.28827 0.805746 7.71173 0.805747 7.22109 1.04962Z" stroke="var(--text-brand)" stroke-width="1.5"></path>
-              <rect x="5.25" y="7.25" width="5.5" height="7" stroke="var(--text-brand)" stroke-width="1.5" stroke-linejoin="round"></rect>
-            </svg>
+            <soci-icon slot="icon" glyph="allPosts"></soci-icon>
           </soci-tag-li>
           <soci-tag-li id="sidebar-submit-post" href="/submit" hide-subscribe>
             Submit post
-            <svg slot="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="7" width="12" height="2" rx="1" fill="var(--text-brand)"></rect>
-              <rect x="7" y="2" width="2" height="12" rx="1" fill="var(--text-brand)"></rect>
-            </svg>
+            <soci-icon slot="icon" glyph="addPosts"></soci-icon>
           </soci-tag-li>
         </section>
         <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">

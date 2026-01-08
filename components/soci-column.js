@@ -1,4 +1,5 @@
 import SociComponent from './soci-component.js'
+import { filterToType } from '../lib/post-filter.js'
 
 export default class SociColumn extends SociComponent {
   constructor() {
@@ -140,7 +141,7 @@ export default class SociColumn extends SociComponent {
           margin-right: 2px;
           &:last-child { margin-right: 0px; }
         }
-        svg {
+        soci-icon {
           width: 16px;
           height: 16px;
         }
@@ -168,32 +169,18 @@ export default class SociColumn extends SociComponent {
           <header>
             <soci-icon id="menu" glyph="menu" @click=_menuClick></soci-icon>
             <div id="tag-input-container">
-              <input id="tag-input" type="text" placeholder="#tag" @keydown=_tagKeydown @blur=_tagBlur>
-              <svg id="hash" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(1,1.5)">
-                <path d="M9.28 7.346H11.17V8.62H9.126L8.832 11H7.558L7.852 8.62H5.486L5.192 11H3.918L4.212 8.62H2.322V7.346H4.366L4.688 4.854H2.798V3.58H4.842L5.136 1.2H6.41L6.116 3.58H8.468L8.762 1.2H10.036L9.742 3.58H11.618L11.632 4.854H9.588L9.28 7.346ZM8.006 7.346L8.314 4.854H5.962L5.64 7.346H8.006Z" fill="currentColor"></path>
-                </g>
-              </svg>
+              <input id="tag-input" type="text" placeholder="Viewing all tags" @keydown=_tagKeydown @blur=_tagBlur>
+              <soci-icon id="hash" glyph="hash"></soci-icon>
             </div>
             <div id="header-spacer"></div>
             <div id="controls">
               <div class="divider" id="tag-input-divider"></div>
               <soci-radio-button-group id="view-buttons">
                 <soci-radio-button value="list" title="List view" selected>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.5" y="1.5" width="15" height="3" rx="1.5" stroke="currentColor"/>
-                    <rect x="0.5" y="6.5" width="15" height="3" rx="1.5" stroke="currentColor"/>
-                    <rect x="0.5" y="11.5" width="15" height="3" rx="1.5" stroke="currentColor"/>
-                  </svg>
-
+                  <soci-icon glyph="viewList"></soci-icon>
                 </soci-radio-button>
                 <soci-radio-button value="lanes" title="Grid lanes view">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.5" y="1.5" width="6" height="4" rx="1.5" stroke="currentColor"/>
-                    <rect x="9.5" y="10.5" width="6" height="4" rx="1.5" stroke="currentColor"/>
-                    <rect x="9.5" y="1.5" width="6" height="7" rx="1.5" stroke="currentColor"/>
-                    <rect x="0.5" y="7.5" width="6" height="7" rx="1.5" stroke="currentColor"/>
-                  </svg>
+                  <soci-icon glyph="viewLanes"></soci-icon>
                 </soci-radio-button>
               </soci-radio-button-group>
               <div class="divider"></div>
@@ -224,38 +211,19 @@ export default class SociColumn extends SociComponent {
               </soci-select>
               <soci-radio-button-group id="filter-buttons">
                 <soci-radio-button value="all" selected>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C13.6569 2 15 3.34315 15 5V8C15 9.60511 13.7394 10.9158 12.1543 10.9961L12 11V10C13.1046 10 14 9.10457 14 8V5C14 3.89543 13.1046 3 12 3H7C5.89543 3 5 3.89543 5 5H4C4 3.34315 5.34315 2 7 2H12Z" fill="currentColor"/>
-                    <rect x="1.5" y="5.5" width="10" height="8" rx="2.5" stroke="currentColor"/>
-                  </svg>
+                  <soci-icon glyph="allPosts"></soci-icon>
                 </soci-radio-button>
                 <soci-radio-button value="images">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-linejoin="round"/>
-                    <path d="M1.5 9L4.5 7L9.5 10.5L12 9L14.5 11" stroke="currentColor"/>
-                    <circle cx="11.5" cy="5.5" r="1.5" fill="currentColor"/>
-                  </svg>
+                  <soci-icon glyph="filterImages"></soci-icon>
                 </soci-radio-button>
                 <soci-radio-button value="videos">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-linejoin="round"/>
-                    <path d="M10.5 8L6 6V10L10.5 8Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                  </svg>
+                  <soci-icon glyph="filterVideos"></soci-icon>
                 </soci-radio-button>
                 <soci-radio-button value="blogs">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-linejoin="round"/>
-                    <rect x="3" y="4" width="9" height="1" rx="0.5" fill="currentColor"/>
-                    <path d="M3 6.5C3 6.22386 3.22386 6 3.5 6H8.5C8.77614 6 9 6.22386 9 6.5C9 6.77614 8.77614 7 8.5 7H3.5C3.22386 7 3 6.77614 3 6.5Z" fill="currentColor"/>
-                    <path d="M3 10.5C3 10.2239 3.22386 10 3.5 10H8.5C8.77614 10 9 10.2239 9 10.5C9 10.7761 8.77614 11 8.5 11H3.5C3.22386 11 3 10.7761 3 10.5Z" fill="currentColor"/>
-                    <rect x="3" y="8" width="7" height="1" rx="0.5" fill="currentColor"/>
-                  </svg>
+                  <soci-icon glyph="filterBlogs"></soci-icon>
                 </soci-radio-button>
                 <soci-radio-button value="links">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 7H3C2.48232 7 2.05621 7.39333 2.00488 7.89746L2 8V11C2 11.5523 2.44772 12 3 12H8C8.55228 12 9 11.5523 9 11V8C9 7.44772 8.55228 7 8 7V6C9.10457 6 10 6.89543 10 8V11C10 12.0357 9.21278 12.887 8.2041 12.9893L8 13H3L2.7959 12.9893C1.85435 12.8938 1.1062 12.1457 1.01074 11.2041L1 11V8C1 6.89543 1.89543 6 3 6H5V7ZM7 7H6V6H7V7Z" fill="currentColor"/>
-                    <path d="M13 3C14.1046 3 15 3.89543 15 5V8C15 9.03565 14.2128 9.887 13.2041 9.98926L13 10H11V9H13C13.5523 9 14 8.55228 14 8V5C14 4.44772 13.5523 4 13 4H8C7.48232 4 7.05621 4.39333 7.00488 4.89746L7 5V8C7 8.55228 7.44772 9 8 9V10L7.7959 9.98926C6.85435 9.8938 6.1062 9.14565 6.01074 8.2041L6 8V5C6 3.89543 6.89543 3 8 3H13ZM10 10H9V9H10V10Z" fill="currentColor"/>
-                  </svg>
+                  <soci-icon glyph="filterLinks"></soci-icon>
                 </soci-radio-button>
               </soci-radio-button-group>
             </div>
@@ -340,7 +308,7 @@ export default class SociColumn extends SociComponent {
     return this.setAttribute('filter', val)
   }
 
-  sortPosts(sort){
+  _buildPostsUrl(sort, filter){
     let params = []
     sort = sort || 'popular'
 
@@ -367,16 +335,29 @@ export default class SociColumn extends SociComponent {
     let community = this.getAttribute('community')
     if(community) params.push(`community=${community}`)
 
-    let paramString = params.length > 0 ? `?${params.join('&')}` : ''
+    const type = filterToType(filter)
+    if(type) params.push(`type=${type}`)
 
+    return '/posts' + (params.length > 0 ? `?${params.join('&')}` : '')
+  }
+
+  sortPosts(sort){
+    const url = this._buildPostsUrl(sort, this._currentFilter)
     let postList = this.querySelector('soci-post-list')
-    if(postList?.getAttribute('data') == '/posts' + paramString) return
-    postList?.setAttribute('data', '/posts' + paramString)
+    if(postList?.getAttribute('data') == url) return
+    postList?.setAttribute('data', url)
   }
 
   filterPosts(filter){
     filter = filter || 'all'
-    this.querySelector('soci-post-list')?.setAttribute('filter', filter)
+    const postList = this.querySelector('soci-post-list')
+    if(!postList) return
+    
+    // Apply filter to re-render matching posts from cache
+    postList.setAttribute('filter', filter)
+    
+    // Fetch filtered posts from server and merge new ones
+    postList.fetchAndMerge(this._buildPostsUrl(this._currentSort, filter))
   }
 
   _sortChanged(){

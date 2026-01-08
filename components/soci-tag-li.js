@@ -48,6 +48,7 @@ export default class SociTagLi extends SociComponent {
       }
 
       ::slotted(svg),
+      ::slotted(soci-icon),
       #hash {
         position: absolute;
         left: 12px;
