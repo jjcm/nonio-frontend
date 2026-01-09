@@ -1,6 +1,6 @@
 import SociComponent from './soci-component.js'
 import config from '../config.js'
-import { polyfill, unpolyfill, relayout } from '../lib/grid-lanes-polyfill.js'
+import { polyfill, unpolyfill, relayout, SUPPORTS_GRID_LANES } from '../lib/grid-lanes-polyfill.js'
 import { filterToType } from '../lib/post-filter.js'
 
 export default class SociPostList extends SociComponent {
@@ -11,6 +11,7 @@ export default class SociPostList extends SociComponent {
     this._loadController = null // main list load request
     this._renderGeneration = 0
     this._items = null
+    this._masonryDebugTimers = []
 
     this._onCardLoaded = () => {
       if(this.getAttribute('view') === 'lanes' && this._items) relayout(this._items)
@@ -63,6 +64,7 @@ export default class SociPostList extends SociComponent {
         max-width: 278px;
         width: 100%;
         margin-right: -8px;
+        position: relative;
       }
       #tag-input {
         height: 28px;
@@ -84,8 +86,8 @@ export default class SociPostList extends SociComponent {
       }
       #hash {
         position: absolute;
-        left: 18px;
-        top: 12px;
+        left: 6px;
+        top: 6px;
         pointer-events: none;
         width: 16px;
         height: 16px;
@@ -114,13 +116,13 @@ export default class SociPostList extends SociComponent {
       soci-select {
         --height: 30px;
         --color: var(--text-secondary);
+        display: none;
       }
       soci-option[slot="selected"] {
         border-radius: 3px;
+        white-space: nowrap;
       }
-      soci-radio-button-group { display: none; }
-      :host([large]) soci-radio-button-group { display: flex; }
-      :host([large]) soci-select { display: none; }
+      soci-radio-button-group { display: flex; }
 
       soci-radio-button-group soci-radio-button[selected]::after {
         content:'';
@@ -163,6 +165,11 @@ export default class SociPostList extends SociComponent {
         opacity: 0;
         transform: translateY(12px);
       }
+      /* In lanes view we animate cards individually; keep the container visible. */
+      :host([view="lanes"]) #items {
+        opacity: 1;
+        transform: none;
+      }
       :host([loaded]) #items {
         transform: translateY(0);
         opacity: 1;
@@ -182,14 +189,44 @@ export default class SociPostList extends SociComponent {
         gap: 12px;
         --grid-lanes: true;
       }
-
-      @media (max-width: 768px) {
-        #menu { display: block; }
-        #view-buttons { display: none; }
-        #tag-input { max-width: 120px; }
+      /* Prevent vertical-list flash before grid-lanes polyfill positions children (shadow DOM-safe). */
+      :host([view="lanes"]) #items[data-grid-lanes-container] > * {
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+        transition: opacity 0.25s var(--soci-ease), transform 0.25s var(--soci-ease);
       }
+      :host([view="lanes"]) #items[data-grid-lanes-container] > [data-grid-lanes-positioned] {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      :host([view="lanes"]) #items[data-grid-lanes-container] > [data-grid-lanes-positioned][unloaded] {
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+      }
+
       @media (max-width: 480px) {
         #tag-input { display: none; }
+      }
+      @media (max-width: 820px) {
+        #filter-buttons { display: none; }
+        #filter-select { display: block; }
+      }
+      @media (max-width: 768px) {
+        #menu { display: block; }
+        #filter-buttons { display: flex; }
+        #filter-select { display: none; }
+      }
+      @media (max-width: 620px) {
+        #filter-buttons { display: none; }
+        #filter-select { display: block; }
+      }
+      @media (max-width: 1024px) {
+        #tag-input-container { max-width: 100%; }
+        #sort-buttons { display: none; }
+        #sort-select { display: block; }
       }
       @media (max-width: 1128px) {
         #tag-input-divider { opacity: 1; }
@@ -210,15 +247,6 @@ export default class SociPostList extends SociComponent {
             <div id="header-spacer"></div>
             <div id="controls">
               <div class="divider" id="tag-input-divider"></div>
-              <soci-radio-button-group id="view-buttons">
-                <soci-radio-button value="list" title="List view" selected>
-                  <soci-icon glyph="viewList"></soci-icon>
-                </soci-radio-button>
-                <soci-radio-button value="lanes" title="Grid lanes view">
-                  <soci-icon glyph="viewLanes"></soci-icon>
-                </soci-radio-button>
-              </soci-radio-button-group>
-              <div class="divider"></div>
               <soci-select id="sort-select">
                 <soci-option slot="selected" value="popular">Popular</soci-option>
                 <soci-option value="new">New</soci-option>
@@ -238,7 +266,7 @@ export default class SociPostList extends SociComponent {
               </soci-radio-button-group>
               <div class="divider"></div>
               <soci-select id="filter-select" dropdown-horizontal-position="right">
-                <soci-option slot="selected">All</soci-option>
+                <soci-option slot="selected" value="all">All</soci-option>
                 <soci-option value="links">Links</soci-option>
                 <soci-option value="images">Images</soci-option>
                 <soci-option value="videos">Videos</soci-option>
@@ -259,6 +287,15 @@ export default class SociPostList extends SociComponent {
                 </soci-radio-button>
                 <soci-radio-button value="links">
                   <soci-icon glyph="filterLinks"></soci-icon>
+                </soci-radio-button>
+              </soci-radio-button-group>
+              <div class="divider"></div>
+              <soci-radio-button-group id="view-buttons">
+                <soci-radio-button value="list" title="List view" selected>
+                  <soci-icon glyph="viewList"></soci-icon>
+                </soci-radio-button>
+                <soci-radio-button value="lanes" title="Grid lanes view">
+                  <soci-icon glyph="viewLanes"></soci-icon>
                 </soci-radio-button>
               </soci-radio-button-group>
             </div>
@@ -302,11 +339,6 @@ export default class SociPostList extends SociComponent {
     this.select('#filter-buttons')?.addEventListener('change', this._filterGroupChanged.bind(this))
     this.select('#view-buttons')?.addEventListener('change', this._viewGroupChanged.bind(this))
 
-    this._ro = new ResizeObserver(() => {
-      this.toggleAttribute('large', this.offsetWidth > 800)
-    })
-    this._ro.observe(this)
-
     this.addEventListener('card-loaded', this._onCardLoaded)
     window.addEventListener('hashchange', this._onHashChange)
 
@@ -316,7 +348,6 @@ export default class SociPostList extends SociComponent {
   }
 
   disconnectedCallback() {
-    this._ro?.disconnect()
     if(this._items) unpolyfill(this._items)
     this.removeEventListener('card-loaded', this._onCardLoaded)
     window.removeEventListener('hashchange', this._onHashChange)
@@ -617,10 +648,24 @@ export default class SociPostList extends SociComponent {
     const renderFn = isLanes ? this.renderPostCard.bind(this) : this.renderPostLi.bind(this)
     if(!this._items) return
 
-    let numberToRender = Math.ceil(window.innerHeight / (isLanes ? 300 : 104))
-    this._items.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
+    if(isLanes) this._scheduleMasonryFlashDebug(generation, 'createPosts(start)')
 
-    if (isLanes) polyfill(this._items, true)
+    if(isLanes) {
+      // Ensure our shadow-scoped "hide until positioned" CSS applies immediately (prevents pre-polyfill flash).
+      if(!SUPPORTS_GRID_LANES) this._items.setAttribute('data-grid-lanes-container', '')
+
+      this._items.innerHTML = ''
+
+      this._masonryFlashDebug('polyfill(call)')
+      polyfill(this._items, true)
+      this._masonryFlashDebug('polyfill(return)')
+
+      await this._renderPostCardsSequential(data, generation)
+      return
+    }
+
+    let numberToRender = Math.ceil(window.innerHeight / 104)
+    this._items.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
 
     const renderNextPost = (remainingPosts) => {
       if (remainingPosts.length === 0) return
@@ -639,6 +684,105 @@ export default class SociPostList extends SociComponent {
     }
 
     renderNextPost(data)
+  }
+
+  async _renderPostCardsSequential(posts, generation){
+    while(posts.length) {
+      if(this._renderGeneration !== generation) return
+      if(!this._items) return
+
+      const tempDom = document.createElement('div')
+      tempDom.innerHTML = this.renderPostCard(posts.shift())
+      const el = tempDom.firstElementChild
+      if(!el) continue
+
+      el.setAttribute('unloaded', '')
+      this._items.appendChild(el)
+
+      // Trigger layout; the polyfill will mark `[data-grid-lanes-positioned]` when done.
+      relayout(this._items)
+
+      if(SUPPORTS_GRID_LANES) {
+        await new Promise(requestAnimationFrame)
+      } else {
+        await this._waitForGridLanesPositioned(el, generation)
+      }
+
+      if(this._renderGeneration !== generation) return
+      el.removeAttribute('unloaded')
+
+      // Yield to avoid locking the main thread (lets paint/input happen between cards).
+      await new Promise(r => setTimeout(r, 1))
+    }
+  }
+
+  _waitForGridLanesPositioned(el, generation){
+    if(el.hasAttribute('data-grid-lanes-positioned')) return Promise.resolve()
+    return new Promise(resolve => {
+      if(this._renderGeneration !== generation) return resolve()
+
+      let done = false
+      let timer = null
+      const finish = () => {
+        if(done) return
+        done = true
+        clearTimeout(timer)
+        mo.disconnect()
+        resolve()
+      }
+
+      const mo = new MutationObserver(() => {
+        if(this._renderGeneration !== generation) return finish()
+        if(el.hasAttribute('data-grid-lanes-positioned')) finish()
+      })
+      mo.observe(el, { attributes: true, attributeFilter: ['data-grid-lanes-positioned'] })
+
+      // Safety: don't deadlock if something goes wrong; still allow the feed to appear.
+      timer = setTimeout(finish, 2500)
+    })
+  }
+
+  _masonryFlashDebug(label){
+    if(localStorage.getItem('soci-debug-masonry-flash') !== '1') return
+    if(!this._items) return
+
+    const children = Array.from(this._items.children || [])
+    const positioned = this._items.querySelectorAll('[data-grid-lanes-positioned]').length
+
+    const itemsOpacity = getComputedStyle(this._items).opacity
+    const first = children[0]
+    const firstOpacity = first ? getComputedStyle(first).opacity : '(none)'
+    const firstVis = first ? getComputedStyle(first).visibility : '(none)'
+
+    console.log('[soci-post-list][masonry-flash]', {
+      t: Math.round(performance.now()),
+      label,
+      view: this.getAttribute('view'),
+      loaded: this.hasAttribute('loaded'),
+      containerAttr: this._items.hasAttribute('data-grid-lanes-container'),
+      childCount: children.length,
+      positioned,
+      itemsOpacity,
+      firstOpacity,
+      firstVis,
+    })
+  }
+
+  _scheduleMasonryFlashDebug(generation, label){
+    if(localStorage.getItem('soci-debug-masonry-flash') !== '1') return
+
+    this._masonryDebugTimers.forEach(id => clearTimeout(id))
+    this._masonryDebugTimers = []
+
+    const logIfCurrent = (tLabel) => {
+      if(this._renderGeneration !== generation) return
+      this._masonryFlashDebug(tLabel)
+    }
+
+    logIfCurrent(label)
+    ;[2000, 4000, 6000, 8000].forEach(ms => {
+      this._masonryDebugTimers.push(setTimeout(() => logIfCurrent(`${label}+${ms}ms`), ms))
+    })
   }
 
   renderPostLi(post){

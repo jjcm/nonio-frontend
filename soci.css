@@ -1612,18 +1612,18 @@ soci-sidebar {
         display: inline-flex;
         background: var(--bg-secondary-hover);
         &:hover soci-icon {
-          margin: -2px -2px -2px -8px;
+          margin: 2px 2px -2px -4px;
         }
       }
 
       soci-icon {
-        margin: -2px 8px -2px -10px;
+        margin: 2px 8px -2px -4px;
         transition: margin 0.1s var(--soci-ease);
       }
 
       #logout-btn {
         transition: width 0.1s var(--soci-ease);
-        width: 20px;
+        width: 24px;
         overflow: hidden;
         &:hover {
           width: 64px;

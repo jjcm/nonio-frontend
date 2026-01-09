@@ -360,7 +360,9 @@ export default class SociTagGroup extends SociComponent {
 
   async _updateTagSearch(search){
     let dom = this.select("#tag-search")
-    let tags = await this.getData('/tags/' + search, this.authToken)
+    const community = this.closest('[community]')?.getAttribute('community') || window.soci.routeContext.community || ''
+    const q = community ? `?community=${encodeURIComponent(community)}` : ''
+    let tags = await this.getData('/tags/' + encodeURIComponent(search) + q, this.authToken)
 
     let match = false
     let createLi = `<li selected value=${search}>${search}<div class="count">new tag</div></li>`
