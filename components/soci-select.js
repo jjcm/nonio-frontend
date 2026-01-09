@@ -134,7 +134,6 @@ export class SociOption extends SociComponent {
       border-right: 4px solid transparent;
       border-top: 4px solid currentColor;
       flex-shrink: 0;
-      filter: drop-shadow(30px 10px 4px #4444dd);
     }
 
     :host([slot="selected"])::before {
