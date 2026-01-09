@@ -208,7 +208,7 @@ export default class SociPostList extends SociComponent {
       }
 
       @media (max-width: 480px) {
-        #tag-input { display: none; }
+        .divider { display: none; }
       }
       @media (max-width: 820px) {
         #filter-buttons { display: none; }

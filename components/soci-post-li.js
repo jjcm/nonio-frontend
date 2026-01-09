@@ -71,6 +71,7 @@ export default class SociPostLi extends SociComponent {
         white-space: nowrap;
         flex-wrap: wrap;
         height: 16px;
+        overflow: hidden;
       }
       #domain,
       #time {
