@@ -74,5 +74,25 @@ api.votes = {
   get: () => api.getData('votes')
 }
 
+api.voice = {
+  join: (community, channel) => api.postData('voice/join', { community, channel }),
+  presence: (community) => api.postData('voice/presence', { community })
+}
+
+api.channels = {
+  list: (community) => api.getData(`community/channels?community=${encodeURIComponent(community)}`),
+  create: (data) => api.postData('community/channel/create', data)
+}
+
+api.channelMessages = {
+  list: (community, channel, before, limit) => {
+    let path = `community/channel/messages?community=${encodeURIComponent(community)}&channel=${encodeURIComponent(channel)}`
+    if (before) path += `&before=${before}`
+    if (limit) path += `&limit=${limit}`
+    return api.getData(path)
+  },
+  send: (data) => api.postData('community/channel/messages', data)
+}
+
 window.api = api
 export default api

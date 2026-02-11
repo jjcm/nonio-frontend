@@ -71,6 +71,15 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
             <soci-icon slot="icon" glyph="addPosts"></soci-icon>
           </soci-tag-li>
         </section>
+        <section id="voice-channels">
+          <div class="channels-header">
+            <h2>Channels</h2>
+            <soci-button id="channel-create-btn" subtle title="Create channel" style="display: none;">
+              <soci-icon glyph="create" size="16"></soci-icon>
+            </soci-button>
+          </div>
+          <div id="channel-list"></div>
+        </section>
         <section id="subscribed-tags" style="height: 0px; opacity: 0; display: none;">
           <h2>Subscribed Tags</h2>
           <tags></tags>
@@ -81,6 +90,12 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
         </section>
       </content>
     </div>
+    <section id="voice-connection-strip" style="display: none;">
+      <div class="voice-connection-row">
+        <span class="voice-connection-label">Voice</span>
+        <soci-button id="voice-disconnect" subtle>Connected</soci-button>
+      </div>
+    </section>
     <section id="sidebar-user">
       <div id="sidebar-user-logged-in">
         <div class="footer-bar">
@@ -112,11 +127,23 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     this.querySelector('content')?.addEventListener('subscribe', (e) => sidebar._createSubscribedTag(e))
     this.querySelector('content')?.addEventListener('unsubscribe', (e) => sidebar._removeSubscribedTag(e))
 
+    this.querySelector('#channel-list')?.addEventListener('voice-join', (e) => {
+      if (e.detail?.channel) sidebar.joinVoiceChannel(e.detail.channel)
+    })
+    this.querySelector('#channel-list')?.addEventListener('text-channel-open', (e) => {
+      if (e.detail?.channel) sidebar.openTextChannel(e.detail.channel)
+    })
+    this.querySelector('#channel-create-btn')?.addEventListener('click', () => sidebar.openCreateChannelModal())
+    this.querySelector('#voice-disconnect')?.addEventListener('click', () => sidebar.disconnectVoice())
+
     sidebar._syncAuthUI()
     sidebar._loadCommunities()
     sidebar._loadCommonTags()
     if(sidebar.authToken) sidebar._loadSubscribedTags()
     sidebar._onRouteChange()
+    sidebar._loadChannels?.()
+    sidebar._updateVoiceUI?.()
+    sidebar._renderVoiceParticipants?.()
 
     // Panel re-renders on activation; repopulate community-dependent DOM even if route didn't change.
     sidebar._updateCommunitySelection?.(sidebar.currentCommunity)

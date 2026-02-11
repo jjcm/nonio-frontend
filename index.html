@@ -30,6 +30,18 @@
     <soci-sidebar-login-panel id="login" panel="login"></soci-sidebar-login-panel>
     <soci-sidebar-account-creation id="create" panel="create"></soci-sidebar-account-creation>
     <soci-sidebar-create-community-panel id="create-community" panel="create-community"></soci-sidebar-create-community-panel>
+    <soci-modal id="create-channel-modal" title="Create channel">
+      <form id="create-channel-form">
+        <input name="name" placeholder="Name" required>
+        <input name="slug" placeholder="Slug (optional)">
+        <soci-radio-button-group name="kind" value="text">
+          <soci-radio-button value="text">Text</soci-radio-button>
+          <soci-radio-button value="voice">Voice</soci-radio-button>
+        </soci-radio-button-group>
+        <div class="error" hidden></div>
+        <soci-button async id="submit-create-channel">Create</soci-button>
+      </form>
+    </soci-modal>
     <section id="footer" slot="footer">
       <links>
         <soci-link href="/about">About</soci-link><a href="https://github.com/jjcm/nonio/issues/new">Feedback</a>
@@ -38,6 +50,9 @@
     </section>
   </soci-sidebar>
   <div id="pages">
+    <soci-route id="text-channel" path="^/@[\w-]+:[^/#?]+$" fresh>
+      <script>lazyload('/pages/text-channel.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
     <soci-route id="tags" test="both" path="^(/@[\w-]+)?/?(#.*)?$" fresh>
       <script>lazyload('/pages/tags.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>

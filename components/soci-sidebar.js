@@ -113,6 +113,7 @@ export default class SociSidebar extends SociComponent {
     this._loadSubscribedTags()
     window.soci.loadVotes?.()
     this._syncAuthUI()
+    this._startVoicePresencePolling()
 
     this.showCommunity()
   }
@@ -155,6 +156,7 @@ export default class SociSidebar extends SociComponent {
 
     // Set initial routes and community details
     setTimeout(() => this._onRouteChange(), 0)
+    this._startVoicePresencePolling()
   }
 
   disconnectedCallback(){
@@ -163,6 +165,7 @@ export default class SociSidebar extends SociComponent {
     window.removeEventListener('link', this._onRouteChange)
     document.removeEventListener('avatar-updated', this._onAvatarUpdate)
     document.removeEventListener('community-updated', this._onCommunityUpdate)
+    this._stopVoicePresencePolling()
   }
 
   _nextFrame(){
@@ -180,6 +183,7 @@ export default class SociSidebar extends SociComponent {
   _onRouteChange() {
     this._updateLinks()
     this._checkCommunityChange()
+    this._syncActiveChannelFromHash()
     // Activate submit nav item if on submit route
     if(/\/submit\/?$/.test(window.location.pathname)) this._setActiveNavItem('submit')
   }
@@ -193,14 +197,159 @@ export default class SociSidebar extends SociComponent {
   _checkCommunityChange() {
     let community = this.currentCommunity
     if(this._lastCommunity === community) return
-    
+
+    if(this._voiceRoom && this._voiceCommunity !== community) this._voiceDisconnect()
     this._lastCommunity = community
     if(this.authToken) this._loadSubscribedTags()
     this._loadCommonTags()
     this._updateCommunitySelection(community)
     this._updateCommunityAvatar(community)
     this._toggleCommunityHeaderVisible(community)
+    this._toggleVoiceChannelsVisible(community)
     this._populateCommunityDetails()
+    this._loadChannels()
+    this._startVoicePresencePolling()
+    this._syncActiveChannelFromHash()
+  }
+
+  _syncActiveChannelFromHash(){
+    const path = window.location.pathname || ''
+    const m = path.match(/^\/@([\w-]+):([^/]+)$/)
+    if(!m) {
+      this._setActiveTextChannelInList(null)
+      return
+    }
+    const routeCommunity = m[1]
+    const routeChannel = decodeURIComponent(m[2] || '')
+    if(routeCommunity !== this.currentCommunity) {
+      this._setActiveTextChannelInList(null)
+      return
+    }
+    this._setActiveTextChannelInList(routeChannel)
+  }
+
+  _toggleVoiceChannelsVisible(communityUrl){
+    const section = this.select('#voice-channels')
+    if(!section) return
+    section.style.display = communityUrl ? 'block' : 'none'
+  }
+
+  async _loadChannels(){
+    const community = this.currentCommunity
+    const list = this.select('#channel-list')
+    if(!community || !this.authToken || !list) {
+      if(list) list.innerHTML = ''
+      return
+    }
+    try {
+      const res = await window.api.channels.list(community)
+      const channels = res?.channels || []
+      list.innerHTML = ''
+      channels.forEach(ch => {
+        if(ch.kind === 'voice') {
+          const li = document.createElement('soci-voice-channel-li')
+          li.setAttribute('channel', ch.slug)
+          list.appendChild(li)
+        } else {
+          const li = document.createElement('soci-text-channel-li')
+          li.setAttribute('channel', ch.slug)
+          li.setAttribute('name', ch.name || ch.slug)
+          list.appendChild(li)
+        }
+      })
+      // Route sync can run before channels finish loading on refresh.
+      // Re-apply active text channel state now that channel items exist.
+      this._syncActiveChannelFromHash()
+      this._updateVoiceUI()
+      this._renderVoicePresenceParticipants()
+    } catch (e) {
+      console.warn('SociSidebar: failed to load channels', e)
+      list.innerHTML = ''
+    }
+  }
+
+  openCreateChannelModal(){
+    const community = this.currentCommunity
+    if(!community || !this.authToken) {
+      window.soci?.requireLogin?.('create a channel')
+      return
+    }
+    const modal = this.select('#create-channel-modal')
+    if(!modal) return
+    const btn = this.select('#channel-create-btn')
+    if(btn && btn.style.display === 'none') return
+    const form = this.select('#create-channel-form')
+    const errEl = modal?.querySelector('.error')
+    if(form && !form._channelFormBound) {
+      form._channelFormBound = true
+      form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        this._submitCreateChannel()
+      })
+      this.select('#submit-create-channel')?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this._submitCreateChannel()
+      })
+    }
+    if(errEl) { errEl.hidden = true; errEl.textContent = '' }
+    if(form) {
+      form.reset()
+      const kindGroup = form.querySelector('soci-radio-button-group[name="kind"]')
+      if (kindGroup) kindGroup.setAttribute('value', 'text')
+    }
+    modal?.activate()
+  }
+
+  async _submitCreateChannel(){
+    const modal = this.select('#create-channel-modal')
+    const form = this.select('#create-channel-form')
+    const btn = this.select('#submit-create-channel')
+    const errEl = modal?.querySelector('.error')
+    const community = this.currentCommunity
+    if(!community || !form) return
+    const name = form.name?.value?.trim()
+    const slug = (form.slug?.value?.trim() || name || '').toLowerCase().replace(/\s+/g, '-')
+    const kind = form.querySelector('soci-radio-button-group[name="kind"]')?.getAttribute('value') || 'text'
+    if(!name) {
+      if(errEl) { errEl.hidden = false; errEl.textContent = 'Name is required' }
+      return
+    }
+    btn?.wait?.()
+    if(errEl) errEl.hidden = true
+    try {
+      const res = await window.api.channels.create({ community, kind, slug: slug || name, name })
+      if(res?.error) {
+        if(errEl) { errEl.hidden = false; errEl.textContent = res.error }
+        btn?.error?.()
+        return
+      }
+      btn?.success?.()
+      await this._loadChannels()
+      modal?.deactivate?.()
+    } catch (e) {
+      if(errEl) { errEl.hidden = false; errEl.textContent = 'Failed to create channel' }
+      btn?.error?.()
+    }
+  }
+
+  openTextChannel(slug){
+    const community = this.currentCommunity
+    if(!community) return
+    const encodedSlug = encodeURIComponent(slug)
+    const path = `/@${community}:${encodedSlug}`
+    if(window.location.pathname !== path || window.location.hash) {
+      window.history.pushState(null, null, path)
+      window.dispatchEvent(new CustomEvent('link'))
+    }
+  }
+
+  _setActiveTextChannelInList(slug){
+    const list = this.select('#channel-list')
+    if(!list) return
+    list.querySelectorAll('soci-text-channel-li').forEach(li => {
+      const ch = li.getAttribute('channel')
+      li.toggleAttribute('active', !!slug && ch === slug)
+    })
   }
 
   _toggleCommunityHeaderVisible(communityUrl){
@@ -236,6 +385,8 @@ export default class SociSidebar extends SociComponent {
         this._toggleCommunityHeaderVisible(null)
         this._animateSection(container, false)
         adminLinks.style.display = 'none'
+        const createChannelBtn = this.select('#channel-create-btn')
+        if(createChannelBtn) createChannelBtn.style.display = 'none'
         return
     }
 
@@ -253,6 +404,8 @@ export default class SociSidebar extends SociComponent {
         } else {
             adminLinks.style.display = 'none'
         }
+        const createChannelBtn = this.select('#channel-create-btn')
+        if(createChannelBtn) createChannelBtn.style.display = res?.isAdmin ? '' : 'none'
         
         // Update description
         let quillView = container.querySelector('soci-markdown-view')
@@ -267,6 +420,8 @@ export default class SociSidebar extends SociComponent {
         console.error('SociSidebar: Error loading community details', e)
         this._animateSection(container, false)
         adminLinks.style.display = 'none'
+        const createChannelBtn = this.select('#channel-create-btn')
+        if(createChannelBtn) createChannelBtn.style.display = 'none'
     }
   }
   
@@ -753,6 +908,9 @@ export default class SociSidebar extends SociComponent {
     this._subscribedTags = []
     this._subscribedTagsLoaded = true
     this._toggleSubscribedTagsVisible(false)
+    this._stopVoicePresencePolling()
+    this._voicePresenceByChannel = {}
+    this._renderVoicePresenceParticipants()
 
     this._syncAuthUI()
 
@@ -763,5 +921,484 @@ export default class SociSidebar extends SociComponent {
 
   _closeMobileOverlay(){
     this.toggleAttribute('overlay', false)
+  }
+
+  // --- Voice (LiveKit) ---
+  _voiceRoom = null
+  _voiceChannel = null
+  _voiceCommunity = null
+  _voiceParticipantEls = new Map()
+  _voiceRemoteAudioEls = new Map()
+  _voicePresenceByChannel = {}
+  _voicePresencePollTimer = null
+  _voicePresencePollMs = 5000
+  _voiceTalkingPollTimer = null
+  _voiceTalkingPollMs = 3000
+  _localVADSpeaking = false
+  _vadInstance = null
+  _vadLoadPromise = null
+
+  _voiceAudioContext = null
+
+  _loadVAD() {
+    if (this._vadLoadPromise) return this._vadLoadPromise
+    this._vadLoadPromise = new Promise((resolve, reject) => {
+      if (window.vad?.MicVAD) {
+        resolve(window.vad)
+        return
+      }
+      const onnx = document.createElement('script')
+      onnx.src = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.wasm.min.js'
+      onnx.crossOrigin = 'anonymous'
+      onnx.onload = () => {
+        const vadScript = document.createElement('script')
+        vadScript.src = 'https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.30/dist/bundle.min.js'
+        vadScript.crossOrigin = 'anonymous'
+        vadScript.onload = () => resolve(window.vad)
+        vadScript.onerror = () => reject(new Error('VAD script failed to load'))
+        document.head.appendChild(vadScript)
+      }
+      onnx.onerror = () => reject(new Error('ONNX script failed to load'))
+      document.head.appendChild(onnx)
+    })
+    return this._vadLoadPromise
+  }
+
+  async _startVAD() {
+    try {
+      const vad = await this._loadVAD()
+      this._vadInstance = await vad.MicVAD.new({
+        onSpeechStart: () => {
+          this._localVADSpeaking = true
+          this._updateVoiceTalkingIndicators()
+        },
+        onSpeechEnd: () => {
+          this._localVADSpeaking = false
+          this._updateVoiceTalkingIndicators()
+        },
+        onnxWASMBasePath: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/',
+        baseAssetPath: 'https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.30/dist/'
+      })
+      this._vadInstance.start()
+    } catch (err) {
+      console.warn('[Voice] VAD failed to start, using server speaking state:', err)
+    }
+  }
+
+  _stopVAD() {
+    this._localVADSpeaking = false
+    if (this._vadInstance) {
+      try {
+        this._vadInstance.pause()
+        if (typeof this._vadInstance.destroy === 'function') this._vadInstance.destroy()
+      } catch (_) {}
+      this._vadInstance = null
+    }
+  }
+
+  _playVoiceTone(frequency, durationMs = 80) {
+    try {
+      const ctx = this._voiceAudioContext || (this._voiceAudioContext = new (window.AudioContext || window.webkitAudioContext)())
+      if (ctx.state === 'suspended') ctx.resume()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.frequency.value = frequency
+      osc.type = 'sine'
+      gain.gain.setValueAtTime(0.15, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + durationMs / 1000)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + durationMs / 1000)
+    } catch (_) {}
+  }
+
+  _playVoiceJoined() {
+    console.log('[Voice] Joined channel – playing join sound (low → high)')
+    this._playVoiceTone(220, 70)
+    setTimeout(() => this._playVoiceTone(440, 70), 90)
+  }
+
+  _playVoiceLeft() {
+    console.log('[Voice] Left channel – playing leave sound (high → low)')
+    this._playVoiceTone(440, 70)
+    setTimeout(() => this._playVoiceTone(220, 70), 90)
+  }
+
+  _startVoiceTalkingPolling(){
+    this._stopVoiceTalkingPolling()
+    this._voiceTalkingPollTimer = setInterval(() => {
+      this._enforceVoiceTalkingIndicators()
+    }, this._voiceTalkingPollMs)
+  }
+
+  _stopVoiceTalkingPolling(){
+    if(this._voiceTalkingPollTimer) clearInterval(this._voiceTalkingPollTimer)
+    this._voiceTalkingPollTimer = null
+  }
+
+  _enforceVoiceTalkingIndicators(){
+    if(!this._voiceRoom || !this._voiceParticipantEls.size) return
+    const activeSpeakers = this._voiceRoom.activeSpeakers || []
+    const hasActiveSpeaker = activeSpeakers.length > 0 || this._localVADSpeaking
+    if(!hasActiveSpeaker) {
+      this._voiceParticipantEls.forEach(user => user.toggleAttribute('talking', false))
+      return
+    }
+
+    this._voiceParticipants().forEach(p => {
+      const key = this._voiceParticipantKey(p)
+      const user = this._voiceParticipantEls.get(key)
+      if(!user) return
+      const isInActiveSpeakers = activeSpeakers.some(s => s.sid === p.sid)
+      const speaking = p.isLocal
+        ? this._localVADSpeaking
+        : (p.isSpeaking || isInActiveSpeakers)
+      user.toggleAttribute('talking', !!speaking)
+    })
+  }
+
+  _stopVoicePresencePolling(){
+    if(this._voicePresencePollTimer) clearInterval(this._voicePresencePollTimer)
+    this._voicePresencePollTimer = null
+  }
+
+  _startVoicePresencePolling(){
+    this._stopVoicePresencePolling()
+    if(!this.authToken || !this.currentCommunity) {
+      this._voicePresenceByChannel = {}
+      this._renderVoicePresenceParticipants()
+      return
+    }
+
+    this._refreshVoicePresence()
+    this._voicePresencePollTimer = setInterval(() => this._refreshVoicePresence(), this._voicePresencePollMs)
+  }
+
+  async _refreshVoicePresence(){
+    if(!this.authToken || !this.currentCommunity) return
+    const community = this.currentCommunity
+    try {
+      const res = await window.api.voice.presence(community)
+      if(res?.error) {
+        console.warn('Voice presence failed:', res.error)
+        return
+      }
+      if(this.currentCommunity !== community) return
+      this._voicePresenceByChannel = res?.channels || {}
+      this._renderVoicePresenceParticipants()
+    } catch (err) {
+      console.warn('Voice presence request failed:', err)
+    }
+  }
+
+  _renderVoicePresenceParticipants(){
+    const list = this.select('#channel-list')
+    if(!list) return
+
+    const activeChannel = this._voiceRoom && this._voiceCommunity === this.currentCommunity
+      ? this._voiceChannel
+      : null
+
+    list.querySelectorAll('soci-voice-channel-li').forEach(li => {
+      const channel = li.getAttribute('channel')
+      li.querySelectorAll('soci-user[voice-preview]').forEach(el => el.remove())
+
+      if(activeChannel && channel === activeChannel) {
+        li.toggleAttribute('has-participants', false)
+        return
+      }
+
+      const identities = this._voicePresenceByChannel?.[channel]
+      const names = Array.isArray(identities) ? identities : []
+      names.forEach(identity => {
+        const user = document.createElement('soci-user')
+        user.setAttribute('voice-preview', '')
+        if(identity === window.soci?.username) user.toggleAttribute('self', true)
+        else user.setAttribute('name', identity)
+        li.appendChild(user)
+      })
+      li.toggleAttribute('has-participants', names.length > 0)
+    })
+  }
+
+  async joinVoiceChannel(channel){
+    const community = this.currentCommunity
+    if(!community || !this.authToken) {
+      if(!this.authToken) window.soci?.requireLogin?.('join voice')
+      return
+    }
+    if(this._voiceRoom && this._voiceChannel === channel && this._voiceCommunity === community) return
+
+    await this._voiceDisconnect()
+    const res = await window.api.voice.join(community, channel)
+    if(res?.error) {
+      console.error('Voice join failed:', res.error)
+      return
+    }
+    const { token, wsUrl, roomName } = res
+    if(!token || !wsUrl) return
+
+    try {
+      const { Room, RoomEvent } = await import('https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.esm.mjs')
+      const room = new Room()
+      this._voiceRoom = room
+      this._voiceChannel = channel
+      this._voiceCommunity = community
+
+      room.on(RoomEvent.Connected, () => {
+        room.localParticipant.setMicrophoneEnabled(true).catch(() => {})
+        this._playVoiceJoined()
+        this._updateVoiceUI()
+        this._syncVoiceParticipantElements()
+        this._updateVoiceTalkingIndicators()
+        this._startVAD()
+        this._syncVoiceRemoteAudioElements()
+        this._refreshVoicePresence()
+        this._startVoiceTalkingPolling()
+      })
+      room.on(RoomEvent.Disconnected, () => {
+        this._stopVAD()
+        this._stopVoiceTalkingPolling()
+        this._playVoiceLeft()
+        this._voiceRoom = null
+        this._voiceChannel = null
+        this._voiceCommunity = null
+        this._updateVoiceUI()
+        this._clearVoiceParticipantElements()
+        this._clearVoiceRemoteAudioElements()
+        this._refreshVoicePresence()
+      })
+      room.on(RoomEvent.ParticipantConnected, () => {
+        this._syncVoiceParticipantElements()
+        this._refreshVoicePresence()
+      })
+      room.on(RoomEvent.ParticipantDisconnected, (participant) => {
+        this._syncVoiceParticipantElements()
+        this._removeVoiceRemoteAudioForParticipant(participant)
+        this._refreshVoicePresence()
+      })
+      room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
+        this._attachVoiceRemoteAudio(track, publication, participant)
+        this._syncVoiceParticipantElements()
+      })
+      room.on(RoomEvent.TrackUnsubscribed, (track, publication) => {
+        this._detachVoiceRemoteAudio(track, publication)
+        this._syncVoiceParticipantElements()
+      })
+      room.on(RoomEvent.IsSpeakingChanged, () => this._updateVoiceTalkingIndicators())
+      room.on(RoomEvent.ActiveSpeakersChanged, () => this._updateVoiceTalkingIndicators())
+
+      await room.connect(wsUrl, token)
+    } catch (err) {
+      console.error('Voice connect error:', err)
+      this._voiceRoom = null
+      this._voiceChannel = null
+      this._voiceCommunity = null
+      this._updateVoiceUI()
+    }
+  }
+
+  async disconnectVoice(){
+    await this._voiceDisconnect()
+    this._updateVoiceUI()
+    this._clearVoiceParticipantElements()
+  }
+
+  async _voiceDisconnect(){
+    if(!this._voiceRoom) {
+      this._clearVoiceParticipantElements()
+      this._clearVoiceRemoteAudioElements()
+      this._stopVoiceTalkingPolling()
+      return
+    }
+    this._stopVAD()
+    this._stopVoiceTalkingPolling()
+    const room = this._voiceRoom
+    this._voiceRoom = null
+    this._voiceChannel = null
+    this._voiceCommunity = null
+    this._clearVoiceParticipantElements()
+    this._clearVoiceRemoteAudioElements()
+    try {
+      room.disconnect()
+    } catch (_) {}
+  }
+
+  _voiceRemoteTrackKey(track, publication){
+    return publication?.trackSid || track?.sid || null
+  }
+
+  _attachVoiceRemoteAudio(track, publication, participant){
+    if(!track || track.kind !== 'audio') return
+    const key = this._voiceRemoteTrackKey(track, publication)
+    if(!key) return
+
+    const existing = this._voiceRemoteAudioEls.get(key)
+    if(existing?.el?.isConnected) return
+
+    const el = document.createElement('audio')
+    el.autoplay = true
+    el.playsInline = true
+    el.volume = 1
+    el.style.display = 'none'
+    this.appendChild(el)
+
+    try {
+      track.attach(el)
+      const p = el.play?.()
+      if(p?.catch) p.catch(() => {})
+    } catch (err) {
+      console.warn('[Voice] Failed to attach remote audio track:', err)
+      el.remove()
+      return
+    }
+
+    this._voiceRemoteAudioEls.set(key, { el, track, participantSid: participant?.sid || null })
+  }
+
+  _detachVoiceRemoteAudio(track, publication){
+    const key = this._voiceRemoteTrackKey(track, publication)
+    if(!key) return
+
+    const entry = this._voiceRemoteAudioEls.get(key)
+    if(!entry) return
+
+    try {
+      entry.track?.detach?.(entry.el)
+    } catch (_) {}
+    entry.el?.remove()
+    this._voiceRemoteAudioEls.delete(key)
+  }
+
+  _removeVoiceRemoteAudioForParticipant(participant){
+    const sid = participant?.sid
+    if(!sid) return
+    this._voiceRemoteAudioEls.forEach((entry, key) => {
+      if(entry?.participantSid !== sid) return
+      try {
+        entry.track?.detach?.(entry.el)
+      } catch (_) {}
+      entry.el?.remove()
+      this._voiceRemoteAudioEls.delete(key)
+    })
+  }
+
+  _syncVoiceRemoteAudioElements(){
+    if(!this._voiceRoom) return
+    this._voiceRoom.remoteParticipants.forEach((participant) => {
+      participant.trackPublications.forEach((publication) => {
+        const track = publication?.track
+        if(track) this._attachVoiceRemoteAudio(track, publication, participant)
+      })
+    })
+  }
+
+  _clearVoiceRemoteAudioElements(){
+    this._voiceRemoteAudioEls.forEach((entry) => {
+      try {
+        entry.track?.detach?.(entry.el)
+      } catch (_) {}
+      entry.el?.remove()
+    })
+    this._voiceRemoteAudioEls.clear()
+  }
+
+  _updateVoiceUI(){
+    const list = this.select('#channel-list')
+    const strip = this.select('#voice-connection-strip')
+    if(!list) return
+    list.querySelectorAll('soci-voice-channel-li').forEach(li => {
+      const ch = li.getAttribute('channel')
+      const active = this._voiceRoom && this._voiceChannel === ch && this._voiceCommunity === this.currentCommunity
+      li.toggleAttribute('active', !!active)
+      if(active) li.querySelectorAll('soci-user[voice-preview]').forEach(el => el.remove())
+    })
+    if(strip) strip.style.display = this._voiceRoom ? 'block' : 'none'
+    this._renderVoicePresenceParticipants()
+  }
+
+  _activeVoiceChannelLi(){
+    return this._voiceRoom && this._voiceChannel
+      ? this.select(`#channel-list soci-voice-channel-li[channel="${this._voiceChannel}"]`)
+      : null
+  }
+
+  _voiceParticipants(){
+    if(!this._voiceRoom) return []
+    return [this._voiceRoom.localParticipant, ...this._voiceRoom.remoteParticipants.values()]
+  }
+
+  _voiceParticipantKey(p){
+    if(p?.isLocal) return 'local'
+    if(p?.sid) return `sid:${p.sid}`
+    const identity = p?.identity || p?.name || 'Unknown'
+    return `identity:${identity}`
+  }
+
+  _createVoiceParticipantEl(p){
+    const identity = p.identity || p.name || 'Unknown'
+    const user = document.createElement('soci-user')
+    user.toggleAttribute('self', !!p.isLocal)
+    if(!p.isLocal) user.setAttribute('name', identity)
+    return user
+  }
+
+  _clearVoiceParticipantElements(){
+    this._voiceParticipantEls.forEach(el => el.remove())
+    this._voiceParticipantEls.clear()
+    this._renderVoicePresenceParticipants()
+  }
+
+  _syncVoiceParticipantElements(){
+    const activeChannelLi = this._activeVoiceChannelLi()
+    if(!activeChannelLi) {
+      this._clearVoiceParticipantElements()
+      return
+    }
+
+    const participants = this._voiceParticipants()
+    const currentKeys = new Set()
+
+    participants.forEach(p => {
+      const key = this._voiceParticipantKey(p)
+      currentKeys.add(key)
+      let user = this._voiceParticipantEls.get(key)
+      if(!user) {
+        user = this._createVoiceParticipantEl(p)
+        this._voiceParticipantEls.set(key, user)
+      } else if(!p.isLocal) {
+        const identity = p.identity || p.name || 'Unknown'
+        if(user.getAttribute('name') !== identity) user.setAttribute('name', identity)
+      }
+      if(user.parentElement !== activeChannelLi) activeChannelLi.appendChild(user)
+    })
+
+    this._voiceParticipantEls.forEach((user, key) => {
+      if(currentKeys.has(key)) return
+      user.remove()
+      this._voiceParticipantEls.delete(key)
+    })
+
+    this._updateVoiceTalkingIndicators()
+  }
+
+  _updateVoiceTalkingIndicators(){
+    if(!this._voiceRoom || !this._voiceParticipantEls.size) return
+    const activeSpeakers = this._voiceRoom.activeSpeakers || []
+    this._voiceParticipants().forEach(p => {
+      const key = this._voiceParticipantKey(p)
+      const user = this._voiceParticipantEls.get(key)
+      if(!user) return
+      const isInActiveSpeakers = activeSpeakers.some(s => s.sid === p.sid)
+      const speaking = p.isLocal
+        ? this._localVADSpeaking
+        : (p.isSpeaking || isInActiveSpeakers)
+      user.toggleAttribute('talking', !!speaking)
+    })
+  }
+
+  _renderVoiceParticipants(){
+    this._syncVoiceParticipantElements()
   }
 }

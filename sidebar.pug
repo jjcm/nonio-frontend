@@ -9,6 +9,16 @@ soci-sidebar(loading)
   soci-sidebar-account-creation#create(panel="create")
   soci-sidebar-create-community-panel#create-community(panel="create-community")
 
+  soci-modal#create-channel-modal(title="Create channel")
+    form#create-channel-form
+      input(name="name" placeholder="Name" required)
+      input(name="slug" placeholder="Slug (optional)")
+      soci-radio-button-group(name="kind" value="text")
+        soci-radio-button(value="text") Text
+        soci-radio-button(value="voice") Voice
+      .error(hidden)
+      soci-button(async id="submit-create-channel") Create
+
   section#footer(slot="footer")
     links
       soci-link(href="/about") About

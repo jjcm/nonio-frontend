@@ -1412,6 +1412,51 @@ soci-sidebar {
       padding-left: 12px;
       line-height: 32px;
     }
+
+    #voice-channels {
+      padding: 0 12px 8px;
+    }
+    #voice-channels .channels-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 12px;
+      margin-bottom: 4px;
+    }
+    #voice-channels .channels-header h2 {
+      padding-left: 0;
+      margin: 0;
+    }
+    #voice-channels .channels-header soci-button {
+      flex-shrink: 0;
+      min-width: 32px;
+      padding: 4px;
+    }
+    #voice-channels #channel-list soci-voice-channel-li,
+    #voice-channels #channel-list soci-text-channel-li {
+      display: block;
+      margin-bottom: 2px;
+    }
+    #voice-channels #channel-list soci-voice-channel-li:last-child,
+    #voice-channels #channel-list soci-text-channel-li:last-child {
+      margin-bottom: 0;
+    }
+    #voice-connection-strip {
+      padding: 8px 12px 0;
+      border-top: 1px solid var(--bg-bold);
+      margin-top: 8px;
+    }
+    #voice-connection-strip .voice-connection-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    #voice-connection-strip .voice-connection-label {
+      font-weight: 500;
+    }
   }
 
   input {
@@ -1483,6 +1528,23 @@ soci-sidebar {
       color: var(--text-danger);
       font-size: 13px;
       margin-top: 8px;
+    }
+  }
+
+  #create-channel-form {
+    soci-radio-button-group {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--bg-secondary);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      width: fit-content;
+    }
+
+    soci-radio-button[selected] {
+      background: var(--bg-brand);
+      color: var(--text-inverse);
     }
   }
 

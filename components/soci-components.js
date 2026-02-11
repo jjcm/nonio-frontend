@@ -66,6 +66,9 @@ window.customElements.define('soci-notification-badge', SociNotificationBadge)
 import SociMarkdownView from "./soci-markdown-view.js"
 window.customElements.define('soci-markdown-view', SociMarkdownView)
 
+import SociMessageRow from "./soci-message-row.js"
+window.customElements.define('soci-message-row', SociMessageRow)
+
 import SociPassword from "./soci-password.js"
 window.customElements.define('soci-password', SociPassword)
 
@@ -121,6 +124,15 @@ window.customElements.define('soci-tag-li', SociTagLi)
 
 import SociUrlInput from "./soci-url-input.js"
 window.customElements.define('soci-url-input', SociUrlInput)
+
+import SociVoiceChannelLi from "./soci-voice-channel-li.js"
+window.customElements.define('soci-voice-channel-li', SociVoiceChannelLi)
+
+import SociTextChannelLi from "./soci-text-channel-li.js"
+window.customElements.define('soci-text-channel-li', SociTextChannelLi)
+
+import SociTextChannelView from "./soci-text-channel-view.js"
+window.customElements.define('soci-text-channel-view', SociTextChannelView)
 
 import SociUsernameInput from "./soci-username-input.js"
 window.customElements.define('soci-username-input', SociUsernameInput)

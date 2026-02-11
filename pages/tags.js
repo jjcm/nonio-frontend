@@ -5,18 +5,18 @@ let tags = {
   },
   onActivate: () => {
     tags.dom.innerHTML = ''
-    let tag = window.location.hash.replace('#', '').split('+')[0]
-    if(tag == '') tag = 'all'
-
-    let community = window.soci.routeContext.community
+    const hash = window.location.hash || ''
+    const community = window.soci.routeContext.community
+    let tag = hash.replace('#', '').split('+')[0]
+    if (tag === '') tag = 'all'
 
     let list = document.createElement('soci-post-list')
     list.setAttribute('tag', decodeURIComponent(tag))
-    if(community) list.setAttribute('community', community)
+    if (community) list.setAttribute('community', community)
     tags.dom.appendChild(list)
   },
   onDeactivate: () => {
-    document.querySelector('soci-sidebar').activateTag('')
+    document.querySelector('soci-sidebar')?.activateTag?.('')
   }
 }
 

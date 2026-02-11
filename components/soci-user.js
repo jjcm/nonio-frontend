@@ -32,6 +32,10 @@ export default class SociUser extends SociComponent {
         object-fit: cover;
       }
 
+      :host([talking]) img {
+        box-shadow: 0 0 0 2px var(--bg-success, #22c55e);
+      }
+
       username {
         font-size: var(--font-size);
         font-weight: var(--font-weight);

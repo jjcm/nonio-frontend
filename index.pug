@@ -21,6 +21,9 @@ html(lang="en")
 
   include sidebar.pug
   #pages
+    soci-route#text-channel(path="^/@[\\w-]+:[^/#?]+$" fresh)
+      script.
+        lazyload('/pages/text-channel.js', document.currentScript.closest('soci-route'))
     soci-route#tags(test="both" path="^(/@[\\w-]+)?/?(#.*)?$" fresh)
       include pages/tags.pug
     soci-route#admin-create(path="/admin/create-account").admin-page
