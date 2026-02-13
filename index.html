@@ -2,7 +2,7 @@
 <html lang="en">
   <title>Nonio</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="icon" type="image/svg+xml" href="/lib/favicon.svg">
   <script src="/lib/markdown-wasm/markdown.js"></script>
   <script src="/soci.js" type="module"></script>
@@ -403,12 +403,6 @@
     </soci-route>
     <soci-route id="user" test="both" path="^/user/" fresh>
       <div class="content" load-order="secondary">
-        <header>
-          <div class="sorts">
-            <div class="sort" selected>Top</div>
-            <div class="sort">New</div>
-          </div>
-        </header>
         <div class="inner-content">
           <soci-post-list></soci-post-list>
         </div>
