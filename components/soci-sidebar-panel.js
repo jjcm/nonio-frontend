@@ -43,7 +43,7 @@ export class SociSidebarPanel extends SociComponent {
 export class SociSidebarCommunityPanel extends SociSidebarPanel {
   activeHTML(){ return `
     <div class="panel-header">
-      <soci-select id="community-switcher"></soci-select>
+      <soci-sidebar-switcher id="community-switcher"><soci-select></soci-select></soci-sidebar-switcher>
     </div>
     <header>
       <div id="community-avatar">
@@ -75,7 +75,9 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
           <div class="channels-header">
             <h2>Channels</h2>
             <soci-button id="channel-create-btn" subtle title="Create channel" style="display: none;">
-              <soci-icon glyph="create" size="16"></soci-icon>
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="7" width="9" height="1" rx="0.5" fill="currentColor"></rect><rect x="7" y="3" width="1" height="9" rx="0.5" fill="currentColor"></rect>'
+              </svg>
             </soci-button>
           </div>
           <div id="channel-list"></div>
@@ -122,7 +124,6 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     const sidebar = this.closest('soci-sidebar')
     if(!sidebar) return
 
-    this.querySelector('#community-switcher')?.addEventListener('selected', (e) => sidebar._onCommunitySelect(e))
     this.querySelector('#community-subscribe')?.addEventListener('click', () => sidebar.toggleSubscribe())
     this.querySelector('content')?.addEventListener('subscribe', (e) => sidebar._createSubscribedTag(e))
     this.querySelector('content')?.addEventListener('unsubscribe', (e) => sidebar._removeSubscribedTag(e))
@@ -150,6 +151,185 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     sidebar._updateCommunityAvatar?.(sidebar.currentCommunity)
     sidebar._toggleCommunityHeaderVisible?.(sidebar.currentCommunity)
     sidebar._populateCommunityDetails?.()
+  }
+}
+
+export class SociSidebarUserPanel extends SociSidebarPanel {
+  constructor() {
+    super()
+    this._onRouteMaybeChanged = this._onRouteMaybeChanged.bind(this)
+    this._currentUsername = ''
+    this._currentType = 'posts'
+  }
+
+  activeHTML(){ return `
+    <div class="panel-header">
+      <soci-sidebar-switcher id="user-switcher">
+        <soci-select>
+          <soci-option slot="selected" value="__user__">
+            <soci-user id="selected-user"></soci-user>
+          </soci-option>
+        </soci-select>
+      </soci-sidebar-switcher>
+    </div>
+
+    <div id="user-panel-header">
+
+      <div id="user-description" hidden>
+        <soci-markdown-view></soci-markdown-view>
+      </div>
+
+      <div class="stats">
+        <div class="stat-row">
+          <div class="stat">
+            <div class="value" value="posts"></div>
+            <label>Posts</label>
+          </div>
+          <div class="stat">
+            <div class="value" value="karma"></div>
+            <label>Post Karma</label>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="value" value="comments"></div>
+            <label>Comments</label>
+          </div>
+          <div class="stat">
+            <div class="value" value="comment_karma"></div>
+            <label>Comment Karma</label>
+          </div>
+        </div>
+      </div>
+
+      <section id="user-content-nav">
+        <h2>Content</h2>
+        <soci-tag-li class="type" data-type="posts" hide-subscribe>
+          Posts
+          <soci-icon slot="icon" glyph="allPosts" size="16"></soci-icon>
+        </soci-tag-li>
+        <soci-tag-li class="type" data-type="comments" hide-subscribe>
+          Comments
+          <soci-icon slot="icon" glyph="comments" size="16"></soci-icon>
+        </soci-tag-li>
+      </section>
+
+      <section class="admin-links">
+        <h2>Admin</h2>
+        <soci-tag-li class="self-action" data-type="settings" href="/admin/settings" hide-subscribe>
+          edit profile
+          <soci-icon slot="icon" glyph="create" size="16"></soci-icon>
+        </soci-tag-li>
+        <soci-tag-li class="self-action" data-type="financials" href="/admin/financials" hide-subscribe>
+          view financials
+          <soci-icon slot="icon" glyph="info" size="16"></soci-icon>
+        </soci-tag-li>
+      </section>
+
+
+      <div class="admin-actions">
+        <soci-button class="nuke-user" danger async><strong>nuke user</strong></soci-button>
+        <soci-button danger>ban user</soci-button>
+      </div>
+    </div>
+  `}
+
+  activatedCallback(){
+    const sidebar = this.closest('soci-sidebar')
+    if(!sidebar) return
+    this._loaded = false
+
+    this.querySelector('#user-content-nav')?.addEventListener('click', (e) => this._onTypeClick(e))
+    this.querySelector('.nuke-user')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('user-nuke'))
+    })
+
+    window.addEventListener('hashchange', this._onRouteMaybeChanged)
+    window.addEventListener('popstate', this._onRouteMaybeChanged)
+    window.addEventListener('link', this._onRouteMaybeChanged)
+
+    sidebar._loadCommunities().then(() => this.querySelector('#user-switcher')?.populate(sidebar._communities))
+    this._refreshFromRoute()
+  }
+
+  deactivatedCallback(){
+    window.removeEventListener('hashchange', this._onRouteMaybeChanged)
+    window.removeEventListener('popstate', this._onRouteMaybeChanged)
+    window.removeEventListener('link', this._onRouteMaybeChanged)
+  }
+
+  _onRouteMaybeChanged(){
+    if(!this._isUserContextRoute()) return
+    this._refreshFromRoute()
+  }
+
+  _renderTypeState(){
+    this.querySelectorAll('#user-content-nav soci-tag-li.type').forEach(li => {
+      li.toggleAttribute('active', li.dataset.type === this._currentType)
+    })
+  }
+
+  _onTypeClick(e){
+    const li = e.target.closest('soci-tag-li.type')
+    if(!li?.dataset.type) return
+    this._currentType = li.dataset.type
+    this._renderTypeState()
+    window.dispatchEvent(new CustomEvent('user-tab', { detail: { type: li.dataset.type } }))
+  }
+
+  _isUserContextRoute(){
+    const path = window.location.pathname || ''
+    return /^\/user\//.test(path) || /^\/admin\/(settings|financials)\/?$/.test(path)
+  }
+
+  _resolveUsername(){
+    const path = window.location.pathname || ''
+    if(/^\/user\//.test(path)) return path.slice(6)
+    if(/^\/admin\/(settings|financials)\/?$/.test(path)) return window.soci.username || ''
+    return ''
+  }
+
+  _updateTypeHrefs(username){
+    const posts = this.querySelector('#user-content-nav soci-tag-li[data-type="posts"]')
+    const comments = this.querySelector('#user-content-nav soci-tag-li[data-type="comments"]')
+    if(posts) posts.setAttribute('href', `/user/${username}`)
+    if(comments) comments.setAttribute('href', `/user/${username}#comments`)
+  }
+
+  async _refreshFromRoute(){
+    const username = this._resolveUsername()
+    if(!username || username === this._currentUsername && this._loaded) return
+    this._loaded = true
+    this._currentUsername = username
+    this._currentType = window.location.hash === '#comments' ? 'comments' : 'posts'
+
+    const selectedUser = this.querySelector('#selected-user')
+    if(selectedUser) selectedUser.setAttribute('name', username)
+
+    const sidebar = this.closest('soci-sidebar')
+    this.querySelector('#user-switcher')?.populate(sidebar?._communities || [])
+    this._updateTypeHrefs(username)
+    this._renderTypeState()
+
+    const isSelf = username === window.soci.username
+    this.querySelector('.admin-links')?.toggleAttribute('active', isSelf)
+    const isAdmin = !!window.soci.roles?.includes('admin') && !isSelf
+    this.querySelector('.admin-actions')?.toggleAttribute('active', isAdmin)
+
+    const response = await window.soci.getData(`users/${username}`).catch(() => ({}))
+    ;['posts', 'karma', 'comments', 'comment_karma'].forEach(k => {
+      const node = this.querySelector(`.value[value="${k}"]`)
+      if(node) node.textContent = response?.[k] ?? 0
+    })
+    const description = (response?.description || '').trim()
+    const descriptionWrap = this.querySelector('#user-description')
+    const md = descriptionWrap?.querySelector('soci-markdown-view')
+    if(md && description) {
+      descriptionWrap.hidden = false
+      md.render(description)
+    } else if(descriptionWrap) {
+      descriptionWrap.hidden = true
+    }
   }
 }
 

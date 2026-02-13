@@ -127,8 +127,8 @@ export default class SociPostList extends SociComponent {
       soci-radio-button-group soci-radio-button[selected]::after {
         content:'';
         display: block;
-        position: fixed;
-        top: 40px;
+        position: absolute;
+        top: 32px;
         width: 16px;
         height: 3px;
         border-radius: 0 0 2px 2px;
@@ -175,10 +175,10 @@ export default class SociPostList extends SociComponent {
         opacity: 1;
         transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
       }
-      #items > soci-post-li {
+      #items::slotted(soci-post-li) {
         margin-top: 8px;
       }
-      #items > soci-post-li:first-child {
+      #items::slotted(soci-post-li:first-child) {
         margin-top: 0;
       }
 
@@ -189,19 +189,19 @@ export default class SociPostList extends SociComponent {
         gap: 12px;
         --grid-lanes: true;
       }
-      /* Prevent vertical-list flash before grid-lanes polyfill positions children (shadow DOM-safe). */
-      :host([view="lanes"]) #items[data-grid-lanes-container] > * {
+      /* Prevent vertical-list flash before grid-lanes polyfill positions children (slotted). */
+      :host([view="lanes"]) #items[data-grid-lanes-container]::slotted(*) {
         opacity: 0;
         transform: translateY(12px);
         pointer-events: none;
         transition: opacity 0.25s var(--soci-ease), transform 0.25s var(--soci-ease);
       }
-      :host([view="lanes"]) #items[data-grid-lanes-container] > [data-grid-lanes-positioned] {
+      :host([view="lanes"]) #items[data-grid-lanes-container]::slotted([data-grid-lanes-positioned]) {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
       }
-      :host([view="lanes"]) #items[data-grid-lanes-container] > [data-grid-lanes-positioned][unloaded] {
+      :host([view="lanes"]) #items[data-grid-lanes-container]::slotted([data-grid-lanes-positioned][unloaded]) {
         opacity: 0;
         transform: translateY(12px);
         pointer-events: none;
@@ -300,7 +300,7 @@ export default class SociPostList extends SociComponent {
               </soci-radio-button-group>
             </div>
           </header>
-          <div id="items"></div>
+          <div id="items"><slot></slot></div>
         </content>
       </scroll-container>
     `
@@ -332,6 +332,7 @@ export default class SociPostList extends SociComponent {
 
   connectedCallback() {
     this._items = this.select('#items')
+    this._itemsSlot = this.select('#items slot')
 
     this.select('#sort-select')?.addEventListener('selected', this._sortChanged.bind(this))
     this.select('#filter-select')?.addEventListener('selected', this._filterChanged.bind(this))
@@ -348,7 +349,7 @@ export default class SociPostList extends SociComponent {
   }
 
   disconnectedCallback() {
-    if(this._items) unpolyfill(this._items)
+    if(this._itemsSlot) unpolyfill(this._itemsSlot)
     this.removeEventListener('card-loaded', this._onCardLoaded)
     window.removeEventListener('hashchange', this._onHashChange)
     if(this._fetchController) this._fetchController.abort()
@@ -599,7 +600,7 @@ export default class SociPostList extends SociComponent {
       if(!data.posts?.length) return
 
       const domIds = new Set(
-        Array.from(this._items?.querySelectorAll('soci-post-li, soci-post-card') || [])
+        Array.from(this.querySelectorAll('soci-post-li, soci-post-card'))
           .map(el => el.getAttribute('post-id'))
       )
       const cacheIds = new Set((this._postsData || []).map(p => String(p.ID)))
@@ -618,11 +619,11 @@ export default class SociPostList extends SociComponent {
         const tempDom = document.createElement('div')
         tempDom.innerHTML = renderFn(post)
         const postEl = tempDom.firstElementChild
-        if(!postEl || !this._items) return
+        if(!postEl) return
 
         postEl.style.opacity = '0'
         postEl.style.transform = 'translateY(12px)'
-        this._items.appendChild(postEl)
+        this.appendChild(postEl)
 
         setTimeout(() => {
           postEl.style.transition = 'opacity 0.3s var(--soci-ease), transform 0.3s var(--soci-ease)'
@@ -631,14 +632,14 @@ export default class SociPostList extends SociComponent {
         }, i * 50)
       })
 
-      if(isLanes && this._items) relayout(this._items)
+      if(isLanes && this._itemsSlot) relayout(this._itemsSlot)
     } catch(e) {
       if(e.name !== 'AbortError') throw e
     }
   }
 
   _updateView(view) {
-    if(this._items) unpolyfill(this._items)
+    if(this._itemsSlot) unpolyfill(this._itemsSlot)
     if(this._postsData) this._applyFilter(this.getAttribute('filter'))
   }
 
@@ -646,7 +647,7 @@ export default class SociPostList extends SociComponent {
     const generation = ++this._renderGeneration
     const isLanes = this.getAttribute('view') === 'lanes'
     const renderFn = isLanes ? this.renderPostCard.bind(this) : this.renderPostLi.bind(this)
-    if(!this._items) return
+    if(!this._itemsSlot) return
 
     if(isLanes) this._scheduleMasonryFlashDebug(generation, 'createPosts(start)')
 
@@ -654,10 +655,10 @@ export default class SociPostList extends SociComponent {
       // Ensure our shadow-scoped "hide until positioned" CSS applies immediately (prevents pre-polyfill flash).
       if(!SUPPORTS_GRID_LANES) this._items.setAttribute('data-grid-lanes-container', '')
 
-      this._items.innerHTML = ''
+      this.innerHTML = ''
 
       this._masonryFlashDebug('polyfill(call)')
-      polyfill(this._items, true)
+      polyfill(this._itemsSlot, true)
       this._masonryFlashDebug('polyfill(return)')
 
       await this._renderPostCardsSequential(data, generation)
@@ -665,7 +666,7 @@ export default class SociPostList extends SociComponent {
     }
 
     let numberToRender = Math.ceil(window.innerHeight / 104)
-    this._items.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
+    this.innerHTML = data.splice(0, numberToRender).map(renderFn).join('')
 
     const renderNextPost = (remainingPosts) => {
       if (remainingPosts.length === 0) return
@@ -674,11 +675,11 @@ export default class SociPostList extends SociComponent {
       const ric = window.requestIdleCallback || (cb => setTimeout(cb, 0))
       ric(() => {
         if (this._renderGeneration !== generation) return
-        if(!this._items) return
+        if(!this._itemsSlot) return
 
-        let tempDom = document.createElement('div')
-        tempDom.innerHTML = renderFn(remainingPosts[0])
-        this._items.appendChild(tempDom.firstElementChild)
+        const temp = document.createElement('div')
+        temp.innerHTML = renderFn(remainingPosts[0])
+        this.appendChild(temp.firstElementChild)
         renderNextPost(remainingPosts.slice(1))
       })
     }
@@ -689,7 +690,7 @@ export default class SociPostList extends SociComponent {
   async _renderPostCardsSequential(posts, generation){
     while(posts.length) {
       if(this._renderGeneration !== generation) return
-      if(!this._items) return
+      if(!this._itemsSlot) return
 
       const tempDom = document.createElement('div')
       tempDom.innerHTML = this.renderPostCard(posts.shift())
@@ -697,10 +698,10 @@ export default class SociPostList extends SociComponent {
       if(!el) continue
 
       el.setAttribute('unloaded', '')
-      this._items.appendChild(el)
+      this.appendChild(el)
 
       // Trigger layout; the polyfill will mark `[data-grid-lanes-positioned]` when done.
-      relayout(this._items)
+      relayout(this._itemsSlot)
 
       if(SUPPORTS_GRID_LANES) {
         await new Promise(requestAnimationFrame)
@@ -746,8 +747,8 @@ export default class SociPostList extends SociComponent {
     if(localStorage.getItem('soci-debug-masonry-flash') !== '1') return
     if(!this._items) return
 
-    const children = Array.from(this._items.children || [])
-    const positioned = this._items.querySelectorAll('[data-grid-lanes-positioned]').length
+    const children = Array.from(this.querySelectorAll('soci-post-li, soci-post-card'))
+    const positioned = this.querySelectorAll('[data-grid-lanes-positioned]').length
 
     const itemsOpacity = getComputedStyle(this._items).opacity
     const first = children[0]

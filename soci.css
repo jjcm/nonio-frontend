@@ -539,10 +539,15 @@ soci-markdown-view *:first-child {
 soci-markdown-view *:last-child {
   margin-bottom: 0;
 }
-soci-markdown-view img {
-  max-width: 100%;
-  margin-top: 8px;
-  border-radius: 4px;
+soci-markdown-view {
+  img {
+    max-width: 100%;
+    margin-top: 8px;
+    border-radius: 4px;
+  }
+  p + p {
+    margin-top: 8px;
+  }
 } 
 pre {
   display: block;
@@ -552,6 +557,10 @@ pre {
   overflow-x: auto;
 }
 a {
+  color: var(--text-brand);
+  text-decoration: none;
+}
+soci-markdown-view a {
   color: var(--text-brand);
   text-decoration: none;
 }
@@ -710,81 +719,9 @@ button:focus {
 soci-route#user {
   min-width: 420px;
   overflow: hidden;
-  .sidebar {
-    padding: 30px 46px 30px 50px;
-    border-right: 4px solid var(--bg);
-    box-sizing: border-box;
-    overflow-y: auto;
-    width: 400px;
-    min-width: 400px;
-    height: 100dvh;
-    position: relative;
-    z-index: 1;
-    box-shadow: 1px 0 5px var(--shadow);
-    soci-link {
-      display: block;
-      width: 100%;
-    }
-    soci-button {
-      width: 100%;
-      margin: 0 0 16px 0;
-      float: none;
-      svg {
-        margin-right: 4px;
-        position: relative;
-        top: 1.5px;
-      }
-    }
-  }
-  .stats {
-    border: 1px solid var(--bg-secondary);
-    border-radius: 8px;
-    margin-bottom: 16px;
-    .stat {
-      display: flex;
-      border-bottom: inherit;
-      padding: 8px 12px;
-    }
-    label {
-      flex: 1;
-      font-weight: 600;
-    }
-    .value {
-      flex: 1;
-      text-align: right;
-    }
-  }
-  .self-actions,
-  .admin-actions {
-    display: none;
-    gap: 8px;
-  }
-  .self-actions[active],
-  .admin-actions[active] {
-    display: flex;
-  }
-  .hero {
-    margin-bottom: 16px;
-    .description {
-      text-align: justify;
-    }
-  }
-  soci-user[avatar-only] {
-    --avatar-size: 220px;
-    display: block;
-    width: 220px;
-    height: 220px;
-    background: var(--bg-secondary);
-    border-radius: 50%;
-    margin: 0 auto 8px;
-  }
-  soci-user[username-only] {
-    margin-bottom: 8px;
-    display: block;
-  }
 }
 soci-route#user[active] {
-  display: flex;
+  display: block;
 }
 soci-route#user .content,
 soci-route#notifications .content {
@@ -793,7 +730,6 @@ soci-route#notifications .content {
   height: 100dvh;
   overflow: hidden;
 }
-soci-route#user .content header,
 soci-route#notifications .content header {
   background-color: var(--bg);
   position: sticky;
@@ -810,15 +746,11 @@ soci-route#notifications .content header {
   justify-content: space-between;
   user-select: none;
 }
-soci-route#user .content header .types,
 soci-route#notifications .content header .types,
-soci-route#user .content header .sorts,
 soci-route#notifications .content header .sorts {
   display: flex;
 }
-soci-route#user .content header .type,
 soci-route#notifications .content header .type,
-soci-route#user .content header .sort,
 soci-route#notifications .content header .sort {
   text-transform: capitalize;
   position: relative;
@@ -832,23 +764,17 @@ soci-route#notifications .content header .sort {
   border-radius: 3px;
   color: var(--text-secondary);
 }
-soci-route#user .content header .type:hover,
 soci-route#notifications .content header .type:hover,
-soci-route#user .content header .sort:hover,
 soci-route#notifications .content header .sort:hover {
   color: var(--text-secondary-hover);
 }
-soci-route#user .content header .type[selected],
 soci-route#notifications .content header .type[selected],
-soci-route#user .content header .sort[selected],
 soci-route#notifications .content header .sort[selected] {
   opacity: 1;
   color: var(--text-brand-bold);
   background: var(--bg-secondary);
 }
-soci-route#user .content header .type[selected]::after,
 soci-route#notifications .content header .type[selected]::after,
-soci-route#user .content header .sort[selected]::after,
 soci-route#notifications .content header .sort[selected]::after {
   content: '';
   display: block;
@@ -861,9 +787,7 @@ soci-route#notifications .content header .sort[selected]::after {
   background: var(--bg);
   box-shadow: 0 1px 1px var(--shadow);
 }
-soci-route#user .content header .type:before,
 soci-route#notifications .content header .type:before,
-soci-route#user .content header .sort:before,
 soci-route#notifications .content header .sort:before {
   position: absolute;
   content: '';
@@ -1034,7 +958,7 @@ soci-route#notifications .content .inner-content {
   display: block;
 }
 @media screen and (max-width: 968px) {
-  soci-route#user .stats {
+  soci-sidebar-user-panel .stats {
     margin-top: 12px;
   }
 }
@@ -1429,8 +1353,15 @@ soci-sidebar {
     }
     #voice-channels .channels-header soci-button {
       flex-shrink: 0;
-      min-width: 32px;
       padding: 4px;
+      width: 24px;
+      height: 24px;
+      background: transparent;
+      color: var(--text-tertiary);
+      &:hover {
+        background: var(--bg-hover);
+        color: var(--text-secondary);
+      }
     }
     #voice-channels #channel-list soci-voice-channel-li,
     #voice-channels #channel-list soci-text-channel-li {
@@ -1604,6 +1535,95 @@ soci-sidebar {
     }
   }
 
+  #user-panel-header {
+    padding: 12px;
+    overflow-y: auto;
+    height: calc(100dvh - 52px);
+    box-sizing: border-box;
+
+    .admin-links,
+    .admin-actions {
+      display: none;
+      margin-bottom: 12px;
+
+      &[active] {
+        display: block;
+      }
+    }
+
+    .admin-links,
+    #user-content-nav {
+      h2 {
+        margin: 0 0 6px;
+      }
+
+      soci-tag-li {
+        margin-bottom: 4px;
+      }
+    }
+
+    #user-content-nav {
+      margin-bottom: 12px;
+    }
+
+    .stats {
+      border: 1px solid var(--bg-secondary);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      .stat-row {
+        display: flex;
+        gap: 12px;
+        border-bottom: 1px solid var(--bg-secondary);
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      .stat {
+        display: flex;
+        flex-direction: column;
+        padding: 8px 12px;
+        width: 50%;
+
+      }
+
+      label {
+        flex: 1;
+        font-size: 11px;
+        color: var(--text-tertiary);
+        margin-top: 4px;
+      }
+
+      .value {
+        font-size: 14px;
+      }
+    }
+
+    #user-description {
+      border: 1px solid var(--bg-secondary);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+  }
+
+  #user-switcher soci-option[slot="selected"] {
+    margin: 0;
+    width: 100%;
+
+    soci-user {
+      width: 100%;
+      --font-size: 14px;
+      --font-weight: 500;
+      --avatar-size: 20px;
+      --line-height: 20px;
+      --spacing: 8px;
+    }
+  }
+
   #sidebar-user {
     padding: 12px;
     box-sizing: border-box;
@@ -1774,41 +1794,14 @@ hr {
 @media (max-width: 1080px) {
   soci-route#user {
     min-width: 0;
-    height: 100dvh;
-    overflow-y: auto;
+    height: auto;
+    overflow-y: visible;
     &[active]{
       display: block;
     }
-    soci-user[avatar-only] {
-      width: 40px;
-      height: 40px;
-      --avatar-size: 40px;
-      position: absolute;
-      left: 12px;
-      top: 12px;
-    }
-
-    soci-user[username-only] {
-      padding-left: 52px;
-      transform: translateY(-4px);
-    }
-
     .content {
       height: auto;
     }
-
-    .stats {
-      margin-bottom: 4px;
-    }
-
-    .sidebar {
-      display: block;
-      box-shadow: none !important;
-      padding: 20px 12px 0 !important;
-      width: 100%;
-      height: auto;
-    }
-
   }
 }
 @media (max-width: 768px) {

@@ -16,7 +16,6 @@ export default class SociPostCard extends SociPostLi {
         border-radius: 8px;
         box-shadow: 0px 1px 3px var(--shadow);
         box-sizing: border-box;
-        overflow: hidden;
         height: auto;
         transition: opacity 0.25s var(--soci-ease), transform 0.25s var(--soci-ease);
       }

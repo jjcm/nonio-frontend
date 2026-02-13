@@ -1,69 +1,36 @@
 let user = {
   dom: document.currentScript.closest('soci-route'),
-  sort: 'top',
   type: 'posts',
+  username: '',
   init: () => {
     soci.registerPage(user)
   },
   onActivate: () => {
-    let username = document.location.pathname.slice(6)
-    document.title = 'Overview for ' + username
-
-    user.dom.querySelector('.hero').innerHTML = `
-      <soci-user size="large" avatar-only name="${username}"></soci-user>
-      <soci-user size="large" username-only name="${username}"></soci-user>
-      <soci-markdown-view class="description" value="description"></soci-markdown-view>
-    `
-
-    if(username == soci.username){
-      user.showPersonalControls()
-    }
-    else if(soci.roles.includes('admin')){
-      user.showAdminControls()
-    }
-
-    let myPosts = document.querySelector('#user soci-post-list')
-    myPosts.setAttribute('data', `/posts?user=${username}`)
-    user.dom.querySelector('header').addEventListener('click', user.tabClick)
-
-    user.checkInfo()
+    user.username = document.location.pathname.slice(6)
+    user.type = window.location.hash === '#comments' ? 'comments' : 'posts'
+    document.title = 'Overview for ' + user.username
+    user.renderContent()
+    window.removeEventListener('user-tab', user.onUserTab)
+    window.addEventListener('user-tab', user.onUserTab)
+    window.removeEventListener('user-nuke', user.nuke)
+    window.addEventListener('user-nuke', user.nuke)
   },
-  tabClick: e => {
-    if(e.target.className.match(/type|sort/)){
-      let container = user.dom.querySelector('.inner-content')
-      let username = document.location.pathname.slice(6)
-      e.target.parentElement.querySelector('[selected]').removeAttribute('selected')
-      e.target.toggleAttribute('selected', true)
-      user[e.target.className] = e.target.innerHTML.toLowerCase()
-      let params = `data="/${user.type}?user=${username}&sort=${user.sort}"`
-
-      if(user.type == "posts")
-        container.innerHTML = `<soci-post-list ${params}></soci-post-list>`
-      else 
-        container.innerHTML = `<soci-user-comment-list ${params}></soci-user-comment-list>`
-    }
+  renderContent: () => {
+    let container = user.dom.querySelector('.inner-content')
+    if(!container) return
+    let params = `data="/${user.type}?user=${user.username}&sort=top"`
+    container.innerHTML = user.type === 'posts'
+      ? `<soci-post-list ${params}></soci-post-list>`
+      : `<soci-user-comment-list ${params}></soci-user-comment-list>`
   },
-  setContents: () => {
-
-  },
-  showPersonalControls: () => {
-    user.dom.querySelector('.self-actions').toggleAttribute('active', true)
-  },
-  showAdminControls: () => {
-    user.dom.querySelector('.admin-actions').toggleAttribute('active', true)
-  },
-  checkInfo: async () => {
-    let username = document.location.pathname.slice(6)
-    let response = await soci.getData(`users/${username}`)
-
-    for (var property in response){
-      let dom = user.dom.querySelector(`.sidebar [value="${property}"]`)
-      if(property == 'description') dom.value = response[property]
-      else dom.innerHTML = response[property]
-    }
+  onUserTab: (e) => {
+    const nextType = e?.detail?.type
+    if(nextType !== 'posts' && nextType !== 'comments') return
+    user.type = nextType
+    user.renderContent()
   },
   nuke: async () => {
-    let button = user.dom.querySelector('soci-button.nuke-user')
+    let button = document.querySelector('soci-sidebar-user-panel soci-button.nuke-user')
     if(confirm('Are you sure you want to nuke this user? This will delete all their posts and comments.')) {
       let username = document.location.pathname.slice(6)
       let response = await window.api.user.nuke(username)
@@ -80,11 +47,5 @@ let user = {
     }
   },
 }
-
-user.dom.querySelector('soci-post-list').addEventListener('tabactivate', e=>{
-  let username = document.location.pathname.slice(6)
-  let myPosts = document.querySelector('#user soci-post-list')
-  myPosts.setAttribute('data', `/posts?user=${username}`)
-})
 
 document.addEventListener('DOMContentLoaded', user.init)

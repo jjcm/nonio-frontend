@@ -181,6 +181,10 @@ export default class SociSidebar extends SociComponent {
   }
 
   _onRouteChange() {
+    const onUserRoute = /^\/user\//.test(window.location.pathname || '')
+      || /^\/admin\/(settings|financials)\/?$/.test(window.location.pathname || '')
+    if(onUserRoute) this.setView('user')
+    else if(this.getAttribute('view') === 'user') this.setView('community')
     this._updateLinks()
     this._checkCommunityChange()
     this._syncActiveChannelFromHash()
@@ -438,6 +442,7 @@ export default class SociSidebar extends SociComponent {
   }
   
   _updateCommunitySelection(communityUrl) {
+    if(this.getAttribute('view') !== 'community') return
     let select = this.select('soci-select')
     if(!select) return
     const subscribeBtn = this.select('#community-subscribe')
@@ -553,6 +558,7 @@ export default class SociSidebar extends SociComponent {
   }
 
   _populateCommunitySelect(communities){
+    if(this.getAttribute('view') !== 'community') return
     this._communitiesLoaded = true
     let select = this.select('soci-select')
     if(!select) return
@@ -598,19 +604,6 @@ export default class SociSidebar extends SociComponent {
     }
   }
   
-  _onCommunitySelect(e) {
-    let val = e.target.getAttribute('value')
-    if(val === '__create__') {
-        this.openCreateCommunity()
-        // Reset select to previous value
-        this._updateCommunitySelection(this.currentCommunity)
-    } else {
-        let href = val ? `/@${val}` : '/'
-        window.history.pushState(null, null, href)
-        window.dispatchEvent(new CustomEvent('link'))
-    }
-  }
-
   openCreateCommunity(){
     // Switch to the create-community panel (used by the community selector "__create__" option)
     if(!this.authToken) return window.soci?.requireLogin?.('create a community')
