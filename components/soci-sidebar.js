@@ -1,5 +1,6 @@
 import SociComponent from './soci-component.js'
 import config from '../config.js'
+import sociModalManager from './modals/soci-modal-manager.js'
 
 export default class SociSidebar extends SociComponent {
   constructor() {
@@ -79,8 +80,15 @@ export default class SociSidebar extends SociComponent {
   }
 
   showLogin() {
-    // Explicitly show the login panel (no longer the default for logged-out users)
-    this._setView('login')
+    sociModalManager.open('login')
+  }
+
+  showCreateAccount() {
+    sociModalManager.open('createAccount')
+  }
+
+  showCreateCommunity() {
+    sociModalManager.open('createCommunity')
   }
 
   needsLogin() {
@@ -151,6 +159,9 @@ export default class SociSidebar extends SociComponent {
     window.addEventListener('hashchange', this._onRouteChange)
     window.addEventListener('popstate', this._onRouteChange)
     window.addEventListener('link', this._onRouteChange)
+    window.addEventListener('auth-login', (e) => this._onLoggedIn(e.detail))
+    window.addEventListener('auth-signup', (e) => this._onLoggedIn(e.detail))
+    window.addEventListener('community-created', () => this._loadCommunities())
     document.addEventListener('avatar-updated', this._onAvatarUpdate)
     document.addEventListener('community-updated', this._onCommunityUpdate)
 
@@ -163,6 +174,10 @@ export default class SociSidebar extends SociComponent {
     window.removeEventListener('hashchange', this._onRouteChange)
     window.removeEventListener('popstate', this._onRouteChange)
     window.removeEventListener('link', this._onRouteChange)
+    // We can leave anonymous listeners as they will be GC'd with the window/element
+    // but cleaner to remove if we bound them. Since we used arrow functions in addEventListener above, 
+    // we can't easily remove them unless we bind them. 
+    // Given soci-sidebar is a singleton that persists, this is acceptable.
     document.removeEventListener('avatar-updated', this._onAvatarUpdate)
     document.removeEventListener('community-updated', this._onCommunityUpdate)
     this._stopVoicePresencePolling()
@@ -181,10 +196,10 @@ export default class SociSidebar extends SociComponent {
   }
 
   _onRouteChange() {
-    const onUserRoute = /^\/user\//.test(window.location.pathname || '')
-      || /^\/admin\/(settings|financials)\/?$/.test(window.location.pathname || '')
-    if(onUserRoute) this.setView('user')
+    this._userRouteState = this._resolveUserRouteState()
+    if(this._userRouteState) this.setView('user')
     else if(this.getAttribute('view') === 'user') this.setView('community')
+    this._notifyUserPanelRouteState()
     this._updateLinks()
     this._checkCommunityChange()
     this._syncActiveChannelFromHash()
@@ -195,8 +210,37 @@ export default class SociSidebar extends SociComponent {
   // Sentinel so the first _checkCommunityChange() always runs on initial load,
   // even when currentCommunity is null/undefined (Nonio/frontpage).
   _lastCommunity = '__init__'
+  _userRouteState = null
   _communities = []
   _communitiesLoaded = false
+
+  _resolveUserRouteState() {
+    const path = window.location.pathname || ''
+    const userMatch = path.match(/^\/user\/([^/]+)\/?$/)
+    if(userMatch) {
+      const username = decodeURIComponent(userMatch[1] || '')
+      if(!username) return null
+      return {
+        username,
+        section: window.location.hash === '#comments' ? 'comments' : 'posts'
+      }
+    }
+
+    const adminMatch = path.match(/^\/admin\/(settings|financials)\/?$/)
+    if(adminMatch) {
+      const username = window.soci?.username || ''
+      if(!username) return null
+      return {
+        username,
+        section: adminMatch[1]
+      }
+    }
+    return null
+  }
+
+  _notifyUserPanelRouteState() {
+    this.querySelector('#user-panel')?.setRouteState?.(this._userRouteState)
+  }
 
   _checkCommunityChange() {
     let community = this.currentCommunity
@@ -605,9 +649,9 @@ export default class SociSidebar extends SociComponent {
   }
   
   openCreateCommunity(){
-    // Switch to the create-community panel (used by the community selector "__create__" option)
+    // Opens the create-community modal (used by the community selector "__create__" option)
     if(!this.authToken) return window.soci?.requireLogin?.('create a community')
-    this.setView('create-community')
+    this.showCreateCommunity()
   }
   
   async toggleSubscribe() {
@@ -869,8 +913,12 @@ export default class SociSidebar extends SociComponent {
     const signup = e.target?.closest?.('#signup-link')
     if(signup) {
       e.preventDefault?.()
-      return this.setView('create')
+      return this.showCreateAccount()
     }
+  }
+
+  closeSidebarAuthModals(){
+    sociModalManager.closeAll()
   }
 
   _syncAuthUI(){

@@ -157,7 +157,7 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
 export class SociSidebarUserPanel extends SociSidebarPanel {
   constructor() {
     super()
-    this._onRouteMaybeChanged = this._onRouteMaybeChanged.bind(this)
+    this._routeState = null
     this._currentUsername = ''
     this._currentType = 'posts'
   }
@@ -244,27 +244,20 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
       window.dispatchEvent(new CustomEvent('user-nuke'))
     })
 
-    window.addEventListener('hashchange', this._onRouteMaybeChanged)
-    window.addEventListener('popstate', this._onRouteMaybeChanged)
-    window.addEventListener('link', this._onRouteMaybeChanged)
-
     sidebar._loadCommunities().then(() => this.querySelector('#user-switcher')?.populate(sidebar._communities))
-    this._refreshFromRoute()
+    this.setRouteState(sidebar._userRouteState)
   }
 
-  deactivatedCallback(){
-    window.removeEventListener('hashchange', this._onRouteMaybeChanged)
-    window.removeEventListener('popstate', this._onRouteMaybeChanged)
-    window.removeEventListener('link', this._onRouteMaybeChanged)
+  setRouteState(routeState){
+    this._routeState = routeState || null
+    if(this.hasAttribute('active')) this._refreshFromRouteState()
   }
 
-  _onRouteMaybeChanged(){
-    if(!this._isUserContextRoute()) return
-    this._refreshFromRoute()
-  }
-
-  _renderTypeState(){
+  _renderNavState(){
     this.querySelectorAll('#user-content-nav soci-tag-li.type').forEach(li => {
+      li.toggleAttribute('active', li.dataset.type === this._currentType)
+    })
+    this.querySelectorAll('.self-action').forEach(li => {
       li.toggleAttribute('active', li.dataset.type === this._currentType)
     })
   }
@@ -273,20 +266,8 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
     const li = e.target.closest('soci-tag-li.type')
     if(!li?.dataset.type) return
     this._currentType = li.dataset.type
-    this._renderTypeState()
+    this._renderNavState()
     window.dispatchEvent(new CustomEvent('user-tab', { detail: { type: li.dataset.type } }))
-  }
-
-  _isUserContextRoute(){
-    const path = window.location.pathname || ''
-    return /^\/user\//.test(path) || /^\/admin\/(settings|financials)\/?$/.test(path)
-  }
-
-  _resolveUsername(){
-    const path = window.location.pathname || ''
-    if(/^\/user\//.test(path)) return path.slice(6)
-    if(/^\/admin\/(settings|financials)\/?$/.test(path)) return window.soci.username || ''
-    return ''
   }
 
   _updateTypeHrefs(username){
@@ -296,12 +277,16 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
     if(comments) comments.setAttribute('href', `/user/${username}#comments`)
   }
 
-  async _refreshFromRoute(){
-    const username = this._resolveUsername()
-    if(!username || username === this._currentUsername && this._loaded) return
-    this._loaded = true
+  async _refreshFromRouteState(){
+    const username = this._routeState?.username || ''
+    if(!username) return
+
+    const section = this._routeState?.section
+    this._currentType = section === 'comments' || section === 'settings' || section === 'financials'
+      ? section
+      : 'posts'
+    const shouldLoadUser = !this._loaded || this._currentUsername !== username
     this._currentUsername = username
-    this._currentType = window.location.hash === '#comments' ? 'comments' : 'posts'
 
     const selectedUser = this.querySelector('#selected-user')
     if(selectedUser) selectedUser.setAttribute('name', username)
@@ -309,13 +294,15 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
     const sidebar = this.closest('soci-sidebar')
     this.querySelector('#user-switcher')?.populate(sidebar?._communities || [])
     this._updateTypeHrefs(username)
-    this._renderTypeState()
+    this._renderNavState()
 
     const isSelf = username === window.soci.username
     this.querySelector('.admin-links')?.toggleAttribute('active', isSelf)
     const isAdmin = !!window.soci.roles?.includes('admin') && !isSelf
     this.querySelector('.admin-actions')?.toggleAttribute('active', isAdmin)
+    if(!shouldLoadUser) return
 
+    this._loaded = true
     const response = await window.soci.getData(`users/${username}`).catch(() => ({}))
     ;['posts', 'karma', 'comments', 'comment_karma'].forEach(k => {
       const node = this.querySelector(`.value[value="${k}"]`)
@@ -329,204 +316,6 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
       md.render(description)
     } else if(descriptionWrap) {
       descriptionWrap.hidden = true
-    }
-  }
-}
-
-export class SociSidebarLoginPanel extends SociSidebarPanel {
-  activeHTML(){ return `
-    <soci-button subtle class="panel-back" id="back-to-community">&larr; back</soci-button>
-    <h2>Login to your account</h2>
-    <form>
-      <input type="email" name="email" placeholder="Email address" autocomplete="email">
-      <soci-password name="password"></soci-password>
-      <soci-button async id="login-btn">login</soci-button>
-    </form>
-    <div class="panel-footer">
-      <soci-link id="create-account" href="#">create account</soci-link>
-      <soci-link id="im-stupid" href="/admin/forgot-password">forgot password</soci-link>
-    </div>
-  `}
-
-  activatedCallback(){
-    const sidebar = this.closest('soci-sidebar')
-    if(!sidebar) return
-
-    this.querySelector('#back-to-community')?.addEventListener('click', (e) => {
-      e.preventDefault()
-      sidebar.setView('community')
-    })
-
-    const form = this.querySelector('form')
-    const btn = this.querySelector('#login-btn')
-    const create = this.querySelector('#create-account')
-
-    const submit = (e) => {
-      e?.preventDefault?.()
-      btn?.wait?.()
-      this._login()
-    }
-
-    form?.addEventListener('submit', submit)
-    btn?.addEventListener('click', submit)
-    create?.addEventListener('click', (e) => {
-      e.preventDefault()
-      sidebar.setView('create')
-    })
-
-    this.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter') submit(e)
-    })
-
-    setTimeout(() => this.querySelector('input[type="email"]')?.focus?.(), 0)
-  }
-
-  async _login(){
-    const sidebar = this.closest('soci-sidebar')
-    if(!sidebar) return
-    const form = this.querySelector('form')
-    const btn = this.querySelector('#login-btn')
-
-    this.querySelector('soci-password')?.checkValidity?.()
-    const loginData = window.soci.getJSONFromForm(form)
-    if(!form.reportValidity()) return btn?.error?.()
-
-    const response = await window.api.user.login(loginData)
-    if(!response?.accessToken) return btn?.error?.()
-    btn?.success?.()
-    sidebar._onLoggedIn(response)
-  }
-}
-
-export class SociSidebarAccountCreation extends SociSidebarPanel {
-  activeHTML(){ return `
-    <soci-button subtle class="panel-back" id="back-to-community">&larr; back</soci-button>
-    <form>
-      <h2>Create Account</h2>
-      <soci-username-input name="username" tabindex="1"></soci-username-input>
-      <input type="email" name="email" placeholder="Email address" autocomplete="email">
-      <soci-password tabindex="0" name="password"></soci-password>
-      <soci-password tabindex="0" name="confirmPassword" placeholder="Confirm Password" match="password"></soci-password>
-      <soci-button async id="register-btn">Create Account</soci-button>
-    </form>
-  `}
-
-  activatedCallback(){
-    const sidebar = this.closest('soci-sidebar')
-    this.querySelector('#back-to-community')?.addEventListener('click', (e) => {
-      e.preventDefault()
-      sidebar?.setView?.('community')
-    })
-
-    const form = this.querySelector('form')
-    const btn = this.querySelector('#register-btn')
-    const submit = (e) => {
-      e?.preventDefault?.()
-      btn?.wait?.()
-      this._register()
-    }
-    form?.addEventListener('submit', submit)
-    btn?.addEventListener('click', submit)
-  }
-
-  async _register(){
-    const sidebar = this.closest('soci-sidebar')
-    if(!sidebar) return
-    const form = this.querySelector('form')
-    const btn = this.querySelector('#register-btn')
-    if(!form.reportValidity()) return btn?.error?.()
-    const formData = window.soci.getJSONFromForm(form)
-    const response = await window.api.user.register(formData)
-    if(!response?.accessToken) return btn?.error?.()
-    btn?.success?.()
-    sidebar._onLoggedIn(response)
-  }
-}
-
-export class SociSidebarCreateCommunityPanel extends SociSidebarPanel {
-  activeHTML(){ return `
-    <div class="panel-header">
-      <soci-button subtle id="close-create-community">
-        &larr; back
-      </soci-button>
-      <h3>Create Community</h3>
-    </div>
-    <form id="create-community-form">
-      <input name="name" placeholder="Name" required>
-      <input name="url" placeholder="URL (no @)" required>
-      <textarea name="description" placeholder="Description"></textarea>
-      <select name="privacy">
-        <option value="public">Public</option>
-        <option value="invite-only">Invite only</option>
-      </select>
-      <div class="error" hidden></div>
-      <div class="actions">
-        <soci-button async id="submit-create-community">Create</soci-button>
-      </div>
-    </form>
-  `}
-
-  activatedCallback(){
-    const sidebar = this.closest('soci-sidebar')
-    if(!sidebar) return
-    this.querySelector('#close-create-community')?.addEventListener('click', (e) => {
-      e.preventDefault()
-      sidebar.setView('community')
-    })
-    const submit = (e) => {
-      e?.preventDefault?.()
-      this._submit()
-    }
-    this.querySelector('#submit-create-community')?.addEventListener('click', submit)
-    this.querySelector('#create-community-form')?.addEventListener('submit', submit)
-    setTimeout(() => this.querySelector('input[name="name"]')?.focus?.(), 0)
-  }
-
-  _toggleError(message) {
-    const error = this.querySelector('.error')
-    if(!error) return
-    if(message) {
-      error.hidden = false
-      error.textContent = message
-    } else {
-      error.hidden = true
-      error.textContent = ''
-    }
-  }
-
-  async _submit(){
-    const sidebar = this.closest('soci-sidebar')
-    if(!sidebar) return
-    if(!sidebar.authToken) return window.soci?.requireLogin?.('create a community')
-
-    const form = this.querySelector('#create-community-form')
-    const btn = this.querySelector('#submit-create-community')
-    btn?.wait?.()
-    this._toggleError()
-
-    const payload = {
-      name: form.name.value.trim(),
-      url: form.url.value.trim().replace(/^@/, '').toLowerCase(),
-      description: form.description.value.trim(),
-      privacyType: form.privacy.value
-    }
-
-    try {
-      const result = await window.api.community.create(payload)
-      if(result?.error) {
-        this._toggleError(result.error)
-        return btn?.error?.()
-      }
-      btn?.success?.()
-      await sidebar._loadCommunities()
-      sidebar.setView('community')
-      if(result?.url) {
-        window.history.pushState(null, null, `/@${result.url}`)
-        window.dispatchEvent(new CustomEvent('link'))
-      }
-    } catch {
-      this._toggleError('Unable to create community')
-      btn?.error?.()
     }
   }
 }

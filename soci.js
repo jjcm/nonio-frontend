@@ -159,15 +159,13 @@ let soci = {
   },
   showRegister() {
     soci.animateSidebar()
-    setTimeout(()=>{
-      document.body.toggleAttribute('noauth', false)
-      document.querySelector('soci-sidebar')._createAccount()
-    }, 1)
+    document.body.toggleAttribute('noauth', false)
+    document.querySelector('soci-sidebar')?.showCreateAccount?.()
   },
   showLogin() {
     soci.animateSidebar()
     document.body.toggleAttribute('noauth', false)
-    document.querySelector('soci-sidebar')?.needsLogin?.()
+    document.querySelector('soci-sidebar')?.showLogin?.()
   },
   setAnimationTimings(){
     let root = document.documentElement

@@ -103,13 +103,21 @@ window.customElements.define('soci-sidebar', SociSidebar)
 import SociSidebarSwitcher from "./soci-sidebar-switcher.js"
 window.customElements.define('soci-sidebar-switcher', SociSidebarSwitcher)
 
-import {SociSidebarPanel, SociSidebarCommunityPanel, SociSidebarUserPanel, SociSidebarLoginPanel, SociSidebarAccountCreation, SociSidebarCreateCommunityPanel} from "./soci-sidebar-panel.js"
+import {SociSidebarPanel, SociSidebarCommunityPanel, SociSidebarUserPanel} from "./soci-sidebar-panel.js"
 window.customElements.define('soci-sidebar-panel', SociSidebarPanel)
 window.customElements.define('soci-sidebar-community-panel', SociSidebarCommunityPanel)
 window.customElements.define('soci-sidebar-user-panel', SociSidebarUserPanel)
-window.customElements.define('soci-sidebar-login-panel', SociSidebarLoginPanel)
-window.customElements.define('soci-sidebar-account-creation', SociSidebarAccountCreation)
-window.customElements.define('soci-sidebar-create-community-panel', SociSidebarCreateCommunityPanel)
+
+import SociLoginModal from "./modals/soci-login-modal.js"
+window.customElements.define('soci-login-modal', SociLoginModal)
+
+import SociCreateAccountModal from "./modals/soci-create-account-modal.js"
+window.customElements.define('soci-create-account-modal', SociCreateAccountModal)
+
+import SociCreateCommunityModal from "./modals/soci-create-community-modal.js"
+window.customElements.define('soci-create-community-modal', SociCreateCommunityModal)
+
+import "./modals/soci-modal-manager.js"
 
 import SociTab from "./soci-tab.js"
 window.customElements.define('soci-tab', SociTab)

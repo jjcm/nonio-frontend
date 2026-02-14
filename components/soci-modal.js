@@ -37,6 +37,7 @@ export default class SociModal extends SociComponent {
       left: 0;
       background: var(--shadow);
       z-index: 5;
+      display: none;
     }
     #modal {
       position: relative;
@@ -49,7 +50,12 @@ export default class SociModal extends SociComponent {
       box-shadow: 0 0 0 1px var(--shadow), 0 4px 8px var(--shadow), 0 0 0 1px rgba(255,255,255,0.1) inset;
       transform: translateY(16px);
       transition: transform 0.25s var(--soci-ease);
+      display: none
     }
+    :host([active]) #modal { display: block; }
+    :host([deactivating]) #modal { display: block; }
+    :host([active]) #blanket { display: block; }
+    :host([deactivating]) #blanket { display: block; }
     h2 { margin-top: 0; }
   `}
 
@@ -68,6 +74,7 @@ export default class SociModal extends SociComponent {
   deactivate(){
     this.toggleAttribute('deactivating', true)
     this.removeAttribute('active')
+    this.dispatchEvent(new CustomEvent('modaldeactivate', { bubbles: true }))
     setTimeout(()=>{
       this.removeAttribute('deactivating')
     }, 400)
@@ -75,5 +82,6 @@ export default class SociModal extends SociComponent {
   
   activate(){
     this.toggleAttribute('active', true)
+    this.dispatchEvent(new CustomEvent('modalactivate', { bubbles: true }))
   }
 }

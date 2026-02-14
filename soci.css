@@ -1158,10 +1158,6 @@ soci-sidebar {
     }
   }
 
-  .panel-back {
-    margin: 0 0 16px;
-    width: 100%;
-  }
 
   .panel-header {
     background: var(--bg-secondary);
@@ -1289,31 +1285,6 @@ soci-sidebar {
   }
 
 
-  #create,
-  #login,
-  #create-community {
-    padding: 24px 24px 20px;
-  }
-
-  #login {
-    soci-link {
-      display: block;
-      margin-top: 32px;
-      font-size: 13px;
-      color: var(--text-brand);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      opacity: 0.8;
-      cursor: pointer;
-      text-align: center;
-      &:last-child {
-        margin: 12px 0 8px;
-        color: var(--text-secondary);
-        font-weight: 400;
-        opacity: 0.5;
-      }
-    }
-  }
 
   #community {
     display: flex;
@@ -1428,38 +1399,6 @@ soci-sidebar {
   select:focus {
     outline: 0;
     border-color: var(--bg-brand);
-  }
-
-  #create-community {
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-bottom: 24px;
-      h3 {
-        margin: 0 0 0 12px;
-        font-size: 16px;
-      }
-    }
-    textarea {
-      min-height: 60px;
-      resize: vertical;
-    }
-    select {
-      border: 1px solid var(--bg-secondary);
-      border-radius: 6px;
-      padding: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      background: var(--bg);
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .error {
-      color: var(--text-danger);
-      font-size: 13px;
-      margin-top: 8px;
-    }
   }
 
   #create-channel-form {
@@ -1965,4 +1904,70 @@ soci-post-card soci-markdown-view img {
 soci-post-card soci-markdown-view pre,
 soci-post-card soci-markdown-view code {
   font-size: 12px;
+}
+
+/* Sidebar auth/community flows now render in top-level modals */
+/* Standard Modal Styles */
+soci-modal .modal-form {
+  display: block;
+  min-width: min(420px, calc(100vw - 72px));
+}
+
+soci-modal .modal-form soci-button {
+  margin: 16px 0 8px;
+  width: 100%;
+}
+
+soci-modal .modal-footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+soci-modal .modal-footer soci-link {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-brand);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+soci-modal .modal-footer soci-link.secondary {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+/* Specific Modal Overrides */
+soci-create-community-modal {
+  textarea {
+    min-height: 60px;
+    resize: vertical;
+  }
+
+  select {
+    border: 1px solid var(--bg-secondary);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
+    margin-bottom: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .error {
+    color: var(--text-danger);
+    font-size: 13px;
+    margin-top: 8px;
+  }
 }
