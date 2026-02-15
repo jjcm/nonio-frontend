@@ -549,6 +549,9 @@ soci-markdown-view {
     margin-top: 8px;
   }
 } 
+soci-message-row:has(+ soci-message-row) {
+  padding-bottom: 0;
+}
 pre {
   display: block;
   background: var(--bg-secondary);
@@ -1401,23 +1404,6 @@ soci-sidebar {
     border-color: var(--bg-brand);
   }
 
-  #create-channel-form {
-    soci-radio-button-group {
-      display: inline-flex;
-      gap: 4px;
-      background: var(--bg-secondary);
-      padding: 4px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      width: fit-content;
-    }
-
-    soci-radio-button[selected] {
-      background: var(--bg-brand);
-      color: var(--text-inverse);
-    }
-  }
-
   #community-avatar {
     display: flex;
     justify-content: center;
@@ -1695,6 +1681,13 @@ soci-route[active] [load-order="tertiary"] {
 soci-route:not([active]):not([activating]) {
   display: none;
 }
+
+.emoji {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  vertical-align: middle;
+}
 #new-user {
   #new-user-container {
     padding: 24px 36px;
@@ -1963,6 +1956,29 @@ soci-create-community-modal {
     margin-bottom: 8px;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .error {
+    color: var(--text-danger);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+}
+
+soci-create-channel-modal {
+  .modal-form soci-radio-button-group {
+    display: inline-flex;
+    gap: 4px;
+    background: var(--bg-secondary);
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    width: fit-content;
+  }
+
+  soci-radio-button[selected] {
+    background: var(--bg-brand);
+    color: var(--text-inverse);
   }
 
   .error {

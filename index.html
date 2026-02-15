@@ -28,18 +28,6 @@
     </section>
     <soci-sidebar-community-panel id="community" panel="community"></soci-sidebar-community-panel>
     <soci-sidebar-user-panel id="user-panel" panel="user"></soci-sidebar-user-panel>
-    <soci-modal id="create-channel-modal" title="Create channel">
-      <form id="create-channel-form">
-        <input name="name" placeholder="Name" required>
-        <input name="slug" placeholder="Slug (optional)">
-        <soci-radio-button-group name="kind" value="text">
-          <soci-radio-button value="text">Text</soci-radio-button>
-          <soci-radio-button value="voice">Voice</soci-radio-button>
-        </soci-radio-button-group>
-        <div class="error" hidden></div>
-        <soci-button async id="submit-create-channel">Create</soci-button>
-      </form>
-    </soci-modal>
     <section id="footer" slot="footer">
       <links>
         <soci-link href="/about">About</soci-link><a href="https://github.com/jjcm/nonio/issues/new">Feedback</a>
@@ -530,6 +518,29 @@
         </soci-modal>
       </div>
     </soci-route>
+    <soci-route class="admin-page" id="admin-emojis" path="/admin/emojis">
+      <style>
+        #admin-emojis {
+          .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+          form { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+          input[type="text"] { min-width: 180px; }
+          .emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+          .emoji-card { border: 1px solid var(--bg-secondary); border-radius: 8px; padding: 8px; text-align: center; }
+          .emoji-card img { width: 24px; height: 24px; object-fit: contain; display: block; margin: 0 auto 6px; }
+          .emoji-name { font-size: 12px; color: var(--text-secondary); }
+        }
+      </style>
+      <div class="container" id="admin-emojis">
+        <h1>Personal Emojis</h1>
+        <form id="emoji-form">
+          <input id="emoji-name" type="text" placeholder="emoji_name" required pattern="^[a-z0-9_]{2,32}$">
+          <input id="emoji-file" type="file" accept="image/*" required>
+          <soci-button id="emoji-upload" async>Upload</soci-button>
+        </form>
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+      <script>lazyload('/pages/admin/emojis.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
     <soci-route id="about" path="/about">
       <div class="content info-page">
         <div class="loading-block" load-order="primary">
@@ -940,6 +951,29 @@
         </div>
       </div>
       <script>lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))</script>
+    </soci-route>
+    <soci-route id="community-emojis" path="^(/@[\w-]+)/admin/emojis$" fresh>
+      <style>
+        #community-emojis {
+          .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+          form { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+          input[type="text"] { min-width: 180px; }
+          .emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+          .emoji-card { border: 1px solid var(--bg-secondary); border-radius: 8px; padding: 8px; text-align: center; }
+          .emoji-card img { width: 24px; height: 24px; object-fit: contain; display: block; margin: 0 auto 6px; }
+          .emoji-name { font-size: 12px; color: var(--text-secondary); }
+        }
+      </style>
+      <div class="container" id="community-emojis">
+        <h1>Community Emojis</h1>
+        <form id="emoji-form">
+          <input id="emoji-name" type="text" placeholder="emoji_name" required pattern="^[a-z0-9_]{2,32}$">
+          <input id="emoji-file" type="file" accept="image/*" required>
+          <soci-button id="emoji-upload" async>Upload</soci-button>
+        </form>
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+      <script>lazyload('/pages/community-emojis.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="post" default fresh>
       <soci-post>

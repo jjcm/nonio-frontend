@@ -76,7 +76,14 @@ api.votes = {
 
 api.voice = {
   join: (community, channel) => api.postData('voice/join', { community, channel }),
-  presence: (community) => api.postData('voice/presence', { community })
+  presence: (community) => api.postData('voice/presence', { community }),
+  presenceWsUrl: (community, token) => {
+    const wsBase = config.API_HOST
+      .replace(/^https:\/\//, 'wss://')
+      .replace(/^http:\/\//, 'ws://')
+      .replace(/\/$/, '')
+    return `${wsBase}/voice/presence/ws?community=${encodeURIComponent(community)}&token=${encodeURIComponent(token)}`
+  }
 }
 
 api.channels = {
@@ -91,7 +98,23 @@ api.channelMessages = {
     if (limit) path += `&limit=${limit}`
     return api.getData(path)
   },
-  send: (data) => api.postData('community/channel/messages', data)
+  send: (data) => api.postData('community/channel/messages', data),
+  thread: (community, channel, parentID) => {
+    const path = `community/channel/thread?community=${encodeURIComponent(community)}&channel=${encodeURIComponent(channel)}&parentID=${encodeURIComponent(parentID)}`
+    return api.getData(path)
+  },
+  sendThreadReply: (data) => api.postData('community/channel/thread', data),
+  react: (messageID, emoji) => api.postData('community/channel/message/react', { messageID, emoji })
+}
+
+api.emoji = {
+  communityList: (community) => api.getData(`community/emojis?community=${encodeURIComponent(community)}`),
+  createCommunity: (data) => api.postData('community/emoji/create', data),
+  createPersonal: (data) => api.postData('emoji/create', data),
+  sets: (community) => api.getData(`emojis/sets${community ? `?community=${encodeURIComponent(community)}` : ''}`),
+  subscribe: (emojiID) => api.postData('emoji/subscribe', { emojiID }),
+  get: (id) => api.getData(`emoji?id=${encodeURIComponent(id)}`),
+  getMany: (ids) => api.getData(`emoji?ids=${encodeURIComponent(ids.join(','))}`)
 }
 
 window.api = api

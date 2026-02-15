@@ -13,6 +13,11 @@ const modalRegistry = {
     id: 'create-community-modal',
     title: 'Create community',
     tag: 'soci-create-community-modal'
+  },
+  createChannel: {
+    id: 'create-channel-modal',
+    title: 'Create channel',
+    tag: 'soci-create-channel-modal'
   }
 }
 

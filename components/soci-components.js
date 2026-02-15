@@ -117,6 +117,9 @@ window.customElements.define('soci-create-account-modal', SociCreateAccountModal
 import SociCreateCommunityModal from "./modals/soci-create-community-modal.js"
 window.customElements.define('soci-create-community-modal', SociCreateCommunityModal)
 
+import SociCreateChannelModal from "./modals/soci-create-channel-modal.js"
+window.customElements.define('soci-create-channel-modal', SociCreateChannelModal)
+
 import "./modals/soci-modal-manager.js"
 
 import SociTab from "./soci-tab.js"

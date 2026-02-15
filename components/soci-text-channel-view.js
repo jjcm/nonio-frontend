@@ -22,10 +22,7 @@ export default class SociTextChannelView extends SociComponent {
       #messages-scroll {
         flex: 1;
         overflow: auto;
-        padding: 12px 16px 80px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+        padding: 12px 0 80px;
         scrollbar-width: auto;
         scrollbar-color: var(--text-secondary) var(--bg-bold);
       }
@@ -43,7 +40,6 @@ export default class SociTextChannelView extends SociComponent {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 8px;
       }
       slot#messages::slotted(*) {
         max-width: 100%;

@@ -121,7 +121,7 @@ export default class SociSidebar extends SociComponent {
     this._loadSubscribedTags()
     window.soci.loadVotes?.()
     this._syncAuthUI()
-    this._startVoicePresencePolling()
+    this._startVoicePresenceSocket()
 
     this.showCommunity()
   }
@@ -162,12 +162,16 @@ export default class SociSidebar extends SociComponent {
     window.addEventListener('auth-login', (e) => this._onLoggedIn(e.detail))
     window.addEventListener('auth-signup', (e) => this._onLoggedIn(e.detail))
     window.addEventListener('community-created', () => this._loadCommunities())
+    window.addEventListener('channel-created', (e) => {
+      this._loadChannels()
+      if (e.detail?.kind === 'text' && e.detail?.slug) this.openTextChannel(e.detail.slug)
+    })
     document.addEventListener('avatar-updated', this._onAvatarUpdate)
     document.addEventListener('community-updated', this._onCommunityUpdate)
 
     // Set initial routes and community details
     setTimeout(() => this._onRouteChange(), 0)
-    this._startVoicePresencePolling()
+    this._startVoicePresenceSocket()
   }
 
   disconnectedCallback(){
@@ -180,7 +184,7 @@ export default class SociSidebar extends SociComponent {
     // Given soci-sidebar is a singleton that persists, this is acceptable.
     document.removeEventListener('avatar-updated', this._onAvatarUpdate)
     document.removeEventListener('community-updated', this._onCommunityUpdate)
-    this._stopVoicePresencePolling()
+    this._stopVoicePresenceSocket()
   }
 
   _nextFrame(){
@@ -256,7 +260,7 @@ export default class SociSidebar extends SociComponent {
     this._toggleVoiceChannelsVisible(community)
     this._populateCommunityDetails()
     this._loadChannels()
-    this._startVoicePresencePolling()
+    this._startVoicePresenceSocket()
     this._syncActiveChannelFromHash()
   }
 
@@ -322,62 +326,9 @@ export default class SociSidebar extends SociComponent {
       window.soci?.requireLogin?.('create a channel')
       return
     }
-    const modal = this.select('#create-channel-modal')
-    if(!modal) return
     const btn = this.select('#channel-create-btn')
     if(btn && btn.style.display === 'none') return
-    const form = this.select('#create-channel-form')
-    const errEl = modal?.querySelector('.error')
-    if(form && !form._channelFormBound) {
-      form._channelFormBound = true
-      form.addEventListener('submit', (e) => {
-        e.preventDefault()
-        this._submitCreateChannel()
-      })
-      this.select('#submit-create-channel')?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this._submitCreateChannel()
-      })
-    }
-    if(errEl) { errEl.hidden = true; errEl.textContent = '' }
-    if(form) {
-      form.reset()
-      const kindGroup = form.querySelector('soci-radio-button-group[name="kind"]')
-      if (kindGroup) kindGroup.setAttribute('value', 'text')
-    }
-    modal?.activate()
-  }
-
-  async _submitCreateChannel(){
-    const modal = this.select('#create-channel-modal')
-    const form = this.select('#create-channel-form')
-    const btn = this.select('#submit-create-channel')
-    const errEl = modal?.querySelector('.error')
-    const community = this.currentCommunity
-    if(!community || !form) return
-    const name = form.name?.value?.trim()
-    const slug = (form.slug?.value?.trim() || name || '').toLowerCase().replace(/\s+/g, '-')
-    const kind = form.querySelector('soci-radio-button-group[name="kind"]')?.getAttribute('value') || 'text'
-    if(!name) {
-      if(errEl) { errEl.hidden = false; errEl.textContent = 'Name is required' }
-      return
-    }
-    btn?.wait?.()
-    if(errEl) errEl.hidden = true
-    try {
-      const res = await window.api.channels.create({ community, kind, slug: slug || name, name })
-      if(res?.error) {
-        if(errEl) { errEl.hidden = false; errEl.textContent = res.error }
-        btn?.error?.()
-        return
-      }
-      btn?.success?.()
-      await this._loadChannels()
-      modal?.deactivate?.()
-    } catch (e) {
-      if(errEl) { errEl.hidden = false; errEl.textContent = 'Failed to create channel' }
-      btn?.error?.()
-    }
+    sociModalManager.open('createChannel')
   }
 
   openTextChannel(slug){
@@ -448,6 +399,7 @@ export default class SociSidebar extends SociComponent {
             links[0].href = prefix
             links[1].href = `${prefix}/users`
             links[2].href = `${prefix}/financials`
+            links[3].href = `${prefix}/emojis`
             adminLinks.style.display = 'block'
         } else {
             adminLinks.style.display = 'none'
@@ -949,7 +901,7 @@ export default class SociSidebar extends SociComponent {
     this._subscribedTags = []
     this._subscribedTagsLoaded = true
     this._toggleSubscribedTagsVisible(false)
-    this._stopVoicePresencePolling()
+    this._stopVoicePresenceSocket()
     this._voicePresenceByChannel = {}
     this._renderVoicePresenceParticipants()
 
@@ -971,8 +923,10 @@ export default class SociSidebar extends SociComponent {
   _voiceParticipantEls = new Map()
   _voiceRemoteAudioEls = new Map()
   _voicePresenceByChannel = {}
-  _voicePresencePollTimer = null
-  _voicePresencePollMs = 5000
+  _voicePresenceSocket = null
+  _voicePresenceSocketCommunity = null
+  _voicePresenceReconnectTimer = null
+  _voicePresenceReconnectAttempt = 0
   _voiceTalkingPollTimer = null
   _voiceTalkingPollMs = 3000
   _localVADSpeaking = false
@@ -1099,24 +1053,85 @@ export default class SociSidebar extends SociComponent {
     })
   }
 
-  _stopVoicePresencePolling(){
-    if(this._voicePresencePollTimer) clearInterval(this._voicePresencePollTimer)
-    this._voicePresencePollTimer = null
+  _stopVoicePresenceSocket(){
+    if(this._voicePresenceReconnectTimer) clearTimeout(this._voicePresenceReconnectTimer)
+    this._voicePresenceReconnectTimer = null
+    this._voicePresenceReconnectAttempt = 0
+    this._voicePresenceSocketCommunity = null
+    const socket = this._voicePresenceSocket
+    this._voicePresenceSocket = null
+    if(socket) {
+      try {
+        socket.close()
+      } catch (_) {}
+    }
   }
 
-  _startVoicePresencePolling(){
-    this._stopVoicePresencePolling()
+  _startVoicePresenceSocket(){
+    this._stopVoicePresenceSocket()
     if(!this.authToken || !this.currentCommunity) {
       this._voicePresenceByChannel = {}
       this._renderVoicePresenceParticipants()
       return
     }
 
-    this._refreshVoicePresence()
-    this._voicePresencePollTimer = setInterval(() => this._refreshVoicePresence(), this._voicePresencePollMs)
+    const community = this.currentCommunity
+    const socket = new WebSocket(window.api.voice.presenceWsUrl(community, this.authToken))
+    this._voicePresenceSocket = socket
+    this._voicePresenceSocketCommunity = community
+
+    socket.addEventListener('open', () => {
+      if(this._voicePresenceSocket !== socket) return
+      this._voicePresenceReconnectAttempt = 0
+    })
+
+    socket.addEventListener('message', (event) => {
+      if(this._voicePresenceSocket !== socket) return
+      this._handleVoicePresenceSocketMessage(event.data, community)
+    })
+
+    socket.addEventListener('close', () => {
+      if(this._voicePresenceSocket !== socket) return
+      this._voicePresenceSocket = null
+      this._voicePresenceSocketCommunity = null
+      this._scheduleVoicePresenceReconnect(community)
+    })
+
+    socket.addEventListener('error', () => {
+      try {
+        socket.close()
+      } catch (_) {}
+    })
+  }
+
+  _scheduleVoicePresenceReconnect(community){
+    if(this._voicePresenceReconnectTimer) clearTimeout(this._voicePresenceReconnectTimer)
+    if(!this.authToken || this.currentCommunity !== community) return
+
+    const attempt = Math.min(this._voicePresenceReconnectAttempt + 1, 6)
+    this._voicePresenceReconnectAttempt = attempt
+    const delay = Math.min(1000 * (2 ** (attempt - 1)), 30000)
+    this._voicePresenceReconnectTimer = setTimeout(() => {
+      this._voicePresenceReconnectTimer = null
+      if(!this.authToken || this.currentCommunity !== community) return
+      this._startVoicePresenceSocket()
+    }, delay)
+  }
+
+  _handleVoicePresenceSocketMessage(rawData, expectedCommunity){
+    try {
+      const msg = JSON.parse(rawData)
+      if(msg?.community !== expectedCommunity || this.currentCommunity !== expectedCommunity) return
+      if(msg?.type !== 'voice.presence.snapshot' && msg?.type !== 'voice.presence.update') return
+      this._voicePresenceByChannel = msg?.channels || {}
+      this._renderVoicePresenceParticipants()
+    } catch (err) {
+      console.warn('Voice presence message parse failed:', err)
+    }
   }
 
   async _refreshVoicePresence(){
+    // On-demand refresh for immediate local UI updates; websocket handles steady-state updates.
     if(!this.authToken || !this.currentCommunity) return
     const community = this.currentCommunity
     try {
