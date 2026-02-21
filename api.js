@@ -112,7 +112,7 @@ api.emoji = {
   createCommunity: (data) => api.postData('community/emoji/create', data),
   createPersonal: (data) => api.postData('emoji/create', data),
   sets: (community) => api.getData(`emojis/sets${community ? `?community=${encodeURIComponent(community)}` : ''}`),
-  subscribe: (emojiID) => api.postData('emoji/subscribe', { emojiID }),
+  subscribe: (emojiID, emojiName) => api.postData('emoji/subscribe', { emojiID, emojiName }),
   get: (id) => api.getData(`emoji?id=${encodeURIComponent(id)}`),
   getMany: (ids) => api.getData(`emoji?ids=${encodeURIComponent(ids.join(','))}`)
 }

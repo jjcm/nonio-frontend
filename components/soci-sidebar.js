@@ -171,7 +171,6 @@ export default class SociSidebar extends SociComponent {
 
     // Set initial routes and community details
     setTimeout(() => this._onRouteChange(), 0)
-    this._startVoicePresenceSocket()
   }
 
   disconnectedCallback(){

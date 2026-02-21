@@ -184,6 +184,7 @@
     --bg-tertiary-hover: var(--z3);
     --bg-inverse: var(--z5);
     --bg-bold: var(--z2);
+    --bg-bold-hover: var(--z3);
     --bg-elevation-tint: rgba(0,0,0,0.063);
     --bg-elevation-tint-hover: rgba(0,0,0,0.125);
     --text: var(--z8);
@@ -228,6 +229,7 @@
     --bg-tertiary-hover: var(--z5);
     --bg-inverse: var(--z3);
     --bg-bold: var(--z9);
+    --bg-bold-hover: var(--z8);
     --bg-elevation-tint: rgba(255,255,255,0.063);
     --bg-elevation-tint-hover: rgba(255,255,255,0.125);
     --text: var(--z2);
@@ -552,6 +554,14 @@ soci-markdown-view {
 soci-message-row:has(+ soci-message-row) {
   padding-bottom: 0;
 }
+soci-message-row {
+  .reaction {
+    color: var(--text);
+  }
+  span:first-child {
+    margin-right: 4px;
+  }
+}
 pre {
   display: block;
   background: var(--bg-secondary);
@@ -598,6 +608,12 @@ button:active {
 }
 button:focus {
   outline: var(--bg-brand-bold) auto 2px;
+}
+soci-message-row button {
+  background: var(--bg-brand-secondary);
+}
+soci-message-row button:hover {
+  background: var(--bg-brand-secondary-hover);
 }
 #pages {
   height: 100dvh;
@@ -1987,3 +2003,4 @@ soci-create-channel-modal {
     margin-top: 8px;
   }
 }
+

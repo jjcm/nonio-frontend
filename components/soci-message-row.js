@@ -15,19 +15,23 @@ export default class SociMessageRow extends SociComponent {
         padding: 4px 16px 4px 52px;
         position: relative;
       }
+      :host(.no-animation) {
+        animation: none;
+      }
       :host(:hover) {
-        background: var(--bg-hover);
+        background: var(--bg-bold-hover);
       }
       #hover-time {
         position: absolute;
         left: 8px;
-        top: 10px;
+        top: 4px;
         width: 38px;
         font-size: 11px;
         color: var(--text-tertiary);
         opacity: 0;
         pointer-events: none;
         text-align: right;
+        display: none;
       }
       :host(:hover) #hover-time {
         opacity: 1;
@@ -41,7 +45,7 @@ export default class SociMessageRow extends SociComponent {
 
       #meta {
         position: absolute;
-        left: 0;
+        left: -32px;
         top: 0;
         flex-shrink: 0;
         display: flex;
@@ -50,7 +54,7 @@ export default class SociMessageRow extends SociComponent {
       }
       #overlay {
         position: absolute;
-        top: -2px;
+        top: -10px;
         right: 0;
         display: flex;
         gap: 4px;
@@ -93,6 +97,11 @@ export default class SociMessageRow extends SociComponent {
         flex: 1;
         min-width: 0;
       }
+      
+      slot[name="reactions"] {
+        display: block;
+        padding-top: 2px;
+      }
 
       ::slotted(soci-markdown-view) {
         display: block;
@@ -105,6 +114,48 @@ export default class SociMessageRow extends SociComponent {
         margin-top: 8px;
         max-width: 100%;
         border-radius: 4px;
+      }
+      #reply-count {
+        margin: 4px 0 4px -4px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 4px 8px 4px 4px;
+        border-radius: 4px;
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      :host([slot="thread-replies"]) #reply-count {
+        display: none;
+      }
+      #reply-avatars {
+        display: inline-flex;
+        align-items: center;
+        padding-left: 2px;
+      }
+      #reply-avatars[hidden] {
+        display: none;
+      }
+      #reply-avatars img {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        border: 2px solid var(--bg);
+        background: var(--bg-secondary);
+        object-fit: cover;
+        margin-left: -7px;
+      }
+      #reply-avatars img:first-child {
+        margin-left: 0;
+      }
+      #reply-count:hover {
+        color: var(--text);
+        background: var(--bg-secondary);
+      }
+      #reply-count[hidden] {
+        display: none;
       }
 
       #time {
@@ -123,9 +174,9 @@ export default class SociMessageRow extends SociComponent {
         #overlay {
           top: -8px;
         }
-      }
-      :host([compact]) #hover-time {
-        top: 2px;
+        #hover-time {
+          display: block;
+        }
       }
 
       @keyframes message-row-load {
@@ -156,6 +207,10 @@ export default class SociMessageRow extends SociComponent {
           <slot></slot>
           <img class="message-image" id="image" alt="Attachment" hidden>
           <slot name="reactions"></slot>
+          <div id="reply-count" hidden>
+            <div id="reply-avatars" hidden></div>
+            <span id="reply-count-text"></span>
+          </div>
         </div>
       </div>
       <div id="hover-time"></div>
@@ -163,7 +218,7 @@ export default class SociMessageRow extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['user', 'time', 'image-url', 'parent-id']
+    return ['user', 'time', 'image-url', 'parent-id', 'reply-count', 'reply-users']
   }
 
   setCompact(compact) {
@@ -171,31 +226,26 @@ export default class SociMessageRow extends SociComponent {
   }
 
   connectedCallback() {
-    this._syncUser()
     this._syncTime()
     this._syncImage()
     this._syncReplyVisibility()
+    this._syncReplyCount()
     const react = this.select('#react-action')
     const reply = this.select('#reply-action')
+    const replyCount = this.select('#reply-count')
     if (react) react.addEventListener('click', () => this._emitAction('message-react'))
     if (reply) reply.addEventListener('click', () => this._emitAction('message-reply'))
+    if (replyCount) replyCount.addEventListener('click', () => this._emitAction('message-reply'))
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return
-    if (name === 'user') this._syncUser()
+    if (name === 'user') this.select('#user').setAttribute('name', newValue)
     if (name === 'time') this._syncTime()
     if (name === 'image-url') this._syncImage()
     if (name === 'parent-id') this._syncReplyVisibility()
-  }
-
-  _syncUser() {
-    const user = this.select('#user')
-    const userName = this.getAttribute('user') || ''
-    if (!user) return
-    const isSelf = userName && userName === window.soci?.username
-    user.setAttribute('name', userName)
-    user.toggleAttribute('self', !!isSelf)
+    if (name === 'reply-count') this._syncReplyCount()
+    if (name === 'reply-users') this._syncReplyCount()
   }
 
   _syncTime() {
@@ -248,6 +298,64 @@ export default class SociMessageRow extends SociComponent {
     const reply = this.select('#reply-action')
     if (!reply) return
     reply.hidden = this.hasAttribute('parent-id')
+  }
+
+  _syncReplyCount() {
+    const replyCountEl = this.select('#reply-count')
+    const replyCountTextEl = this.select('#reply-count-text')
+    const replyAvatarsEl = this.select('#reply-avatars')
+    if (!replyCountEl) return
+    if (this.hasAttribute('parent-id')) {
+      replyCountEl.hidden = true
+      if (replyCountTextEl) replyCountTextEl.textContent = ''
+      if (replyAvatarsEl) replyAvatarsEl.innerHTML = ''
+      return
+    }
+    const count = Number.parseInt(this.getAttribute('reply-count') || '0', 10)
+    if (!Number.isFinite(count) || count <= 0) {
+      replyCountEl.hidden = true
+      if (replyCountTextEl) replyCountTextEl.textContent = ''
+      if (replyAvatarsEl) replyAvatarsEl.innerHTML = ''
+      return
+    }
+    replyCountEl.hidden = false
+    if (replyCountTextEl) replyCountTextEl.textContent = `${count} ${count === 1 ? 'reply' : 'replies'}`
+    this._syncReplyAvatars()
+  }
+
+  _syncReplyAvatars() {
+    const replyAvatarsEl = this.select('#reply-avatars')
+    if (!replyAvatarsEl) return
+    const users = this._parseReplyUsers().slice(0, 5)
+    replyAvatarsEl.innerHTML = ''
+    if (!users.length) {
+      replyAvatarsEl.hidden = true
+      return
+    }
+    users.forEach((userName) => {
+      const img = document.createElement('img')
+      img.alt = userName
+      img.loading = 'lazy'
+      img.decoding = 'async'
+      img.src = `${config.AVATAR_HOST}/thumbnail/${encodeURIComponent(userName)}.webp`
+      img.addEventListener('error', () => {
+        img.src = `${config.AVATAR_HOST}/thumbnail/default.png`
+      }, { once: true })
+      replyAvatarsEl.appendChild(img)
+    })
+    replyAvatarsEl.hidden = false
+  }
+
+  _parseReplyUsers() {
+    const raw = this.getAttribute('reply-users')
+    if (!raw) return []
+    try {
+      const parsed = JSON.parse(raw)
+      if (!Array.isArray(parsed)) return []
+      return parsed.filter((name) => typeof name === 'string' && name.trim())
+    } catch {
+      return raw.split(',').map((name) => name.trim()).filter(Boolean)
+    }
   }
 
   _emitAction(name) {

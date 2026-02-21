@@ -1,0 +1,885 @@
+import SociComponent from './soci-component.js'
+import config from '../config.js'
+
+export default class SociTextChannelViewThreaded extends SociComponent {
+  constructor() {
+    super()
+    this._mainLastRenderedMessage = null
+    this._threadLastRenderedMessage = null
+    this._mainMessagesByID = new Map()
+    this._threadMessagesByID = new Map()
+    this._threadParent = null
+    this._emojiSets = null
+    this._pickerTargetMessageID = null
+    this._activeComposer = 'main'
+  }
+
+  css(){
+    return `
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: var(--bg-bold);
+      }
+      #layout {
+        display: flex;
+        height: 100%;
+        min-height: 0;
+      }
+      #main {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+      }
+      #main-scroll, #thread-scroll {
+        height: 100%;
+        overflow: auto;
+        padding: 12px 0 80px;
+        box-sizing: border-box;
+        scrollbar-width: auto;
+        scrollbar-color: var(--text-secondary) var(--bg-bold);
+      }
+      #main-scroll::-webkit-scrollbar, #thread-scroll::-webkit-scrollbar {
+        width: 12px;
+      }
+      #main-scroll::-webkit-scrollbar-track, #thread-scroll::-webkit-scrollbar-track {
+        background: var(--bg-bold);
+      }
+      #main-scroll::-webkit-scrollbar-thumb, #thread-scroll::-webkit-scrollbar-thumb {
+        border-radius: 7px;
+        border: 3px solid var(--bg-bold);
+      }
+      #thread {
+        width: 360px;
+        border-left: 1px solid var(--bg-secondary);
+        background: var(--bg);
+        position: relative;
+        display: none;
+      }
+      :host([thread-open]) #thread {
+        display: block;
+      }
+      #thread-header {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bg);
+        border-bottom: 1px solid var(--bg-secondary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+      }
+      .icon-btn {
+        border: 0;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .icon-btn:hover {
+        color: var(--text);
+        background: var(--bg-secondary);
+      }
+      .compose {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 12px;
+        border: 1px solid var(--bg-secondary);
+        border-radius: 4px;
+        background: var(--bg);
+        box-shadow: 0 1px 2px var(--shadow);
+        z-index: 2;
+      }
+      .compose-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      textarea {
+        height: 38px;
+        min-height: 38px;
+        max-height: 140px;
+        resize: none;
+        overflow-y: hidden;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--text);
+        font: inherit;
+        line-height: 1.4;
+        box-sizing: border-box;
+        padding: 9px 11px;
+        flex: 1;
+      }
+      textarea::placeholder {
+        color: var(--text-tertiary);
+      }
+      .reactions {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .reaction {
+        border: 1px solid var(--bg-secondary);
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: var(--bg);
+        color: var(--text-secondary);
+        font-size: 12px;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        cursor: pointer;
+      }
+      .reaction:hover {
+        background: var(--bg-secondary);
+      }
+      .reaction[reacted] {
+        border-color: var(--bg-brand);
+        color: var(--text-brand);
+        background: var(--bg-brand-secondary);
+      }
+      #emoji-picker {
+        display: none;
+        position: absolute;
+        right: 18px;
+        bottom: 62px;
+        z-index: 4;
+        width: 280px;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--bg);
+        border: 1px solid var(--bg-secondary);
+        border-radius: 6px;
+        box-shadow: 0 3px 12px var(--shadow);
+        padding: 8px;
+      }
+      #emoji-picker[open] {
+        display: block;
+      }
+      .emoji-section {
+        margin-bottom: 8px;
+      }
+      .emoji-label {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+      }
+      .emoji-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .emoji-btn {
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: transparent;
+        min-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+      }
+      .emoji-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--bg-secondary);
+      }
+      .emoji {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+        vertical-align: middle;
+      }
+      .chip-emoji {
+        width: 16px;
+        height: 16px;
+      }
+      @media (max-width: 900px) {
+        :host([thread-open]) #main {
+          display: none;
+        }
+        #thread {
+          width: 100%;
+          border-left: 0;
+        }
+      }
+    `
+  }
+
+  html(){
+    return `
+      <div id="layout">
+        <div id="main">
+          <div id="main-scroll">
+            <slot></slot>
+          </div>
+          <div id="main-compose" class="compose">
+            <div class="compose-row">
+              <textarea id="message-input" placeholder="Message..."></textarea>
+              <button id="emoji-btn" class="icon-btn" type="button" title="Emoji">😊</button>
+              <button id="attach-btn" class="icon-btn" type="button" title="Attach image">
+                <soci-icon glyph="filterImages" size="16"></soci-icon>
+              </button>
+              <input id="file-input" type="file" accept="image/*" style="display:none">
+            </div>
+            <div id="attach-preview" style="display:none;font-size:12px;color:var(--text-secondary);padding:0 10px 8px;"></div>
+          </div>
+          <div id="emoji-picker"></div>
+        </div>
+        <div id="thread">
+          <div id="thread-header">
+            <button id="thread-back" class="icon-btn" type="button" title="Back">←</button>
+            <div id="thread-title">Thread</div>
+          </div>
+          <div id="thread-scroll">
+            <slot name="thread-replies"></slot>
+          </div>
+          <div class="compose" style="left:10px;right:10px;">
+            <div class="compose-row">
+              <textarea id="thread-input" placeholder="Reply in thread..."></textarea>
+              <button id="thread-emoji-btn" class="icon-btn" type="button" title="Emoji">😊</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  static get observedAttributes() {
+    return ['community', 'channel']
+  }
+
+  get community() {
+    return this.getAttribute('community')
+  }
+
+  get channel() {
+    return this.getAttribute('channel')
+  }
+
+  attributeChangedCallback(name) {
+    if ((name === 'community' || name === 'channel') && this.community && this.channel) {
+      this._loadMessages()
+      this._loadEmojiSets()
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback?.()
+    this._pendingImageUrl = ''
+    
+    const input = this.select('#message-input')
+    const threadInput = this.select('#thread-input')
+    const attachBtn = this.select('#attach-btn')
+    const fileInput = this.select('#file-input')
+    const emojiBtn = this.select('#emoji-btn')
+    const threadEmojiBtn = this.select('#thread-emoji-btn')
+    const threadBack = this.select('#thread-back')
+
+    if (input) {
+      this._attachComposerAutoResize(input)
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault()
+          this._sendMessage()
+        }
+      })
+      input.addEventListener('focus', () => { this._activeComposer = 'main' })
+    }
+
+    if (threadInput) {
+      this._attachComposerAutoResize(threadInput)
+      threadInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault()
+          this._sendThreadReply()
+        }
+      })
+      threadInput.addEventListener('focus', () => { this._activeComposer = 'thread' })
+    }
+
+    if (attachBtn && fileInput) {
+      attachBtn.addEventListener('click', () => fileInput.click())
+      fileInput.addEventListener('change', () => this._onFileSelected())
+    }
+
+    if (emojiBtn) emojiBtn.addEventListener('click', () => this._openEmojiPicker())
+    if (threadEmojiBtn) threadEmojiBtn.addEventListener('click', () => this._openEmojiPicker())
+    if (threadBack) threadBack.addEventListener('click', () => this._closeThread())
+
+    // Listeners for both Light DOM (bubbling to host) and Shadow DOM (captured at shadowRoot)
+    const handleThreadOpen = (e) => this._openThread(e.detail?.messageID)
+    const handleReact = (e) => this._openEmojiPicker(e.detail?.messageID)
+    const handleContext = (e) => this._onEmojiContext(e)
+    const handleClick = (e) => {
+      const picker = this.select('#emoji-picker')
+      const path = e.composedPath?.() || []
+      const fromMessageReactAction = path.some(node => node?.id === 'react-action')
+      if (picker && picker.hasAttribute('open') && 
+          !fromMessageReactAction &&
+          !e.target.closest('#emoji-picker') && 
+          !e.target.closest('#emoji-btn') && 
+          !e.target.closest('#thread-emoji-btn')) {
+        this._closeEmojiPicker()
+      }
+    }
+
+    this.addEventListener('message-reply', handleThreadOpen)
+    this.shadowRoot.addEventListener('message-reply', handleThreadOpen)
+    
+    this.addEventListener('message-react', handleReact)
+    this.shadowRoot.addEventListener('message-react', handleReact)
+
+    this.addEventListener('contextmenu', handleContext)
+    this.shadowRoot.addEventListener('contextmenu', handleContext)
+    
+    this.addEventListener('click', handleClick)
+    this.shadowRoot.addEventListener('click', handleClick)
+
+    if (this.community && this.channel) {
+      this._loadMessages()
+      this._loadEmojiSets()
+    }
+  }
+
+  async _onFileSelected() {
+    const fileInput = this.select('#file-input')
+    if (!fileInput?.files?.length || !this.authToken) return
+    
+    const fd = new FormData()
+    fd.append('files', fileInput.files[0])
+    fd.append('url', '')
+    
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', config.IMAGE_HOST + '/upload')
+    xhr.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
+    xhr.onload = () => {
+      fileInput.value = ''
+      if (xhr.status >= 200 && xhr.status < 300) {
+        this._pendingImageUrl = (xhr.responseText || '').trim().replace(/\.webp$/i, '')
+        const preview = this.select('#attach-preview')
+        if (preview && this._pendingImageUrl) {
+          preview.textContent = 'Image attached'
+          preview.style.display = 'block'
+        }
+      }
+    }
+    xhr.send(fd)
+  }
+
+  async _loadMessages() {
+    if (!this.community || !this.channel || !this.authToken) return
+    
+    const res = await window.api.channelMessages.list(this.community, this.channel).catch(() => null)
+    const messages = res?.messages || []
+    
+    // Clear light DOM children (messages)
+    this.innerHTML = ''
+    this._mainLastRenderedMessage = null
+    this._mainMessagesByID.clear()
+    
+    // Reverse messages to show oldest at top (scroll is usually bottom-anchored in chat)
+    // But this flex-col implementation renders top-down. 
+    // Usually chat APIs return newest first (descending). 
+    // So we reverse to get chronological order.
+    ;[...messages].reverse().forEach(msg => {
+      this._appendMainMessage(msg)
+    })
+    
+    this._scrollToBottom(this.select('#main-scroll'))
+    
+    const threadID = this._threadParent?.id || this._getThreadParam()
+    if (threadID) this._openThread(threadID)
+  }
+
+  _renderMessage(msg, compact = false) {
+    const normalized = this._normalizeMessage(msg)
+    if (!normalized) return document.createElement('div')
+    const row = document.createElement('soci-message-row')
+    row.dataset.messageId = String(normalized.id || '')
+    row.setAttribute('user', normalized.user || '')
+    row.setAttribute('time', String(normalized.date || 'now'))
+    row.setAttribute('reply-count', String(normalized.replyCount || 0))
+    if (Array.isArray(normalized.replyUsers) && normalized.replyUsers.length) {
+      row.setAttribute('reply-users', JSON.stringify(normalized.replyUsers.slice(0, 5)))
+    }
+    
+    if (normalized.parentID) row.setAttribute('parent-id', String(normalized.parentID))
+    if (normalized.imageUrl) row.setAttribute('image-url', normalized.imageUrl)
+    
+    if (compact) row.setCompact?.(true)
+    
+    const md = document.createElement('soci-markdown-view')
+    if (normalized.content) {
+      md.render(normalized.content).catch(() => {})
+    } else {
+      md.style.display = 'none'
+    }
+    row.appendChild(md)
+    
+    // Post-process markdown for emojis
+    setTimeout(() => this._renderMarkdownEmojis(md), 0)
+    
+    const reactions = this._renderReactions(normalized)
+    reactions.slot = 'reactions'
+    row.appendChild(reactions)
+    
+    return row
+  }
+
+  _isCompactMessage(prev, next) {
+    if (!prev || !next) return false
+    if (prev.user !== next.user) return false
+    return (next.date - prev.date) <= 5 * 60 * 1000
+  }
+
+  _appendMainMessage(msg) {
+    if (!msg?.id) return
+    const normalized = this._normalizeMessage(msg)
+    if (!normalized?.id) return
+    const compact = this._isCompactMessage(this._mainLastRenderedMessage, normalized)
+    this.appendChild(this._renderMessage(normalized, compact))
+    this._mainLastRenderedMessage = normalized
+    this._mainMessagesByID.set(normalized.id, normalized)
+  }
+
+  _appendThreadMessage(msg) {
+    if (!msg?.id) return
+    const normalized = this._normalizeMessage(msg)
+    if (!normalized?.id) return
+    const compact = this._isCompactMessage(this._threadLastRenderedMessage, normalized)
+    const row = this._renderMessage(normalized, compact)
+    row.slot = 'thread-replies'
+    this.appendChild(row)
+    this._threadLastRenderedMessage = normalized
+    this._threadMessagesByID.set(normalized.id, normalized)
+  }
+
+  _renderReactions(msg) {
+    const wrap = document.createElement('div')
+    wrap.className = 'reactions'
+    
+    const reactions = msg.reactions || []
+    reactions.forEach(r => {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'reaction'
+      if (r.reacted) btn.setAttribute('reacted', '')
+      
+      btn.appendChild(this._emojiNode(r.emoji))
+      
+      const count = document.createElement('span')
+      count.textContent = String(r.count || 0)
+      btn.appendChild(count)
+      
+      btn.addEventListener('click', () => this._toggleReaction(msg.id, r.emoji))
+      wrap.appendChild(btn)
+    })
+    return wrap
+  }
+
+  _emojiNode(emoji) {
+    // Check if it's a custom emoji token :name:
+    const m = emoji?.match(/^:([a-z0-9_]+):$/)
+    if (m) {
+      const name = m[1]
+      const img = document.createElement('img')
+      img.className = 'emoji chip-emoji'
+      img.src = `${config.AVATAR_HOST}/emoji/${name}.webp`
+      img.dataset.emojiName = name
+      img.alt = `:${name}:`
+      return img
+    }
+    
+    // Fallback to text (unicode emoji)
+    const span = document.createElement('span')
+    span.textContent = emoji
+    return span
+  }
+
+  async _sendMessage() {
+    const input = this.select('#message-input')
+    const content = (input?.value || '').trim()
+    
+    if (!content && !this._pendingImageUrl) return
+    
+    const res = await window.api.channelMessages.send({
+      community: this.community,
+      channel: this.channel,
+      content,
+      imageUrl: this._pendingImageUrl || ''
+    }).catch(() => null)
+    
+    if (!res?.id) return
+    
+    input.value = ''
+    this._resizeComposer(input)
+    const sentImageUrl = this._pendingImageUrl || ''
+    this._pendingImageUrl = ''
+    const preview = this.select('#attach-preview')
+    if (preview) preview.style.display = 'none'
+
+    this._appendMainMessage({
+      id: res.id,
+      user: res.user || window.soci?.username || '',
+      date: res.date || Date.now(),
+      content,
+      imageUrl: sentImageUrl,
+      reactions: [],
+      replyCount: 0
+    })
+    this._scrollToBottom(this.select('#main-scroll'))
+  }
+
+  async _openThread(messageID) {
+    const res = await window.api.channelMessages.thread(this.community, this.channel, messageID).catch(() => null)
+    if (!res) return
+    
+    const parent = this._resolveThreadParent(messageID, res.parent)
+    this._threadParent = parent
+    this._setThreadParam(messageID)
+    this.setAttribute('thread-open', '')
+    this.select('#thread-title').textContent = parent?.user
+      ? `Thread with ${parent.user}`
+      : 'Thread'
+      
+    this.querySelectorAll('[slot="thread-replies"]').forEach((el) => el.remove())
+    this._setMainReplyUsersFromThread(messageID, res.messages || [])
+    
+    // Render parent first, then replies
+    const messages = [parent, ...(res.messages || [])].filter(Boolean)
+    
+    this._threadLastRenderedMessage = null
+    this._threadMessagesByID.clear()
+    messages.forEach(msg => this._appendThreadMessage(msg))
+    
+    this._scrollToBottom(this.select('#thread-scroll'))
+    this._focusThreadInput()
+  }
+
+  _closeThread() {
+    this.removeAttribute('thread-open')
+    this._threadParent = null
+    this._threadLastRenderedMessage = null
+    this._threadMessagesByID.clear()
+    this._setThreadParam()
+    this.querySelectorAll('[slot="thread-replies"]').forEach((el) => el.remove())
+  }
+
+  async _sendThreadReply() {
+    if (!this._threadParent?.id) return
+    
+    const input = this.select('#thread-input')
+    const content = (input?.value || '').trim()
+    
+    if (!content) return
+    
+    const res = await window.api.channelMessages.sendThreadReply({
+      community: this.community,
+      channel: this.channel,
+      parentID: this._threadParent.id,
+      content
+    }).catch(() => null)
+    
+    if (!res?.id) return
+    
+    input.value = ''
+    this._resizeComposer(input)
+    const replyUser = res.user || window.soci?.username || ''
+    this._appendThreadMessage({
+      id: res.id,
+      parentID: this._threadParent.id,
+      user: replyUser,
+      date: res.date || Date.now(),
+      content,
+      reactions: [],
+      replyCount: 0
+    })
+    this._scrollToBottom(this.select('#thread-scroll'))
+    this._incrementMainReplyCount(this._threadParent.id)
+    this._bumpMainReplyUsers(this._threadParent.id, replyUser)
+  }
+
+  async _toggleReaction(messageID, emoji) {
+    const res = await window.api.channelMessages.react(messageID, emoji).catch(() => null)
+    if (!res || typeof res.reacted !== 'boolean') return
+
+    const syncMessage = (msg) => {
+      if (!msg) return
+      const reactions = Array.isArray(msg.reactions) ? [...msg.reactions] : []
+      const idx = reactions.findIndex((r) => r.emoji === emoji)
+      if (res.reacted) {
+        if (idx >= 0) {
+          const count = Number.parseInt(String(reactions[idx].count || 0), 10) || 0
+          reactions[idx] = { ...reactions[idx], reacted: true, count: count + 1 }
+        } else {
+          reactions.push({ emoji, count: 1, reacted: true })
+        }
+      } else if (idx >= 0) {
+        const count = Number.parseInt(String(reactions[idx].count || 0), 10) || 0
+        const nextCount = Math.max(0, count - 1)
+        if (nextCount === 0) reactions.splice(idx, 1)
+        else reactions[idx] = { ...reactions[idx], reacted: false, count: nextCount }
+      }
+      msg.reactions = reactions
+    }
+
+    const mainMsg = this._mainMessagesByID.get(messageID)
+    syncMessage(mainMsg)
+    if (mainMsg) this._mainMessagesByID.set(messageID, mainMsg)
+
+    const threadMsg = this._threadMessagesByID.get(messageID)
+    syncMessage(threadMsg)
+    if (threadMsg) this._threadMessagesByID.set(messageID, threadMsg)
+
+    this._replaceRenderedReactions(messageID)
+  }
+
+  async _loadEmojiSets() {
+    const sets = await window.api.emoji.sets(this.community).catch(() => null)
+    if (!sets) return
+    this._emojiSets = sets
+    this._renderPicker()
+  }
+
+  _renderPicker() {
+    const picker = this.select('#emoji-picker')
+    if (!picker || !this._emojiSets) return
+    
+    const renderSection = (title, items, isCustom) => {
+      if (!items?.length) return ''
+      const buttons = items.map(item => {
+        // If custom, item is an Emoji object { name, ... }
+        // If default, item is { Emoji: "❤️", Name: "heart" }
+        // Note: The API returns `name` for custom emojis and `Name`/`Emoji` for defaults.
+        
+        if (isCustom) {
+          return `
+            <button class="emoji-btn" data-emoji=":${item.name}:" title=":${item.name}:">
+              <img class="emoji chip-emoji" src="${config.AVATAR_HOST}/emoji/${item.name}.webp" alt=":${item.name}:">
+            </button>
+          `
+        } else {
+          return `
+            <button class="emoji-btn" data-emoji="${item.emoji}" title="${item.name}">
+              ${item.emoji}
+            </button>
+          `
+        }
+      }).join('')
+      
+      return `
+        <div class="emoji-section">
+          <div class="emoji-label">${title}</div>
+          <div class="emoji-grid">${buttons}</div>
+        </div>
+      `
+    }
+    
+    picker.innerHTML = [
+      renderSection('Default', this._emojiSets.defaults, false),
+      renderSection('Community', this._emojiSets.community, true),
+      renderSection('Personal', this._emojiSets.personal, true),
+      renderSection('Subscribed', this._emojiSets.subscribed, true)
+    ].join('')
+    
+    picker.querySelectorAll('[data-emoji]').forEach(btn => {
+      btn.addEventListener('click', () => this._chooseEmoji(btn.dataset.emoji))
+    })
+  }
+
+  _openEmojiPicker(messageID = null) {
+    this._pickerTargetMessageID = messageID || null
+    this.select('#emoji-picker')?.setAttribute('open', '')
+  }
+
+  _closeEmojiPicker() {
+    this._pickerTargetMessageID = null
+    this.select('#emoji-picker')?.removeAttribute('open')
+  }
+
+  _chooseEmoji(emoji) {
+    if (this._pickerTargetMessageID) {
+      this._toggleReaction(this._pickerTargetMessageID, emoji)
+      this._closeEmojiPicker()
+      return
+    }
+    
+    const input = this._activeComposer === 'thread' 
+      ? this.select('#thread-input') 
+      : this.select('#message-input')
+      
+    if (!input) return
+    
+    const start = input.selectionStart || input.value.length
+    const end = input.selectionEnd || input.value.length
+    
+    input.value = input.value.slice(0, start) + emoji + input.value.slice(end)
+    this._resizeComposer(input)
+    input.focus()
+    input.setSelectionRange(start + emoji.length, start + emoji.length)
+    
+    this._closeEmojiPicker()
+  }
+
+  async _renderMarkdownEmojis(el) {
+    if (!el || !el.innerHTML) return
+    
+    // Replace :name: with image tags
+    // Limit to alphanumeric + underscore, 2-32 chars
+    el.innerHTML = el.innerHTML.replace(/:([a-z0-9_]{2,32}):/g, (_, name) => {
+      return `<img class="emoji" data-emoji-name="${name}" src="${config.AVATAR_HOST}/emoji/${name}.webp" alt=":${name}:" onerror="this.replaceWith(document.createTextNode(':${name}:'))">`
+    })
+  }
+
+  _onEmojiContext(e) {
+    const name = e.target?.dataset?.emojiName
+    if (!name) return
+    
+    e.preventDefault()
+    window.api.emoji.subscribe(null, name).then(() => this._loadEmojiSets()).catch(() => {})
+  }
+
+  _incrementMainReplyCount(messageID) {
+    const existing = this._mainMessagesByID.get(messageID)
+    if (!existing) return
+    const next = (existing.replyCount || 0) + 1
+    existing.replyCount = next
+    this._mainMessagesByID.set(messageID, existing)
+    const row = this.querySelector(`soci-message-row[data-message-id="${messageID}"]`)
+    if (row) row.setAttribute('reply-count', String(next))
+  }
+
+  _setMainReplyUsers(messageID, users) {
+    if (!messageID) return
+    const nextUsers = Array.isArray(users) ? users.filter((name) => typeof name === 'string' && name.trim()).slice(0, 5) : []
+    const existing = this._mainMessagesByID.get(messageID)
+    if (existing) {
+      existing.replyUsers = nextUsers
+      this._mainMessagesByID.set(messageID, existing)
+    }
+    const row = this.querySelector(`soci-message-row[data-message-id="${messageID}"]`)
+    if (!row) return
+    if (nextUsers.length) row.setAttribute('reply-users', JSON.stringify(nextUsers))
+    else row.removeAttribute('reply-users')
+  }
+
+  _setMainReplyUsersFromThread(messageID, replies) {
+    if (!messageID || !Array.isArray(replies) || !replies.length) return
+    const counts = new Map()
+    replies.forEach((reply) => {
+      const user = reply?.user
+      if (!user) return
+      counts.set(user, (counts.get(user) || 0) + 1)
+    })
+    const users = [...counts.entries()]
+      .sort((a, b) => (b[1] - a[1]) || a[0].localeCompare(b[0]))
+      .slice(0, 5)
+      .map(([name]) => name)
+    this._setMainReplyUsers(messageID, users)
+  }
+
+  _bumpMainReplyUsers(messageID, userName) {
+    if (!messageID || !userName) return
+    const existing = this._mainMessagesByID.get(messageID)
+    const users = Array.isArray(existing?.replyUsers) ? [...existing.replyUsers] : []
+    const withoutUser = users.filter((name) => name !== userName)
+    this._setMainReplyUsers(messageID, [userName, ...withoutUser])
+  }
+
+  _replaceRenderedReactions(messageID) {
+    const msg = this._threadMessagesByID.get(messageID) || this._mainMessagesByID.get(messageID)
+    if (!msg) return
+    this.querySelectorAll(`soci-message-row[data-message-id="${messageID}"]`).forEach((row) => {
+      const hadVisibleReactions = row.querySelectorAll('[slot="reactions"] .reaction').length > 0
+      row.querySelectorAll('[slot="reactions"]').forEach((el) => el.remove())
+      const reactions = this._renderReactions(msg)
+      reactions.slot = 'reactions'
+      row.appendChild(reactions)
+      if (hadVisibleReactions && reactions.querySelectorAll('.reaction').length === 0) {
+        const parent = row.parentNode
+        if (!parent) return
+        const next = row.nextSibling
+        row.classList.add('no-animation')
+        row.remove()
+        if (next) parent.insertBefore(row, next)
+        else parent.appendChild(row)
+      }
+    })
+  }
+
+  _getThreadParam() {
+    const params = new URLSearchParams(window.location.search)
+    const val = Number.parseInt(params.get('thread') || '', 10)
+    return Number.isFinite(val) && val > 0 ? val : null
+  }
+
+  _setThreadParam(messageID = null) {
+    const url = new URL(window.location.href)
+    if (messageID) url.searchParams.set('thread', String(messageID))
+    else url.searchParams.delete('thread')
+    const next = `${url.pathname}${url.search}${url.hash}`
+    window.history.replaceState(window.history.state, '', next)
+  }
+  
+  _scrollToBottom(scrollEl) {
+    if (!scrollEl) return
+    requestAnimationFrame(() => {
+      scrollEl.scrollTop = scrollEl.scrollHeight
+    })
+  }
+
+  _focusThreadInput() {
+    requestAnimationFrame(() => {
+      const input = this.select('#thread-input')
+      if (!input) return
+      input.focus({ preventScroll: true })
+      this._resizeComposer(input)
+      this._activeComposer = 'thread'
+    })
+  }
+
+  _attachComposerAutoResize(input) {
+    if (!input) return
+    input.addEventListener('input', () => this._resizeComposer(input))
+    this._resizeComposer(input)
+  }
+
+  _resizeComposer(input) {
+    if (!input) return
+    // Reset first so shrink + grow both track current content.
+    input.style.height = '38px'
+    input.style.height = `${Math.min(input.scrollHeight, 140)}px`
+    input.style.overflowY = input.scrollHeight > 140 ? 'auto' : 'hidden'
+  }
+
+  _normalizeMessage(msg) {
+    if (!msg || typeof msg !== 'object') return null
+    const normalized = { ...msg }
+    if (normalized.user === null || normalized.user === undefined) normalized.user = ''
+    if (typeof normalized.user === 'string') {
+      const trimmed = normalized.user.trim()
+      if (trimmed === 'nil' || trimmed === '<nil>' || trimmed === 'null') normalized.user = ''
+    }
+    if (!Array.isArray(normalized.reactions)) normalized.reactions = []
+    return normalized
+  }
+
+  _resolveThreadParent(messageID, parent) {
+    const fromMain = this._mainMessagesByID.get(messageID) || this._mainMessagesByID.get(parent?.id)
+    if (!fromMain) return this._normalizeMessage(parent)
+    return this._normalizeMessage({ ...parent, ...fromMain })
+  }
+}

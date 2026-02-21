@@ -146,8 +146,8 @@ window.customElements.define('soci-voice-channel-li', SociVoiceChannelLi)
 import SociTextChannelLi from "./soci-text-channel-li.js"
 window.customElements.define('soci-text-channel-li', SociTextChannelLi)
 
-import SociTextChannelView from "./soci-text-channel-view.js"
-window.customElements.define('soci-text-channel-view', SociTextChannelView)
+import SociTextChannelViewThreaded from "./soci-text-channel-view-threaded.js"
+window.customElements.define('soci-text-channel-view', SociTextChannelViewThreaded)
 
 import SociUsernameInput from "./soci-username-input.js"
 window.customElements.define('soci-username-input', SociUsernameInput)
