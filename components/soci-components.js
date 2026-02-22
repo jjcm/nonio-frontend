@@ -120,6 +120,9 @@ window.customElements.define('soci-create-community-modal', SociCreateCommunityM
 import SociCreateChannelModal from "./modals/soci-create-channel-modal.js"
 window.customElements.define('soci-create-channel-modal', SociCreateChannelModal)
 
+import SociImageViewerModal from "./modals/soci-image-viewer-modal.js"
+window.customElements.define('soci-image-viewer-modal', SociImageViewerModal)
+
 import "./modals/soci-modal-manager.js"
 
 import SociTab from "./soci-tab.js"

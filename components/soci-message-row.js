@@ -30,7 +30,7 @@ export default class SociMessageRow extends SociComponent {
         color: var(--text-tertiary);
         opacity: 0;
         pointer-events: none;
-        text-align: right;
+        text-align: center;
         display: none;
       }
       :host(:hover) #hover-time {
@@ -113,7 +113,19 @@ export default class SociMessageRow extends SociComponent {
       .message-image {
         margin-top: 8px;
         max-width: 100%;
+        max-height: 200px;
         border-radius: 4px;
+        cursor: zoom-in;
+      }
+      #images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 0px;
+        margin-bottom: 4px;
+      }
+      #images[hidden] {
+        display: none;
       }
       #reply-count {
         margin: 4px 0 4px -4px;
@@ -205,7 +217,7 @@ export default class SociMessageRow extends SociComponent {
         </div>
         <div class="message-body">
           <slot></slot>
-          <img class="message-image" id="image" alt="Attachment" hidden>
+          <div id="images" hidden></div>
           <slot name="reactions"></slot>
           <div id="reply-count" hidden>
             <div id="reply-avatars" hidden></div>
@@ -218,7 +230,7 @@ export default class SociMessageRow extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['user', 'time', 'image-url', 'parent-id', 'reply-count', 'reply-users']
+    return ['user', 'time', 'image-url', 'image-urls', 'parent-id', 'reply-count', 'reply-users']
   }
 
   setCompact(compact) {
@@ -233,9 +245,24 @@ export default class SociMessageRow extends SociComponent {
     const react = this.select('#react-action')
     const reply = this.select('#reply-action')
     const replyCount = this.select('#reply-count')
+    const images = this.select('#images')
     if (react) react.addEventListener('click', () => this._emitAction('message-react'))
     if (reply) reply.addEventListener('click', () => this._emitAction('message-reply'))
     if (replyCount) replyCount.addEventListener('click', () => this._emitAction('message-reply'))
+    if (images) {
+      images.addEventListener('click', (e) => {
+        const thumb = e.target.closest('img[data-index]')
+        if (!thumb) return
+        const imageURLs = this._getImageURLs()
+        if (!imageURLs.length) return
+        const index = Number.parseInt(thumb.dataset.index || '0', 10)
+        this.fire('message-image-open', {
+          messageID: Number.parseInt(this.dataset.messageId || '', 10) || 0,
+          imageURLs,
+          index: Number.isFinite(index) ? Math.max(0, Math.min(index, imageURLs.length - 1)) : 0
+        })
+      })
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -243,6 +270,7 @@ export default class SociMessageRow extends SociComponent {
     if (name === 'user') this.select('#user').setAttribute('name', newValue)
     if (name === 'time') this._syncTime()
     if (name === 'image-url') this._syncImage()
+    if (name === 'image-urls') this._syncImage()
     if (name === 'parent-id') this._syncReplyVisibility()
     if (name === 'reply-count') this._syncReplyCount()
     if (name === 'reply-users') this._syncReplyCount()
@@ -270,28 +298,57 @@ export default class SociMessageRow extends SociComponent {
   _formatClock(ts) {
     const d = new Date(ts)
     if (Number.isNaN(d.getTime())) return ''
-    let h = d.getHours()
+    const h = String(d.getHours()).padStart(2, '0')
     const m = String(d.getMinutes()).padStart(2, '0')
-    const ampm = h >= 12 ? 'pm' : 'am'
-    h = h % 12
-    if (h === 0) h = 12
-    return `${h}:${m}${ampm}`
+    return `${h}:${m}`
   }
 
   _syncImage() {
-    const image = this.select('#image')
-    const imageUrl = this.getAttribute('image-url') || ''
-    if (!image) return
-
-    if (imageUrl) {
-      image.hidden = false
-      image.src = imageUrl.startsWith('http')
-        ? imageUrl
-        : `${config.IMAGE_HOST}/${imageUrl}.webp`
-    } else {
-      image.hidden = true
-      image.removeAttribute('src')
+    const images = this.select('#images')
+    if (!images) return
+    const imageURLs = this._getImageURLs()
+    images.innerHTML = ''
+    if (!imageURLs.length) {
+      images.hidden = true
+      return
     }
+    imageURLs.forEach((imageUrl, index) => {
+      const img = document.createElement('img')
+      img.className = 'message-image'
+      img.alt = `Attachment ${index + 1}`
+      img.loading = 'lazy'
+      img.decoding = 'async'
+      img.dataset.index = String(index)
+      img.src = this._toImageSrc(imageUrl)
+      images.appendChild(img)
+    })
+    images.hidden = false
+  }
+
+  _getImageURLs() {
+    const list = []
+    const imageUrlsRaw = this.getAttribute('image-urls') || ''
+    if (imageUrlsRaw) {
+      try {
+        const parsed = JSON.parse(imageUrlsRaw)
+        if (Array.isArray(parsed)) {
+          parsed.forEach((entry) => {
+            const value = typeof entry === 'string' ? entry.trim() : ''
+            if (value) list.push(value)
+          })
+        }
+      } catch {}
+    }
+    const single = (this.getAttribute('image-url') || '').trim()
+    if (single && !list.includes(single)) list.unshift(single)
+    return [...new Set(list)]
+  }
+
+  _toImageSrc(imageUrl) {
+    if (!imageUrl) return ''
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
+    if (imageUrl.endsWith('.webp')) return `${config.IMAGE_HOST}/${imageUrl}`
+    return `${config.IMAGE_HOST}/${imageUrl}.webp`
   }
 
   _syncReplyVisibility() {

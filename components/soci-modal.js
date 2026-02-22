@@ -15,6 +15,7 @@ export default class SociModal extends SociComponent {
       position: fixed;
       width: 100vw;
       height: 100vh;
+      box-sizing: border-box;
       top: 0;
       left: 0;
       pointer-events: none;

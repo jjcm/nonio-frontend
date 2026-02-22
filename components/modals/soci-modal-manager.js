@@ -18,6 +18,11 @@ const modalRegistry = {
     id: 'create-channel-modal',
     title: 'Create channel',
     tag: 'soci-create-channel-modal'
+  },
+  imageViewer: {
+    id: 'image-viewer-modal',
+    title: 'Image viewer',
+    tag: 'soci-image-viewer-modal'
   }
 }
 

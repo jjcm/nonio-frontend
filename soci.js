@@ -174,6 +174,13 @@ let soci = {
     root.style.setProperty('--anim-duration-long', '0.4s')
   },
   handlePaste(e) {
+    if (e.defaultPrevented) return
+    const pathname = window.location.pathname || ''
+    if (/^\/@[\w-]+:[^/]+$/.test(pathname)) return
+    const path = e.composedPath ? e.composedPath() : []
+    const isTextChannelPaste = path.some((node) => node?.tagName === 'SOCI-TEXT-CHANNEL-VIEW')
+    if (isTextChannelPaste) return
+
     const clipboardData = e.clipboardData || window.clipboardData
     if (!clipboardData) return
 

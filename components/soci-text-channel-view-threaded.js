@@ -12,6 +12,8 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     this._emojiSets = null
     this._pickerTargetMessageID = null
     this._activeComposer = 'main'
+    this._pendingAttachments = { main: [], thread: [] }
+    this._nextPendingAttachmentID = 1
   }
 
   css(){
@@ -196,6 +198,72 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         background: var(--bg-secondary);
         border-color: var(--bg-secondary);
       }
+      #thread-emoji-btn, #emoji-btn {
+        display: none;
+      }
+      #attach-btn {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+      }
+      #thread-attach-btn {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+      }
+      .attach-preview {
+        display: none;
+        padding: 0 10px 8px;
+      }
+      .attach-preview-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .attach-preview img {
+        height: 80px;
+        max-width: 140px;
+        object-fit: contain;
+      }
+      .attach-thumb {
+        position: relative;
+        border-radius: 4px;
+        display: inline-flex;
+        overflow: hidden;
+        background: var(--bg-bold);
+      }
+      .attach-thumb img {
+        display: block;
+      }
+      .attach-thumb-remove {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        border: 0;
+        border-radius: 999px;
+        width: 18px;
+        height: 18px;
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        font-size: 12px;
+      }
+      .attach-thumb-status {
+        position: absolute;
+        left: 4px;
+        bottom: 4px;
+        border-radius: 3px;
+        padding: 2px 5px;
+        font-size: 10px;
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+      }
+      :host([drag-over]) #layout {
+        outline: 2px dashed var(--bg-brand);
+        outline-offset: -4px;
+      }
       .emoji {
         width: 24px;
         height: 24px;
@@ -232,9 +300,11 @@ export default class SociTextChannelViewThreaded extends SociComponent {
               <button id="attach-btn" class="icon-btn" type="button" title="Attach image">
                 <soci-icon glyph="filterImages" size="16"></soci-icon>
               </button>
-              <input id="file-input" type="file" accept="image/*" style="display:none">
+              <input id="file-input" type="file" accept="image/*" multiple style="display:none">
             </div>
-            <div id="attach-preview" style="display:none;font-size:12px;color:var(--text-secondary);padding:0 10px 8px;"></div>
+            <div id="attach-preview" class="attach-preview">
+              <div class="attach-preview-list" id="attach-preview-list"></div>
+            </div>
           </div>
           <div id="emoji-picker"></div>
         </div>
@@ -250,6 +320,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
             <div class="compose-row">
               <textarea id="thread-input" placeholder="Reply in thread..."></textarea>
               <button id="thread-emoji-btn" class="icon-btn" type="button" title="Emoji">😊</button>
+              <button id="thread-attach-btn" class="icon-btn" type="button" title="Attach image">
+                <soci-icon glyph="filterImages" size="16"></soci-icon>
+              </button>
+              <input id="thread-file-input" type="file" accept="image/*" multiple style="display:none">
+            </div>
+            <div id="thread-attach-preview" class="attach-preview">
+              <div class="attach-preview-list" id="thread-attach-preview-list"></div>
             </div>
           </div>
         </div>
@@ -278,12 +355,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
 
   connectedCallback() {
     super.connectedCallback?.()
-    this._pendingImageUrl = ''
     
     const input = this.select('#message-input')
     const threadInput = this.select('#thread-input')
     const attachBtn = this.select('#attach-btn')
     const fileInput = this.select('#file-input')
+    const threadAttachBtn = this.select('#thread-attach-btn')
+    const threadFileInput = this.select('#thread-file-input')
     const emojiBtn = this.select('#emoji-btn')
     const threadEmojiBtn = this.select('#thread-emoji-btn')
     const threadBack = this.select('#thread-back')
@@ -312,7 +390,11 @@ export default class SociTextChannelViewThreaded extends SociComponent {
 
     if (attachBtn && fileInput) {
       attachBtn.addEventListener('click', () => fileInput.click())
-      fileInput.addEventListener('change', () => this._onFileSelected())
+      fileInput.addEventListener('change', () => this._onComposerFileInputChange('main'))
+    }
+    if (threadAttachBtn && threadFileInput) {
+      threadAttachBtn.addEventListener('click', () => threadFileInput.click())
+      threadFileInput.addEventListener('change', () => this._onComposerFileInputChange('thread'))
     }
 
     if (emojiBtn) emojiBtn.addEventListener('click', () => this._openEmojiPicker())
@@ -323,6 +405,11 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     const handleThreadOpen = (e) => this._openThread(e.detail?.messageID)
     const handleReact = (e) => this._openEmojiPicker(e.detail?.messageID)
     const handleContext = (e) => this._onEmojiContext(e)
+    const handleImageOpen = (e) => this._onMessageImageOpen(e)
+    const handlePaste = (e) => this._onPasteImages(e)
+    const handleDragOver = (e) => this._onDragOver(e)
+    const handleDragLeave = (e) => this._onDragLeave(e)
+    const handleDrop = (e) => this._onDropImages(e)
     const handleClick = (e) => {
       const picker = this.select('#emoji-picker')
       const path = e.composedPath?.() || []
@@ -344,6 +431,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
 
     this.addEventListener('contextmenu', handleContext)
     this.shadowRoot.addEventListener('contextmenu', handleContext)
+    this.addEventListener('message-image-open', handleImageOpen)
+    this.shadowRoot.addEventListener('message-image-open', handleImageOpen)
+    // Bind host-only for native clipboard/drag events to avoid double-handling.
+    this.addEventListener('paste', handlePaste)
+    this.addEventListener('dragover', handleDragOver)
+    this.addEventListener('dragleave', handleDragLeave)
+    this.addEventListener('drop', handleDrop)
     
     this.addEventListener('click', handleClick)
     this.shadowRoot.addEventListener('click', handleClick)
@@ -354,29 +448,58 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     }
   }
 
-  async _onFileSelected() {
-    const fileInput = this.select('#file-input')
-    if (!fileInput?.files?.length || !this.authToken) return
-    
+  disconnectedCallback() {
+    this._clearPendingAttachments('main')
+    this._clearPendingAttachments('thread')
+  }
+
+  async _onComposerFileInputChange(composer) {
+    const fileInput = composer === 'thread'
+      ? this.select('#thread-file-input')
+      : this.select('#file-input')
+    if (!fileInput?.files?.length) return
+    await this._queueComposerFiles(composer, Array.from(fileInput.files))
+    fileInput.value = ''
+  }
+
+  async _queueComposerFiles(composer, files) {
+    if (!this.authToken || !Array.isArray(files) || !files.length) return
+    const imageFiles = files.filter((file) => file?.type?.startsWith?.('image/'))
+    if (!imageFiles.length) return
+    const additions = imageFiles.map((file) => ({
+      id: this._nextPendingAttachmentID++,
+      previewUrl: URL.createObjectURL(file),
+      uploadedUrl: '',
+      uploading: true,
+      error: false
+    }))
+    this._setPendingAttachments(composer, [...this._getPendingAttachments(composer), ...additions])
+    additions.forEach((attachment, index) => {
+      this._uploadImageFile(imageFiles[index]).then((url) => {
+        this._markPendingAttachmentUploaded(composer, attachment.id, url)
+      })
+    })
+  }
+
+  async _uploadImageFile(file) {
+    if (!file || !this.authToken) return ''
     const fd = new FormData()
-    fd.append('files', fileInput.files[0])
+    fd.append('files', file)
     fd.append('url', '')
-    
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', config.IMAGE_HOST + '/upload')
-    xhr.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
-    xhr.onload = () => {
-      fileInput.value = ''
-      if (xhr.status >= 200 && xhr.status < 300) {
-        this._pendingImageUrl = (xhr.responseText || '').trim().replace(/\.webp$/i, '')
-        const preview = this.select('#attach-preview')
-        if (preview && this._pendingImageUrl) {
-          preview.textContent = 'Image attached'
-          preview.style.display = 'block'
+    return await new Promise((resolve) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', config.IMAGE_HOST + '/upload')
+      xhr.setRequestHeader('Authorization', 'Bearer ' + this.authToken)
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve((xhr.responseText || '').trim().replace(/\.webp$/i, ''))
+          return
         }
+        resolve('')
       }
-    }
-    xhr.send(fd)
+      xhr.onerror = () => resolve('')
+      xhr.send(fd)
+    })
   }
 
   async _loadMessages() {
@@ -418,6 +541,9 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     
     if (normalized.parentID) row.setAttribute('parent-id', String(normalized.parentID))
     if (normalized.imageUrl) row.setAttribute('image-url', normalized.imageUrl)
+    if (Array.isArray(normalized.imageUrls) && normalized.imageUrls.length) {
+      row.setAttribute('image-urls', JSON.stringify(normalized.imageUrls))
+    }
     
     if (compact) row.setCompact?.(true)
     
@@ -512,31 +638,33 @@ export default class SociTextChannelViewThreaded extends SociComponent {
   async _sendMessage() {
     const input = this.select('#message-input')
     const content = (input?.value || '').trim()
+    const imageUrls = this._getPendingImageUrls('main')
     
-    if (!content && !this._pendingImageUrl) return
+    if (!content && !imageUrls.length) return
+    if (this._hasBlockingPendingAttachments('main')) return
     
     const res = await window.api.channelMessages.send({
       community: this.community,
       channel: this.channel,
       content,
-      imageUrl: this._pendingImageUrl || ''
+      imageUrl: imageUrls[0] || '',
+      imageUrls
     }).catch(() => null)
     
     if (!res?.id) return
     
     input.value = ''
     this._resizeComposer(input)
-    const sentImageUrl = this._pendingImageUrl || ''
-    this._pendingImageUrl = ''
-    const preview = this.select('#attach-preview')
-    if (preview) preview.style.display = 'none'
+    const sentImageUrls = [...imageUrls]
+    this._clearPendingAttachments('main')
 
     this._appendMainMessage({
       id: res.id,
       user: res.user || window.soci?.username || '',
       date: res.date || Date.now(),
       content,
-      imageUrl: sentImageUrl,
+      imageUrl: sentImageUrls[0] || '',
+      imageUrls: sentImageUrls,
       reactions: [],
       replyCount: 0
     })
@@ -583,20 +711,25 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     
     const input = this.select('#thread-input')
     const content = (input?.value || '').trim()
+    const imageUrls = this._getPendingImageUrls('thread')
     
-    if (!content) return
+    if (!content && !imageUrls.length) return
+    if (this._hasBlockingPendingAttachments('thread')) return
     
     const res = await window.api.channelMessages.sendThreadReply({
       community: this.community,
       channel: this.channel,
       parentID: this._threadParent.id,
-      content
+      content,
+      imageUrl: imageUrls[0] || '',
+      imageUrls
     }).catch(() => null)
     
     if (!res?.id) return
     
     input.value = ''
     this._resizeComposer(input)
+    this._clearPendingAttachments('thread')
     const replyUser = res.user || window.soci?.username || ''
     this._appendThreadMessage({
       id: res.id,
@@ -604,6 +737,8 @@ export default class SociTextChannelViewThreaded extends SociComponent {
       user: replyUser,
       date: res.date || Date.now(),
       content,
+      imageUrl: imageUrls[0] || '',
+      imageUrls,
       reactions: [],
       replyCount: 0
     })
@@ -873,8 +1008,201 @@ export default class SociTextChannelViewThreaded extends SociComponent {
       const trimmed = normalized.user.trim()
       if (trimmed === 'nil' || trimmed === '<nil>' || trimmed === 'null') normalized.user = ''
     }
+    normalized.imageUrls = this._collectImageUrls(normalized.imageUrls, normalized.imageUrl)
+    normalized.imageUrl = normalized.imageUrls[0] || ''
     if (!Array.isArray(normalized.reactions)) normalized.reactions = []
     return normalized
+  }
+
+  _collectImageUrls(imageUrls, imageUrl) {
+    const out = []
+    if (Array.isArray(imageUrls)) {
+      imageUrls.forEach((entry) => {
+        const value = typeof entry === 'string' ? entry.trim() : ''
+        if (value) out.push(value)
+      })
+    }
+    if (typeof imageUrl === 'string') {
+      const trimmed = imageUrl.trim()
+      if (trimmed) {
+        if (trimmed.startsWith('[')) {
+          try {
+            const parsed = JSON.parse(trimmed)
+            if (Array.isArray(parsed)) {
+              parsed.forEach((entry) => {
+                const value = typeof entry === 'string' ? entry.trim() : ''
+                if (value) out.push(value)
+              })
+            }
+          } catch {}
+        } else if (trimmed.includes(',')) {
+          trimmed.split(',').forEach((entry) => {
+            const value = entry.trim()
+            if (value) out.push(value)
+          })
+        } else {
+          out.push(trimmed)
+        }
+      }
+    }
+    return [...new Set(out)]
+  }
+
+  _getPendingAttachments(composer) {
+    return composer === 'thread'
+      ? [...(this._pendingAttachments.thread || [])]
+      : [...(this._pendingAttachments.main || [])]
+  }
+
+  _setPendingAttachments(composer, attachments) {
+    const next = Array.isArray(attachments) ? attachments : []
+    if (composer === 'thread') this._pendingAttachments.thread = next
+    else this._pendingAttachments.main = next
+    this._renderAttachPreview(composer)
+  }
+
+  _getPendingImageUrls(composer) {
+    return this._getPendingAttachments(composer)
+      .filter((item) => !item.uploading && !item.error && item.uploadedUrl)
+      .map((item) => item.uploadedUrl)
+  }
+
+  _hasBlockingPendingAttachments(composer) {
+    return this._getPendingAttachments(composer).some((item) => item.uploading || item.error)
+  }
+
+  _markPendingAttachmentUploaded(composer, attachmentID, uploadedUrl) {
+    const list = this._getPendingAttachments(composer)
+    const idx = list.findIndex((item) => item.id === attachmentID)
+    if (idx < 0) return
+    const ok = typeof uploadedUrl === 'string' && uploadedUrl.trim()
+    list[idx] = {
+      ...list[idx],
+      uploadedUrl: ok ? uploadedUrl.trim() : '',
+      uploading: false,
+      error: !ok
+    }
+    this._setPendingAttachments(composer, list)
+  }
+
+  _removePendingAttachment(composer, attachmentID) {
+    const list = this._getPendingAttachments(composer)
+    const idx = list.findIndex((item) => item.id === attachmentID)
+    if (idx < 0) return
+    const [removed] = list.splice(idx, 1)
+    if (removed?.previewUrl?.startsWith?.('blob:')) URL.revokeObjectURL(removed.previewUrl)
+    this._setPendingAttachments(composer, list)
+  }
+
+  _clearPendingAttachments(composer) {
+    this._getPendingAttachments(composer).forEach((item) => {
+      if (item?.previewUrl?.startsWith?.('blob:')) URL.revokeObjectURL(item.previewUrl)
+    })
+    this._setPendingAttachments(composer, [])
+  }
+
+  _renderAttachPreview(composer) {
+    const preview = composer === 'thread'
+      ? this.select('#thread-attach-preview')
+      : this.select('#attach-preview')
+    const list = composer === 'thread'
+      ? this.select('#thread-attach-preview-list')
+      : this.select('#attach-preview-list')
+    if (!preview || !list) return
+    const attachments = this._getPendingAttachments(composer)
+    list.innerHTML = ''
+    if (!attachments.length) {
+      preview.style.display = 'none'
+      return
+    }
+    attachments.forEach((attachment, index) => {
+      const thumb = document.createElement('div')
+      thumb.className = 'attach-thumb'
+      const img = document.createElement('img')
+      img.alt = `Attachment ${index + 1}`
+      img.src = attachment.previewUrl || this._toImageSrc(attachment.uploadedUrl)
+      const remove = document.createElement('button')
+      remove.type = 'button'
+      remove.className = 'attach-thumb-remove'
+      remove.textContent = 'x'
+      remove.addEventListener('click', () => this._removePendingAttachment(composer, attachment.id))
+      thumb.appendChild(img)
+      thumb.appendChild(remove)
+      if (attachment.uploading || attachment.error) {
+        const status = document.createElement('div')
+        status.className = 'attach-thumb-status'
+        status.textContent = attachment.uploading ? 'Uploading...' : 'Upload failed'
+        thumb.appendChild(status)
+      }
+      list.appendChild(thumb)
+    })
+    preview.style.display = 'block'
+  }
+
+  _toImageSrc(imageUrl) {
+    if (!imageUrl) return ''
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
+    if (imageUrl.endsWith('.webp')) return `${config.IMAGE_HOST}/${imageUrl}`
+    return `${config.IMAGE_HOST}/${imageUrl}.webp`
+  }
+
+  _onPasteImages(e) {
+    if (!this._isOnTextChannelRoute()) return
+    const items = Array.from(e.clipboardData?.items || [])
+    const files = items
+      .filter((item) => item.kind === 'file' && item.type.startsWith('image/'))
+      .map((item) => item.getAsFile())
+      .filter(Boolean)
+    if (!files.length) return
+    e.preventDefault()
+    e.stopPropagation()
+    this._queueComposerFiles(this._activeComposer === 'thread' ? 'thread' : 'main', files)
+  }
+
+  _hasDraggedImages(dataTransfer) {
+    if (!dataTransfer) return false
+    const types = Array.from(dataTransfer.types || [])
+    if (types.includes('Files')) return true
+    return Array.from(dataTransfer.items || []).some((item) => item.kind === 'file' && item.type.startsWith('image/'))
+  }
+
+  _onDragOver(e) {
+    if (!this._hasDraggedImages(e.dataTransfer)) return
+    e.preventDefault()
+    this.setAttribute('drag-over', '')
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'
+  }
+
+  _onDragLeave() {
+    this.removeAttribute('drag-over')
+  }
+
+  _onDropImages(e) {
+    if (!this._isOnTextChannelRoute()) return
+    if (!this._hasDraggedImages(e.dataTransfer)) return
+    e.preventDefault()
+    this.removeAttribute('drag-over')
+    const files = Array.from(e.dataTransfer?.files || []).filter((file) => file?.type?.startsWith?.('image/'))
+    if (!files.length) return
+    this._queueComposerFiles(this._activeComposer === 'thread' ? 'thread' : 'main', files)
+  }
+
+  _isOnTextChannelRoute() {
+    return /^\/@[\w-]+:[^/]+$/.test(window.location.pathname || '')
+  }
+
+  _onMessageImageOpen(e) {
+    const imageUrls = Array.isArray(e.detail?.imageURLs) ? e.detail.imageURLs : []
+    if (!imageUrls.length) return
+    this._openImageViewer(imageUrls, e.detail?.index || 0)
+  }
+
+  async _openImageViewer(imageUrls, index = 0) {
+    const modal = await window.sociModals?.open?.('imageViewer')
+    if (!modal) return
+    const viewer = modal.querySelector('soci-image-viewer-modal')
+    if (!viewer) return
+    viewer.setImages?.(imageUrls, index)
   }
 
   _resolveThreadParent(messageID, parent) {
