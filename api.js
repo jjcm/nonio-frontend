@@ -98,6 +98,13 @@ api.channelMessages = {
     if (limit) path += `&limit=${limit}`
     return api.getData(path)
   },
+  wsUrl: (community, channel, token) => {
+    const wsBase = config.API_HOST
+      .replace(/^https:\/\//, 'wss://')
+      .replace(/^http:\/\//, 'ws://')
+      .replace(/\/$/, '')
+    return `${wsBase}/community/channel/ws?community=${encodeURIComponent(community)}&channel=${encodeURIComponent(channel)}&token=${encodeURIComponent(token)}`
+  },
   send: (data) => api.postData('community/channel/messages', data),
   thread: (community, channel, parentID) => {
     const path = `community/channel/thread?community=${encodeURIComponent(community)}&channel=${encodeURIComponent(channel)}&parentID=${encodeURIComponent(parentID)}`

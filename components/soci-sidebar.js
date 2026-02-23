@@ -121,7 +121,7 @@ export default class SociSidebar extends SociComponent {
     this._loadSubscribedTags()
     window.soci.loadVotes?.()
     this._syncAuthUI()
-    this._startVoicePresenceSocket()
+    this._startVoicePresenceSocket('auth')
 
     this.showCommunity()
   }
@@ -183,7 +183,7 @@ export default class SociSidebar extends SociComponent {
     // Given soci-sidebar is a singleton that persists, this is acceptable.
     document.removeEventListener('avatar-updated', this._onAvatarUpdate)
     document.removeEventListener('community-updated', this._onCommunityUpdate)
-    this._stopVoicePresenceSocket()
+    this._stopVoicePresenceSocket('disconnected-callback')
   }
 
   _nextFrame(){
@@ -259,7 +259,7 @@ export default class SociSidebar extends SociComponent {
     this._toggleVoiceChannelsVisible(community)
     this._populateCommunityDetails()
     this._loadChannels()
-    this._startVoicePresenceSocket()
+    this._startVoicePresenceSocket('community-change')
     this._syncActiveChannelFromHash()
   }
 
@@ -900,7 +900,7 @@ export default class SociSidebar extends SociComponent {
     this._subscribedTags = []
     this._subscribedTagsLoaded = true
     this._toggleSubscribedTagsVisible(false)
-    this._stopVoicePresenceSocket()
+    this._stopVoicePresenceSocket('logout')
     this._voicePresenceByChannel = {}
     this._renderVoicePresenceParticipants()
 
@@ -1052,7 +1052,7 @@ export default class SociSidebar extends SociComponent {
     })
   }
 
-  _stopVoicePresenceSocket(){
+  _stopVoicePresenceSocket(reason = 'unspecified'){
     if(this._voicePresenceReconnectTimer) clearTimeout(this._voicePresenceReconnectTimer)
     this._voicePresenceReconnectTimer = null
     this._voicePresenceReconnectAttempt = 0
@@ -1060,27 +1060,49 @@ export default class SociSidebar extends SociComponent {
     const socket = this._voicePresenceSocket
     this._voicePresenceSocket = null
     if(socket) {
+      console.info('[VoicePresenceWS] closing socket', {
+        reason,
+        community: socket._voicePresenceCommunity || this.currentCommunity,
+        readyState: socket.readyState
+      })
+    }
+    if(socket) {
       try {
         socket.close()
       } catch (_) {}
     }
   }
 
-  _startVoicePresenceSocket(){
-    this._stopVoicePresenceSocket()
+  _startVoicePresenceSocket(trigger = 'unspecified'){
+    this._stopVoicePresenceSocket(`restart:${trigger}`)
     if(!this.authToken || !this.currentCommunity) {
+      console.info('[VoicePresenceWS] skipped start (missing auth/community)', {
+        trigger,
+        hasAuthToken: !!this.authToken,
+        community: this.currentCommunity || null
+      })
       this._voicePresenceByChannel = {}
       this._renderVoicePresenceParticipants()
       return
     }
 
     const community = this.currentCommunity
+    console.info('[VoicePresenceWS] opening socket', {
+      trigger,
+      community,
+      reconnectAttempt: this._voicePresenceReconnectAttempt
+    })
     const socket = new WebSocket(window.api.voice.presenceWsUrl(community, this.authToken))
+    socket._voicePresenceCommunity = community
     this._voicePresenceSocket = socket
     this._voicePresenceSocketCommunity = community
 
     socket.addEventListener('open', () => {
       if(this._voicePresenceSocket !== socket) return
+      console.info('[VoicePresenceWS] socket open', {
+        community,
+        reconnectAttempt: this._voicePresenceReconnectAttempt
+      })
       this._voicePresenceReconnectAttempt = 0
     })
 
@@ -1089,14 +1111,26 @@ export default class SociSidebar extends SociComponent {
       this._handleVoicePresenceSocketMessage(event.data, community)
     })
 
-    socket.addEventListener('close', () => {
+    socket.addEventListener('close', (event) => {
       if(this._voicePresenceSocket !== socket) return
+      console.warn('[VoicePresenceWS] socket closed', {
+        community,
+        code: event?.code,
+        reason: event?.reason || '',
+        wasClean: !!event?.wasClean,
+        readyState: socket.readyState
+      })
       this._voicePresenceSocket = null
       this._voicePresenceSocketCommunity = null
       this._scheduleVoicePresenceReconnect(community)
     })
 
-    socket.addEventListener('error', () => {
+    socket.addEventListener('error', (event) => {
+      console.warn('[VoicePresenceWS] socket error', {
+        community,
+        readyState: socket.readyState,
+        eventType: event?.type
+      })
       try {
         socket.close()
       } catch (_) {}
@@ -1105,15 +1139,23 @@ export default class SociSidebar extends SociComponent {
 
   _scheduleVoicePresenceReconnect(community){
     if(this._voicePresenceReconnectTimer) clearTimeout(this._voicePresenceReconnectTimer)
-    if(!this.authToken || this.currentCommunity !== community) return
+    if(!this.authToken || this.currentCommunity !== community) {
+      console.info('[VoicePresenceWS] reconnect skipped', {
+        community,
+        hasAuthToken: !!this.authToken,
+        currentCommunity: this.currentCommunity || null
+      })
+      return
+    }
 
     const attempt = Math.min(this._voicePresenceReconnectAttempt + 1, 6)
     this._voicePresenceReconnectAttempt = attempt
     const delay = Math.min(1000 * (2 ** (attempt - 1)), 30000)
+    console.info('[VoicePresenceWS] scheduling reconnect', { community, attempt, delay })
     this._voicePresenceReconnectTimer = setTimeout(() => {
       this._voicePresenceReconnectTimer = null
       if(!this.authToken || this.currentCommunity !== community) return
-      this._startVoicePresenceSocket()
+      this._startVoicePresenceSocket('reconnect')
     }, delay)
   }
 

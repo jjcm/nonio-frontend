@@ -14,6 +14,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     this._activeComposer = 'main'
     this._pendingAttachments = { main: [], thread: [] }
     this._nextPendingAttachmentID = 1
+    this._channelSocket = null
+    this._channelSocketCommunity = null
+    this._channelSocketChannel = null
+    this._channelSocketReconnectTimer = null
+    this._channelSocketReconnectAttempt = 0
+    this._locallySentMessageIDs = new Set()
+    this._localSendMarkerTimers = new Map()
   }
 
   css(){
@@ -60,12 +67,10 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         display: none;
       }
       :host([thread-open]) #thread {
-        display: block;
+        display: flex;
+        flex-direction: column;
       }
       #thread-header {
-        position: sticky;
-        top: 0;
-        z-index: 2;
         background: var(--bg);
         border-bottom: 1px solid var(--bg-secondary);
         display: flex;
@@ -350,6 +355,7 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if ((name === 'community' || name === 'channel') && this.community && this.channel) {
       this._loadMessages()
       this._loadEmojiSets()
+      this._startChannelMessagesSocket()
     }
   }
 
@@ -445,10 +451,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if (this.community && this.channel) {
       this._loadMessages()
       this._loadEmojiSets()
+      this._startChannelMessagesSocket()
     }
   }
 
   disconnectedCallback() {
+    this._stopChannelMessagesSocket()
+    this._clearLocalSendMarkers()
     this._clearPendingAttachments('main')
     this._clearPendingAttachments('thread')
   }
@@ -513,11 +522,7 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     this._mainLastRenderedMessage = null
     this._mainMessagesByID.clear()
     
-    // Reverse messages to show oldest at top (scroll is usually bottom-anchored in chat)
-    // But this flex-col implementation renders top-down. 
-    // Usually chat APIs return newest first (descending). 
-    // So we reverse to get chronological order.
-    ;[...messages].reverse().forEach(msg => {
+    this._sortMessagesByDateAsc(messages).forEach(msg => {
       this._appendMainMessage(msg)
     })
     
@@ -575,6 +580,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if (!msg?.id) return
     const normalized = this._normalizeMessage(msg)
     if (!normalized?.id) return
+    if (this._mainMessagesByID.has(normalized.id)) {
+      const existing = this._mainMessagesByID.get(normalized.id) || {}
+      const merged = { ...existing, ...normalized }
+      this._mainMessagesByID.set(normalized.id, merged)
+      this._syncRenderedMessageRow(merged)
+      return
+    }
     const compact = this._isCompactMessage(this._mainLastRenderedMessage, normalized)
     this.appendChild(this._renderMessage(normalized, compact))
     this._mainLastRenderedMessage = normalized
@@ -585,6 +597,13 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if (!msg?.id) return
     const normalized = this._normalizeMessage(msg)
     if (!normalized?.id) return
+    if (this._threadMessagesByID.has(normalized.id)) {
+      const existing = this._threadMessagesByID.get(normalized.id) || {}
+      const merged = { ...existing, ...normalized }
+      this._threadMessagesByID.set(normalized.id, merged)
+      this._syncRenderedMessageRow(merged)
+      return
+    }
     const compact = this._isCompactMessage(this._threadLastRenderedMessage, normalized)
     const row = this._renderMessage(normalized, compact)
     row.slot = 'thread-replies'
@@ -658,17 +677,28 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     const sentImageUrls = [...imageUrls]
     this._clearPendingAttachments('main')
 
-    this._appendMainMessage({
+    const mainScroll = this.select('#main-scroll')
+    const shouldScroll = this._isScrollNearBottom(mainScroll)
+    this._markLocallySentMessage(res.id)
+    const sent = this._normalizeMessage({
       id: res.id,
-      user: res.user || window.soci?.username || '',
-      date: res.date || Date.now(),
+      user: this._resolveMessageUser(res, window.soci?.username || ''),
+      date: this._resolveMessageDate(res),
       content,
       imageUrl: sentImageUrls[0] || '',
       imageUrls: sentImageUrls,
       reactions: [],
       replyCount: 0
     })
-    this._scrollToBottom(this.select('#main-scroll'))
+    if (!sent?.id) return
+    if (this._mainMessagesByID.has(sent.id)) {
+      const existing = this._mainMessagesByID.get(sent.id) || {}
+      this._mainMessagesByID.set(sent.id, { ...existing, ...sent })
+      this._syncRenderedMessageRow(this._mainMessagesByID.get(sent.id))
+      return
+    }
+    this._appendMainMessage(sent)
+    if (shouldScroll) this._scrollToBottom(mainScroll)
   }
 
   async _openThread(messageID) {
@@ -686,8 +716,9 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     this.querySelectorAll('[slot="thread-replies"]').forEach((el) => el.remove())
     this._setMainReplyUsersFromThread(messageID, res.messages || [])
     
-    // Render parent first, then replies
-    const messages = [parent, ...(res.messages || [])].filter(Boolean)
+    // Render parent first, then replies oldest -> newest.
+    const orderedReplies = this._sortMessagesByDateAsc(res.messages || [])
+    const messages = [parent, ...orderedReplies].filter(Boolean)
     
     this._threadLastRenderedMessage = null
     this._threadMessagesByID.clear()
@@ -730,19 +761,30 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     input.value = ''
     this._resizeComposer(input)
     this._clearPendingAttachments('thread')
-    const replyUser = res.user || window.soci?.username || ''
-    this._appendThreadMessage({
+    const replyUser = this._resolveMessageUser(res, window.soci?.username || '')
+    const threadScroll = this.select('#thread-scroll')
+    const shouldScroll = this._isScrollNearBottom(threadScroll)
+    this._markLocallySentMessage(res.id)
+    const sent = this._normalizeMessage({
       id: res.id,
       parentID: this._threadParent.id,
       user: replyUser,
-      date: res.date || Date.now(),
+      date: this._resolveMessageDate(res),
       content,
       imageUrl: imageUrls[0] || '',
       imageUrls,
       reactions: [],
       replyCount: 0
     })
-    this._scrollToBottom(this.select('#thread-scroll'))
+    if (!sent?.id) return
+    if (this._threadMessagesByID.has(sent.id)) {
+      const existing = this._threadMessagesByID.get(sent.id) || {}
+      this._threadMessagesByID.set(sent.id, { ...existing, ...sent })
+      this._syncRenderedMessageRow(this._threadMessagesByID.get(sent.id))
+      return
+    }
+    this._appendThreadMessage(sent)
+    if (shouldScroll) this._scrollToBottom(threadScroll)
     this._incrementMainReplyCount(this._threadParent.id)
     this._bumpMainReplyUsers(this._threadParent.id, replyUser)
   }
@@ -1003,15 +1045,55 @@ export default class SociTextChannelViewThreaded extends SociComponent {
   _normalizeMessage(msg) {
     if (!msg || typeof msg !== 'object') return null
     const normalized = { ...msg }
-    if (normalized.user === null || normalized.user === undefined) normalized.user = ''
-    if (typeof normalized.user === 'string') {
-      const trimmed = normalized.user.trim()
-      if (trimmed === 'nil' || trimmed === '<nil>' || trimmed === 'null') normalized.user = ''
-    }
+    normalized.id = this._normalizeMessageID(normalized.id)
+    normalized.parentID = this._normalizeMessageID(normalized.parentID)
+    normalized.user = this._resolveMessageUser(normalized, '')
+    normalized.date = this._resolveMessageDate(normalized)
     normalized.imageUrls = this._collectImageUrls(normalized.imageUrls, normalized.imageUrl)
     normalized.imageUrl = normalized.imageUrls[0] || ''
     if (!Array.isArray(normalized.reactions)) normalized.reactions = []
     return normalized
+  }
+
+  _normalizeMessageID(id) {
+    if (id === null || id === undefined) return id
+    const parsed = Number.parseInt(String(id).trim(), 10)
+    if (Number.isFinite(parsed) && parsed > 0) return parsed
+    return id
+  }
+
+  _resolveMessageUser(msg, fallback = '') {
+    const candidates = [
+      msg?.user,
+      msg?.username,
+      msg?.author,
+      msg?.authorName,
+      fallback
+    ]
+    for (const candidate of candidates) {
+      const value = typeof candidate === 'string' ? candidate.trim() : ''
+      if (!value || value === 'nil' || value === '<nil>' || value === 'null') continue
+      return value
+    }
+    return ''
+  }
+
+  _resolveMessageDate(msg) {
+    const dateCandidates = [msg?.date, msg?.createdAt, msg?.created_at]
+    for (const candidate of dateCandidates) {
+      if (typeof candidate === 'number' && Number.isFinite(candidate) && candidate > 0) {
+        return candidate < 1e12 ? candidate * 1000 : candidate
+      }
+      const raw = String(candidate || '').trim()
+      if (!raw) continue
+      if (/^\d+$/.test(raw)) {
+        const asInt = Number.parseInt(raw, 10)
+        if (Number.isFinite(asInt) && asInt > 0) return raw.length <= 10 ? asInt * 1000 : asInt
+      }
+      const asTime = Date.parse(raw)
+      if (Number.isFinite(asTime) && asTime > 0) return asTime
+    }
+    return Date.now()
   }
 
   _collectImageUrls(imageUrls, imageUrl) {
@@ -1209,5 +1291,236 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     const fromMain = this._mainMessagesByID.get(messageID) || this._mainMessagesByID.get(parent?.id)
     if (!fromMain) return this._normalizeMessage(parent)
     return this._normalizeMessage({ ...parent, ...fromMain })
+  }
+
+  _startChannelMessagesSocket() {
+    this._stopChannelMessagesSocket()
+    if (!this.authToken || !this.community || !this.channel) return
+
+    const community = this.community
+    const channel = this.channel
+    const socket = new WebSocket(window.api.channelMessages.wsUrl(community, channel, this.authToken))
+    this._channelSocket = socket
+    this._channelSocketCommunity = community
+    this._channelSocketChannel = channel
+
+    socket.addEventListener('open', () => {
+      if (this._channelSocket !== socket) return
+      this._channelSocketReconnectAttempt = 0
+    })
+
+    socket.addEventListener('message', (event) => {
+      if (this._channelSocket !== socket) return
+      this._handleChannelSocketMessage(event.data, community, channel)
+    })
+
+    socket.addEventListener('close', () => {
+      if (this._channelSocket !== socket) return
+      this._channelSocket = null
+      this._channelSocketCommunity = null
+      this._channelSocketChannel = null
+      this._scheduleChannelSocketReconnect(community, channel)
+    })
+
+    socket.addEventListener('error', () => {
+      try {
+        socket.close()
+      } catch (_) {}
+    })
+  }
+
+  _stopChannelMessagesSocket() {
+    if (this._channelSocketReconnectTimer) clearTimeout(this._channelSocketReconnectTimer)
+    this._channelSocketReconnectTimer = null
+    this._channelSocketReconnectAttempt = 0
+    this._channelSocketCommunity = null
+    this._channelSocketChannel = null
+    const socket = this._channelSocket
+    this._channelSocket = null
+    if (!socket) return
+    try {
+      socket.close()
+    } catch (_) {}
+  }
+
+  _scheduleChannelSocketReconnect(community, channel) {
+    if (this._channelSocketReconnectTimer) clearTimeout(this._channelSocketReconnectTimer)
+    if (!this.authToken || this.community !== community || this.channel !== channel) return
+
+    const attempt = Math.min(this._channelSocketReconnectAttempt + 1, 6)
+    this._channelSocketReconnectAttempt = attempt
+    const delay = Math.min(1000 * (2 ** (attempt - 1)), 30000)
+    this._channelSocketReconnectTimer = setTimeout(() => {
+      this._channelSocketReconnectTimer = null
+      if (!this.authToken || this.community !== community || this.channel !== channel) return
+      this._startChannelMessagesSocket()
+    }, delay)
+  }
+
+  _handleChannelSocketMessage(rawData, expectedCommunity, expectedChannel) {
+    try {
+      const msg = JSON.parse(rawData)
+      if (msg?.community !== expectedCommunity || msg?.channel !== expectedChannel) return
+      if (this.community !== expectedCommunity || this.channel !== expectedChannel) return
+
+      if (msg?.type === 'channel.message.created') {
+        const created = this._normalizeMessage(msg.message)
+        if (!created?.id) return
+        if (this._consumeLocallySentMessage(created.id)) return
+        if (this._mainMessagesByID.has(created.id) || this._threadMessagesByID.has(created.id)) return
+
+        if (created.parentID) {
+          this._incrementMainReplyCount(created.parentID)
+          this._bumpMainReplyUsers(created.parentID, created.user || '')
+          if (this._threadParent?.id === created.parentID) {
+            const threadScroll = this.select('#thread-scroll')
+            const shouldScroll = this._isScrollNearBottom(threadScroll)
+            this._appendThreadMessage(created)
+            if (shouldScroll) this._scrollToBottom(threadScroll)
+          }
+          return
+        }
+
+        const mainScroll = this.select('#main-scroll')
+        const shouldScroll = this._isScrollNearBottom(mainScroll)
+        this._appendMainMessage(created)
+        if (shouldScroll) this._scrollToBottom(mainScroll)
+        return
+      }
+
+      if (msg?.type === 'channel.message.reaction') {
+        const messageID = Number.parseInt(String(msg.messageID || ''), 10)
+        const count = Number.parseInt(String(msg.count || 0), 10)
+        const emoji = typeof msg.emoji === 'string' ? msg.emoji : ''
+        if (!Number.isFinite(messageID) || messageID <= 0 || !emoji) return
+        this._setReactionCountForMessage(messageID, emoji, Math.max(0, count))
+      }
+    } catch (err) {
+      console.warn('Channel message ws parse failed:', err)
+    }
+  }
+
+  _markLocallySentMessage(messageID) {
+    const key = this._localMessageKey(messageID)
+    if (!key) return
+    this._locallySentMessageIDs.add(key)
+    const existingTimer = this._localSendMarkerTimers.get(key)
+    if (existingTimer) clearTimeout(existingTimer)
+    const timer = setTimeout(() => {
+      this._locallySentMessageIDs.delete(key)
+      this._localSendMarkerTimers.delete(key)
+    }, 30000)
+    this._localSendMarkerTimers.set(key, timer)
+  }
+
+  _consumeLocallySentMessage(messageID) {
+    const key = this._localMessageKey(messageID)
+    if (!key || !this._locallySentMessageIDs.has(key)) return false
+    this._locallySentMessageIDs.delete(key)
+    const timer = this._localSendMarkerTimers.get(key)
+    if (timer) clearTimeout(timer)
+    this._localSendMarkerTimers.delete(key)
+    return true
+  }
+
+  _localMessageKey(messageID) {
+    const normalized = this._normalizeMessageID(messageID)
+    if (!normalized) return ''
+    return String(normalized)
+  }
+
+  _clearLocalSendMarkers() {
+    this._localSendMarkerTimers.forEach((timer) => clearTimeout(timer))
+    this._localSendMarkerTimers.clear()
+    this._locallySentMessageIDs.clear()
+  }
+
+  _syncRenderedMessageRow(message) {
+    if (!message?.id) return
+    const rows = Array.from(this.querySelectorAll(`soci-message-row[data-message-id="${message.id}"]`))
+    if (!rows.length) return
+    rows.slice(1).forEach((row) => row.remove())
+    const row = rows[0]
+    row.setAttribute('user', message.user || '')
+    row.setAttribute('time', String(this._resolveMessageDate(message)))
+    row.setAttribute('reply-count', String(message.replyCount || 0))
+    if (message.parentID) row.setAttribute('parent-id', String(message.parentID))
+    else row.removeAttribute('parent-id')
+    if (message.imageUrl) row.setAttribute('image-url', message.imageUrl)
+    else row.removeAttribute('image-url')
+    if (Array.isArray(message.imageUrls) && message.imageUrls.length) {
+      row.setAttribute('image-urls', JSON.stringify(message.imageUrls))
+    } else {
+      row.removeAttribute('image-urls')
+    }
+    const md = row.querySelector('soci-markdown-view')
+    if (md) {
+      if (message.content) {
+        md.style.display = ''
+        md.render(message.content).catch(() => {})
+      } else {
+        md.style.display = 'none'
+      }
+    }
+    this._replaceRenderedReactions(message.id)
+  }
+
+  _setReactionCountForMessage(messageID, emoji, count) {
+    const apply = (msg) => {
+      if (!msg) return
+      const reactions = Array.isArray(msg.reactions) ? [...msg.reactions] : []
+      const idx = reactions.findIndex((entry) => entry.emoji === emoji)
+      if (count <= 0) {
+        if (idx >= 0) reactions.splice(idx, 1)
+        msg.reactions = reactions
+        return
+      }
+      if (idx >= 0) {
+        reactions[idx] = { ...reactions[idx], count }
+      } else {
+        reactions.push({ emoji, count, reacted: false })
+      }
+      msg.reactions = reactions
+    }
+
+    const mainMsg = this._mainMessagesByID.get(messageID)
+    apply(mainMsg)
+    if (mainMsg) this._mainMessagesByID.set(messageID, mainMsg)
+
+    const threadMsg = this._threadMessagesByID.get(messageID)
+    apply(threadMsg)
+    if (threadMsg) this._threadMessagesByID.set(messageID, threadMsg)
+
+    if (mainMsg || threadMsg) this._replaceRenderedReactions(messageID)
+  }
+
+  _isScrollNearBottom(scrollEl) {
+    if (!scrollEl) return false
+    const remaining = scrollEl.scrollHeight - scrollEl.clientHeight - scrollEl.scrollTop
+    return remaining <= 80
+  }
+
+  _sortMessagesByDateAsc(messages) {
+    if (!Array.isArray(messages) || !messages.length) return []
+    return [...messages].sort((a, b) => {
+      const dateDelta = this._messageDateValue(a) - this._messageDateValue(b)
+      if (dateDelta !== 0) return dateDelta
+      const aID = this._messageIDValue(a)
+      const bID = this._messageIDValue(b)
+      if (aID < bID) return -1
+      if (aID > bID) return 1
+      return 0
+    })
+  }
+
+  _messageDateValue(msg) {
+    return this._resolveMessageDate(msg)
+  }
+
+  _messageIDValue(msg) {
+    const value = msg?.id
+    const numeric = Number.parseInt(String(value || ''), 10)
+    if (Number.isFinite(numeric)) return numeric
+    return String(value || '')
   }
 }
