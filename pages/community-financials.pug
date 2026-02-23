@@ -1,5 +1,44 @@
 style.
   #community-financials {
+    background: var(--bg-bold);
+    min-height: 100dvh;
+    
+    header {
+      background-color: var(--bg);
+      position: sticky;
+      top: 0;
+      height: 40px;
+      width: 100%;
+      z-index: 2;
+      display: flex;
+      padding: 0 12px;
+      box-sizing: border-box;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 1px 2px var(--shadow);
+    }
+    
+    .nav-item {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      user-select: none;
+      transition: all 0.1s var(--soci-ease);
+      text-decoration: none;
+      
+      &:hover {
+        color: var(--text);
+        background: var(--bg-secondary);
+      }
+      &.active {
+        color: var(--text-brand);
+        background: var(--bg-brand-secondary);
+      }
+    }
+
     .container {
       padding: 20px;
       max-width: 900px;
@@ -50,6 +89,11 @@ style.
       font-weight: 500;
     }
   }
+header
+  soci-link(href=`/community/admin` class="nav-item") Settings
+  soci-link(href=`/community/admin/users` class="nav-item") Users
+  soci-link(href=`/community/admin/financials` class="nav-item active") Financials
+  soci-link(href=`/community/admin/emojis` class="nav-item") Emojis
 .container
   .load-group(load-order="primary")
     h1 Community Financials

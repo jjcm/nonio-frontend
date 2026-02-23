@@ -11,6 +11,12 @@ let communityFinancials = {
     communityFinancials.communityName = communityName
     document.title = `${communityName} - Financials`
     
+    // update nav links
+    communityFinancials.dom.querySelectorAll('header soci-link').forEach(link => {
+      let href = link.getAttribute('href')
+      link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
+    })
+    
     communityFinancials.loadFinancials()
   },
   loadFinancials: async () => {

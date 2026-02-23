@@ -16,6 +16,12 @@ let communityUsers = {
     communityUsers.communityName = communityName
     document.title = `${communityName} - Users`
 
+    // update nav links
+    communityUsers.dom.querySelectorAll('header soci-link').forEach(link => {
+      let href = link.getAttribute('href')
+      link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
+    })
+
     communityUsers.cacheDom()
     communityUsers.bindPickers()
     communityUsers.loadUsers()

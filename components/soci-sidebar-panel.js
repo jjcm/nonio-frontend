@@ -52,12 +52,6 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
       <soci-button id="community-subscribe" style="display: none;">Subscribe</soci-button>
       <div id="community-description">
         <soci-markdown-view></soci-markdown-view>
-        <div id="admin-links">
-          <soci-link href="#">Settings</soci-link>
-          <soci-link href="#">Users</soci-link>
-          <soci-link href="#">Financials</soci-link>
-          <soci-link href="#">Emoji</soci-link>
-        </div>
       </div>
     </header>
     <div id="tag-container">
@@ -70,6 +64,10 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
           <soci-tag-li id="sidebar-submit-post" href="/submit" hide-subscribe>
             Submit post
             <soci-icon slot="icon" glyph="addPosts"></soci-icon>
+          </soci-tag-li>
+          <soci-tag-li id="sidebar-community-settings" href="/community/admin" hide-subscribe style="display: none;">
+            Community settings
+            <soci-icon slot="icon" glyph="settings"></soci-icon>
           </soci-tag-li>
         </section>
         <section id="voice-channels">
@@ -152,6 +150,7 @@ export class SociSidebarCommunityPanel extends SociSidebarPanel {
     sidebar._updateCommunityAvatar?.(sidebar.currentCommunity)
     sidebar._toggleCommunityHeaderVisible?.(sidebar.currentCommunity)
     sidebar._populateCommunityDetails?.()
+    sidebar._updateLinks?.()
   }
 }
 

@@ -190,12 +190,10 @@ export default class SociSidebar extends SociComponent {
     return new Promise(resolve => requestAnimationFrame(resolve))
   }
 
-  _computeCommunityDescriptionHeight(mdView, adminLinks){
+  _computeCommunityDescriptionHeight(mdView){
     const mdHidden = !mdView || mdView.style.display === 'none'
-    const adminHidden = !adminLinks || adminLinks.style.display === 'none'
     const mdH = mdHidden ? 0 : mdView.getBoundingClientRect().height
-    const adminH = adminHidden ? 0 : adminLinks.getBoundingClientRect().height
-    return Math.ceil(mdH + adminH + 8)
+    return Math.ceil(mdH + 8)
   }
 
   _onRouteChange() {
@@ -382,7 +380,8 @@ export default class SociSidebar extends SociComponent {
     if(!community) {
         this._toggleCommunityHeaderVisible(null)
         this._animateSection(container, false)
-        adminLinks.style.display = 'none'
+        const settingsLi = this.select('#sidebar-community-settings')
+        if(settingsLi) settingsLi.style.display = 'none'
         const createChannelBtn = this.select('#channel-create-btn')
         if(createChannelBtn) createChannelBtn.style.display = 'none'
         return
@@ -391,18 +390,11 @@ export default class SociSidebar extends SociComponent {
     try {
         let res = await this.getData(`/communities/${community}`, this.authToken)
         
-        // Update admin links
-        if(res?.isAdmin) {
-            let prefix = `/@${community}/admin`
-            let links = adminLinks.querySelectorAll('soci-link')
-            links[0].href = prefix
-            links[1].href = `${prefix}/users`
-            links[2].href = `${prefix}/financials`
-            links[3].href = `${prefix}/emojis`
-            adminLinks.style.display = 'block'
-        } else {
-            adminLinks.style.display = 'none'
+        const settingsLi = this.select('#sidebar-community-settings')
+        if(settingsLi) {
+            settingsLi.style.display = res?.isAdmin ? '' : 'none'
         }
+        
         const createChannelBtn = this.select('#channel-create-btn')
         if(createChannelBtn) createChannelBtn.style.display = res?.isAdmin ? '' : 'none'
         
@@ -411,14 +403,15 @@ export default class SociSidebar extends SociComponent {
         if(res?.description || res?.isAdmin) {
             await quillView.render(res?.description || '')
             await this._nextFrame()
-            this._animateSection(container, true, this._computeCommunityDescriptionHeight(quillView, adminLinks))
+            this._animateSection(container, true, this._computeCommunityDescriptionHeight(quillView))
         } else {
             this._animateSection(container, false)
         }
     } catch(e) {
         console.error('SociSidebar: Error loading community details', e)
         this._animateSection(container, false)
-        adminLinks.style.display = 'none'
+        const settingsLi = this.select('#sidebar-community-settings')
+        if(settingsLi) settingsLi.style.display = 'none'
         const createChannelBtn = this.select('#channel-create-btn')
         if(createChannelBtn) createChannelBtn.style.display = 'none'
     }
@@ -504,6 +497,7 @@ export default class SociSidebar extends SociComponent {
     // Update static "All posts" + "Submit post" links
     this.select(`soci-tag-li[href$="#all"]`)?.setAttribute('href', `${prefix}/#all`)
     this.select(`#sidebar-submit-post`)?.setAttribute('href', `${prefix}/submit`)
+    this.select(`#sidebar-community-settings`)?.setAttribute('href', `${prefix}/admin`)
   }
 
   // Logic for the tag lists
@@ -789,13 +783,12 @@ export default class SociSidebar extends SociComponent {
 
     if(this.currentCommunity === value){
       const container = this.select('#community-description')
-      const adminLinks = this.select('#admin-links')
       const quillView = container?.querySelector('soci-markdown-view')
       if(quillView){
         Promise.resolve(quillView.render(detail.description || '')).then(() => {
           requestAnimationFrame(() => {
-            const show = !!detail.description || adminLinks.offsetHeight > 0
-            this._animateSection(container, show, this._computeCommunityDescriptionHeight(quillView, adminLinks))
+            const show = !!detail.description || (this.select('#sidebar-community-settings')?.style.display !== 'none')
+            this._animateSection(container, show, this._computeCommunityDescriptionHeight(quillView))
           })
         })
       }

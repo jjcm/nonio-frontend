@@ -15,6 +15,12 @@ let communitySettings = {
     communitySettings.communityName = communityName
     document.title = `${communityName} - Settings`
     
+    // update nav links
+    communitySettings.dom.querySelectorAll('header soci-link').forEach(link => {
+      let href = link.getAttribute('href')
+      link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
+    })
+    
     // Set community on avatar and banner uploaders
     communitySettings.dom.querySelectorAll('soci-avatar-uploader').forEach(el => el.setAttribute('community', communityName))
     communitySettings.dom.querySelectorAll('soci-avatar-uploader-new').forEach(el => el.setAttribute('community', communityName))

@@ -2,7 +2,15 @@ let communityEmojis = {
   dom: document.currentScript.closest('soci-route'),
   init: () => soci.registerPage(communityEmojis),
   onActivate: () => {
-    communityEmojis.community = (window.location.pathname.match(/^\/@([\w-]+)\/admin\/emojis$/) || [])[1] || ''
+    let communityName = (window.location.pathname.match(/^\/@([\w-]+)\/admin\/emojis$/) || [])[1] || ''
+    communityEmojis.community = communityName
+    
+    // update nav links
+    communityEmojis.dom.querySelectorAll('header soci-link').forEach(link => {
+      let href = link.getAttribute('href')
+      link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
+    })
+    
     const form = communityEmojis.dom.querySelector('#emoji-form')
     form?.addEventListener('submit', communityEmojis.upload)
     communityEmojis.load()
