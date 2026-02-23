@@ -204,8 +204,10 @@ export default class SociSidebar extends SociComponent {
     this._updateLinks()
     this._checkCommunityChange()
     this._syncActiveChannelFromHash()
+    const path = window.location.pathname || ''
+    if(/^\/@[\w-]+\/admin(?:\/|$)/.test(path)) this._setActiveNavItem('community-settings')
     // Activate submit nav item if on submit route
-    if(/\/submit\/?$/.test(window.location.pathname)) this._setActiveNavItem('submit')
+    else if(/\/submit\/?$/.test(path)) this._setActiveNavItem('submit')
   }
 
   // Sentinel so the first _checkCommunityChange() always runs on initial load,
@@ -375,7 +377,6 @@ export default class SociSidebar extends SociComponent {
   async _populateCommunityDetails() {
     let community = this.currentCommunity
     let container = this.select('#community-description')
-    let adminLinks = this.select('#admin-links')
     
     if(!community) {
         this._toggleCommunityHeaderVisible(null)
@@ -665,11 +666,13 @@ export default class SociSidebar extends SociComponent {
   // Unified nav item activation - clears all active states and sets the appropriate one
   _setActiveNavItem(type, value = null) {
     this.toggleAttribute('overlay', false)
-    this.select('soci-tag-li[active]')?.toggleAttribute('active', false)
-    this.select('#sidebar-submit-post[active]')?.toggleAttribute('active', false)
+    this.querySelectorAll('soci-tag-li[active]').forEach(li => li.toggleAttribute('active', false))
 
     if(type === 'submit') {
       this.select('#sidebar-submit-post')?.toggleAttribute('active', true)
+      this._activeTag = null
+    } else if(type === 'community-settings') {
+      this.select('#sidebar-community-settings')?.toggleAttribute('active', true)
       this._activeTag = null
     } else if(type === 'tag' && value) {
       if(value === 'all') this.select(`soci-tag-li[href$="#all"]`)?.toggleAttribute('active', true)

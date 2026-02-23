@@ -1,155 +1,44 @@
-style.
-  #community-settings {
-    background: var(--bg-bold);
-    min-height: 100dvh;
-    
-    header {
-      background-color: var(--bg);
-      position: sticky;
-      top: 0;
-      height: 40px;
-      width: 100%;
-      z-index: 2;
-      display: flex;
-      padding: 0 12px;
-      box-sizing: border-box;
-      gap: 8px;
-      align-items: center;
-      box-shadow: 0 1px 2px var(--shadow);
-    }
-    
-    .nav-item {
-      color: var(--text-tertiary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      user-select: none;
-      transition: all 0.1s var(--soci-ease);
-      text-decoration: none;
+#community-settings.community-settings
+  header
+    soci-link(href=`/@community/admin` class="nav-item active") Settings
+    soci-link(href=`/@community/admin/users` class="nav-item") Users
+    soci-link(href=`/@community/admin/financials` class="nav-item") Financials
+    soci-link(href=`/@community/admin/emojis` class="nav-item") Emojis
+  .container
+    form
+      .load-group(load-order="primary")
+        h1 Community Settings
+        label Banner
+        soci-avatar-uploader(type="banner")
       
-      &:hover {
-        color: var(--text);
-        background: var(--bg-secondary);
-      }
-      &.active {
-        color: var(--text-brand);
-        background: var(--bg-brand-secondary);
-      }
-    }
+      .load-group(load-order="secondary")
+        .columns
+          .column.basic-info
+            h2 Basic Info
+            label(for="name") Display name
+            input(name="name" placeholder="Community Name" required)
+            label(for="description") Description
+            soci-input(name="description" placeholder="Add a short description of your community")
+            div(style="margin-top: 8px; text-align: right;")
+              soci-button Save Changes
+          .column
+            h2 Privacy & Permissions
+            label Privacy
+            soci-radio-button-group(name="privacy" class="radio-group" value="public")
+              soci-radio-button(value="public") Public
+              soci-radio-button(value="invite-only") Invite Only
 
-    .container {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .columns {
-      display: flex;
-      flex-direction: row;
-      gap: 32px;
-      margin-top: 8px;
-    }
-    .column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      &:first-child {
-        min-width: 460px;
-      }
-    }
-    .load-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    textarea {
-      min-height: 100px;
-    }
-    soci-input {
-      border: 2px solid var(--bg-secondary);
-      border-radius: 8px;
-      min-height: 100px;
-    }
-    label {
-      color: var(--text-secondary);
-    }
-    soci-radio-button-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    soci-avatar-uploader {
-      height: 180px;
-      transition: height 0.2s var(--soci-ease);
-    }
-    soci-avatar-uploader[editing] {
-      height: 300px;
-    }
-
-    soci-radio-button-group {
-      background: var(--bg-secondary);
-      padding: 4px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      width: fit-content;
-    }
-
-    soci-radio-button[selected] {
-      background: var(--bg-brand);
-      color: var(--text-inverse);
-    }
-
-    soci-button {
-      margin: 0;
-    }
-
-    input {
-      width: auto;
-    }
-  }
-header
-  soci-link(href=`/community/admin` class="nav-item active") Settings
-  soci-link(href=`/community/admin/users` class="nav-item") Users
-  soci-link(href=`/community/admin/financials` class="nav-item") Financials
-  soci-link(href=`/community/admin/emojis` class="nav-item") Emojis
-.container
-  form
-    .load-group(load-order="primary")
-      h1 Community Settings
-      label Banner
-      soci-avatar-uploader(type="banner")
-    
-    .load-group(load-order="secondary")
-      .columns
-        .column.basic-info
-          h2 Basic Info
-          label(for="name") Display name
-          input(name="name" placeholder="Community Name" required)
-          label(for="description") Description
-          soci-input(name="description" placeholder="Add a short description of your community")
-          div(style="margin-top: 8px; text-align: right;")
-            soci-button Save Changes
-        .column
-          h2 Privacy & Permissions
-          label Privacy
-          soci-radio-button-group(name="privacy" class="radio-group" value="public")
-            soci-radio-button(value="public") Public
-            soci-radio-button(value="invite-only") Invite Only
-
-          label Who can post?
-          soci-radio-button-group(name="post_permission" class="radio-group" value="all")
-            soci-radio-button(value="all") All Users
-            soci-radio-button(value="paid") Paid Users Only
-            soci-radio-button(value="admin") Admins Only
-          
-          label Who can comment?
-          soci-radio-button-group(name="comment_permission" class="radio-group" value="all")
-            soci-radio-button(value="all") All Users
-            soci-radio-button(value="paid") Paid Users Only
-            soci-radio-button(value="admin") Admins Only
+            label Who can post?
+            soci-radio-button-group(name="post_permission" class="radio-group" value="all")
+              soci-radio-button(value="all") All Users
+              soci-radio-button(value="paid") Paid Users Only
+              soci-radio-button(value="admin") Admins Only
+            
+            label Who can comment?
+            soci-radio-button-group(name="comment_permission" class="radio-group" value="all")
+              soci-radio-button(value="all") All Users
+              soci-radio-button(value="paid") Paid Users Only
+              soci-radio-button(value="admin") Admins Only
       
 
 script.

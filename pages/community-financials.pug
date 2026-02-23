@@ -1,121 +1,31 @@
-style.
-  #community-financials {
-    background: var(--bg-bold);
-    min-height: 100dvh;
-    
-    header {
-      background-color: var(--bg);
-      position: sticky;
-      top: 0;
-      height: 40px;
-      width: 100%;
-      z-index: 2;
-      display: flex;
-      padding: 0 12px;
-      box-sizing: border-box;
-      gap: 8px;
-      align-items: center;
-      box-shadow: 0 1px 2px var(--shadow);
-    }
-    
-    .nav-item {
-      color: var(--text-tertiary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      user-select: none;
-      transition: all 0.1s var(--soci-ease);
-      text-decoration: none;
-      
-      &:hover {
-        color: var(--text);
-        background: var(--bg-secondary);
-      }
-      &.active {
-        color: var(--text-brand);
-        background: var(--bg-brand-secondary);
-      }
-    }
+#community-financials.community-settings
+  header
+    soci-link(href=`/@community/admin` class="nav-item") Settings
+    soci-link(href=`/@community/admin/users` class="nav-item") Users
+    soci-link(href=`/@community/admin/financials` class="nav-item active") Financials
+    soci-link(href=`/@community/admin/emojis` class="nav-item") Emojis
+  .container
+    .load-group(load-order="primary")
+      h1 Community Financials
+    .load-group(load-order="secondary")
+      h2 Earnings this month
+      .cards
+        .card
+          h2 Overview
+          p.stat.js-total-earned $0.00
 
-    .container {
-      padding: 20px;
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .card {
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    h1 {
-      margin: 0;
-    }
-    h2 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-    }
-    p {
-      margin: 0;
-    }
-    .stat {
-      font-size: 22px;
-      font-weight: 600;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid var(--bg-secondary);
-    }
-    th {
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-  }
-header
-  soci-link(href=`/community/admin` class="nav-item") Settings
-  soci-link(href=`/community/admin/users` class="nav-item") Users
-  soci-link(href=`/community/admin/financials` class="nav-item active") Financials
-  soci-link(href=`/community/admin/emojis` class="nav-item") Emojis
-.container
-  .load-group(load-order="primary")
-    h1 Community Financials
-  .load-group(load-order="secondary")
-    h2 Earnings this month
-    .cards
-      .card
-        h2 Overview
-        p.stat.js-total-earned $0.00
+        .card
+          h2 Admin payouts
+          p.stat.js-admin-payout $0.00
 
-      .card
-        h2 Admin payouts
-        p.stat.js-admin-payout $0.00
-
-  .load-group(load-order="tertiary")
-    h2 User payouts
-    table
-      thead
-        tr
-          th User
-          th Amount Earned
-      tbody
+    .load-group(load-order="tertiary")
+      h2 User payouts
+      table
+        thead
+          tr
+            th User
+            th Amount Earned
+        tbody
 
 script.
   lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))

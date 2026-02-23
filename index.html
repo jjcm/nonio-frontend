@@ -602,316 +602,66 @@
       </div>
     </soci-route>
     <soci-route id="community-settings" path="^(/@[\w-]+)/admin$" fresh>
-      <style>
-        #community-settings {
-          background: var(--bg-bold);
-          min-height: 100dvh;
-          
-          header {
-            background-color: var(--bg);
-            position: sticky;
-            top: 0;
-            height: 40px;
-            width: 100%;
-            z-index: 2;
-            display: flex;
-            padding: 0 12px;
-            box-sizing: border-box;
-            gap: 8px;
-            align-items: center;
-            box-shadow: 0 1px 2px var(--shadow);
-          }
-          
-          .nav-item {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            user-select: none;
-            transition: all 0.1s var(--soci-ease);
-            text-decoration: none;
-            
-            &:hover {
-              color: var(--text);
-              background: var(--bg-secondary);
-            }
-            &.active {
-              color: var(--text-brand);
-              background: var(--bg-brand-secondary);
-            }
-          }
-        
-          .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-          }
-          .columns {
-            display: flex;
-            flex-direction: row;
-            gap: 32px;
-            margin-top: 8px;
-          }
-          .column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            &:first-child {
-              min-width: 460px;
-            }
-          }
-          .load-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-          }
-          textarea {
-            min-height: 100px;
-          }
-          soci-input {
-            border: 2px solid var(--bg-secondary);
-            border-radius: 8px;
-            min-height: 100px;
-          }
-          label {
-            color: var(--text-secondary);
-          }
-          soci-radio-button-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-          }
-        
-          soci-avatar-uploader {
-            height: 180px;
-            transition: height 0.2s var(--soci-ease);
-          }
-          soci-avatar-uploader[editing] {
-            height: 300px;
-          }
-        
-          soci-radio-button-group {
-            background: var(--bg-secondary);
-            padding: 4px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            width: fit-content;
-          }
-        
-          soci-radio-button[selected] {
-            background: var(--bg-brand);
-            color: var(--text-inverse);
-          }
-        
-          soci-button {
-            margin: 0;
-          }
-        
-          input {
-            width: auto;
-          }
-        }
-      </style>
-      <header>
-        <soci-link class="nav-item active" href="/community/admin">Settings</soci-link>
-        <soci-link class="nav-item" href="/community/admin/users">Users</soci-link>
-        <soci-link class="nav-item" href="/community/admin/financials">Financials</soci-link>
-        <soci-link class="nav-item" href="/community/admin/emojis">Emojis</soci-link>
-      </header>
-      <div class="container">
-        <form>
-          <div class="load-group" load-order="primary">
-            <h1>Community Settings</h1>
-            <label>Banner</label>
-            <soci-avatar-uploader type="banner"></soci-avatar-uploader>
-          </div>
-          <div class="load-group" load-order="secondary">
-            <div class="columns">
-              <div class="column basic-info">
-                <h2>Basic Info</h2>
-                <label for="name">Display name</label>
-                <input name="name" placeholder="Community Name" required>
-                <label for="description">Description</label>
-                <soci-input name="description" placeholder="Add a short description of your community"></soci-input>
-                <div style="margin-top: 8px; text-align: right;">
-                  <soci-button>Save Changes</soci-button>
+      <div class="community-settings" id="community-settings">
+        <header>
+          <soci-link class="nav-item active" href="/@community/admin">Settings</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
+        </header>
+        <div class="container">
+          <form>
+            <div class="load-group" load-order="primary">
+              <h1>Community Settings</h1>
+              <label>Banner</label>
+              <soci-avatar-uploader type="banner"></soci-avatar-uploader>
+            </div>
+            <div class="load-group" load-order="secondary">
+              <div class="columns">
+                <div class="column basic-info">
+                  <h2>Basic Info</h2>
+                  <label for="name">Display name</label>
+                  <input name="name" placeholder="Community Name" required>
+                  <label for="description">Description</label>
+                  <soci-input name="description" placeholder="Add a short description of your community"></soci-input>
+                  <div style="margin-top: 8px; text-align: right;">
+                    <soci-button>Save Changes</soci-button>
+                  </div>
+                </div>
+                <div class="column">
+                  <h2>Privacy & Permissions</h2>
+                  <label>Privacy</label>
+                  <soci-radio-button-group class="radio-group" name="privacy" value="public">
+                    <soci-radio-button value="public">Public</soci-radio-button>
+                    <soci-radio-button value="invite-only">Invite Only</soci-radio-button>
+                  </soci-radio-button-group>
+                  <label>Who can post?</label>
+                  <soci-radio-button-group class="radio-group" name="post_permission" value="all">
+                    <soci-radio-button value="all">All Users</soci-radio-button>
+                    <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
+                    <soci-radio-button value="admin">Admins Only</soci-radio-button>
+                  </soci-radio-button-group>
+                  <label>Who can comment?</label>
+                  <soci-radio-button-group class="radio-group" name="comment_permission" value="all">
+                    <soci-radio-button value="all">All Users</soci-radio-button>
+                    <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
+                    <soci-radio-button value="admin">Admins Only</soci-radio-button>
+                  </soci-radio-button-group>
                 </div>
               </div>
-              <div class="column">
-                <h2>Privacy & Permissions</h2>
-                <label>Privacy</label>
-                <soci-radio-button-group class="radio-group" name="privacy" value="public">
-                  <soci-radio-button value="public">Public</soci-radio-button>
-                  <soci-radio-button value="invite-only">Invite Only</soci-radio-button>
-                </soci-radio-button-group>
-                <label>Who can post?</label>
-                <soci-radio-button-group class="radio-group" name="post_permission" value="all">
-                  <soci-radio-button value="all">All Users</soci-radio-button>
-                  <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
-                  <soci-radio-button value="admin">Admins Only</soci-radio-button>
-                </soci-radio-button-group>
-                <label>Who can comment?</label>
-                <soci-radio-button-group class="radio-group" name="comment_permission" value="all">
-                  <soci-radio-button value="all">All Users</soci-radio-button>
-                  <soci-radio-button value="paid">Paid Users Only</soci-radio-button>
-                  <soci-radio-button value="admin">Admins Only</soci-radio-button>
-                </soci-radio-button-group>
-              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
       <script>lazyload('/pages/community-settings.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="community-users" path="^(/@[\w-]+)/admin/users$" fresh>
-      <style>
-        #community-users {
-          background: var(--bg-bold);
-          min-height: 100dvh;
-          
-          header {
-            background-color: var(--bg);
-            position: sticky;
-            top: 0;
-            height: 40px;
-            width: 100%;
-            z-index: 2;
-            display: flex;
-            padding: 0 12px;
-            box-sizing: border-box;
-            gap: 8px;
-            align-items: center;
-            box-shadow: 0 1px 2px var(--shadow);
-          }
-          
-          .nav-item {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            user-select: none;
-            transition: all 0.1s var(--soci-ease);
-            text-decoration: none;
-            
-            &:hover {
-              color: var(--text);
-              background: var(--bg-secondary);
-            }
-            &.active {
-              color: var(--text-brand);
-              background: var(--bg-brand-secondary);
-            }
-          }
-        
-          .container {
-            padding: 20px;
-            max-width: 960px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-          }
-          .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 12px;
-          }
-          .card {
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-          }
-          h1 {
-            margin: 0;
-          }
-          h2 {
-            margin: 0;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-          }
-          .card-header soci-button.add-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            width: 28px;
-            min-width: 28px;
-            padding: 0 8px;
-            overflow: hidden;
-            transition: width 0.12s var(--soci-ease);
-            background: var(--bg-secondary-hover);
-          }
-          .card-header soci-button.add-btn:hover {
-            width: 76px;
-          }
-          .card-header soci-button.add-btn soci-icon {
-            margin: -2px 0 -2px -4px;
-          }
-          .card-header soci-button.add-btn span {
-            text-transform: lowercase;
-          }
-          .card-header soci-user-picker {
-            display: none;
-            flex: 1;
-          }
-          .card-header[editing] h2,
-          .card-header[editing] soci-button.add-btn {
-            display: none;
-          }
-          .card-header[editing] soci-user-picker {
-            display: block;
-          }
-          .list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-          }
-          .user-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--bg);
-          }
-          .user-row:last-child {
-            border-bottom: 0;
-          }
-          .actions {
-            display: flex;
-            gap: 8px;
-          }
-          .empty {
-            padding: 12px 0;
-            color: var(--text-secondary);
-            font-style: italic;
-          }
-          soci-user-picker {
-            width: 100%;
-          }
-        }
-        
-      </style>
-      <div id="community-users">
+      <div class="community-settings" id="community-users">
         <header>
-          <soci-link class="nav-item" href="/community/admin">Settings</soci-link>
-          <soci-link class="nav-item active" href="/community/admin/users">Users</soci-link>
-          <soci-link class="nav-item" href="/community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item" href="/community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/users">Users</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
         </header>
         <div class="container">
           <div class="load-group" load-order="primary">
@@ -957,193 +707,53 @@
       <script>lazyload('/pages/community-users.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="community-financials" path="^(/@[\w-]+)/admin/financials$" fresh>
-      <style>
-        #community-financials {
-          background: var(--bg-bold);
-          min-height: 100dvh;
-          
-          header {
-            background-color: var(--bg);
-            position: sticky;
-            top: 0;
-            height: 40px;
-            width: 100%;
-            z-index: 2;
-            display: flex;
-            padding: 0 12px;
-            box-sizing: border-box;
-            gap: 8px;
-            align-items: center;
-            box-shadow: 0 1px 2px var(--shadow);
-          }
-          
-          .nav-item {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            user-select: none;
-            transition: all 0.1s var(--soci-ease);
-            text-decoration: none;
-            
-            &:hover {
-              color: var(--text);
-              background: var(--bg-secondary);
-            }
-            &.active {
-              color: var(--text-brand);
-              background: var(--bg-brand-secondary);
-            }
-          }
-        
-          .container {
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-          }
-          .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-          }
-          .card {
-            background: var(--bg-secondary);
-            border-radius: 8px;
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-          }
-          h1 {
-            margin: 0;
-          }
-          h2 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-          }
-          p {
-            margin: 0;
-          }
-          .stat {
-            font-size: 22px;
-            font-weight: 600;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-          th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid var(--bg-secondary);
-          }
-          th {
-            color: var(--text-secondary);
-            font-weight: 500;
-          }
-        }
-      </style>
-      <header>
-        <soci-link class="nav-item" href="/community/admin">Settings</soci-link>
-        <soci-link class="nav-item" href="/community/admin/users">Users</soci-link>
-        <soci-link class="nav-item active" href="/community/admin/financials">Financials</soci-link>
-        <soci-link class="nav-item" href="/community/admin/emojis">Emojis</soci-link>
-      </header>
-      <div class="container">
-        <div class="load-group" load-order="primary">
-          <h1>Community Financials</h1>
-        </div>
-        <div class="load-group" load-order="secondary">
-          <h2>Earnings this month</h2>
-          <div class="cards">
-            <div class="card">
-              <h2>Overview</h2>
-              <p class="stat js-total-earned">$0.00</p>
-            </div>
-            <div class="card">
-              <h2>Admin payouts</h2>
-              <p class="stat js-admin-payout">$0.00</p>
+      <div class="community-settings" id="community-financials">
+        <header>
+          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/financials">Financials</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
+        </header>
+        <div class="container">
+          <div class="load-group" load-order="primary">
+            <h1>Community Financials</h1>
+          </div>
+          <div class="load-group" load-order="secondary">
+            <h2>Earnings this month</h2>
+            <div class="cards">
+              <div class="card">
+                <h2>Overview</h2>
+                <p class="stat js-total-earned">$0.00</p>
+              </div>
+              <div class="card">
+                <h2>Admin payouts</h2>
+                <p class="stat js-admin-payout">$0.00</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="load-group" load-order="tertiary">
-          <h2>User payouts</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Amount Earned</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="load-group" load-order="tertiary">
+            <h2>User payouts</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Amount Earned</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
       <script>lazyload('/pages/community-financials.js', document.currentScript.closest('soci-route'))</script>
     </soci-route>
     <soci-route id="community-emojis" path="^(/@[\w-]+)/admin/emojis$" fresh>
-      <style>
-        #community-emojis {
-          background: var(--bg-bold);
-          min-height: 100dvh;
-          
-          header {
-            background-color: var(--bg);
-            position: sticky;
-            top: 0;
-            height: 40px;
-            width: 100%;
-            z-index: 2;
-            display: flex;
-            padding: 0 12px;
-            box-sizing: border-box;
-            gap: 8px;
-            align-items: center;
-            box-shadow: 0 1px 2px var(--shadow);
-          }
-          
-          .nav-item {
-            color: var(--text-tertiary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            user-select: none;
-            transition: all 0.1s var(--soci-ease);
-            text-decoration: none;
-            
-            &:hover {
-              color: var(--text);
-              background: var(--bg-secondary);
-            }
-            &.active {
-              color: var(--text-brand);
-              background: var(--bg-brand-secondary);
-            }
-          }
-        
-          .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-          form { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-          input[type="text"] { min-width: 180px; }
-          .emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
-          .emoji-card { border: 1px solid var(--bg-secondary); border-radius: 8px; padding: 8px; text-align: center; }
-          .emoji-card img { width: 24px; height: 24px; object-fit: contain; display: block; margin: 0 auto 6px; }
-          .emoji-name { font-size: 12px; color: var(--text-secondary); }
-        }
-      </style>
-      <div id="community-emojis">
+      <div class="community-settings" id="community-emojis">
         <header>
-          <soci-link class="nav-item" href="/community/admin">Settings</soci-link>
-          <soci-link class="nav-item" href="/community/admin/users">Users</soci-link>
-          <soci-link class="nav-item" href="/community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item active" href="/community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/emojis">Emojis</soci-link>
         </header>
         <div class="container">
           <h1>Community Emojis</h1>

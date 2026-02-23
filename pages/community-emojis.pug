@@ -1,58 +1,9 @@
-style.
-  #community-emojis {
-    background: var(--bg-bold);
-    min-height: 100dvh;
-    
-    header {
-      background-color: var(--bg);
-      position: sticky;
-      top: 0;
-      height: 40px;
-      width: 100%;
-      z-index: 2;
-      display: flex;
-      padding: 0 12px;
-      box-sizing: border-box;
-      gap: 8px;
-      align-items: center;
-      box-shadow: 0 1px 2px var(--shadow);
-    }
-    
-    .nav-item {
-      color: var(--text-tertiary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      user-select: none;
-      transition: all 0.1s var(--soci-ease);
-      text-decoration: none;
-      
-      &:hover {
-        color: var(--text);
-        background: var(--bg-secondary);
-      }
-      &.active {
-        color: var(--text-brand);
-        background: var(--bg-brand-secondary);
-      }
-    }
-
-    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-    form { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-    input[type="text"] { min-width: 180px; }
-    .emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
-    .emoji-card { border: 1px solid var(--bg-secondary); border-radius: 8px; padding: 8px; text-align: center; }
-    .emoji-card img { width: 24px; height: 24px; object-fit: contain; display: block; margin: 0 auto 6px; }
-    .emoji-name { font-size: 12px; color: var(--text-secondary); }
-  }
-#community-emojis
+#community-emojis.community-settings
   header
-    soci-link(href=`/community/admin` class="nav-item") Settings
-    soci-link(href=`/community/admin/users` class="nav-item") Users
-    soci-link(href=`/community/admin/financials` class="nav-item") Financials
-    soci-link(href=`/community/admin/emojis` class="nav-item active") Emojis
+    soci-link(href=`/@community/admin` class="nav-item") Settings
+    soci-link(href=`/@community/admin/users` class="nav-item") Users
+    soci-link(href=`/@community/admin/financials` class="nav-item") Financials
+    soci-link(href=`/@community/admin/emojis` class="nav-item active") Emojis
   .container
     h1 Community Emojis
     form#emoji-form
