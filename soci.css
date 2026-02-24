@@ -5,7 +5,7 @@
   --n3: #7e8b87;
   --n4: #232f34;
   --z0: #fff;
-  --z1: #eaebeb;
+  --z1: #eff0f0;
   --z2: #d6d7d8;
   --z3: #c2c3c4;
   --z4: #aeb0b1;
@@ -911,24 +911,30 @@ soci-route#notifications .content .inner-content {
 
   .nav-item {
     color: var(--text-tertiary);
-    font-size: 14px;
-    font-weight: 500;
     cursor: pointer;
-    --padding: 4px 8px;
-    border-radius: 6px;
     user-select: none;
     transition: all 0.1s var(--soci-ease);
     text-decoration: none;
+    translateY(-1px);
 
-    &:hover {
-      color: var(--text);
-      background: var(--bg-secondary);
+    span {
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+
+      &:hover {
+        color: var(--text);
+        background: var(--bg-secondary);
+      }
     }
 
-    &.active {
+
+    &.active span {
       color: var(--text-brand-bold);
       background: var(--bg-brand-secondary);
     }
+
   }
 
   > .container {
@@ -936,6 +942,23 @@ soci-route#notifications .content .inner-content {
     margin: 0 auto;
     padding: 24px;
     box-sizing: border-box;
+  }
+
+  input {
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 2px solid var(--bg-secondary);
+    background: transparent !important;
+    -webkit-box-shadow: none !important;
+  }
+
+  .card {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 }
 
@@ -970,7 +993,7 @@ soci-route#notifications .content .inner-content {
   soci-input {
     border: 2px solid var(--bg-secondary);
     border-radius: 8px;
-    min-height: 100px;
+    --min-height: 100px;
   }
 
   soci-avatar-uploader {
@@ -1031,15 +1054,6 @@ soci-route#notifications .content .inner-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 12px;
-  }
-
-  .card {
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 
   h1 {
@@ -1148,11 +1162,6 @@ soci-route#notifications .content .inner-content {
   }
 
   .card {
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
     gap: 4px;
   }
 
@@ -2016,6 +2025,36 @@ soci-sidebar {
   }
 }
 
+@media (prefers-color-scheme: light) {
+  soci-sidebar {
+    .panel-header {
+      background: var(--bg);
+      &:hover {
+        background: var(--bg-hover);
+      }
+    }
+    #sidebar-user {
+      #sidebar-user-actions {
+        soci-notification-badge,
+        soci-button {
+          background: var(--bg-secondary);
+          &:hover {
+            background: var(--bg-secondary-hover);
+          }
+        }
+
+
+      }
+      
+      .footer-bar {
+        background: color-mix(in srgb, var(--bg-secondary) 50%, var(--bg));
+        box-shadow: 0 1px 2px var(--shadow), 0 0 0.5px var(--shadow);
+      }
+    }
+
+  }
+}
+
 @media (max-height: 780px) {
   /* no fixed footer */
 }
@@ -2261,41 +2300,43 @@ soci-post-card soci-markdown-view code {
 
 /* Sidebar auth/community flows now render in top-level modals */
 /* Standard Modal Styles */
-soci-modal .modal-form {
-  display: block;
-  min-width: min(420px, calc(100vw - 72px));
-}
+soci-modal {
+  .modal-form {
+    display: block;
+    min-width: min(420px, calc(100vw - 72px));
 
-soci-modal .modal-form soci-button {
-  margin: 16px 0 8px;
-  width: 100%;
-}
-
-soci-modal .modal-footer {
-  margin-top: 24px;
-  text-align: center;
-}
-
-soci-modal .modal-footer soci-link {
-  display: block;
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--text-brand);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  opacity: 0.8;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 1;
+    soci-button {
+      margin: 16px 0 8px;
+      width: 100%;
+    }
   }
-}
 
-soci-modal .modal-footer soci-link.secondary {
-  margin-top: 8px;
-  color: var(--text-secondary);
-  font-weight: 400;
-  opacity: 0.5;
+  .modal-footer {
+    margin-top: 24px;
+    text-align: center;
+
+    soci-link {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-brand);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      opacity: 0.8;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &.secondary {
+        margin-top: 8px;
+        color: var(--text-secondary);
+        font-weight: 400;
+        opacity: 0.5;
+      }
+    }
+  }
 }
 
 /* Specific Modal Overrides */

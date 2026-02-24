@@ -222,11 +222,11 @@ export class SociSidebarUserPanel extends SociSidebarPanel {
         </soci-tag-li>
         <soci-tag-li class="self-action" data-type="financials" href="/admin/financials" hide-subscribe>
           view financials
-          <soci-icon slot="icon" glyph="info" size="16"></soci-icon>
+          <soci-icon slot="icon" glyph="cash" size="16"></soci-icon>
         </soci-tag-li>
         <soci-tag-li class="self-action" data-type="emojis" href="/admin/emojis" hide-subscribe>
           emojis
-          <soci-icon slot="icon" glyph="comments" size="16"></soci-icon>
+          <soci-icon slot="icon" glyph="emoji" size="16"></soci-icon>
         </soci-tag-li>
       </section>
 

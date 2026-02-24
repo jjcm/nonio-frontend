@@ -18,8 +18,7 @@ export default class SociLink extends SociComponent {
     a {
       text-decoration: inherit;
       color: inherit;
-      display: inline-block;
-      padding: var(--padding, 0);
+      display: contents;
       box-sizing: border-box;
     }
   `}

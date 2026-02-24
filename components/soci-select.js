@@ -49,6 +49,11 @@ export class SociSelect extends SociComponent {
       top: auto;
       bottom: calc(var(--height) + 4px);
     }
+    @media (prefers-color-scheme: light) {
+      dropdown {
+        background: var(--bg);
+      }
+    }
 
   `}
 
@@ -167,6 +172,14 @@ export class SociOption extends SociComponent {
       height: 18px;
       border-radius: 4px;
       object-fit: cover;
+    }
+    ::slotted(soci-user) {
+      --padding: 0;
+    }
+    @media (prefers-color-scheme: light) {
+      :host(:not([slot="selected"]):hover) {
+        background: var(--bg-hover);
+      }
     }
   `}
 

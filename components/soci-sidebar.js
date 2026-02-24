@@ -208,6 +208,7 @@ export default class SociSidebar extends SociComponent {
     if(/^\/@[\w-]+\/admin(?:\/|$)/.test(path)) this._setActiveNavItem('community-settings')
     // Activate submit nav item if on submit route
     else if(/\/submit\/?$/.test(path)) this._setActiveNavItem('submit')
+    else this._setActiveNavItem('none')
   }
 
   // Sentinel so the first _checkCommunityChange() always runs on initial load,
@@ -678,6 +679,8 @@ export default class SociSidebar extends SociComponent {
       if(value === 'all') this.select(`soci-tag-li[href$="#all"]`)?.toggleAttribute('active', true)
       else this.select(`soci-tag-li[tag="${value}"]`)?.toggleAttribute('active', true)
       this._activeTag = value
+    } else {
+      this._activeTag = null
     }
   }
 
