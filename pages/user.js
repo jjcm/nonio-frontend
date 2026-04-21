@@ -18,10 +18,13 @@ let user = {
   renderContent: () => {
     let container = user.dom.querySelector('.inner-content')
     if(!container) return
-    let params = `data="/${user.type}?user=${user.username}&sort=top"`
-    container.innerHTML = user.type === 'posts'
-      ? `<soci-post-list ${params}></soci-post-list>`
-      : `<soci-user-comment-list ${params}></soci-user-comment-list>`
+    const u = user.username.replaceAll('"', '&quot;')
+    if(user.type === 'posts'){
+      container.innerHTML = `<soci-post-list user="${u}" sort="top"></soci-post-list>`
+    }
+    else {
+      container.innerHTML = `<soci-user-comment-list data="/${user.type}?user=${user.username}&sort=top"></soci-user-comment-list>`
+    }
   },
   onUserTab: (e) => {
     const nextType = e?.detail?.type

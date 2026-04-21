@@ -307,7 +307,7 @@ export default class SociPostList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['tag', 'filter', 'sort', 'view', 'community']
+    return ['tag', 'filter', 'sort', 'view', 'community', 'user']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -316,6 +316,7 @@ export default class SociPostList extends SociComponent {
       case 'tag':
       case 'sort':
       case 'community':
+      case 'user':
         this._syncTagInput()
         this._updateTitle()
         this._refreshData()
@@ -516,6 +517,9 @@ export default class SociPostList extends SociComponent {
 
     const community = this.getAttribute('community') || window.soci?.routeContext?.community
     if(community) params.push(`community=${encodeURIComponent(community)}`)
+
+    const forUser = this.getAttribute('user')
+    if(forUser) params.push(`user=${encodeURIComponent(forUser)}`)
 
     const type = filterToType(filter)
     if(type) params.push(`type=${encodeURIComponent(type)}`)
