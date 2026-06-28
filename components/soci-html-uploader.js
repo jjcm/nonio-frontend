@@ -106,9 +106,9 @@ export default class SociHTMLUploader extends SociComponent {
 
   html(){ return `
     <div id="uploading">
-      <div class="info">drag files here</div>
-      <label for="file">select files</label>
-      <input id="file" type="file" name="files" multiple/>
+      <div class="info">drag files or a .zip here</div>
+      <label for="file">select files or .zip</label>
+      <input id="file" type="file" name="files" multiple accept=".html,.htm,.css,.js,.zip,application/zip,application/x-zip-compressed,text/html,text/css,text/javascript,application/javascript,image/*"/>
     </div>
     <soci-html-page id="preview"></soci-html-page>
   `}
@@ -165,7 +165,21 @@ export default class SociHTMLUploader extends SociComponent {
 
     data.append('url', this.closest('form').querySelector('soci-url-input').value)
 
+    request.addEventListener('error', () => {
+      this.setAttribute('state', 'uploading')
+      this.select('#uploading .info').innerHTML = 'Upload failed. Check that your upload includes index.html or a valid .zip.'
+      this.select('label').innerHTML = 'select files or .zip'
+      this.select('label').classList.remove('uploading')
+    })
+
     request.addEventListener('load', e => {
+      if(request.status < 200 || request.status >= 300) {
+        this.setAttribute('state', 'uploading')
+        this.select('#uploading .info').innerHTML = request.response || 'Upload failed.'
+        this.select('label').innerHTML = 'select files or .zip'
+        this.select('label').classList.remove('uploading')
+        return
+      }
       setTimeout(()=>{
         this.setAttribute('state', 'preview')
         console.log(request.response)
