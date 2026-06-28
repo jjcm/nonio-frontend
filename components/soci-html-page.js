@@ -33,15 +33,64 @@ export default class SociHTMLPage extends SociComponent {
   }
 
   connectedCallback(){
+    this._contentHeight = null
+    this._setDefaultHeight()
+    this._watchDetailsHeight()
+
     const channel = new MessageChannel()
     this.select('iframe').addEventListener('load', () => {
+      this._contentHeight = null
+      this._setDefaultHeight()
+
       channel.port1.onmessage = (e) => {
-        if(e.data.height)
+        if(e.data.height) {
+          this._contentHeight = e.data.height
           this.select('iframe').style.height = e.data.height + 'px'
+        }
       }
 
       this.select('iframe').contentWindow.postMessage('resize observer initialization', '*', [channel.port2])
     })
+  }
+
+  disconnectedCallback(){
+    this._detailsResizeObserver?.disconnect()
+    this._detailsResizeObserver = null
+  }
+
+  _getDetailsHeight(){
+    const post = this.closest('soci-post')
+    const details = post?.shadowRoot?.querySelector('#details')
+    return details?.offsetHeight || 0
+  }
+
+  _setDefaultHeight(){
+    if(this._contentHeight != null) return
+
+    const iframe = this.select('iframe')
+    if(!iframe) return
+
+    const detailsHeight = this._getDetailsHeight()
+    iframe.style.height = detailsHeight
+      ? `calc(100vh - ${detailsHeight}px)`
+      : '100vh'
+  }
+
+  _watchDetailsHeight(){
+    const post = this.closest('soci-post')
+    if(!post) return
+
+    const observe = () => {
+      const details = post.shadowRoot?.querySelector('#details')
+      if(!details) return
+
+      this._detailsResizeObserver?.disconnect()
+      this._detailsResizeObserver = new ResizeObserver(() => this._setDefaultHeight())
+      this._detailsResizeObserver.observe(details)
+    }
+
+    if(post.shadowRoot) observe()
+    else customElements.whenDefined('soci-post').then(observe)
   }
 
   get src(){
@@ -53,6 +102,8 @@ export default class SociHTMLPage extends SociComponent {
       this.setAttribute('src', val)
       return
     }
+    this._contentHeight = null
+    this._setDefaultHeight()
     this.select('#page').src = config.HTML_HOST + '/' + val
   }
 }
