@@ -9,6 +9,20 @@ var pug = require('pug')
 var url = require('url')
 var mime = require('mime-types')
 var prerender = require('prerender-node')
+var zlib = require('zlib')
+
+// gzip text-ish responses when the client supports it
+var compressible = /html|javascript|json|css|svg|xml|wasm|text/
+var send = function(req, res, status, headers, body){
+  var accepts = (req.headers['accept-encoding'] || '').includes('gzip')
+  if(accepts && body && compressible.test(headers['Content-Type'] || '')){
+    body = zlib.gzipSync(body)
+    headers['Content-Encoding'] = 'gzip'
+    headers['Vary'] = 'Accept-Encoding'
+  }
+  res.writeHead(status, headers)
+  res.end(body)
+}
 
 
 var server = http.createServer(function (req, res) {
@@ -31,7 +45,7 @@ var server = http.createServer(function (req, res) {
       else {
         console.log(req.method + ' | ' + 'PATH   | ' + req.url)
         let html = pug.renderFile('index.pug')
-        res.end(html, 'utf-8')
+        send(req, res, 200, { 'Content-Type': 'text/html' }, html)
       }
   }
 
@@ -113,8 +127,7 @@ var handler = {
       }
       else {
         var html = pug.render(data, {doctype: 'html'})
-        res.writeHead(200, { 'Content-Type' : 'text/html' })
-        res.end(html, 'utf-8')
+        send(req, res, 200, { 'Content-Type': 'text/html' }, html)
       }
     })
   },
@@ -123,9 +136,9 @@ var handler = {
     var filePath = '.' + req.url
     console.log(req.method + ' | ' + 'FOLDER | ' + req.url)
     fs.readdir(filePath, function(err, files){
-      res.writeHead(200, { 'Content-Type' : 'text/html' })
       if(err) {
         console.log(err)
+        res.writeHead(200, { 'Content-Type' : 'text/html' })
         res.end(err.toString(), 'utf-8')
         return 0
       }
@@ -141,7 +154,7 @@ var handler = {
           html += '<li><a href="' + path + '">' + files[i] + '</a></li>'
         }
       }
-      res.end(html, 'utf-8')
+      send(req, res, 200, { 'Content-Type': 'text/html' }, html)
     })
   },
   file: function(req, res){
@@ -200,8 +213,7 @@ var handler = {
             res.end("Sorry the page was not found")
           }
           else {
-            res.writeHead(200, headers)
-            res.end(data)
+            send(req, res, 200, headers, data)
           }
         })
       })
