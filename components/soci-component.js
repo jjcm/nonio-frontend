@@ -61,13 +61,22 @@ export default class SociComponent extends HTMLElement {
   }
 
   async getData(url, auth){
+    // Dedupe identical GETs fired in quick succession (boot issues /tags x3
+    // and /communities x2); callers within the window share one promise.
+    // Cache is shared with api.js via window so both helpers dedupe together.
+    let cache = window.__sociGetCache ??= new Map()
+    let key = url + '|' + (auth ? 'Bearer ' + auth : '')
+    let hit = cache.get(key)
+    if(hit && performance.now() - hit.t < 2000) return hit.promise
+
     let options = {}
     if(auth) options.headers = { 
       Authorization: 'Bearer ' + auth
     }
 
-    const response = await fetch(config.API_HOST + url, options)
-    return await response.json()
+    let promise = fetch(config.API_HOST + url, options).then(r => r.json())
+    cache.set(key, {t: performance.now(), promise})
+    return promise
   }
 
   fire(event, detail, attr){

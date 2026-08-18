@@ -31,10 +31,16 @@ const api = {
 
   async getData(url) {
     const path = url.startsWith('/') ? url.slice(1) : url
-    const response = await fetch(`${config.API_HOST}/${path}`, {
-      headers: this.headers()
-    })
-    return await response.json()
+    const headers = this.headers()
+    // Shared short-window GET dedupe (see SociComponent.getData).
+    const cache = window.__sociGetCache ??= new Map()
+    const key = '/' + path + '|' + (headers.Authorization || '')
+    const hit = cache.get(key)
+    if(hit && performance.now() - hit.t < 2000) return hit.promise
+
+    const promise = fetch(`${config.API_HOST}/${path}`, { headers }).then(r => r.json())
+    cache.set(key, {t: performance.now(), promise})
+    return promise
   }
 }
 
