@@ -17,6 +17,7 @@ var esbuild = require('esbuild')
 // stay split into their own chunks. Rebuilt on every server start.
 var DIST = '.speed-lab-dist'
 try {
+  fs.rmSync(DIST, { recursive: true, force: true })
   esbuild.buildSync({
     entryPoints: ['soci.js', 'components/soci-components.js'],
     bundle: true,
@@ -38,6 +39,23 @@ var resolveFile = function(reqPath){
   if(fs.existsSync('./' + DIST + reqPath)) return './' + DIST + reqPath
   if(fs.existsSync('.' + reqPath)) return '.' + reqPath
   return null
+}
+
+// Shared chunks are only discoverable once the entry bundles parse, costing a
+// serial RTT wave; preload just those (not the deferred route chunk).
+var chunkPreloads = ''
+try {
+  chunkPreloads = fs.readdirSync(DIST)
+    .filter(f => f.startsWith('chunk-') && f.endsWith('.js'))
+    .map(f => `<link rel="modulepreload" href="/${f}">`)
+    .join('')
+}
+catch(e) {}
+
+var shellHtml = function(){
+  var html = pug.renderFile('index.pug')
+  if(chunkPreloads) html = html.replace('<script', chunkPreloads + '<script')
+  return html
 }
 
 // gzip text-ish responses when the client supports it
@@ -63,7 +81,7 @@ var server = http.createServer(function (req, res) {
       // Path-keyed; the client falls back to a live fetch on any mismatch.
       if(req.url == '/'){
         console.log(req.method + ' | ' + 'FEED   | /')
-        let html = pug.renderFile('index.pug')
+        let html = shellHtml()
         try {
           let posts = await fetch(config.API_HOST + '/posts').then(r => r.ok ? r.text() : null)
           if(posts) html = html.replace('<script', `<script>window.__sociPreload={"/posts":${posts.replace(/</g, '\\u003c')}}</script><script`)
@@ -87,8 +105,7 @@ var server = http.createServer(function (req, res) {
       }
       else {
         console.log(req.method + ' | ' + 'PATH   | ' + req.url)
-        let html = pug.renderFile('index.pug')
-        send(req, res, 200, { 'Content-Type': 'text/html' }, html)
+        send(req, res, 200, { 'Content-Type': 'text/html' }, shellHtml())
       }
   }
 
