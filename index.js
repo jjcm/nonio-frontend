@@ -10,6 +10,20 @@ var url = require('url')
 var mime = require('mime-types')
 var prerender = require('prerender-node')
 var zlib = require('zlib')
+var crypto = require('crypto')
+
+// Dynamic documents get a content-derived ETag so unchanged shells (same
+// template + same embedded payload) revalidate to 304 on warm loads.
+var sendHtml = function(req, res, html){
+  var etag = '"' + crypto.createHash('md5').update(html).digest('base64url') + '"'
+  var headers = { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache', 'ETag': etag }
+  if(req.headers['if-none-match'] == etag){
+    res.writeHead(304, headers)
+    res.end()
+    return
+  }
+  send(req, res, 200, headers, html)
+}
 var esbuild = require('esbuild')
 
 // Bundle the critical module graphs at boot so first paint isn't gated by
@@ -109,7 +123,7 @@ var server = http.createServer(function (req, res) {
           }
         }
         catch {}
-        send(req, res, 200, { 'Content-Type': 'text/html' }, html)
+        sendHtml(req, res, html)
         return
       }
       if(resolveFile(req.url)) {
@@ -127,7 +141,7 @@ var server = http.createServer(function (req, res) {
       }
       else {
         console.log(req.method + ' | ' + 'PATH   | ' + req.url)
-        send(req, res, 200, { 'Content-Type': 'text/html' }, shellHtml())
+        sendHtml(req, res, shellHtml())
       }
   }
 
