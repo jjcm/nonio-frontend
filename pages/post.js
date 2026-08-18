@@ -3,6 +3,9 @@ let post = {
     let postRoute = document.querySelector('#post')
     if(postRoute) {
       postRoute.addEventListener('routeactivate', post.onActivate)
+      // Route may already be active: this script loads after DOMContentLoaded
+      // (lazyload), while the router activates routes at module boot.
+      if(postRoute.active) post.onActivate({target: postRoute})
     }
   },
   onActivate(e) {

@@ -14,10 +14,19 @@ export default class SociMarkdownView extends HTMLElement {
   }
 
   async _getMarkdown() {
-    if (window.markdown && window.markdown.ready) {
-      return await window.markdown.ready
+    // Load markdown-wasm on demand: routes without markdown (e.g. the feed
+    // list view) never pay for the loader script + 56KB wasm.
+    if (!window.markdown || !window.markdown.ready) {
+      window.__markdownLoading ??= new Promise((resolve, reject) => {
+        const s = document.createElement('script')
+        s.src = '/lib/markdown-wasm/markdown.js'
+        s.onload = resolve
+        s.onerror = () => reject(new Error('markdown-wasm failed to load'))
+        document.head.appendChild(s)
+      })
+      await window.__markdownLoading
     }
-    throw new Error('markdown-wasm not loaded')
+    return await window.markdown.ready
   }
 
   async render(markdownText) {
