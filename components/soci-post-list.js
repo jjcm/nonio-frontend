@@ -546,12 +546,18 @@ export default class SociPostList extends SociComponent {
 
     this.toggleAttribute('loaded', false)
     try {
-      const options = { signal }
-      if(this.authToken) options.headers = { Authorization: 'Bearer ' + this.authToken }
+      // Shell-embedded payload for this exact path (anonymous only);
+      // consumed once, anything else falls through to a live fetch.
+      let data = !this.authToken && window.__sociPreload?.[url]
+      if(data) delete window.__sociPreload[url]
+      else {
+        const options = { signal }
+        if(this.authToken) options.headers = { Authorization: 'Bearer ' + this.authToken }
 
-      const res = await fetch(config.API_HOST + url, options)
-      const data = await res.json()
-      if(signal.aborted) return
+        const res = await fetch(config.API_HOST + url, options)
+        data = await res.json()
+        if(signal.aborted) return
+      }
 
       this._postsData = data.posts || []
       this._dedupePostsData()

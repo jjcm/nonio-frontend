@@ -27,8 +27,22 @@ var send = function(req, res, status, headers, body){
 
 var server = http.createServer(function (req, res) {
 
-  var sociServer = () => {
+  var sociServer = async () => {
       var ext = path.extname(req.url)
+      // Feed shell: embed the anonymous /posts payload this route needs so
+      // first render doesn't wait on an API roundtrip after JS boot.
+      // Path-keyed; the client falls back to a live fetch on any mismatch.
+      if(req.url == '/'){
+        console.log(req.method + ' | ' + 'FEED   | /')
+        let html = pug.renderFile('index.pug')
+        try {
+          let posts = await fetch(config.API_HOST + '/posts').then(r => r.ok ? r.text() : null)
+          if(posts) html = html.replace('<script', `<script>window.__sociPreload={"/posts":${posts.replace(/</g, '\\u003c')}}</script><script`)
+        }
+        catch {}
+        send(req, res, 200, { 'Content-Type': 'text/html' }, html)
+        return
+      }
       if(fs.existsSync('.' + req.url)) {
         switch(ext){
           case '.pug':
