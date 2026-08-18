@@ -61,20 +61,26 @@ var shellHtml = function(){
   return html
 }
 
-// gzip text-ish responses when the client supports it; static files pass a
-// cacheKey (path+ETag) so their gzipped bytes are computed once, not per request
+// Compress text-ish responses: brotli when the client supports it (~15-20%
+// smaller than gzip), gzip otherwise. Static files pass a cacheKey
+// (path+ETag) so compressed bytes are computed once, not per request.
+// Dynamic responses use a faster brotli quality to protect TTFB.
 var compressible = /html|javascript|json|css|svg|xml|wasm|text/
-var gzipCache = new Map()
+var encCache = new Map()
 var send = function(req, res, status, headers, body, cacheKey){
-  var accepts = (req.headers['accept-encoding'] || '').includes('gzip')
-  if(accepts && body && compressible.test(headers['Content-Type'] || '')){
-    var zipped = cacheKey && gzipCache.get(cacheKey)
+  var accepted = req.headers['accept-encoding'] || ''
+  var enc = accepted.includes('br') ? 'br' : accepted.includes('gzip') ? 'gzip' : ''
+  if(enc && body && compressible.test(headers['Content-Type'] || '')){
+    var key = cacheKey && enc + '|' + cacheKey
+    var zipped = key && encCache.get(key)
     if(!zipped){
-      zipped = zlib.gzipSync(body)
-      if(cacheKey) gzipCache.set(cacheKey, zipped)
+      zipped = enc == 'br'
+        ? zlib.brotliCompressSync(body, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: cacheKey ? 11 : 5 } })
+        : zlib.gzipSync(body)
+      if(key) encCache.set(key, zipped)
     }
     body = zipped
-    headers['Content-Encoding'] = 'gzip'
+    headers['Content-Encoding'] = enc
     headers['Vary'] = 'Accept-Encoding'
   }
   res.writeHead(status, headers)
