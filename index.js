@@ -84,7 +84,13 @@ var server = http.createServer(function (req, res) {
         let html = shellHtml()
         try {
           let posts = await fetch(config.API_HOST + '/posts').then(r => r.ok ? r.text() : null)
-          if(posts) html = html.replace('<script', `<script>window.__sociPreload={"/posts":${posts.replace(/</g, '\\u003c')}}</script><script`)
+          if(posts){
+            html = html.replace('<script', `<script>window.__sociPreload={"/posts":${posts.replace(/</g, '\\u003c')}}</script><script`)
+            // Preload only the LCP image: the first rendered post's thumbnail.
+            // (Deliberately not the whole grid - measured slower in prior labs.)
+            let lcp = JSON.parse(posts).posts?.find(p => p.type == 'image' || p.type == 'link')
+            if(lcp) html = html.replace('<script', `<link rel="preload" as="image" href="${config.THUMBNAIL_HOST}/${lcp.url}.webp"><script`)
+          }
         }
         catch {}
         send(req, res, 200, { 'Content-Type': 'text/html' }, html)
