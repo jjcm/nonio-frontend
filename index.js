@@ -174,16 +174,36 @@ var handler = {
       })
     }
     else {
-      fs.readFile('.' + req.url, function(err, data){
+      fs.stat('.' + req.url, function(err, stats){
         if(err){
           res.writeHead(404,{"Content-type":"text/plain"})
           res.end("Sorry the page was not found")
+          return
         }
-        else {
-          if(mimetype)
-            res.writeHead(200, { 'Content-Type': mimetype })
-          res.end(data)
+        // Bounded freshness + revalidation so warm loads don't re-download
+        // every module. Not immutable: files aren't content-hashed.
+        var etag = '"' + stats.size + '-' + Number(stats.mtimeMs) + '"'
+        var headers = {
+          'Cache-Control': 'max-age=300',
+          'ETag': etag,
+          'Last-Modified': stats.mtime.toUTCString()
         }
+        if(mimetype) headers['Content-Type'] = mimetype
+        if(req.headers['if-none-match'] == etag){
+          res.writeHead(304, headers)
+          res.end()
+          return
+        }
+        fs.readFile('.' + req.url, function(err, data){
+          if(err){
+            res.writeHead(404,{"Content-type":"text/plain"})
+            res.end("Sorry the page was not found")
+          }
+          else {
+            res.writeHead(200, headers)
+            res.end(data)
+          }
+        })
       })
     }
   }
