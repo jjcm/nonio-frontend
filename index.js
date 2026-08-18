@@ -52,8 +52,11 @@ try {
 }
 catch(e) {}
 
+// Compile the shell template once; renderFile re-parses index.pug and all
+// includes on every request (~30ms of TTFB).
+var shellTemplate = pug.compileFile('index.pug')
 var shellHtml = function(){
-  var html = pug.renderFile('index.pug')
+  var html = shellTemplate()
   if(chunkPreloads) html = html.replace('<script', chunkPreloads + '<script')
   return html
 }
