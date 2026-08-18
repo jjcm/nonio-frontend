@@ -536,7 +536,12 @@ export default class SociPostList extends SociComponent {
 
   _refreshFilterFetch(){
     this._updateTitle()
-    this.fetchAndMerge(this._buildPostsUrl())
+    const url = this._buildPostsUrl()
+    // Boot-time attribute initialization lands here with the same URL the
+    // initial load just fetched; only merge when the filter actually changes
+    // the query (or before any data exists there's nothing to merge into).
+    if(!this._postsData || url === this._currentDataUrl) return
+    this.fetchAndMerge(url)
   }
 
   async _loadPosts(url){
