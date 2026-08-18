@@ -20,6 +20,7 @@ try {
   esbuild.buildSync({
     entryPoints: ['soci.js', 'components/soci-components.js'],
     bundle: true,
+    minify: true,
     format: 'esm',
     splitting: true,
     outdir: DIST,
