@@ -1,5 +1,6 @@
 #home-container
-  script(src="/pages/home.js")
+  script.
+    lazyload('/pages/home.js', document.currentScript.closest('soci-route'))
   .header-container
     .header.inner-container(load-order="primary")
       .left-block

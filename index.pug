@@ -65,4 +65,5 @@ html(lang="en")
     soci-route#post(default fresh)
       include pages/post.pug
 
-  script(src="/pages/post.js")
+  script.
+    lazyload('/pages/post.js')

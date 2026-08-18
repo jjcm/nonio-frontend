@@ -6,4 +6,5 @@
 
   .inner-content(load-order="secondary")
 
-script(src="/pages/notifications.js")
+script.
+  lazyload('/pages/notifications.js', document.currentScript.closest('soci-route'))

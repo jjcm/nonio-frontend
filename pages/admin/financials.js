@@ -79,4 +79,4 @@ let adminFinancials = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', adminFinancials.init)
+adminFinancials.init()

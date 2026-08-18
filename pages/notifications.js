@@ -29,4 +29,4 @@ let notifications = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', notifications.init)
+notifications.init()

@@ -1,5 +1,6 @@
 #why-webcomics
-  script(src="/pages/why-webcomics.js")
+  script.
+    lazyload('/pages/why-webcomics.js', document.currentScript.closest('soci-route'))
   style.
     #why-webcomics {
       padding: 40px;

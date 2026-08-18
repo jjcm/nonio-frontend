@@ -51,4 +51,4 @@ let user = {
   },
 }
 
-document.addEventListener('DOMContentLoaded', user.init)
+user.init()

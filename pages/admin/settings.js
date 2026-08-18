@@ -53,4 +53,4 @@ let adminSettings = {
   },
 }
 
-document.addEventListener('DOMContentLoaded', adminSettings.init)
+adminSettings.init()

@@ -158,4 +158,4 @@ let adminSubscribe = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', adminSubscribe.init)
+adminSubscribe.init()

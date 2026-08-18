@@ -174,7 +174,8 @@
       margin: 24px 0 8px;
     }
 
-  script(src="/pages/admin/subscribe.js")
+  script.
+    lazyload('/pages/admin/subscribe.js', document.currentScript.closest('soci-route'))
   .loading-block(load-order="primary")
     h1 Subscription
     p Please pick your account type:

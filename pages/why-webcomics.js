@@ -39,4 +39,4 @@ let webcomics = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', webcomics.init)
+webcomics.init()

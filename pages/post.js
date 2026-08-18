@@ -42,4 +42,4 @@ let post = {
   },
 }
 
-document.addEventListener('DOMContentLoaded', post.init)
+post.init()

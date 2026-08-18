@@ -31,4 +31,4 @@ let home = {
   }
 }
 
-document.addEventListener('DOMContentLoaded', home.init)
+home.init()

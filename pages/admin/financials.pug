@@ -1,5 +1,6 @@
 #admin-financials-container.container
-  script(src="/pages/admin/financials.js")
+  script.
+    lazyload('/pages/admin/financials.js', document.currentScript.closest('soci-route'))
   .header(load-order="primary")
     h1 Your Financials 
     soci-banner(type="info" title="Auto-withdrawal enabled" style="display: none;") 
