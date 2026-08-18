@@ -8,6 +8,14 @@ let post = {
   onActivate(e) {
     let route = e.target
     let postElement = route.querySelector('soci-post')
+    soci.ensureComponents([
+      ['./components/soci-post.js', 'soci-post'],
+      ['./components/soci-comment-list.js', 'soci-comment-list'],
+      ['./components/soci-comment.js', 'soci-comment'],
+      ['./components/soci-html-page.js', 'soci-html-page'],
+      ['./components/soci-encoding-progress.js', 'soci-encoding-progress'],
+      ['./components/soci-radial-progress.js', 'soci-radial-progress']
+    ])
     let path = window.soci.routeContext.path
     let url = path.substr(1)
 

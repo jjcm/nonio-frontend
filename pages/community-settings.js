@@ -21,6 +21,9 @@ let communitySettings = {
       link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
     })
     
+    soci.ensureComponents([
+      ['./components/soci-avatar-uploader.js', 'soci-avatar-uploader']
+    ])
     // Set community on avatar and banner uploaders
     communitySettings.dom.querySelectorAll('soci-avatar-uploader').forEach(el => el.setAttribute('community', communityName))
     communitySettings.dom.querySelectorAll('soci-avatar-uploader-new').forEach(el => el.setAttribute('community', communityName))

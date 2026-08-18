@@ -13,6 +13,11 @@ let notifications = {
       })
     }
     console.log(soci.notificationCount)
+    soci.ensureComponents([
+      ['./components/soci-user-comment-list.js', 'soci-user-comment-list'],
+      ['./components/soci-user-comment.js', 'soci-user-comment'],
+      ['./components/soci-comment.js', 'soci-comment']
+    ])
     container.innerHTML = `<soci-user-comment-list data="/notifications${soci.notificationCount ? '?unread=true' : ''}"></soci-user-comment-list>`
   },
   tabClick: e => {

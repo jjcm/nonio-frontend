@@ -22,6 +22,9 @@ let communityUsers = {
       link.setAttribute('href', href.replace(/@[\w-]+/, `@${communityName}`))
     })
 
+    soci.ensureComponents([
+      ['./components/soci-user-picker.js', 'soci-user-picker']
+    ])
     communityUsers.cacheDom()
     communityUsers.bindPickers()
     communityUsers.loadUsers()

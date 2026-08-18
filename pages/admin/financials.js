@@ -5,6 +5,12 @@ let adminFinancials = {
   },
   onActivate: () => {
     document.title = "Nonio - Your Financials"
+    soci.ensureComponents([
+      ['./components/soci-banner.js', 'soci-banner'],
+      ['./components/soci-ledger.js', 'soci-ledger'],
+      ['./components/soci-ledger-month.js', 'soci-ledger-month'],
+      ['./components/soci-ledger-li.js', 'soci-ledger-li']
+    ])
     adminFinancials.dom.querySelector('.header soci-button')?.wait()
     adminFinancials.checkFinancials()
   },

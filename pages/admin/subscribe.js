@@ -5,6 +5,9 @@ let adminSubscribe = {
   },
   onActivate: () => {
     document.title = "Nonio - Choose Your Account Type"
+    soci.ensureComponents([
+      ['./components/soci-contribution-slider.js', 'soci-contribution-slider']
+    ])
     adminSubscribe.dom.querySelector('form').addEventListener('submit', e => {
       e.preventDefault()
     })

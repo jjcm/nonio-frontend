@@ -23,6 +23,11 @@ let user = {
       container.innerHTML = `<soci-post-list user="${u}" sort="top"></soci-post-list>`
     }
     else {
+      soci.ensureComponents([
+        ['./components/soci-user-comment-list.js', 'soci-user-comment-list'],
+        ['./components/soci-user-comment.js', 'soci-user-comment'],
+        ['./components/soci-comment.js', 'soci-comment']
+      ])
       container.innerHTML = `<soci-user-comment-list data="/${user.type}?user=${user.username}&sort=top"></soci-user-comment-list>`
     }
   },

@@ -6,6 +6,9 @@ let adminSettings = {
   onActivate: () => {
     document.title = 'Nonio - Settings'
 
+    soci.ensureComponents([
+      ['./components/soci-avatar-uploader.js', 'soci-avatar-uploader']
+    ])
     adminSettings.dom.querySelector('.description soci-button').addEventListener('click', adminSettings.changeDescription)
     adminSettings.dom.querySelector('.password soci-button').addEventListener('click', adminSettings.changePassword)
     adminSettings.setDescription()

@@ -1,13 +1,24 @@
 let submit = {
   dom: document.currentScript.closest('soci-route'),
+  components: [
+    ['./components/soci-url-input.js', 'soci-url-input'],
+    ['./components/soci-link-input.js', 'soci-link-input'],
+    ['./components/soci-image-uploader.js', 'soci-image-uploader'],
+    ['./components/soci-video-uploader.js', 'soci-video-uploader'],
+    ['./components/soci-html-uploader.js', 'soci-html-uploader'],
+    ['./components/soci-html-page.js', 'soci-html-page'],
+    ['./components/soci-encoding-progress.js', 'soci-encoding-progress'],
+    ['./components/soci-radial-progress.js', 'soci-radial-progress']
+  ],
   init() {
     soci.registerPage(submit)
   },
   form: null, 
   currentCommunity: null,
-  onActivate() {
+  async onActivate() {
     console.log('Submit onActivate')
     const dom = submit.dom || this
+    await soci.ensureComponents(submit.components)
     submit.form = dom.querySelector('form')
 
     submit.currentCommunity = window.soci.routeContext.community

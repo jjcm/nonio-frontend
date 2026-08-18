@@ -42,6 +42,22 @@ let soci = {
 
     return modal
   },
+  ensureComponents(list) {
+    this._componentImports ??= new Map()
+    const jobs = []
+    for (const [path, tag] of list) {
+      if (!this._componentImports.has(path)) {
+        this._componentImports.set(path, import(path).then(({default: component}) => {
+          if (!window.customElements.get(tag)) window.customElements.define(tag, component)
+        }).catch(error => {
+          this._componentImports.delete(path)
+          console.error(`Failed to load ${tag}`, error)
+        }))
+      }
+      jobs.push(this._componentImports.get(path))
+    }
+    return Promise.all(jobs)
+  },
   requireLogin: (action = 'do that') => {
     if(soci.isLoggedIn()) return true
     const modal = soci._ensureLoginRequiredModal()
@@ -252,6 +268,7 @@ let soci = {
     const isOnSubmitPage = submitRoute && submitRoute.active && window.location.pathname === '/submit'
     
     const setupContent = async () => {
+      await soci.ensureComponents(submit.components)
       const tabGroup = submitRoute.querySelector('soci-tab-group')
       if (!tabGroup) return
 

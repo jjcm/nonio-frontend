@@ -13,6 +13,10 @@ let textChannel = {
     const channel = decodeURIComponent(match[2] || '')
     if (!community || !channel) return
 
+    soci.ensureComponents([
+      ['./components/soci-text-channel-view-threaded.js', 'soci-text-channel-view'],
+      ['./components/soci-message-row.js', 'soci-message-row']
+    ])
     const view = document.createElement('soci-text-channel-view')
     view.setAttribute('community', community)
     view.setAttribute('channel', channel)

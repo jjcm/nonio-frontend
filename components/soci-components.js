@@ -6,29 +6,8 @@ window.customElements.define('soci-route', SociRoute)
 import SociRouter from "./soci-router.js"
 window.sociRouter = new SociRouter()
 
-import SociAvatarUploader from "./soci-avatar-uploader.js"
-window.customElements.define('soci-avatar-uploader', SociAvatarUploader)
-
-import SociBanner from "./soci-banner.js"
-window.customElements.define('soci-banner', SociBanner)
-
 import SociButton from "./soci-button.js"
 window.customElements.define('soci-button', SociButton)
-
-import SociComment from "./soci-comment.js"
-window.customElements.define('soci-comment', SociComment)
-
-import SociContributionSlider from "./soci-contribution-slider.js"
-window.customElements.define('soci-contribution-slider', SociContributionSlider)
-
-import SociCommentList from "./soci-comment-list.js"
-window.customElements.define('soci-comment-list', SociCommentList)
-
-import SociHTMLPage from "./soci-html-page.js"
-window.customElements.define('soci-html-page', SociHTMLPage)
-
-import SociHTMLUploader from "./soci-html-uploader.js"
-window.customElements.define('soci-html-uploader', SociHTMLUploader)
 
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
@@ -36,26 +15,11 @@ window.customElements.define('soci-icon', SociIcon)
 import SociImage from "./soci-image.js"
 window.customElements.define('soci-image', SociImage)
 
-import SociImageUploader from "./soci-image-uploader.js"
-window.customElements.define('soci-image-uploader', SociImageUploader)
-
 import SociInput from "./soci-input.js"
 window.customElements.define('soci-input', SociInput)
 
-import SociLedgerLi from "./soci-ledger-li.js"
-window.customElements.define('soci-ledger-li', SociLedgerLi)
-
-import SociLedgerMonth from "./soci-ledger-month.js"
-window.customElements.define('soci-ledger-month', SociLedgerMonth)
-
-import SociLedger from "./soci-ledger.js"
-window.customElements.define('soci-ledger', SociLedger)
-
 import SociLink from "./soci-link.js"
 window.customElements.define('soci-link', SociLink)
-
-import SociLinkInput from "./soci-link-input.js"
-window.customElements.define('soci-link-input', SociLinkInput)
 
 import SociModal from "./soci-modal.js"
 window.customElements.define('soci-modal', SociModal)
@@ -66,14 +30,8 @@ window.customElements.define('soci-notification-badge', SociNotificationBadge)
 import SociMarkdownView from "./soci-markdown-view.js"
 window.customElements.define('soci-markdown-view', SociMarkdownView)
 
-import SociMessageRow from "./soci-message-row.js"
-window.customElements.define('soci-message-row', SociMessageRow)
-
 import SociPassword from "./soci-password.js"
 window.customElements.define('soci-password', SociPassword)
-
-import SociPost from "./soci-post.js"
-window.customElements.define('soci-post', SociPost)
 
 import SociPostLi from "./soci-post-li.js"
 window.customElements.define('soci-post-li', SociPostLi)
@@ -93,9 +51,6 @@ window.customElements.define('soci-radio-button', SociRadioButton)
 
 import SociRadioButtonGroup from "./soci-radio-button-group.js"
 window.customElements.define('soci-radio-button-group', SociRadioButtonGroup)
-
-import SociRadialProgress from "./soci-radial-progress.js"
-window.customElements.define('soci-radial-progress', SociRadialProgress)
 
 import SociSidebar from "./soci-sidebar.js"
 window.customElements.define('soci-sidebar', SociSidebar)
@@ -140,17 +95,11 @@ window.customElements.define('soci-tag-group', SociTagGroup)
 import SociTagLi from "./soci-tag-li.js"
 window.customElements.define('soci-tag-li', SociTagLi)
 
-import SociUrlInput from "./soci-url-input.js"
-window.customElements.define('soci-url-input', SociUrlInput)
-
 import SociVoiceChannelLi from "./soci-voice-channel-li.js"
 window.customElements.define('soci-voice-channel-li', SociVoiceChannelLi)
 
 import SociTextChannelLi from "./soci-text-channel-li.js"
 window.customElements.define('soci-text-channel-li', SociTextChannelLi)
-
-import SociTextChannelViewThreaded from "./soci-text-channel-view-threaded.js"
-window.customElements.define('soci-text-channel-view', SociTextChannelViewThreaded)
 
 import SociUsernameInput from "./soci-username-input.js"
 window.customElements.define('soci-username-input', SociUsernameInput)
@@ -158,20 +107,5 @@ window.customElements.define('soci-username-input', SociUsernameInput)
 import SociUser from "./soci-user.js"
 window.customElements.define('soci-user', SociUser)
 
-import SociUserPicker from "./soci-user-picker.js"
-window.customElements.define('soci-user-picker', SociUserPicker)
-
-import SociUserComment from "./soci-user-comment.js"
-window.customElements.define('soci-user-comment', SociUserComment)
-
-import SociUserCommentList from "./soci-user-comment-list.js"
-window.customElements.define('soci-user-comment-list', SociUserCommentList)
-
 import SociVideo from "./soci-video.js"
 window.customElements.define('soci-video', SociVideo)
-
-import SociVideoUploader from "./soci-video-uploader.js"
-window.customElements.define('soci-video-uploader', SociVideoUploader)
-
-import SociEncodingProgress from "./soci-encoding-progress.js"
-window.customElements.define('soci-encoding-progress', SociEncodingProgress)
