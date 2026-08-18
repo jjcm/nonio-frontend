@@ -61,12 +61,19 @@ var shellHtml = function(){
   return html
 }
 
-// gzip text-ish responses when the client supports it
+// gzip text-ish responses when the client supports it; static files pass a
+// cacheKey (path+ETag) so their gzipped bytes are computed once, not per request
 var compressible = /html|javascript|json|css|svg|xml|wasm|text/
-var send = function(req, res, status, headers, body){
+var gzipCache = new Map()
+var send = function(req, res, status, headers, body, cacheKey){
   var accepts = (req.headers['accept-encoding'] || '').includes('gzip')
   if(accepts && body && compressible.test(headers['Content-Type'] || '')){
-    body = zlib.gzipSync(body)
+    var zipped = cacheKey && gzipCache.get(cacheKey)
+    if(!zipped){
+      zipped = zlib.gzipSync(body)
+      if(cacheKey) gzipCache.set(cacheKey, zipped)
+    }
+    body = zipped
     headers['Content-Encoding'] = 'gzip'
     headers['Vary'] = 'Accept-Encoding'
   }
@@ -283,7 +290,7 @@ var handler = {
             res.end("Sorry the page was not found")
           }
           else {
-            send(req, res, 200, headers, data)
+            send(req, res, 200, headers, data, filePath + '|' + etag)
           }
         })
       })
