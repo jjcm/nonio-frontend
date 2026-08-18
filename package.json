@@ -24,6 +24,7 @@
     "pug": "^3.0.1"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "pug-cli": "^1.0.0-alpha6"
   }
 }

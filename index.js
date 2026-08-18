@@ -10,6 +10,34 @@ var url = require('url')
 var mime = require('mime-types')
 var prerender = require('prerender-node')
 var zlib = require('zlib')
+var esbuild = require('esbuild')
+
+// Bundle the critical module graphs at boot so first paint isn't gated by
+// ~30 serial HTTP/1.1 module requests. Dynamic imports (deferred components)
+// stay split into their own chunks. Rebuilt on every server start.
+var DIST = '.speed-lab-dist'
+try {
+  esbuild.buildSync({
+    entryPoints: ['soci.js', 'components/soci-components.js'],
+    bundle: true,
+    format: 'esm',
+    splitting: true,
+    outdir: DIST,
+    outbase: '.',
+    logLevel: 'error'
+  })
+  console.log('critical JS graph bundled into ' + DIST)
+}
+catch(e) {
+  console.log('bundle failed, serving unbundled modules: ' + e.message)
+}
+
+// Serve bundled artifacts (and their chunks) when present.
+var resolveFile = function(reqPath){
+  if(fs.existsSync('./' + DIST + reqPath)) return './' + DIST + reqPath
+  if(fs.existsSync('.' + reqPath)) return '.' + reqPath
+  return null
+}
 
 // gzip text-ish responses when the client supports it
 var compressible = /html|javascript|json|css|svg|xml|wasm|text/
@@ -43,7 +71,7 @@ var server = http.createServer(function (req, res) {
         send(req, res, 200, { 'Content-Type': 'text/html' }, html)
         return
       }
-      if(fs.existsSync('.' + req.url)) {
+      if(resolveFile(req.url)) {
         switch(ext){
           case '.pug':
             handler.pug(req,res)
@@ -201,7 +229,8 @@ var handler = {
       })
     }
     else {
-      fs.stat('.' + req.url, function(err, stats){
+      var filePath = resolveFile(req.url) || ('.' + req.url)
+      fs.stat(filePath, function(err, stats){
         if(err){
           res.writeHead(404,{"Content-type":"text/plain"})
           res.end("Sorry the page was not found")
@@ -221,7 +250,7 @@ var handler = {
           res.end()
           return
         }
-        fs.readFile('.' + req.url, function(err, data){
+        fs.readFile(filePath, function(err, data){
           if(err){
             res.writeHead(404,{"Content-type":"text/plain"})
             res.end("Sorry the page was not found")
