@@ -98,6 +98,8 @@ var sss = function(req) {
   return isRequestingPrerenderedPage;
 }
 
+var IMMUTABLE_EXT = { '.js': 1, '.css': 1, '.wasm': 1, '.png': 1, '.webp': 1, '.jpg': 1, '.jpeg': 1, '.gif': 1, '.svg': 1, '.ico': 1, '.woff': 1, '.woff2': 1 }
+
 var handler = {
   error: function(req, res, err){
     res.writeHead(404, { 'Content-Type' : 'text/html' })
@@ -180,8 +182,11 @@ var handler = {
           res.end("Sorry the page was not found")
         }
         else {
-          if(mimetype)
-            res.writeHead(200, { 'Content-Type': mimetype })
+          if(mimetype){
+            var headers = { 'Content-Type': mimetype }
+            if(IMMUTABLE_EXT[path.extname(req.url)]) headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+            res.writeHead(200, headers)
+          }
           res.end(data)
         }
       })
