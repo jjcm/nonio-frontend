@@ -100,6 +100,7 @@ var sss = function(req) {
 
 var IMMUTABLE_EXT = { '.js': 1, '.css': 1, '.wasm': 1, '.png': 1, '.webp': 1, '.jpg': 1, '.jpeg': 1, '.gif': 1, '.svg': 1, '.ico': 1, '.woff': 1, '.woff2': 1 }
 var GZIP_EXT = { '.js': 1, '.css': 1, '.html': 1, '.svg': 1, '.wasm': 1 }
+var GZIP_CACHE = {}
 function maybeGzip(req, res, data, compressible){
   if(compressible && (req.headers['accept-encoding']||'').indexOf('gzip') !== -1){
     data = zlib.gzipSync(data)
@@ -185,21 +186,50 @@ var handler = {
       })
     }
     else {
-      fs.readFile('.' + req.url, function(err, data){
-        if(err){
-          res.writeHead(404,{"Content-type":"text/plain"})
-          res.end("Sorry the page was not found")
-        }
-        else {
-          if(mimetype){
-            var headers = { 'Content-Type': mimetype }
-            if(IMMUTABLE_EXT[path.extname(req.url)]) headers['Cache-Control'] = 'public, max-age=31536000, immutable'
-            data = maybeGzip(req, res, data, GZIP_EXT[path.extname(req.url)])
-            res.writeHead(200, headers)
+      var fileKey = '.' + req.url
+      var ext = path.extname(req.url)
+      var wantsGzip = !!GZIP_EXT[ext] && (req.headers['accept-encoding']||'').indexOf('gzip') !== -1
+      var send = function(data){
+        if(mimetype){
+          var headers = { 'Content-Type': mimetype }
+          if(IMMUTABLE_EXT[ext]) headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+          if(wantsGzip){
+            res.setHeader('Content-Encoding','gzip')
+            res.setHeader('Vary','Accept-Encoding')
           }
-          res.end(data)
+          res.writeHead(200, headers)
         }
-      })
+        res.end(data)
+      }
+      var read = function(){
+        fs.stat(fileKey, function(err, stats){
+          if(err){
+            res.writeHead(404,{"Content-type":"text/plain"})
+            res.end("Sorry the page was not found")
+            return
+          }
+          fs.readFile(fileKey, function(err, data){
+            if(err){
+              res.writeHead(404,{"Content-type":"text/plain"})
+              res.end("Sorry the page was not found")
+              return
+            }
+            if(GZIP_EXT[ext]) GZIP_CACHE[fileKey] = { mtime: stats.mtimeMs, size: stats.size, raw: data, gz: zlib.gzipSync(data) }
+            send(GZIP_CACHE[fileKey] && wantsGzip ? GZIP_CACHE[fileKey].gz : data)
+          })
+        })
+      }
+      var cached = GZIP_CACHE[fileKey]
+      if(cached){
+        fs.stat(fileKey, function(err, stats){
+          if(!err && cached.mtime === stats.mtimeMs && cached.size === stats.size){
+            send(wantsGzip ? cached.gz : cached.raw)
+            return
+          }
+          read()
+        })
+      }
+      else read()
     }
   }
 }
