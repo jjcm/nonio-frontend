@@ -7,6 +7,7 @@ var fs = require('fs')
 var path = require('path')
 var pug = require('pug')
 var url = require('url')
+var zlib = require('zlib')
 var mime = require('mime-types')
 var prerender = require('prerender-node')
 
@@ -30,8 +31,7 @@ var server = http.createServer(function (req, res) {
       }
       else {
         console.log(req.method + ' | ' + 'PATH   | ' + req.url)
-        let html = pug.renderFile('index.pug')
-        res.end(html, 'utf-8')
+        res.end(maybeGzip(req, res, pug.renderFile('index.pug'), true), 'utf-8')
       }
   }
 
@@ -99,6 +99,15 @@ var sss = function(req) {
 }
 
 var IMMUTABLE_EXT = { '.js': 1, '.css': 1, '.wasm': 1, '.png': 1, '.webp': 1, '.jpg': 1, '.jpeg': 1, '.gif': 1, '.svg': 1, '.ico': 1, '.woff': 1, '.woff2': 1 }
+var GZIP_EXT = { '.js': 1, '.css': 1, '.html': 1, '.svg': 1 }
+function maybeGzip(req, res, data, compressible){
+  if(compressible && (req.headers['accept-encoding']||'').indexOf('gzip') !== -1){
+    data = zlib.gzipSync(data)
+    res.setHeader('Content-Encoding','gzip')
+    res.setHeader('Vary','Accept-Encoding')
+  }
+  return data
+}
 
 var handler = {
   error: function(req, res, err){
@@ -125,16 +134,15 @@ var handler = {
     var filePath = '.' + req.url
     console.log(req.method + ' | ' + 'FOLDER | ' + req.url)
     fs.readdir(filePath, function(err, files){
-      res.writeHead(200, { 'Content-Type' : 'text/html' })
       if(err) {
+        res.writeHead(200, { 'Content-Type' : 'text/html' })
         console.log(err)
         res.end(err.toString(), 'utf-8')
         return 0
       }
       if(files.indexOf('index.pug') != -1){
         if(!filePath.match(/\/$/)) filePath += '/'
-
-        html = pug.renderFile(filePath + 'index.pug')
+        html = maybeGzip(req, res, pug.renderFile(filePath + 'index.pug'), true)
       }
       else {
         html = '<h1>Directory Listing</h1><ul>'
@@ -143,6 +151,7 @@ var handler = {
           html += '<li><a href="' + path + '">' + files[i] + '</a></li>'
         }
       }
+      res.writeHead(200, { 'Content-Type' : 'text/html' })
       res.end(html, 'utf-8')
     })
   },
@@ -185,6 +194,7 @@ var handler = {
           if(mimetype){
             var headers = { 'Content-Type': mimetype }
             if(IMMUTABLE_EXT[path.extname(req.url)]) headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+            data = maybeGzip(req, res, data, GZIP_EXT[path.extname(req.url)])
             res.writeHead(200, headers)
           }
           res.end(data)
