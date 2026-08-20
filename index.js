@@ -99,7 +99,7 @@ var sss = function(req) {
 }
 
 var IMMUTABLE_EXT = { '.js': 1, '.css': 1, '.wasm': 1, '.png': 1, '.webp': 1, '.jpg': 1, '.jpeg': 1, '.gif': 1, '.svg': 1, '.ico': 1, '.woff': 1, '.woff2': 1 }
-var GZIP_EXT = { '.js': 1, '.css': 1, '.html': 1, '.svg': 1 }
+var GZIP_EXT = { '.js': 1, '.css': 1, '.html': 1, '.svg': 1, '.wasm': 1 }
 function maybeGzip(req, res, data, compressible){
   if(compressible && (req.headers['accept-encoding']||'').indexOf('gzip') !== -1){
     data = zlib.gzipSync(data)
