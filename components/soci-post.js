@@ -15,7 +15,10 @@ export default class SociPost extends SociComponent {
         display: flex;
         flex-direction: column;
         z-index: 10;
-        transition: opacity 0.1s var(--soci-ease);
+        /* Entrances fade in on --soci-ease-out. The symmetric --soci-ease held
+           each of these below perceptible opacity for its first ~18% and needed
+           ~70% to reach full, all of it after the response had landed. */
+        transition: opacity 0.1s var(--soci-ease-out);
         width: 100%;
         height: 100dvh;
         overflow-x: hidden;
@@ -76,7 +79,7 @@ export default class SociPost extends SociComponent {
 
       :host([loaded]) .media {
         opacity: 1;
-        transition: opacity 0.3s var(--soci-ease);
+        transition: opacity 0.3s var(--soci-ease-out);
         position: relative;
       }
 
@@ -199,18 +202,18 @@ export default class SociPost extends SociComponent {
       :host([loaded]) title-container,
       :host([loaded]) slot[name="tags"] {
         opacity: 1;
-        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease);
+        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease-out);
         transform: translateY(0);
       }
 
       :host([loaded]) slot[name="description"] {
-        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease);
+        transition: transform 0.3s cubic-bezier(.15,0,0,1), opacity 0.3s var(--soci-ease-out);
         opacity: 1;
         transform: translateY(0);
       }
 
       :host([type="blog"][loaded]) slot[name="description"] {
-        transition: all 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease);
+        transition: all 0.35s cubic-bezier(.15,0,.20,1), opacity 0.35s var(--soci-ease-out);
       }
 
       :host([type="html"]) #media-container {
@@ -227,7 +230,7 @@ export default class SociPost extends SociComponent {
       :host([loaded]) slot[name="comments"] {
         opacity: 1;
         transform: translateY(0px);
-        transition: all 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease);
+        transition: all 0.4s cubic-bezier(.15,0,.35,1), opacity 0.4s var(--soci-ease-out);
       }
 
       #vote-message span {
