@@ -9,6 +9,98 @@ var pug = require('pug')
 var url = require('url')
 var mime = require('mime-types')
 var prerender = require('prerender-node')
+var zlib = require('zlib')
+var crypto = require('crypto')
+
+// Asset filenames are not content-hashed (/soci.js is always /soci.js), so this
+// has to stay short enough that a deploy is picked up promptly. The win comes
+// from revalidating into a 304 rather than from a long TTL, so there is no
+// reason to reach for `immutable` here.
+var STATIC_MAX_AGE = 300
+var COMPRESSIBLE = /^(?:text\/|application\/(?:javascript|json|xml)$|image\/svg\+xml$)/
+var MIN_GZIP_SIZE = 512
+
+// Re-compressing the same asset for every request is the expensive part, not
+// the compression itself, so results are keyed by path + ETag and computed once.
+var gzipCache = new Map()
+
+function gzipFor(key, buf){
+  var hit = gzipCache.get(key)
+  if(hit) return hit
+  var out = zlib.gzipSync(buf)
+  if(gzipCache.size > 512) gzipCache.clear()
+  gzipCache.set(key, out)
+  return out
+}
+
+// Send a body with an ETag, so a repeat visit revalidates into a 304 instead of
+// downloading it again, and gzip it when that is worth doing.
+function send(req, res, body, mimetype, etag, cacheControl){
+  var headers = { 'Cache-Control': cacheControl }
+  if(mimetype) headers['Content-Type'] = mimetype
+
+  if(etag){
+    headers.ETag = etag
+    if(req.headers['if-none-match'] === etag){
+      res.writeHead(304, headers)
+      res.end()
+      return
+    }
+  }
+
+  if(COMPRESSIBLE.test(mimetype || '')){
+    headers.Vary = 'Accept-Encoding'
+    if(/\bgzip\b/.test(req.headers['accept-encoding'] || '') && body.length >= MIN_GZIP_SIZE){
+      body = gzipFor(req.url + '|' + etag, body)
+      headers['Content-Encoding'] = 'gzip'
+    }
+  }
+
+  headers['Content-Length'] = body.length
+  res.writeHead(200, headers)
+  res.end(body)
+}
+
+// The app shell renders identical output for every request but costs ~30ms to
+// compile, and that lands on every cold document load and on every SPA deep
+// link. Render it once and reuse.
+//
+// Editing a template still takes effect without a restart: pug reports the
+// includes it pulled in, so the cache is validated by stat-ing the entry
+// template plus its dependencies. That is ~20 stats, far cheaper than a
+// recompile, and unlike a filesystem watcher it cannot silently miss a change.
+var pugCache = new Map()
+
+function newestMtime(files){
+  var newest = 0
+  for(var i = 0; i < files.length; i++){
+    try {
+      var m = fs.statSync(files[i]).mtimeMs
+      if(m > newest) newest = m
+    } catch(e) {
+      // A deleted include should force a recompile so pug reports the error.
+      return Infinity
+    }
+  }
+  return newest
+}
+
+function renderPug(file){
+  var hit = pugCache.get(file)
+  if(hit && newestMtime(hit.files) <= hit.mtime) return hit
+
+  var fn = pug.compileFile(file)
+  var files = [file].concat(fn.dependencies || [])
+  var html = fn()
+  var entry = {
+    body: Buffer.from(html, 'utf-8'),
+    etag: '"' + crypto.createHash('md5').update(html).digest('hex') + '"',
+    files: files,
+    mtime: newestMtime(files)
+  }
+  pugCache.set(file, entry)
+  return entry
+}
 
 
 var server = http.createServer(function (req, res) {
@@ -30,8 +122,10 @@ var server = http.createServer(function (req, res) {
       }
       else {
         console.log(req.method + ' | ' + 'PATH   | ' + req.url)
-        let html = pug.renderFile('index.pug')
-        res.end(html, 'utf-8')
+        let cached = renderPug('index.pug')
+        // no-cache still allows a 304, so the shell is revalidated on every
+        // visit (a deploy is picked up immediately) without resending 30KB.
+        send(req, res, cached.body, 'text/html', cached.etag, 'no-cache')
       }
   }
 
@@ -123,18 +217,23 @@ var handler = {
     var filePath = '.' + req.url
     console.log(req.method + ' | ' + 'FOLDER | ' + req.url)
     fs.readdir(filePath, function(err, files){
-      res.writeHead(200, { 'Content-Type' : 'text/html' })
       if(err) {
         console.log(err)
+        res.writeHead(200, { 'Content-Type' : 'text/html' })
         res.end(err.toString(), 'utf-8')
         return 0
       }
       if(files.indexOf('index.pug') != -1){
         if(!filePath.match(/\/$/)) filePath += '/'
 
-        html = pug.renderFile(filePath + 'index.pug')
+        // This is the path that serves "/", i.e. the app shell for every cold
+        // visit to the homepage.
+        var cached = renderPug(filePath + 'index.pug')
+        send(req, res, cached.body, 'text/html', cached.etag, 'no-cache')
+        return 0
       }
       else {
+        res.writeHead(200, { 'Content-Type' : 'text/html' })
         html = '<h1>Directory Listing</h1><ul>'
         for(var i = 0; i < files.length; i++){
           var path = req.url + files[i]
@@ -174,16 +273,30 @@ var handler = {
       })
     }
     else {
-      fs.readFile('.' + req.url, function(err, data){
-        if(err){
+      var filePath = '.' + req.url
+      fs.stat(filePath, function(statErr, stats){
+        if(statErr || !stats.isFile()){
           res.writeHead(404,{"Content-type":"text/plain"})
           res.end("Sorry the page was not found")
+          return
         }
-        else {
-          if(mimetype)
-            res.writeHead(200, { 'Content-Type': mimetype })
-          res.end(data)
+        // size + mtime, the same shape nginx uses. Cheap, and it changes
+        // whenever the file does, so no hashing of large assets is needed.
+        var etag = '"' + stats.size.toString(16) + '-' + stats.mtimeMs.toString(16) + '"'
+        if(req.headers['if-none-match'] === etag){
+          res.writeHead(304, { 'ETag': etag, 'Cache-Control': 'public, max-age=' + STATIC_MAX_AGE })
+          res.end()
+          return
         }
+        fs.readFile(filePath, function(err, data){
+          if(err){
+            res.writeHead(404,{"Content-type":"text/plain"})
+            res.end("Sorry the page was not found")
+          }
+          else {
+            send(req, res, data, mimetype || undefined, etag, 'public, max-age=' + STATIC_MAX_AGE)
+          }
+        })
       })
     }
   }
