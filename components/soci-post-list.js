@@ -174,7 +174,11 @@ export default class SociPostList extends SociComponent {
       :host([loaded]) #items {
         transform: translateY(0);
         opacity: 1;
-        transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+        /* Entrance, so opacity uses the ease-out token rather than the
+           symmetric --soci-ease. Same 0.35s and same slide; the ease-in-out
+           curve held the feed below perceptible opacity for its first ~65ms
+           after the response had already landed. */
+        transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease-out);
       }
       #items::slotted(soci-post-li) {
         margin-top: 8px;
