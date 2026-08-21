@@ -393,10 +393,15 @@ export default class SociPost extends SociComponent {
         this.loadContent(post.type, isEncoding)
       }
       
-      setTimeout(()=>{
+      // Reveal on the next frame rather than after a fixed 100ms. The element
+      // has been rendering at opacity 0 for the whole fetch, so its style is
+      // already resolved and the entrance transitions still animate; the wait
+      // was 100ms of dead time between the response landing and the post
+      // becoming visible.
+      requestAnimationFrame(()=>{
         this.toggleAttribute('loaded', true)
         this._checkDeletePermission()
-      }, 100)
+      })
     })
   }
 

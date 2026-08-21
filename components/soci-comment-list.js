@@ -171,14 +171,11 @@ export default class SociCommentList extends SociComponent {
     let comments = await this.getData('/comments?post=' + url + communityQuery)
     comments = comments.comments
     this.select('comment-count').innerHTML = comments.length + (comments.length == 1 ? ' comment' : ' comments')
-    let votes = await this.getData('/comment-votes?post=' + url + communityQuery, this.authToken)
-    votes = votes.commentVotes
 
     comments.sort((a,b)=>{
       if(b.lineage_score = a.lineage_score) return a.parent - b.parent
       else return b.lineage_score - a.lineage_score
     })
-
 
     comments.forEach(comment => {
       let newComment = document.createElement('soci-comment')
@@ -187,6 +184,13 @@ export default class SociCommentList extends SociComponent {
       parent?.appendChild(newComment)
     })
 
+    // Votes only decorate comments that are already on screen, and only exist
+    // for a signed-in reader, so they must not gate the tree render. Previously
+    // this round trip was awaited first and returned 401 for anonymous
+    // visitors, costing every one of them a full RTT before any comment
+    // appeared.
+    if(!this.authToken) return
+    const votes = (await this.getData('/comment-votes?post=' + url + communityQuery, this.authToken))?.commentVotes
     votes?.forEach(vote => {
       let comment = this.querySelector(`soci-comment[comment-id="${vote.comment_id}`)
       comment?.showVote(vote.upvote)
