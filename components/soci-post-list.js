@@ -12,6 +12,7 @@ export default class SociPostList extends SociComponent {
     this._renderGeneration = 0
     this._items = null
     this._masonryDebugTimers = []
+    this._initializing = false
 
     this._onCardLoaded = () => {
       if(this.getAttribute('view') === 'lanes' && this._items) relayout(this._items)
@@ -173,7 +174,7 @@ export default class SociPostList extends SociComponent {
       :host([loaded]) #items {
         transform: translateY(0);
         opacity: 1;
-        transition: transform 0.175s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.175s var(--soci-ease);
+        transition: transform 0.175s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.175s var(--soci-ease-out);
       }
       #items::slotted(soci-post-li) {
         margin-top: 8px;
@@ -324,7 +325,10 @@ export default class SociPostList extends SociComponent {
         break
       case 'filter':
         this._applyFilter(newValue)
-        this._refreshFilterFetch()
+        // Skip while initializing: connectedCallback's _refreshData() is about
+        // to load this exact URL, and fetchAndMerge has no dedupe guard, so
+        // reacting here would request it a second time on every navigation.
+        if(!this._initializing) this._refreshFilterFetch()
         break
       case 'view':
         this._updateView(newValue)
@@ -363,6 +367,7 @@ export default class SociPostList extends SociComponent {
   }
 
   _initializeControls(){
+    this._initializing = true
     const savedSort = localStorage.getItem('soci-column-sort')
     const savedFilter = localStorage.getItem('soci-column-filter')
     const savedView = localStorage.getItem('soci-column-view')
@@ -382,6 +387,7 @@ export default class SociPostList extends SociComponent {
     this.setAttribute('sort', sort)
     this.setAttribute('filter', filter)
     this.setAttribute('view', view)
+    this._initializing = false
   }
 
   _updateSortUI(sort){
