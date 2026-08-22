@@ -548,15 +548,27 @@ soci-markdown-view {
     border-radius: 4px;
   }
   p + p {
-    margin-top: 8px;
+    margin-top: 4px;
+  }
+  soci-emoji {
+    --size: 23px;
+    height: 8px;
   }
 } 
 soci-message-row:has(+ soci-message-row) {
   padding-bottom: 0;
 }
 soci-message-row {
+  soci-emoji {
+    --size: calc(1.5em + 2px);
+    height: calc(11em / 14 - 3px);
+  }
   .reaction {
     color: var(--text);
+    soci-emoji {
+      --size: 14px;
+      height: 8px;
+    }
   }
   span:first-child {
     margin-right: 4px;
@@ -915,7 +927,7 @@ soci-route#notifications .content .inner-content {
     user-select: none;
     transition: all 0.1s var(--soci-ease);
     text-decoration: none;
-    translateY(-1px);
+    transform: translateY(-1px);
 
     span {
       padding: 5px 8px;
@@ -950,6 +962,7 @@ soci-route#notifications .content .inner-content {
     border: 2px solid var(--bg-secondary);
     background: transparent !important;
     -webkit-box-shadow: none !important;
+    box-shadow: none !important;
   }
 
   .card {
@@ -1227,10 +1240,10 @@ soci-route#notifications .content .inner-content {
     text-align: center;
   }
 
-  .emoji-card img {
+  .emoji-card img,
+  .emoji-card soci-emoji {
     width: 24px;
     height: 24px;
-    object-fit: contain;
     display: block;
     margin: 0 auto 6px;
   }
@@ -2059,17 +2072,17 @@ soci-sidebar {
   /* no fixed footer */
 }
 [load-order] {
-  transform: translateY(20px);
+  transform: translateY(10px);
   opacity: 0;
-  transition: transform 0.3s cubic-bezier(0.15, 0, 0, 1), opacity 0.3s var(--soci-ease);
+  transition: transform 0.15s cubic-bezier(0.15, 0, 0, 1), opacity 0.15s var(--soci-ease);
 }
 [load-order="secondary"] {
-  transform: translateY(25px);
-  transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+  transform: translateY(12.5px);
+  transition: transform 0.175s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.175s var(--soci-ease);
 }
 [load-order="tertiary"] {
-  transform: translateY(30px);
-  transition: transform 0.4s cubic-bezier(0.15, 0, 0.35, 1), opacity 0.4s var(--soci-ease);
+  transform: translateY(15px);
+  transition: transform 0.2s cubic-bezier(0.15, 0, 0.35, 1), opacity 0.2s var(--soci-ease);
 }
 soci-route[active] [load-order],
 soci-route[active] [load-order="secondary"],
@@ -2081,12 +2094,6 @@ soci-route:not([active]):not([activating]) {
   display: none;
 }
 
-.emoji {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  vertical-align: middle;
-}
 #new-user {
   #new-user-container {
     padding: 24px 36px;

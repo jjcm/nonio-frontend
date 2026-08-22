@@ -209,6 +209,8 @@ export default class SociSidebar extends SociComponent {
     // Activate submit nav item if on submit route
     else if(/\/submit\/?$/.test(path)) this._setActiveNavItem('submit')
     else this._setActiveNavItem('none')
+    // Re-apply user panel nav state after _setActiveNavItem (which clears all soci-tag-li[active])
+    if(this._userRouteState) this._notifyUserPanelRouteState()
   }
 
   // Sentinel so the first _checkCommunityChange() always runs on initial load,

@@ -54,7 +54,7 @@ export default class SociCommentList extends SociComponent {
 
     comments?.forEach(comment => {
       let newComment = document.createElement('soci-user-comment')
-      let unread = comment.read == undefined ? undefined : !comment.read
+      let unread = path.includes('notifications') && comment.read === false
       newComment = newComment.factory(comment.user, comment.upvotes - comment.downvotes, comment.lineage_score, comment.date, comment.comment_id || comment.id, comment.content, comment.edited, comment.post, comment.post_title, unread)
       if(path.includes('notifications')) newComment.setAttribute('notification-id', comment.id)
       this.appendChild(newComment)

@@ -526,7 +526,7 @@
           input[type="text"] { min-width: 180px; }
           .emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
           .emoji-card { border: 1px solid var(--bg-secondary); border-radius: 8px; padding: 8px; text-align: center; }
-          .emoji-card img { width: 24px; height: 24px; object-fit: contain; display: block; margin: 0 auto 6px; }
+          .emoji-card img, .emoji-card soci-emoji { width: 24px; height: 24px; display: block; margin: 0 auto 6px; }
           .emoji-name { font-size: 12px; color: var(--text-secondary); }
         }
       </style>
@@ -604,10 +604,10 @@
     <soci-route id="community-settings" path="^(/@[\w-]+)/admin$" fresh>
       <div class="community-settings" id="community-settings">
         <header>
-          <soci-link class="nav-item active" href="/@community/admin">Settings</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item active" href="/@community/admin"><span>Settings</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users"><span>Users</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials"><span>Financials</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis"><span>Emojis</span></soci-link>
         </header>
         <div class="container">
           <form>
@@ -658,10 +658,10 @@
     <soci-route id="community-users" path="^(/@[\w-]+)/admin/users$" fresh>
       <div class="community-settings" id="community-users">
         <header>
-          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
-          <soci-link class="nav-item active" href="/@community/admin/users">Users</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item" href="/@community/admin"><span>Settings</span></soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/users"><span>Users</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials"><span>Financials</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis"><span>Emojis</span></soci-link>
         </header>
         <div class="container">
           <div class="load-group" load-order="primary">
@@ -709,10 +709,10 @@
     <soci-route id="community-financials" path="^(/@[\w-]+)/admin/financials$" fresh>
       <div class="community-settings" id="community-financials">
         <header>
-          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
-          <soci-link class="nav-item active" href="/@community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item" href="/@community/admin"><span>Settings</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users"><span>Users</span></soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/financials"><span>Financials</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/emojis"><span>Emojis</span></soci-link>
         </header>
         <div class="container">
           <div class="load-group" load-order="primary">
@@ -750,10 +750,10 @@
     <soci-route id="community-emojis" path="^(/@[\w-]+)/admin/emojis$" fresh>
       <div class="community-settings" id="community-emojis">
         <header>
-          <soci-link class="nav-item" href="/@community/admin">Settings</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/users">Users</soci-link>
-          <soci-link class="nav-item" href="/@community/admin/financials">Financials</soci-link>
-          <soci-link class="nav-item active" href="/@community/admin/emojis">Emojis</soci-link>
+          <soci-link class="nav-item" href="/@community/admin"><span>Settings</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/users"><span>Users</span></soci-link>
+          <soci-link class="nav-item" href="/@community/admin/financials"><span>Financials</span></soci-link>
+          <soci-link class="nav-item active" href="/@community/admin/emojis"><span>Emojis</span></soci-link>
         </header>
         <div class="container">
           <h1>Community Emojis</h1>

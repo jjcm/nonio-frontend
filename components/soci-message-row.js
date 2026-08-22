@@ -107,7 +107,6 @@ export default class SociMessageRow extends SociComponent {
         display: block;
         font-size: 14px;
         line-height: 1.5;
-        margin-top: 2px;
       }
 
       .message-image {

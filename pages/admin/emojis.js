@@ -3,7 +3,14 @@ let adminEmojis = {
   init: () => soci.registerPage(adminEmojis),
   onActivate: () => {
     const form = adminEmojis.dom.querySelector('#emoji-form')
-    form?.addEventListener('submit', adminEmojis.upload)
+    const btn = adminEmojis.dom.querySelector('#emoji-upload')
+    if (!adminEmojis._boundUpload) {
+      adminEmojis._boundUpload = (e) => adminEmojis.upload(e)
+    }
+    form?.removeEventListener('submit', adminEmojis._boundUpload)
+    btn?.removeEventListener('click', adminEmojis._boundUpload)
+    form?.addEventListener('submit', adminEmojis._boundUpload)
+    btn?.addEventListener('click', adminEmojis._boundUpload)
     adminEmojis.load()
   },
   load: async () => {
@@ -13,13 +20,13 @@ let adminEmojis = {
     const emojis = sets?.personal || []
     grid.innerHTML = emojis.map(e => `
       <div class="emoji-card">
-        <img src="${window.config.AVATAR_HOST}/${e.key}.webp" alt="${e.name}" data-emoji-id="${e.id}">
+        <soci-emoji name="${e.name}" data-emoji-id="${e.id}" style="height:24px;"></soci-emoji>
         <div class="emoji-name">:${e.name}:</div>
       </div>
     `).join('')
   },
   upload: async (e) => {
-    e.preventDefault()
+    e?.preventDefault?.()
     const name = (adminEmojis.dom.querySelector('#emoji-name')?.value || '').trim().toLowerCase()
     const file = adminEmojis.dom.querySelector('#emoji-file')?.files?.[0]
     const btn = adminEmojis.dom.querySelector('#emoji-upload')

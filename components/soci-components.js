@@ -33,6 +33,9 @@ window.customElements.define('soci-html-uploader', SociHTMLUploader)
 import SociIcon from "./soci-icon.js"
 window.customElements.define('soci-icon', SociIcon)
 
+import SociEmoji from "./soci-emoji.js"
+window.customElements.define('soci-emoji', SociEmoji)
+
 import SociImage from "./soci-image.js"
 window.customElements.define('soci-image', SociImage)
 

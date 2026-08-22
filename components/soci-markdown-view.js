@@ -1,3 +1,6 @@
+import config from '../config.js'
+import { decorateRichTextElement } from '../lib/soci-rich-text.js'
+
 export default class SociMarkdownView extends HTMLElement {
   constructor() {
     super()
@@ -41,6 +44,9 @@ export default class SociMarkdownView extends HTMLElement {
         allowJSURIs: false,
       })
       this.innerHTML = html
+      decorateRichTextElement(this, {
+        avatarHost: config.AVATAR_HOST,
+      })
     } catch (e) {
       soci?.log?.('Error: Malformed markdown', e, 'error')
       this.innerHTML = "<error style='color: var(--text-danger);'>Error: Malformed content</error>"

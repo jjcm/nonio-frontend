@@ -45,6 +45,7 @@ export default class SociLink extends SociComponent {
   }
 
   localLink(e){
+    if (e.metaKey || e.ctrlKey) return // Cmd/Ctrl+click: let browser open in new tab
     e.preventDefault()
     let link = e.currentTarget
     window.history.pushState(null, null, link.href)

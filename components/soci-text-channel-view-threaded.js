@@ -109,24 +109,15 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         align-items: flex-end;
         gap: 8px;
       }
-      textarea {
-        height: 38px;
-        min-height: 38px;
-        max-height: 140px;
-        resize: none;
-        overflow-y: hidden;
-        border: 0;
-        outline: 0;
-        background: transparent;
-        color: var(--text);
-        font: inherit;
-        line-height: 1.4;
-        box-sizing: border-box;
-        padding: 9px 11px;
+      soci-input {
         flex: 1;
+        --min-height: 38px;
       }
-      textarea::placeholder {
-        color: var(--text-tertiary);
+      .compose-row soci-input {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        margin: 0;
       }
       .reactions {
         display: flex;
@@ -153,6 +144,10 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         border-color: var(--bg-brand);
         color: var(--text-brand);
         background: var(--bg-brand-secondary);
+      }
+      .reaction soci-emoji {
+        width: 14px;
+        height: 14px;
       }
       #emoji-picker {
         display: none;
@@ -193,9 +188,6 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         border-radius: 4px;
         background: transparent;
         min-height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
         padding: 0;
       }
@@ -269,16 +261,6 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         outline: 2px dashed var(--bg-brand);
         outline-offset: -4px;
       }
-      .emoji {
-        width: 24px;
-        height: 24px;
-        object-fit: contain;
-        vertical-align: middle;
-      }
-      .chip-emoji {
-        width: 16px;
-        height: 16px;
-      }
       @media (max-width: 900px) {
         :host([thread-open]) #main {
           display: none;
@@ -300,7 +282,7 @@ export default class SociTextChannelViewThreaded extends SociComponent {
           </div>
           <div id="main-compose" class="compose">
             <div class="compose-row">
-              <textarea id="message-input" placeholder="Message..."></textarea>
+              <soci-input id="message-input" placeholder="Message..."></soci-input>
               <button id="emoji-btn" class="icon-btn" type="button" title="Emoji">😊</button>
               <button id="attach-btn" class="icon-btn" type="button" title="Attach image">
                 <soci-icon glyph="filterImages" size="16"></soci-icon>
@@ -323,7 +305,7 @@ export default class SociTextChannelViewThreaded extends SociComponent {
           </div>
           <div class="compose" style="left:10px;right:10px;">
             <div class="compose-row">
-              <textarea id="thread-input" placeholder="Reply in thread..."></textarea>
+              <soci-input id="thread-input" placeholder="Reply in thread..."></soci-input>
               <button id="thread-emoji-btn" class="icon-btn" type="button" title="Emoji">😊</button>
               <button id="thread-attach-btn" class="icon-btn" type="button" title="Attach image">
                 <soci-icon glyph="filterImages" size="16"></soci-icon>
@@ -373,24 +355,24 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     const threadBack = this.select('#thread-back')
 
     if (input) {
-      this._attachComposerAutoResize(input)
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
+          if (input.querySelector('#token-search[active]')) return
           e.preventDefault()
           this._sendMessage()
         }
-      })
+      }, true)
       input.addEventListener('focus', () => { this._activeComposer = 'main' })
     }
 
     if (threadInput) {
-      this._attachComposerAutoResize(threadInput)
       threadInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
+          if (threadInput.querySelector('#token-search[active]')) return
           e.preventDefault()
           this._sendThreadReply()
         }
-      })
+      }, true)
       threadInput.addEventListener('focus', () => { this._activeComposer = 'thread' })
     }
 
@@ -560,9 +542,6 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     }
     row.appendChild(md)
     
-    // Post-process markdown for emojis
-    setTimeout(() => this._renderMarkdownEmojis(md), 0)
-    
     const reactions = this._renderReactions(normalized)
     reactions.slot = 'reactions'
     row.appendChild(reactions)
@@ -640,12 +619,11 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     const m = emoji?.match(/^:([a-z0-9_]+):$/)
     if (m) {
       const name = m[1]
-      const img = document.createElement('img')
-      img.className = 'emoji chip-emoji'
-      img.src = `${config.AVATAR_HOST}/emoji/${name}.webp`
-      img.dataset.emojiName = name
-      img.alt = `:${name}:`
-      return img
+      const customEmoji = document.createElement('soci-emoji')
+      customEmoji.className = 'chip-emoji'
+      customEmoji.dataset.emojiName = name
+      customEmoji.setAttribute('name', name)
+      return customEmoji
     }
     
     // Fallback to text (unicode emoji)
@@ -673,7 +651,6 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if (!res?.id) return
     
     input.value = ''
-    this._resizeComposer(input)
     const sentImageUrls = [...imageUrls]
     this._clearPendingAttachments('main')
 
@@ -759,7 +736,6 @@ export default class SociTextChannelViewThreaded extends SociComponent {
     if (!res?.id) return
     
     input.value = ''
-    this._resizeComposer(input)
     this._clearPendingAttachments('thread')
     const replyUser = this._resolveMessageUser(res, window.soci?.username || '')
     const threadScroll = this.select('#thread-scroll')
@@ -800,13 +776,14 @@ export default class SociTextChannelViewThreaded extends SociComponent {
       if (res.reacted) {
         if (idx >= 0) {
           const count = Number.parseInt(String(reactions[idx].count || 0), 10) || 0
-          reactions[idx] = { ...reactions[idx], reacted: true, count: count + 1 }
+          // Keep websocket-updated counts authoritative when already present.
+          reactions[idx] = { ...reactions[idx], reacted: true, count: Math.max(1, count) }
         } else {
           reactions.push({ emoji, count: 1, reacted: true })
         }
       } else if (idx >= 0) {
         const count = Number.parseInt(String(reactions[idx].count || 0), 10) || 0
-        const nextCount = Math.max(0, count - 1)
+        const nextCount = reactions[idx].reacted ? Math.max(0, count - 1) : count
         if (nextCount === 0) reactions.splice(idx, 1)
         else reactions[idx] = { ...reactions[idx], reacted: false, count: nextCount }
       }
@@ -845,7 +822,7 @@ export default class SociTextChannelViewThreaded extends SociComponent {
         if (isCustom) {
           return `
             <button class="emoji-btn" data-emoji=":${item.name}:" title=":${item.name}:">
-              <img class="emoji chip-emoji" src="${config.AVATAR_HOST}/emoji/${item.name}.webp" alt=":${item.name}:">
+              <soci-emoji class="chip-emoji" name="${item.name}"></soci-emoji>
             </button>
           `
         } else {
@@ -900,29 +877,18 @@ export default class SociTextChannelViewThreaded extends SociComponent {
       
     if (!input) return
     
-    const start = input.selectionStart || input.value.length
-    const end = input.selectionEnd || input.value.length
-    
-    input.value = input.value.slice(0, start) + emoji + input.value.slice(end)
-    this._resizeComposer(input)
+    if (typeof input.insertText === 'function') input.insertText(emoji)
+    else input.value = `${input.value || ''}${emoji}`
     input.focus()
-    input.setSelectionRange(start + emoji.length, start + emoji.length)
     
     this._closeEmojiPicker()
   }
 
-  async _renderMarkdownEmojis(el) {
-    if (!el || !el.innerHTML) return
-    
-    // Replace :name: with image tags
-    // Limit to alphanumeric + underscore, 2-32 chars
-    el.innerHTML = el.innerHTML.replace(/:([a-z0-9_]{2,32}):/g, (_, name) => {
-      return `<img class="emoji" data-emoji-name="${name}" src="${config.AVATAR_HOST}/emoji/${name}.webp" alt=":${name}:" onerror="this.replaceWith(document.createTextNode(':${name}:'))">`
-    })
-  }
-
   _onEmojiContext(e) {
-    const name = e.target?.dataset?.emojiName
+    const path = e.composedPath?.() || []
+    const emojiNode = path.find((node) => node?.tagName === 'SOCI-EMOJI')
+      || e.target?.closest?.('soci-emoji')
+    const name = emojiNode?.getAttribute?.('name') || e.target?.dataset?.emojiName
     if (!name) return
     
     e.preventDefault()
@@ -1023,23 +989,16 @@ export default class SociTextChannelViewThreaded extends SociComponent {
       const input = this.select('#thread-input')
       if (!input) return
       input.focus({ preventScroll: true })
-      this._resizeComposer(input)
       this._activeComposer = 'thread'
     })
   }
 
   _attachComposerAutoResize(input) {
-    if (!input) return
-    input.addEventListener('input', () => this._resizeComposer(input))
-    this._resizeComposer(input)
+    return input
   }
 
   _resizeComposer(input) {
-    if (!input) return
-    // Reset first so shrink + grow both track current content.
-    input.style.height = '38px'
-    input.style.height = `${Math.min(input.scrollHeight, 140)}px`
-    input.style.overflowY = input.scrollHeight > 140 ? 'auto' : 'hidden'
+    return input
   }
 
   _normalizeMessage(msg) {

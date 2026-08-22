@@ -12,7 +12,14 @@ let communityEmojis = {
     })
     
     const form = communityEmojis.dom.querySelector('#emoji-form')
-    form?.addEventListener('submit', communityEmojis.upload)
+    const btn = communityEmojis.dom.querySelector('#emoji-upload')
+    if (!communityEmojis._boundUpload) {
+      communityEmojis._boundUpload = (e) => communityEmojis.upload(e)
+    }
+    form?.removeEventListener('submit', communityEmojis._boundUpload)
+    btn?.removeEventListener('click', communityEmojis._boundUpload)
+    form?.addEventListener('submit', communityEmojis._boundUpload)
+    btn?.addEventListener('click', communityEmojis._boundUpload)
     communityEmojis.load()
   },
   load: async () => {
@@ -22,13 +29,13 @@ let communityEmojis = {
     const emojis = res?.emojis || []
     grid.innerHTML = emojis.map(e => `
       <div class="emoji-card">
-        <img src="${window.config.AVATAR_HOST}/${e.key}.webp" alt="${e.name}" data-emoji-id="${e.id}">
+        <soci-emoji name="${e.name}" data-emoji-id="${e.id}" style="height:24px;"></soci-emoji>
         <div class="emoji-name">:${e.name}:</div>
       </div>
     `).join('')
   },
   upload: async (e) => {
-    e.preventDefault()
+    e?.preventDefault?.()
     const name = (communityEmojis.dom.querySelector('#emoji-name')?.value || '').trim().toLowerCase()
     const file = communityEmojis.dom.querySelector('#emoji-file')?.files?.[0]
     const btn = communityEmojis.dom.querySelector('#emoji-upload')

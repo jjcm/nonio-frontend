@@ -163,7 +163,7 @@ export default class SociPostList extends SociComponent {
         padding: 12px 12px 28px;
         box-sizing: border-box;
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(6px);
       }
       /* In lanes view we animate cards individually; keep the container visible. */
       :host([view="lanes"]) #items {
@@ -173,7 +173,7 @@ export default class SociPostList extends SociComponent {
       :host([loaded]) #items {
         transform: translateY(0);
         opacity: 1;
-        transition: transform 0.35s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.35s var(--soci-ease);
+        transition: transform 0.175s cubic-bezier(0.15, 0, 0.2, 1), opacity 0.175s var(--soci-ease);
       }
       #items::slotted(soci-post-li) {
         margin-top: 8px;
@@ -192,9 +192,9 @@ export default class SociPostList extends SociComponent {
       /* Prevent vertical-list flash before grid-lanes polyfill positions children (slotted). */
       :host([view="lanes"]) #items[data-grid-lanes-container]::slotted(*) {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(6px);
         pointer-events: none;
-        transition: opacity 0.25s var(--soci-ease), transform 0.25s var(--soci-ease);
+        transition: opacity 0.125s var(--soci-ease), transform 0.125s var(--soci-ease);
       }
       :host([view="lanes"]) #items[data-grid-lanes-container]::slotted([data-grid-lanes-positioned]) {
         opacity: 1;
@@ -203,7 +203,7 @@ export default class SociPostList extends SociComponent {
       }
       :host([view="lanes"]) #items[data-grid-lanes-container]::slotted([data-grid-lanes-positioned][unloaded]) {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(6px);
         pointer-events: none;
       }
 
@@ -307,7 +307,7 @@ export default class SociPostList extends SociComponent {
   }
 
   static get observedAttributes() {
-    return ['tag', 'filter', 'sort', 'view', 'community', 'user']
+    return ['tag', 'filter', 'sort', 'view', 'community', 'data', 'user']
   }
 
   attributeChangedCallback(name, oldValue, newValue){
@@ -316,6 +316,7 @@ export default class SociPostList extends SociComponent {
       case 'tag':
       case 'sort':
       case 'community':
+      case 'data':
       case 'user':
         this._syncTagInput()
         this._updateTitle()
@@ -477,7 +478,7 @@ export default class SociPostList extends SociComponent {
     const tag = decodeURIComponent(first || 'all')
     if(tag && tag !== this.getAttribute('tag')) this.setAttribute('tag', tag)
     this._syncTagInput()
-    document.querySelector('soci-sidebar')?.activateTag(tag)
+    if(!/^\/user\//.test(window.location.pathname || '')) document.querySelector('soci-sidebar')?.activateTag(tag)
   }
 
   _updateTitle(){
@@ -490,6 +491,26 @@ export default class SociPostList extends SociComponent {
   }
 
   _buildPostsUrl(){
+    const dataAttr = this.getAttribute('data')
+    if(dataAttr) {
+      const url = new URL(dataAttr, 'http://x')
+      const sort = this.getAttribute('sort') || this._currentSort || 'popular'
+      const filter = this.getAttribute('filter') || this._currentFilter || 'all'
+      if(sort === 'new') {
+        url.searchParams.set('sort', 'new')
+        url.searchParams.delete('time')
+      } else if(['day','week','month','year'].includes(sort)) {
+        url.searchParams.set('sort', 'top')
+        url.searchParams.set('time', sort)
+      } else {
+        url.searchParams.set('sort', sort || 'popular')
+      }
+      const type = filterToType(filter)
+      if(type) url.searchParams.set('type', type)
+      else url.searchParams.delete('type')
+      return url.pathname + (url.search || '')
+    }
+
     let params = []
     const sort = this.getAttribute('sort') || this._currentSort || 'popular'
     const filter = this.getAttribute('filter') || this._currentFilter || 'all'
@@ -518,8 +539,8 @@ export default class SociPostList extends SociComponent {
     const community = this.getAttribute('community') || window.soci?.routeContext?.community
     if(community) params.push(`community=${encodeURIComponent(community)}`)
 
-    const forUser = this.getAttribute('user')
-    if(forUser) params.push(`user=${encodeURIComponent(forUser)}`)
+    const user = this.getAttribute('user')
+    if(user) params.push(`user=${encodeURIComponent(user)}`)
 
     const type = filterToType(filter)
     if(type) params.push(`type=${encodeURIComponent(type)}`)
