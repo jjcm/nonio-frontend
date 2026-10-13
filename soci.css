@@ -511,18 +511,7 @@ blockquote {
   margin: 12px 0;
   padding-left: 12px;
   border-left: 4px solid var(--bg-secondary);
-  font-family: serif;
-  font-style: italic;
-  font-size: 1.25em;
-}
-blockquote *:first-child:before {
-  content: '“';
-  font-size: 38px;
-  font-weight: bold;
-  color: var(--text-tertiary);
-  line-height: 30px;
-  margin-right: 4px;
-  font-family: serif;
+  color: var(--text-secondary);
 }
 table {
   border: 1px solid var(--bg-secondary);
@@ -535,26 +524,47 @@ table {
     text-align: left;
   }
 }
-soci-markdown-view *:first-child {
-  margin-top: 0;
-}
-soci-markdown-view *:last-child {
-  margin-bottom: 0;
-}
 soci-markdown-view {
   img {
     max-width: 100%;
     margin-top: 8px;
     border-radius: 4px;
   }
+  ul, ol, pre {
+    margin: 0;
+  }
+  ul, ol {
+    padding-left: 24px;
+  }
+  * + :is(p, ul, ol, pre, blockquote, table) {
+    margin-top: 8px;
+  }
   p + p {
     margin-top: 4px;
+  }
+  * + :is(h1, h2, h3) {
+    margin-top: 0.75em;
+  }
+  li + li {
+    margin-top: 2px;
+  }
+  :not(pre) > code {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    font-size: 0.9em;
+  }
+  :first-child {
+    margin-top: 0;
+  }
+  :last-child {
+    margin-bottom: 0;
   }
   soci-emoji {
     --size: 23px;
     height: 8px;
   }
-} 
+}
 soci-message-row:has(+ soci-message-row) {
   padding-bottom: 0;
 }
